@@ -27,35 +27,20 @@ spacecost example                  # a worked mission cost breakdown, end to end
 spacecost build -o ./out           # write all six CSVs
 ```
 
-## The API
+## Contents
 
-| call | gives you |
-|---|---|
-| `load_launch_vehicles()` and the four other `load_*` | one reference table as a DataFrame |
-| `LAUNCH_VEHICLES_REFERENCE` and the four other `*_REFERENCE` | the same data as plain dicts, no pandas needed to read it |
-| `propellant_mass_for_dv(payload_kg, dv, isp)` | Tsiolkovsky, vectorised over arrays |
-| `cost_per_dv_usd_per_kg(cost, isp, dv)` | the headline normalised metric: USD of propellant to move 1 kg through a delta-v |
-| `cheapest_launch_to(catalog, "leo", min_payload_kg=...)` | the launch table filtered and ranked |
-| `cheapest_propellant_for(catalog, dv)` | the propellant table ranked by fuel cost at that delta-v |
-| `mission_cost_breakdown(catalog, ...)` | launch + propellant + hardware + ops + contingency, itemised |
-| `build_transportation_summary(...)` | the vehicle x segment x propellant cross-join |
-| `validate_tables(...)` (alias `validate`) | sanity bands over the loaded tables; prints warnings, never raises |
-| `build_catalog(config, catalog_date=None)` | everything, written to CSV |
-| `set_verbose(True)` | turn on the progress output, which is off by default |
-
-⚠️  **Prefer `validate_tables` over `validate` if your build rewrites source.**
-Both are the same function. economicspace concatenates its four stage modules
-into one file and resolves name collisions with a whole-word regex, so
-`from spacecost import validate as _v` gets rewritten there and then fails to
-import. Anything vendored, concatenated or code-generated wants the unambiguous
-name.
-
-⚠️  The query helpers read `cost_usd_per_kg`, the **resolved** price. That column
-is produced by `merge_propellant_prices`, not by `load_propellants`, whose
-column is `ref_cost_usd_per_kg`. `build_catalog` does this for you; if you are
-assembling a catalog dict by hand, pass the propellant frame through
-`merge_propellant_prices(load_propellants(), pd.DataFrame())` for an offline
-resolve.
+- [What is in it](#what-is-in-it)
+- [The three things it does that a spreadsheet of prices does not](#the-three-things-it-does-that-a-spreadsheet-of-prices-does-not)
+- [The API](#the-api)
+- [Two numbers, and they are not the same number](#two-numbers-and-they-are-not-the-same-number)
+- [The output is a contract](#the-output-is-a-contract)
+- [Live prices are opt-in](#live-prices-are-opt-in)
+- [Changing a row](#changing-a-row)
+- [Layout](#layout)
+- [Reading the tables without Python](#reading-the-tables-without-python)
+- [Provenance](#provenance)
+- [What it does not do](#what-it-does-not-do)
+- [Citations and licence](#citations-and-licence)
 
 ## What is in it
 
@@ -102,6 +87,36 @@ a mixture are computed from the components at the stage O/F ratio, with fuel and
 oxidiser tankage summed over their own volumes rather than averaged. That is the
 whole reason methalox is treated better than hydrolox: LOX and LCH4 share a
 thermal class, LOX and LH2 do not.
+
+## The API
+
+| call | gives you |
+|---|---|
+| `load_launch_vehicles()` and the four other `load_*` | one reference table as a DataFrame |
+| `LAUNCH_VEHICLES_REFERENCE` and the four other `*_REFERENCE` | the same data as plain dicts, no pandas needed to read it |
+| `propellant_mass_for_dv(payload_kg, dv, isp)` | Tsiolkovsky, vectorised over arrays |
+| `cost_per_dv_usd_per_kg(cost, isp, dv)` | the headline normalised metric: USD of propellant to move 1 kg through a delta-v |
+| `cheapest_launch_to(catalog, "leo", min_payload_kg=...)` | the launch table filtered and ranked |
+| `cheapest_propellant_for(catalog, dv)` | the propellant table ranked by fuel cost at that delta-v |
+| `mission_cost_breakdown(catalog, ...)` | launch + propellant + hardware + ops + contingency, itemised |
+| `build_transportation_summary(...)` | the vehicle x segment x propellant cross-join |
+| `validate_tables(...)` (alias `validate`) | sanity bands over the loaded tables; prints warnings, never raises |
+| `build_catalog(config, catalog_date=None)` | everything, written to CSV |
+| `set_verbose(True)` | turn on the progress output, which is off by default |
+
+⚠️  **Prefer `validate_tables` over `validate` if your build rewrites source.**
+Both are the same function. economicspace concatenates its four stage modules
+into one file and resolves name collisions with a whole-word regex, so
+`from spacecost import validate as _v` gets rewritten there and then fails to
+import. Anything vendored, concatenated or code-generated wants the unambiguous
+name.
+
+⚠️  The query helpers read `cost_usd_per_kg`, the **resolved** price. That column
+is produced by `merge_propellant_prices`, not by `load_propellants`, whose
+column is `ref_cost_usd_per_kg`. `build_catalog` does this for you; if you are
+assembling a catalog dict by hand, pass the propellant frame through
+`merge_propellant_prices(load_propellants(), pd.DataFrame())` for an offline
+resolve.
 
 ## Two numbers, and they are not the same number
 
@@ -172,6 +187,68 @@ launch price is a library that is not reproducible, and every committed
 reference file here is an offline build. Requires the extra: `pip install
 "spacecost[live]"`.
 
+## Changing a row
+
+A number here is a number in somebody's trade study, so a change is a release,
+not a commit.
+
+1. **Edit the row** in `spacecost/`, keeping its `notes` citation and
+   `reference_year` truthful.
+2. **Bump `pipeline_version`** in `spacecost/config.py` if the change moves any
+   value a build produces. That is the DATA contract, and the rule is
+   one-directional: changing a number means bumping it, and bumping it is not
+   evidence that a number changed.
+3. **Regenerate `reference/`** so the committed CSVs match, and re-run the
+   tests. `tests/test_parity.py` will fail until you do, which is the point.
+4. **Add a CHANGELOG entry** under Package releases, and say what moved.
+5. **Tag it.** `git tag -a vX.Y.Z` and push the tag. Consumers pin tags, so an
+   untagged change reaches nobody.
+
+⚠️  **Then repin downstream.** [economicspace](https://github.com/loggger101/economicspace)
+installs this package from a pinned tag in `requirements.txt` and
+`_MASTER_REQUIRED`. Until that tag moves it keeps building against the old
+tables, so the edit silently does not land there. Its `verify_stage3.py`
+catches the mismatch; nothing else will.
+
+⚠️  **Test the TAG, not the working tree.** The test suite imports the source
+directory, so it cannot see a packaging gap. `v0.1.0` shipped without
+`validate_tables` for exactly this reason, and a clean install of it could not
+satisfy economicspace's import. CI now builds a wheel and exercises the public
+API from outside the tree; a clean `pip install` of the new tag is still the
+last check worth doing by hand.
+
+## Layout
+
+```
+spacecost/          the package
+    vehicles.py     the five reference tables, one per file, every row cited
+    propellants.py    -- propellants.py also carries the tankage derivation,
+    deltav.py            the thruster devices and the fuel/oxidiser blender
+    operations.py
+    storage.py
+    config.py       the dials, and the two version numbers
+    tables.py       loaders, and the vehicle x segment x propellant summary
+    rocket.py       Tsiolkovsky helpers
+    prices.py       live commodity fuel prices, and the merge
+    validate.py     sanity bands over the loaded tables
+    build.py        writes the six CSVs
+    query.py        cheapest-X helpers and a worked mission breakdown
+    cli.py          `python -m spacecost`
+reference/          the five tables as committed CSVs, plus a sample of the
+                    sixth and the platform its hash was taken on
+tests/              parity against reference/, table invariants, output rules
+```
+
+## Reading the tables without Python
+
+`reference/` holds the five tables as committed CSVs, so `curl` and a
+spreadsheet are enough. The sixth file, the composite
+`transportation_summary.csv` cross-joining vehicle x segment x propellant, is
+7.4 MB and is **not** committed. `reference/summary_sample.csv` is a 411-row
+stride sample of it at full precision, and `reference/summary_meta.json` records
+its row count, its hash and the platform that hash was taken on. `spacecost
+build` rebuilds the whole thing.
+
 ## Provenance
 
 These tables were built over fourteen releases as **Module 3 of
@@ -191,16 +268,6 @@ evidence that it changed nothing. What did change, and all it changed:
 - output defaults to `./spacecost_data`, reading `SPACECOST_OUTPUT_DIR`
 - `build_transportation_catalog` is now `build_catalog` (the old name is kept
   as an alias)
-
-## Reading the tables without Python
-
-`reference/` holds the five tables as committed CSVs, so `curl` and a
-spreadsheet are enough. The sixth file, the composite
-`transportation_summary.csv` cross-joining vehicle x segment x propellant, is
-7.4 MB and is **not** committed. `reference/summary_sample.csv` is a 411-row
-stride sample of it at full precision, and `reference/summary_meta.json` records
-its row count, its hash and the platform that hash was taken on. `spacecost
-build` rebuilds the whole thing.
 
 ## What it does not do
 

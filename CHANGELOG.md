@@ -271,7 +271,7 @@ is priced off the existing $800/W power-system row; this row covers only the
 propulsion train. Adds one category, to 35.
 
 **`1.9.0`  CATALOG COMPLETENESS AUDIT.** Full write-up:
-[calc v1.11.0 / transportation v1.9.0](#calc-v1110--transportation-v190). The
+[calc v1.11.0 / transportation v1.9.0](https://github.com/loggger101/economicspace/blob/main/versions.md#calc-v1110--transportation-v190). The
 three reference tables held what somebody happened to list rather than what
 exists, and the omissions all ran in the same direction. Propellants 7 → 40
 (sixteen additions that have flown and were simply absent, seven in development,
@@ -290,7 +290,7 @@ a consumer in Stage 4.
 `storage_systems.csv` and the whole thing was documentation. See v1.11.0 below.
 
 **`1.10.0`  realism audit of the v1.9.0 tables.** Full write-up:
-[calc v1.12.0 / transportation v1.10.0](#calc-v1120--transportation-v1100).
+[calc v1.12.0 / transportation v1.10.0](https://github.com/loggger101/economicspace/blob/main/versions.md#calc-v1120--transportation-v1100).
 Three changes, two of which move every number: a `_THRUSTER_SYSTEMS` block
 supplying `thruster_kg_per_n`, `thruster_efficiency` and `thrust_scaling` per
 technology, so the DEVICE is modelled and not only the propellant; a new ops row
@@ -305,7 +305,7 @@ existed since v1.9.0 with nothing ever buying one.
 Propellants 40 → 41 (23 operational, 8 development).
 
 **`1.11.0`  the reference DATA was right and unreachable.** Full write-up:
-[calc v1.14.0 / transportation v1.11.0](#calc-v1140--transportation-v1110). Four
+[calc v1.14.0 / transportation v1.11.0](https://github.com/loggger101/economicspace/blob/main/versions.md#calc-v1140--transportation-v1110). Four
 new `OPERATIONAL_COSTS` rows, not one of them a new measurement: every figure
 already existed in `STORAGE_REFERENCE`, where it had sat behind a
 "Not modelled in Module 4" note since v1.9.0, and Stage 4 loads
@@ -320,7 +320,7 @@ because it can now read these.
 
 **`1.12.0`  the rig had a calendar life and no duty-cycle limit.** Full
 write-up:
-[calc v1.15.0 / transportation v1.12.0](#calc-v1150--transportation-v1120). One
+[calc v1.15.0 / transportation v1.12.0](https://github.com/loggger101/economicspace/blob/main/versions.md#calc-v1150--transportation-v1120). One
 new `OPERATIONAL_COSTS` row, `Mining rig maximum trips` 5 (range 2-12), the
 missing half of a bound the table has carried since v1.7.0.
 `Mining rig service life` is 15 YEARS and Stage 4 turned that into a mission
@@ -334,7 +334,7 @@ No propellant, vehicle, Δv or storage figure moved.
 
 **`1.12.1`  one line in `validate()`, and no table row moved at all.** Full
 write-up:
-[calc v1.17.7 / transportation v1.12.1](#calc-v1177--transportation-v1121). The
+[calc v1.17.7 / transportation v1.12.1](https://github.com/loggger101/economicspace/blob/main/versions.md#calc-v1177--transportation-v1121). The
 two propellant sanity bands selected their rows with
 `~propellant_df["propellantless"].astype(bool)`, correct today ONLY because
 every one of the 41 rows states the flag, so pandas infers dtype `bool`. Add a
@@ -351,7 +351,7 @@ which moves `cost_usd_per_kg` and with it every Stage 4 baseline. The on-disk
 Same call, and the same reason, as catalog v1.1.1.
 
 **`1.13.0`  three Δv segments for a Mars-orbit depot.** Full write-up:
-[calc v1.18.0 / mineral_value v1.8.0 / transportation v1.13.0](#calc-v1180--mineral_value-v180--transportation-v1130).
+[calc v1.18.0 / mineral_value v1.8.0 / transportation v1.13.0](https://github.com/loggger101/economicspace/blob/main/versions.md#calc-v1180--mineral_value-v180--transportation-v1130).
 `DELTA_V_REFERENCE` gains "Mars arrival → 1-sol orbit (MOI)" at **900 m/s**,
 "LEO → Mars 1-sol orbit depot" at **4,500**, and "1-sol Mars orbit → Earth
 (TEI)" at **900**. No column, no field, and no existing row changes.
@@ -370,7 +370,7 @@ prices and moves every Stage 4 baseline. Nothing downstream reads the table, so
 nothing is waiting on it. Same call, and the same reason, as v1.12.1 above.
 
 **`1.14.0`  four Δv segments for a geostationary depot.** Full write-up:
-[calc v1.19.0 / mineral_value v1.9.0 / transportation v1.14.0](#calc-v1190--mineral_value-v190--transportation-v1140).
+[calc v1.19.0 / mineral_value v1.9.0 / transportation v1.14.0](https://github.com/loggger101/economicspace/blob/main/versions.md#calc-v1190--mineral_value-v190--transportation-v1140).
 `DELTA_V_REFERENCE` gains "LEO → GTO (perigee burn)" at **2,455 m/s**,
 "GTO → GEO (circularise + plane change)" at **1,836**, "LEO → GEO depot" at
 **4,291**, and "GEO → Earth (deorbit to entry)" at **1,488**. No column, no
