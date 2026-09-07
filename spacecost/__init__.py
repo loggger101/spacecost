@@ -69,13 +69,13 @@ from .tables import (build_transportation_summary, load_delta_v,
                      load_propellants, load_storage)
 from .units import (COMMODITY_DENSITY_KG_PER_L, G0_M_S2, LITRES_PER_BBL,
                     LITRES_PER_GAL)
-from .validate import validate
+from .validate import validate, validate_tables
 from .vehicles import LAUNCH_VEHICLES_REFERENCE
 
 # The PACKAGE release. Not the data contract -- that is
 # `SpacecostConfig.pipeline_version`, which is stamped into every CSV. See
 # spacecost/config.py for why the two are deliberately separate.
-__version__ = "0.1.0"
+__version__ = "0.1.1"
 
 # The DATA contract this release ships, repeated here for convenience only.
 # config.py is the authority; this is a mirror, and a mirror can drift, so
@@ -98,6 +98,7 @@ __all__ = [
     "load_launch_vehicles", "load_propellants", "load_delta_v",
     "load_operational_costs", "load_storage",
     "build_transportation_summary", "build_catalog", "validate",
+    "validate_tables",
     "propellant_mass_for_dv", "cost_per_dv_usd_per_kg",
     "cheapest_launch_to", "cheapest_propellant_for", "mission_cost_breakdown",
     "G0_M_S2", "LITRES_PER_GAL", "LITRES_PER_BBL",

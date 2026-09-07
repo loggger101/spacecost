@@ -39,9 +39,16 @@ spacecost build -o ./out           # write all six CSVs
 | `cheapest_propellant_for(catalog, dv)` | the propellant table ranked by fuel cost at that delta-v |
 | `mission_cost_breakdown(catalog, ...)` | launch + propellant + hardware + ops + contingency, itemised |
 | `build_transportation_summary(...)` | the vehicle x segment x propellant cross-join |
-| `validate(...)` | sanity bands over the loaded tables; prints warnings, never raises |
+| `validate_tables(...)` (alias `validate`) | sanity bands over the loaded tables; prints warnings, never raises |
 | `build_catalog(config, catalog_date=None)` | everything, written to CSV |
 | `set_verbose(True)` | turn on the progress output, which is off by default |
+
+⚠️  **Prefer `validate_tables` over `validate` if your build rewrites source.**
+Both are the same function. economicspace concatenates its four stage modules
+into one file and resolves name collisions with a whole-word regex, so
+`from spacecost import validate as _v` gets rewritten there and then fails to
+import. Anything vendored, concatenated or code-generated wants the unambiguous
+name.
 
 ⚠️  The query helpers read `cost_usd_per_kg`, the **resolved** price. That column
 is produced by `merge_propellant_prices`, not by `load_propellants`, whose

@@ -40,3 +40,31 @@ jobs:
 
       - name: Build the catalog from the CLI
         run: python -m spacecost build -o ./ci_out
+
+      # Install the BUILT DISTRIBUTION, not the working tree, and exercise the
+      # public API from a directory where the source is not importable.
+      #
+      # The editable install above cannot see a packaging gap: it imports the
+      # tree, so anything present in the tree passes. A consumer gets a built
+      # artifact from a tag, which is a different thing -- and that difference
+      # already shipped a bug once, when the v0.1.0 tag predated
+      # `validate_tables` and a clean install of it could not satisfy
+      # economicspace's import.
+      - name: Install the built distribution and use it from outside the tree
+        shell: bash
+        run: |
+          python -m pip install --upgrade build
+          python -m build --wheel --outdir dist_check
+          python -m venv fresh
+          if [ -d fresh/Scripts ]; then PY=fresh/Scripts/python; else PY=fresh/bin/python; fi
+          "$PY" -m pip install --quiet dist_check/*.whl
+          mkdir -p elsewhere
+          cd elsewhere
+          "../$PY" -c "
+          import spacecost
+          for name in spacecost.__all__:
+              assert hasattr(spacecost, name), 'missing from the wheel: ' + name
+          print('wheel exports', len(spacecost.__all__), 'names, all importable')
+          print('spacecost', spacecost.__version__, 'data', spacecost.DATA_VERSION)
+          "
+

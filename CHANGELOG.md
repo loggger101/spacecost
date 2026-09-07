@@ -13,6 +13,27 @@ may read a version as proof that a number moved.
 
 ## Package releases
 
+### 0.1.1 - 2026-09-07
+
+Data contract `pipeline_version` **1.14.0**, unchanged. No table row moved and
+no output byte moved.
+
+**Adds `validate_tables`, a second name for `validate`.** Both are the same
+function; prefer the longer one anywhere your build rewrites source.
+
+The reason is concrete. economicspace concatenates its four stage modules into
+a single file and resolves name collisions with a whole-word regex over the
+entire text -- comments and string literals included. Module 2 there also
+defines a `validate`, so `from spacecost import validate as _v` had the
+IMPORTED name rewritten and then failed against a package with no such
+attribute. Aliasing the local name does not help: the imported name is still a
+bare word. The fix has to be a name that does not collide.
+
+⚠️  **Found by installing the pinned tag into a clean virtualenv**, not by the
+test suite, which imports the working tree and so could not see that `v0.1.0`
+predated the fix. A tag is what consumers actually get; test that, not only the
+tree.
+
 ### 0.1.0 - 2026-09-07
 
 First release. Data contract `pipeline_version` **1.14.0**, unchanged.
