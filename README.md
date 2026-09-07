@@ -86,11 +86,25 @@ API. `CHANGELOG.md` is the record for both.
 
 ## The output is a contract
 
-`build_catalog()` writes six CSVs. They are the input to a model whose every
-release is argued from bit-identity, so what this package promises is not "the
-same numbers" but **the same bytes**. `tests/test_parity.py` is that promise as
-a test: it rebuilds the tables and compares them to the files committed under
-`reference/` byte for byte.
+`build_catalog()` writes six CSVs, and the guarantee is not the same for all
+six. Which one applies depends on whether a file contains a computed float:
+
+| | contract | why |
+|---|---|---|
+| the five reference tables | **byte identical, every platform** | no arithmetic; every value is a table entry passed through |
+| the composite summary | **the same values, to a few ULP** | three columns of rocket equation, so `exp()` is involved |
+
+The tables feed a model whose releases are argued from bit-identity, so what is
+promised there is not "the same numbers" but the same bytes, and a tolerance
+would hide the drift the check exists to catch. The summary cannot be promised
+that by anyone: `exp()` is the platform libm and numpy picks SIMD kernels per
+architecture, and neither is required by IEEE 754 to be correctly rounded. CI
+demonstrated it on the first push, where Linux 3.9 and 3.12 agreed with each
+other and 3.14 did not, which is a numpy version choosing different kernels
+rather than an OS difference. Its byte hash is therefore recorded with the
+platform it was taken on and checked only there.
+
+`tests/test_parity.py` is both contracts as tests.
 
 ```bash
 pip install -e ".[test]"
@@ -151,8 +165,10 @@ evidence that it changed nothing. What did change, and all it changed:
 `reference/` holds the five tables as committed CSVs, so `curl` and a
 spreadsheet are enough. The sixth file, the composite
 `transportation_summary.csv` cross-joining vehicle x segment x propellant, is
-7.4 MB and is **not** committed; it is pinned by SHA-256 in
-`reference/SUMMARY_SHA256` and rebuilt by `spacecost build`.
+7.4 MB and is **not** committed. `reference/summary_sample.csv` is a 411-row
+stride sample of it at full precision, and `reference/summary_meta.json` records
+its row count, its hash and the platform that hash was taken on. `spacecost
+build` rebuilds the whole thing.
 
 ## What it does not do
 

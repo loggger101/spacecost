@@ -44,8 +44,25 @@ identical to the ones that module produces, hashes included.
   `reference/`, the five tables as committed CSVs for anyone who wants the data
   without running Python
 
-Known gap: the composite `transportation_summary.csv` is 7.4 MB and is not
-committed. It is pinned by SHA-256 in `reference/SUMMARY_SHA256`.
+**A portability finding, from CI on the first push.** The five reference
+tables are byte-identical on Linux and Windows across Python 3.9, 3.12 and
+3.14. The composite summary is not, and cannot be: three of its columns are
+rocket equation, so they run through `exp()`, which is the platform libm and
+numpy's per-architecture SIMD kernels, and neither is required by IEEE 754 to
+be correctly rounded. Linux 3.9 and 3.12 agreed with each other while 3.14
+differed, which is a numpy version picking different kernels rather than an OS
+difference.
+
+That is a property of floating point, not a defect, and it is not filed as one.
+The contract is stated at the strength each file can actually carry: the tables
+are compared byte for byte everywhere, the summary is compared by VALUE to
+within 1e-12 relative, and its byte hash is recorded together with the platform
+it was taken on and checked only there.
+
+The composite summary is 7.4 MB and is not committed.
+`reference/summary_sample.csv` is a 411-row stride sample at full precision and
+`reference/summary_meta.json` carries the row count, the hash and that
+platform.
 
 ## Data contract history, inherited
 

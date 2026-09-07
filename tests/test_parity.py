@@ -1,21 +1,38 @@
 # -*- coding: utf-8 -*-
-"""The acceptance test: a build reproduces the committed reference files exactly.
+"""The acceptance test: a build reproduces the committed reference files.
 
-WHY THIS IS A BYTE COMPARISON AND NOT A TOLERANCE.  These tables are the input
-to a model whose every release is argued from bit-identity, so the contract
-this package offers its consumers is not "the same numbers" but "the same
-bytes".  A tolerance would hide exactly the drift this exists to catch: a
-reordered column, a float formatted differently, a row silently dropped.
+TWO CONTRACTS, AND THEY ARE NOT THE SAME STRENGTH.  Which one applies depends
+on whether the file contains a computed float:
 
-The five reference CSVs under `reference/` were produced by economicspace
+    the five reference tables    BYTE identical, on every platform
+    the composite summary        the same VALUES, to within a few ULP
+
+The tables carry no arithmetic -- every value is a table entry passed through
+-- so a byte comparison is the right contract and a tolerance would hide
+exactly the drift it exists to catch: a reordered column, a float formatted
+differently, a row silently dropped. These tables feed a model whose releases
+are argued from bit-identity, so what is promised there is not "the same
+numbers" but "the same bytes".
+
+The summary is three columns of rocket equation, so it goes through `exp()`,
+which is the platform libm and numpy's per-architecture SIMD kernels. Neither
+is required by IEEE 754 to be correctly rounded. Promising bytes there would be
+promising something no host can deliver, so its values are compared instead,
+and its byte hash is checked only on the platform it was recorded on.
+
+The reference files were produced by economicspace
 modules/transportation.py at pipeline_version 1.14.0 (commit b0b18b2) and by
-this package, byte for byte identically, on 2026-09-07.  If this test fails and
-you did not mean to change a row, the extraction has drifted.
+this package, byte for byte identically, on 2026-09-07.  If a table test fails
+and you did not mean to change a row, the extraction has drifted.
 """
 
 import hashlib
+import json
 import os
+import platform
+import sys
 
+import numpy as np
 import pandas as pd
 import pytest
 
@@ -55,13 +72,80 @@ def test_table_is_byte_identical(built, name):
     )
 
 
-def test_summary_matches_pinned_hash(built):
-    """The composite summary is pinned by hash; it is too large to commit."""
+def _summary_meta():
+    with open(os.path.join(REFERENCE, "summary_meta.json")) as fh:
+        return json.load(fh)
+
+
+def _on_reference_platform(meta) -> bool:
+    ref = meta["reference_platform"]
+    return (platform.system() == ref["system"]
+            and platform.machine() == ref["machine"]
+            and ".".join(map(str, sys.version_info[:2])) == ref["python"]
+            and np.__version__ == ref["numpy"]
+            and pd.__version__ == ref["pandas"])
+
+
+def test_summary_values_are_portable(built):
+    """The composite summary reproduces its VALUES everywhere, to a few ULP.
+
+    ⚠️  NOT its bytes, and that distinction is the point of this test.
+
+    The five reference tables carry no computed floats -- every value is a
+    table entry passed through -- so they are byte-portable, and
+    `test_table_is_byte_identical` checks exactly that on every CI platform.
+
+    The summary is different in kind. Three of its columns come out of the
+    rocket equation, so they run through `exp()`: the platform libm, and
+    numpy's per-architecture SIMD kernels. Neither is required by IEEE 754 to
+    be correctly rounded, and they are not. CI caught this on the first push:
+    Linux/3.9 and Linux/3.12 agreed with each other and Linux/3.14 did not,
+    which is a numpy version picking different kernels, not an OS difference.
+
+    So a byte comparison of this file is a statement about a host. A VALUE
+    comparison is a statement about the model, and that is what is asserted
+    here. rtol is 1e-12: tight enough that any real change to a table, a
+    coefficient or a formula fails it by orders of magnitude, loose enough
+    that last-bit differences in exp() do not.
+    """
+    table_dir, frames = built
+    want = pd.read_csv(os.path.join(REFERENCE, "summary_sample.csv"),
+                       float_precision="round_trip")
+    stride = _summary_meta()["stride"]
+    got = frames["summary"].iloc[::stride].reset_index(drop=True)
+
+    assert len(got) == len(want), "the summary changed length"
+    assert list(got.columns) == list(want.columns), "the summary changed shape"
+
+    for col in want.columns:
+        if pd.api.types.is_numeric_dtype(want[col]):
+            np.testing.assert_allclose(
+                got[col].to_numpy(dtype=float), want[col].to_numpy(dtype=float),
+                rtol=1e-12, equal_nan=True,
+                err_msg="column " + col + " moved by more than a few ULP")
+        else:
+            assert got[col].fillna("").tolist() == want[col].fillna("").tolist(), col
+
+
+def test_summary_row_count_is_pinned(built):
+    """A dropped vehicle, propellant or segment changes the cross-join size."""
+    _, frames = built
+    assert len(frames["summary"]) == _summary_meta()["rows"]
+
+
+def test_summary_hash_on_the_reference_platform(built):
+    """On the recorded platform, and only there, the summary is byte-exact.
+
+    Skipped elsewhere rather than relaxed, because a hash that is only
+    sometimes meaningful is worse than one that says when it applies.
+    """
+    meta = _summary_meta()
+    if not _on_reference_platform(meta):
+        pytest.skip("not the reference platform: " + repr(meta["reference_platform"]))
     table_dir, _ = built
     path = os.path.join(table_dir, "transportation_summary.csv")
     got = hashlib.sha256(open(path, "rb").read()).hexdigest()
-    want = open(os.path.join(REFERENCE, "SUMMARY_SHA256")).read().strip()
-    assert got == want
+    assert got == meta["sha256"]
 
 
 def _bare_lf_outside_quotes(raw: bytes) -> int:
