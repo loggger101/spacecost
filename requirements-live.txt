@@ -1,0 +1,2 @@
+# Optional: live commodity fuel prices (spacecost build --live)
+yfinance>=0.2

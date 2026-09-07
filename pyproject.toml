@@ -1,0 +1,50 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "spacecost"
+version = "0.1.0"
+description = "Cited reference tables for space-mission cost and mass estimation: launch vehicles, propellants, delta-v, operations, storage."
+readme = "README.md"
+requires-python = ">=3.9"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{ name = "loggger101" }]
+keywords = [
+    "spaceflight", "launch", "propellant", "delta-v", "rocket-equation",
+    "mission-design", "cost-estimation", "isru", "reference-data",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "Programming Language :: Python :: 3",
+    "Topic :: Scientific/Engineering :: Astronomy",
+    "Topic :: Scientific/Engineering :: Physics",
+]
+
+# numpy and pandas only. The live-price fetch is the ONE optional extra, and it
+# is optional on purpose: `use_yfinance` defaults False, so a build is
+# deterministic and offline unless the caller asks for the network.
+dependencies = [
+    "numpy>=1.24",
+    "pandas>=2.0",
+]
+
+[project.optional-dependencies]
+live = ["yfinance>=0.2"]
+test = ["pytest>=7.0"]
+
+[project.urls]
+Homepage = "https://github.com/loggger101/spacecost"
+Source = "https://github.com/loggger101/spacecost"
+"Upstream project" = "https://github.com/loggger101/economicspace"
+
+[project.scripts]
+spacecost = "spacecost.cli:main"
+
+[tool.setuptools]
+packages = ["spacecost"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

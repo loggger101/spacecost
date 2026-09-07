@@ -1,0 +1,11 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.pytest_cache/
+.venv/
+venv/
+
+# Build output. `reference/` holds the COMMITTED tables; this is scratch.
+spacecost_data/

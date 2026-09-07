@@ -1,0 +1,16 @@
+# The reference CSVs are CRLF BY CONTRACT, not by accident of platform.
+# `pandas.to_csv` has lineterminator pinned to "\r\n" in build.py because the
+# committed hashes are hashes of CRLF; tests/test_parity.py compares bytes.
+#
+# Without these rules git would normalise them to LF on a Linux checkout and the
+# parity test would fail there while passing on Windows -- which reads exactly
+# like a code defect and is not one.
+*.csv -text
+reference/SUMMARY_SHA256 text eol=lf
+
+# Everything else is ordinary source: normalise it.
+*.py text eol=lf
+*.md text eol=lf
+*.toml text eol=lf
+*.yml text eol=lf
+*.txt text eol=lf
