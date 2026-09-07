@@ -5,6 +5,8 @@
     python -m spacecost build --live     fetch live fuel prices first
     python -m spacecost show vehicles    print a table
     python -m spacecost propellant 6500  cheapest propellant for a given delta-v
+    python -m spacecost launch leo       cheapest vehicle to a destination
+    python -m spacecost example          a worked mission cost breakdown
 
 `build` is the only subcommand that writes anything.  Everything prints ASCII
 only -- see tests/test_quiet.py for why that is a rule and not a preference.
@@ -18,7 +20,8 @@ from . import __version__
 from ._log import set_verbose
 from .build import build_catalog
 from .config import SpacecostConfig
-from .query import cheapest_propellant_for, mission_cost_breakdown
+from .query import (cheapest_launch_to, cheapest_propellant_for,
+                    mission_cost_breakdown)
 from .tables import (load_delta_v, load_launch_vehicles,
                      load_operational_costs, load_propellants, load_storage)
 
@@ -68,11 +71,67 @@ def _build_parser() -> argparse.ArgumentParser:
     q.add_argument("delta_v_m_per_s", type=float)
     q.add_argument("-n", "--rows", type=int, default=10)
 
+    lv = sub.add_parser("launch",
+                        help="cheapest launch vehicle to a destination")
+    lv.add_argument("destination", choices=["leo", "gto", "escape"])
+    lv.add_argument("--min-payload-kg", type=float, default=0.0)
+    lv.add_argument("-n", "--rows", type=int, default=10)
+
+    ex = sub.add_parser("example",
+                        help="worked mission cost breakdown, end to end")
+    ex.add_argument("--payload-kg", type=float, default=1_000.0)
+    ex.add_argument("--dv-outbound", type=float, default=6_500.0)
+    ex.add_argument("--dv-return", type=float, default=5_500.0)
+    ex.add_argument("--years", type=float, default=3.0)
+    ex.add_argument("--hardware-kg", type=float, default=2_000.0)
+    ex.add_argument("--vehicle", default="Falcon Heavy (reusable side cores)")
+    ex.add_argument("--propellant", default="methalox  (LCH4 / LOX)")
+
     return p
+
+
+def _priced_catalog():
+    """The frames the query helpers need, resolved offline.
+
+    `cheapest_propellant_for` and `mission_cost_breakdown` read
+    `cost_usd_per_kg`, which is the RESOLVED price -- live where a quote
+    exists, reference otherwise -- and only `merge_propellant_prices` produces
+    it.  Handing them the raw reference frame raises `KeyError`, because the
+    reference column is named `ref_cost_usd_per_kg`.  An empty live frame
+    resolves every row to its reference price with no network call.
+    """
+    import pandas as pd
+
+    from .prices import merge_propellant_prices
+    return {
+        "launch_vehicles": load_launch_vehicles(),
+        "propellants": merge_propellant_prices(load_propellants(), pd.DataFrame()),
+        "operational_costs": load_operational_costs(),
+    }
+
+
+def _make_stdout_total():
+    """Never die printing a DATA value.
+
+    Every string this package prints is ASCII, and tests/test_quiet.py keeps it
+    that way -- but the `notes` fields are data, not output, and they carry a
+    yen sign, degree symbols and em-dashes. `show` prints them. Windows picks
+    cp1252 for a REDIRECTED stdout, so `spacecost show storage > out.txt` would
+    raise UnicodeEncodeError on the first one, and never in a console, which is
+    what makes it invisible until somebody logs it.
+
+    `errors="replace"` is deliberate over `"strict"`: a mangled character in a
+    citation is a far better outcome than a dead command.
+    """
+    try:
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+    except (AttributeError, ValueError):
+        pass
 
 
 def main(argv=None) -> int:
     """Entry point. Returns a process exit code."""
+    _make_stdout_total()
     args = _build_parser().parse_args(argv)
 
     if args.command == "build":
@@ -95,19 +154,40 @@ def main(argv=None) -> int:
         return 0
 
     if args.command == "propellant":
-        # `cheapest_propellant_for` reads `cost_usd_per_kg`, which is the
-        # RESOLVED price -- live where a quote exists, reference otherwise --
-        # and only `merge_propellant_prices` produces it. Handing it the raw
-        # reference frame gets a KeyError, because the reference column is
-        # named `ref_cost_usd_per_kg`. Passing an empty live frame resolves
-        # every row to its reference price with no network call.
-        import pandas as pd
-
-        from .prices import merge_propellant_prices
-        catalog = {"propellants": merge_propellant_prices(
-            load_propellants(), pd.DataFrame())}
-        ranked = cheapest_propellant_for(catalog, args.delta_v_m_per_s)
+        ranked = cheapest_propellant_for(_priced_catalog(), args.delta_v_m_per_s)
         print(ranked.head(args.rows).to_string(index=False))
+        return 0
+
+    if args.command == "launch":
+        found = cheapest_launch_to(_priced_catalog(), args.destination,
+                                   min_payload_kg=args.min_payload_kg)
+        if found is None or (hasattr(found, "empty") and found.empty):
+            print("no vehicle carries " + str(args.min_payload_kg)
+                  + " kg to " + args.destination)
+            return 1
+        cols = ["name", "operator", "status", "payload_leo_kg",
+                "payload_gto_kg", "payload_escape_kg",
+                "usd_per_kg_to_" + args.destination, "list_price_usd"]
+        found = found[[c for c in cols if c in found.columns]]
+        print(found.head(args.rows).to_string(index=False))
+        return 0
+
+    if args.command == "example":
+        breakdown = mission_cost_breakdown(
+            _priced_catalog(),
+            payload_kg          = args.payload_kg,
+            delta_v_outbound    = args.dv_outbound,
+            delta_v_return      = args.dv_return,
+            launch_vehicle      = args.vehicle,
+            propellant          = args.propellant,
+            mission_duration_yr = args.years,
+            hardware_kg         = args.hardware_kg,
+        )
+        for key, value in breakdown.items():
+            if isinstance(value, float):
+                print("    %-30s : %18s" % (key, format(value, ",.0f")))
+            else:
+                print("    %-30s : %s" % (key, value))
         return 0
 
     return 1

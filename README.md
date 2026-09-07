@@ -20,10 +20,35 @@ spacecost.cost_per_dv_usd_per_kg(
 ```
 
 ```bash
-spacecost show vehicles -n 10
+spacecost show vehicles -n 10      # or propellants, deltav, operations, storage
 spacecost propellant 6500          # rank propellants by fuel cost for a delta-v
+spacecost launch leo --min-payload-kg 5000
+spacecost example                  # a worked mission cost breakdown, end to end
 spacecost build -o ./out           # write all six CSVs
 ```
+
+## The API
+
+| call | gives you |
+|---|---|
+| `load_launch_vehicles()` and the four other `load_*` | one reference table as a DataFrame |
+| `LAUNCH_VEHICLES_REFERENCE` and the four other `*_REFERENCE` | the same data as plain dicts, no pandas needed to read it |
+| `propellant_mass_for_dv(payload_kg, dv, isp)` | Tsiolkovsky, vectorised over arrays |
+| `cost_per_dv_usd_per_kg(cost, isp, dv)` | the headline normalised metric: USD of propellant to move 1 kg through a delta-v |
+| `cheapest_launch_to(catalog, "leo", min_payload_kg=...)` | the launch table filtered and ranked |
+| `cheapest_propellant_for(catalog, dv)` | the propellant table ranked by fuel cost at that delta-v |
+| `mission_cost_breakdown(catalog, ...)` | launch + propellant + hardware + ops + contingency, itemised |
+| `build_transportation_summary(...)` | the vehicle x segment x propellant cross-join |
+| `validate(...)` | sanity bands over the loaded tables; prints warnings, never raises |
+| `build_catalog(config, catalog_date=None)` | everything, written to CSV |
+| `set_verbose(True)` | turn on the progress output, which is off by default |
+
+⚠️  The query helpers read `cost_usd_per_kg`, the **resolved** price. That column
+is produced by `merge_propellant_prices`, not by `load_propellants`, whose
+column is `ref_cost_usd_per_kg`. `build_catalog` does this for you; if you are
+assembling a catalog dict by hand, pass the propellant frame through
+`merge_propellant_prices(load_propellants(), pd.DataFrame())` for an offline
+resolve.
 
 ## What is in it
 
@@ -183,6 +208,12 @@ The surface delivery figures are **marginal-transport lower bounds**: no
 non-recurring engineering, no programme overhead, no cadence limit. They answer
 "what could this cost at industrial scale", not "what would this cost today".
 Real CLPS lunar delivery is roughly $1M/kg at ~100 kg scale.
+
+**The operational table assumes an uncrewed spacecraft.** No life support, no
+habitat, no crew operations, no return-vehicle uplift for people. The
+"Autonomous mining control & AI (NRE)" line is what that design pays instead.
+The launch, propellant, delta-v and storage tables are indifferent to crew; the
+operational one is not, and costing a crewed mission with it will read low.
 
 ## Citations and licence
 

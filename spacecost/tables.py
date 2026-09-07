@@ -13,9 +13,8 @@ from .config import CONFIG, SpacecostConfig as TransportConfig
 from .deltav import DELTA_V_REFERENCE
 from .operations import OPERATIONAL_COSTS_REFERENCE
 from .propellants import PROPELLANTS_REFERENCE, _apply_thruster_data
-from .rocket import cost_per_dv_usd_per_kg, propellant_mass_for_dv
+from .rocket import propellant_mass_for_dv
 from .storage import STORAGE_REFERENCE
-from .units import G0_M_S2
 from .vehicles import LAUNCH_VEHICLES_REFERENCE
 
 # ─────────────────────────────────────────────────────────────────────────────

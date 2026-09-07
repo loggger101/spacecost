@@ -1,6 +1,10 @@
 # -*- coding: utf-8 -*-
 """spacecost: a cited reference dataset for space-mission cost and mass estimation.
 
+Every cost that sits between "payload on the ground" and "payload delivered":
+
+    Launch  +  Transit propellant  +  Operations  +  Return  +  Contingency
+
 Five tables, every row carrying an inline citation and a `reference_year`:
 
     36 launch vehicles      $/kg to LEO, GTO and escape, payload, status
@@ -9,6 +13,21 @@ Five tables, every row carrying an inline citation and a `reference_year`:
     33 delta-v segments     m/s and trip duration per trajectory leg
     44 operational costs    $/mission-year and $/kg-payload lines
     20 storage systems      the domains a kilogram can be held in
+
+Each is normalised to a unit the others compose with, which is the whole point
+of collecting them together rather than separately:
+
+    Launch        ->  USD per kg of payload to destination
+    Propellant    ->  USD per kg, USD per L, AND USD per (kg-delta-v), which is
+                      the rocket equivalent of "fuel cost per km"
+    Mission dv    ->  m/s and trip duration (yr) per trajectory leg
+    Operational   ->  USD per mission-year and USD per kg-payload
+
+THE OPERATIONAL TABLE ASSUMES AN UNCREWED SPACECRAFT.  No life support, no
+habitat, no crew operations, no return-vehicle uplift for people.  The
+"Autonomous mining control & AI (NRE)" line is what that design pays instead.
+If you are costing a crewed mission the launch, propellant, delta-v and storage
+tables still apply and this one does not.
 
 Quick start:
 
@@ -63,9 +82,17 @@ __version__ = "0.1.0"
 # tests/test_parity.py asserts the two agree.
 DATA_VERSION = CONFIG.pipeline_version
 
+# Migration aliases. The two names this package changed on the way out of
+# economicspace, kept importable so a call site moving over does not have to be
+# rewritten to be tried. `build_transportation_catalog` is aliased in build.py
+# for the same reason.
+TransportConfig = SpacecostConfig
+build_transportation_catalog = build_catalog
+
 __all__ = [
     "__version__", "DATA_VERSION",
     "CONFIG", "SpacecostConfig",
+    "TransportConfig", "build_transportation_catalog",
     "LAUNCH_VEHICLES_REFERENCE", "PROPELLANTS_REFERENCE",
     "DELTA_V_REFERENCE", "OPERATIONAL_COSTS_REFERENCE", "STORAGE_REFERENCE",
     "load_launch_vehicles", "load_propellants", "load_delta_v",

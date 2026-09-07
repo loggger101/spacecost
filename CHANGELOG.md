@@ -64,6 +64,33 @@ The composite summary is 7.4 MB and is not committed.
 `reference/summary_meta.json` carries the row count, the hash and that
 platform.
 
+## Where the rest of the history lives
+
+The section below is the **table-level** record: what changed in which stamp,
+which config fields and output columns each added. It is complete, all 21
+stamps, and it is the authority for what a given `pipeline_version` contains.
+
+⚠️  **It is not the whole story, and the rest is deliberately not copied here.**
+Seven of these releases shipped jointly with the model that consumed the
+tables, and those release notes carry the *measurements that motivated the
+table change* -- what moved, by how much, and on what population. Those are
+measurements of that model, not facts about these tables, so they stay where
+they were made. Naming one authority is the alternative to having two that
+drift.
+
+Read them at
+[economicspace/versions.md](https://github.com/loggger101/economicspace/blob/main/versions.md):
+
+| this stamp | the release note that explains why |
+|---|---|
+| `1.9.0` | `calc v1.11.0 / transportation v1.9.0` -- tankage is only ~0.7% of launch mass and still changes which propellant wins |
+| `1.10.0` | `calc v1.12.0 / transportation v1.10.0` -- why the thruster device is separate from the propellant, and what a COPV costs at 22.9% tankage |
+| `1.11.0` | `calc v1.14.0 / transportation v1.11.0` -- the storage figures behind the eclipse power term |
+| `1.12.0` | `calc v1.15.0 / transportation v1.12.0` |
+| `1.12.1` | `calc v1.17.7 / transportation v1.12.1` -- the `.astype(bool)` flag fix, which lives in a function Stage 4 never calls |
+| `1.13.0` | `calc v1.18.0 / transportation v1.13.0` -- three reference rows for a Mars-orbit depot |
+| `1.14.0` | `calc v1.19.0 / transportation v1.14.0` -- four reference rows for a geostationary depot |
+
 ## Data contract history, inherited
 
 Every `pipeline_version` stamp these tables carried while they were Module 3

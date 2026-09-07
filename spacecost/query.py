@@ -10,7 +10,6 @@ from typing import Dict
 
 import pandas as pd
 
-from ._log import say
 from .config import CONFIG, SpacecostConfig as TransportConfig
 from .rocket import cost_per_dv_usd_per_kg, propellant_mass_for_dv
 

@@ -26,6 +26,8 @@ import subprocess
 import sys
 import tokenize
 
+import pytest
+
 import spacecost
 
 PKG_DIR = os.path.dirname(os.path.abspath(spacecost.__file__))
@@ -98,6 +100,48 @@ def test_printed_strings_are_ascii():
                             os.path.basename(path) + ":" + str(sub.lineno)
                             + " " + repr("".join(bad)))
     assert not offenders, "non-ASCII in printed strings: " + "; ".join(offenders)
+
+
+def test_notes_fields_do_contain_non_ascii():
+    """The premise of the next test: `notes` are DATA and keep their Unicode.
+
+    If this ever passes with zero hits, somebody has ASCII-flattened the
+    citations, and the test below stops proving anything.
+    """
+    import spacecost as sc
+    hits = 0
+    for table in (sc.LAUNCH_VEHICLES_REFERENCE, sc.PROPELLANTS_REFERENCE,
+                  sc.DELTA_V_REFERENCE, sc.OPERATIONAL_COSTS_REFERENCE,
+                  sc.STORAGE_REFERENCE):
+        for row in table:
+            note = row.get("notes", "")
+            if any(ord(c) > 127 for c in note):
+                hits += 1
+    assert hits > 0, "no notes field carries Unicode; has the data been flattened?"
+
+
+@pytest.mark.parametrize("table", ["vehicles", "propellants", "deltav",
+                                   "operations", "storage"])
+def test_show_survives_a_cp1252_redirect(table):
+    """`show` prints DATA, and data carries Unicode the ASCII rule does not cover.
+
+    A separate failure from the printed-string one, with a separate fix: the
+    ASCII rule keeps the package's OWN output safe, and cannot keep a yen sign
+    somebody put in a citation safe. `cli._make_stdout_total` is what does
+    that, and this is the test that it is still wired up.
+    """
+    env = dict(os.environ, PYTHONUTF8="0", PYTHONIOENCODING="cp1252")
+    import tempfile
+    with tempfile.TemporaryDirectory() as tmp:
+        out = os.path.join(tmp, "out.txt")
+        with open(out, "w") as fh:
+            proc = subprocess.run(
+                [sys.executable, "-m", "spacecost", "show", table],
+                stdout=fh, stderr=subprocess.PIPE, text=True, env=env,
+                cwd=os.path.dirname(PKG_DIR),
+            )
+        assert proc.returncode == 0, proc.stderr
+        assert "UnicodeEncodeError" not in proc.stderr, proc.stderr
 
 
 def test_build_survives_a_cp1252_redirect():

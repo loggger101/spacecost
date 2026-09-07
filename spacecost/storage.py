@@ -8,9 +8,7 @@ commit b0b18b2de301653ee23de1bd3779867ae5b617a1 (2026-09-04).
 from typing import List
 
 from ._log import say
-from .propellants import (_COPV_PERFORMANCE_J_PER_KG, _LAR_BOILOFF_PCT_PER_DAY,
-                          _STORAGE_CLASS_TANK_MULT, _TANK_BASE_KG_PER_L,
-                          _tank_kg_per_L)
+from .propellants import _COPV_PERFORMANCE_J_PER_KG, _TANK_BASE_KG_PER_L
 
 # ─────────────────────────────────────────────────────────────────────────────
 # STORAGE SYSTEMS REFERENCE TABLE  (v1.9.0)

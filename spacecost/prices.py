@@ -13,8 +13,8 @@ import pandas as pd
 from ._log import say
 from .config import SpacecostConfig as TransportConfig
 from .propellants import _COMPONENTS, PROPELLANTS_REFERENCE
-from .units import (COMMODITY_DENSITY_KG_PER_L, _per_bbl_to_per_kg,
-                    _per_gal_to_per_kg, _per_mmbtu_to_per_kg_ng)
+from .units import (_per_bbl_to_per_kg, _per_gal_to_per_kg,
+                    _per_mmbtu_to_per_kg_ng)
 
 # ─────────────────────────────────────────────────────────────────────────────
 # YFINANCE FETCHER  (live commodity proxies for liquid propellants)
