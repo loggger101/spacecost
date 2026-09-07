@@ -112,14 +112,28 @@ Read them at
 | `1.13.0` | `calc v1.18.0 / transportation v1.13.0` -- three reference rows for a Mars-orbit depot |
 | `1.14.0` | `calc v1.19.0 / transportation v1.14.0` -- four reference rows for a geostationary depot |
 
-## Data contract history, inherited
+## Data contract history
 
-Every `pipeline_version` stamp these tables carried while they were Module 3
-of economicspace, copied across unaltered. It is the measurement record: what
-changed in which release, and what each number used to be.
+Every `pipeline_version` stamp these tables have carried, from `1.2.0` to
+`1.14.0`. It is the measurement record: what changed in which release, what
+each number used to be, and which release added which output column.
 
-> These entries describe `modules/transportation.py`. File paths and
-> cross-references in them point into that project, not this one.
+**This is the only copy.** The entries below were written while the tables were
+Module 3 of [economicspace](https://github.com/loggger101/economicspace), and
+that repo held them until 2026-09-07; it now points here, because two copies of
+one measurement record is a bug and the tables are this package's. Nothing was
+altered in the move, and nothing was dropped -- checked token by token with
+that project's `verify_docs.py --before`, 874 distinctive numbers, none lost.
+
+⚠️  **Read them as history, not as instructions.** They describe
+`modules/transportation.py`, so file paths and cross-references in them point
+into that project. The numbering is continuous across the move: a catalog on
+disk stamped `transportation 1.9.0` was written by the tables this package
+versions as data contract `1.9.0`.
+
+⚠️  **The schema half is the part with no other home.** Which release added
+`tank_kg_per_L` and which added the thruster columns is what tells you whether
+an archived CSV can answer the question you are asking of it.
 
 **`1.2.0`  initial release.**
 
