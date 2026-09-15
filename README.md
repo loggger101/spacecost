@@ -207,8 +207,17 @@ not a commit.
 ⚠️  **Then repin downstream.** [economicspace](https://github.com/loggger101/economicspace)
 installs this package from a pinned tag in `requirements.txt` and
 `_MASTER_REQUIRED`. Until that tag moves it keeps building against the old
-tables, so the edit silently does not land there. Its `verify_stage3.py`
-catches the mismatch; nothing else will.
+tables, so the edit silently does not land there.
+
+Three checks over there catch a repin that went wrong, and they catch different
+halves of it. `verify_docs.py` check 7 holds those two copies of the tag to each
+other, because repinning one and not the other makes `pip install -r` and its
+Colab paste install different revisions of these tables with nothing else
+moving. `verify_stage3.py` check 6 reads pip's own `direct_url.json` and holds
+the INSTALLED revision to the pinned tag, which is also what catches a tag that
+has been moved after the fact. Its other checks then compare this package's
+output byte for byte. **None of them can tell "not yet repinned" from "never
+released", so cutting the tag is still on you.**
 
 ⚠️  **Test the TAG, not the working tree.** The test suite imports the source
 directory, so it cannot see a packaging gap. `v0.1.0` shipped without
@@ -216,6 +225,16 @@ directory, so it cannot see a packaging gap. `v0.1.0` shipped without
 satisfy economicspace's import. CI now builds a wheel and exercises the public
 API from outside the tree; a clean `pip install` of the new tag is still the
 last check worth doing by hand.
+
+⚠️  **And the CONSUMER SURFACE is a test now**, `tests/test_consumer_contract.py`.
+The wheel step above walks `__all__`, which proves the names this package
+currently declares are packaged; it cannot see a name being deleted from the
+package and from `__all__` in one commit, which is what happened with
+`validate_tables`. That file lists what economicspace actually imports, so
+removing one fails here rather than at a consumer's import three steps later.
+A failure is not an instruction to put the name back: it says the change is
+**breaking**, so it wants a major bump, a CHANGELOG entry, and the matching
+edit to `modules/transportation.py` in the same breath.
 
 ## Layout
 
@@ -236,7 +255,8 @@ spacecost/          the package
     cli.py          `python -m spacecost`
 reference/          the five tables as committed CSVs, plus a sample of the
                     sixth and the platform its hash was taken on
-tests/              parity against reference/, table invariants, output rules
+tests/              parity against reference/, table invariants, output
+                    rules, and the surface economicspace imports
 ```
 
 ## Reading the tables without Python
