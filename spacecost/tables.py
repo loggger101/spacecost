@@ -5,12 +5,12 @@ Extracted verbatim from economicspace modules/transportation.py, pipeline_versio
 commit b0b18b2de301653ee23de1bd3779867ae5b617a1 (2026-09-04).
 """
 
-import numpy as np
 import pandas as pd
 
 from ._log import say
 from .config import CONFIG, SpacecostConfig as TransportConfig
 from .deltav import DELTA_V_REFERENCE
+from .environments import ENVIRONMENTS_REFERENCE
 from .operations import OPERATIONAL_COSTS_REFERENCE
 from .propellants import PROPELLANTS_REFERENCE, _apply_thruster_data
 from .rocket import propellant_mass_for_dv
@@ -74,11 +74,32 @@ def load_storage() -> pd.DataFrame:
     into `OPERATIONAL_COSTS_REFERENCE` in v1.11.0, after this table had spent
     two releases being quoted as a model while being documentation. If you add
     a figure here that Stage 4 should read, add it there too.
+
+    ⚠️  ADD IT BY MIRRORING, NOT BY TYPING IT TWICE. Three figures obeyed the
+    instruction above by existing as a literal value AND a literal range in
+    both files, agreeing only because nobody had edited one of them yet. Since
+    v1.15.0 the copy in storage.py reads the ops row through `_mirrors_ops`,
+    and `tests/test_schema.py` fails on a fourth undeclared duplicate.
     """
     say("\n   Loading storage-systems reference ...")
     df = pd.DataFrame(STORAGE_REFERENCE)
     say(f"     OK  {len(df)} storage systems")
     return df
+
+def load_environments() -> pd.DataFrame:
+    """`ENVIRONMENTS_REFERENCE` as a frame: where a kilogram is being priced.
+
+    The one table here that is not inherited from economicspace Module 3, and
+    the one that carries no money.  It exists because three rows of
+    `operational_costs` -- power-system specific mass, energy storage, and the
+    autonomy NRE -- are functions of heliocentric distance, and nothing in this
+    dataset knew the distance.  See environments.py for the derivations.
+    """
+    say("\n  Loading environments reference ...")
+    df = pd.DataFrame(ENVIRONMENTS_REFERENCE)
+    say(f"     OK  {len(df)} destination environments")
+    return df
+
 
 def build_transportation_summary(
     launch_df:      pd.DataFrame,
@@ -106,29 +127,50 @@ def build_transportation_summary(
         ~delta_v_df["segment"].str.contains("surface", case=False)
     ].copy()
 
+    # ⚠️  The two inner frames are unpacked ONCE, not re-walked per vehicle.
+    # `iterrows()` rebuilds a Series per row per call, and nested three deep
+    # that was 36 x 32 rebuilds of all 41 propellant rows -- 47,232 Series
+    # constructed to do 39,852 multiplications, which is where roughly 90% of a
+    # build's wall time went.
+    #
+    # ⚠️  WHAT IS DELIBERATELY *NOT* DONE HERE IS VECTORISING THE ARITHMETIC.
+    # (This module imports no numpy at all, which is the shortest way to say
+    # so: the only array library in reach is the one behind the scalar call
+    # below, and nothing here should reach for it directly.)
+    # It would be one numpy call and it would be faster still, and it would
+    # also change the output bytes: `propellant_mass_for_dv` reaches `np.exp`,
+    # and numpy dispatches a SIMD kernel for an array that is not the scalar
+    # path, so the two disagree in the last bit or two. The committed summary
+    # hash is a scalar-path hash. The cost is real and the hash is the point,
+    # so the loop stays a loop and only the row access is hoisted. Same
+    # operations, same order, same bytes -- verified against the pre-change
+    # build before this was committed.
+    segments = [(str(r["segment"]), float(r["dv_m_per_s"]), r["duration_yr"])
+                for _, r in in_space.iterrows()]
+    propellants = [(r["name"], float(r["cost_usd_per_kg"]), float(r["isp_vac_s"]))
+                   for _, r in propellant_df.iterrows()]
+
     rows = []
     for _, lv in launch_df.iterrows():
         # Use the LEO price as the baseline cost to "lift" the payload to
         # the start of every in-space segment.  Module 4 can switch this
         # to escape-class numbers for deep-space-direct injections.
         leo_cost_per_kg = lv["usd_per_kg_to_leo"]
+        vehicle_name    = lv["name"]
+        vehicle_status  = lv["status"]
 
-        for _, seg in in_space.iterrows():
-            for _, p in propellant_df.iterrows():
-                cost_per_kg = float(p["cost_usd_per_kg"])
-                isp         = float(p["isp_vac_s"])
-                dv          = float(seg["dv_m_per_s"])
-
+        for segment_name, dv, duration_yr in segments:
+            for prop_name, cost_per_kg, isp in propellants:
                 prop_per_payload = float(propellant_mass_for_dv(1.0, dv, isp))
                 in_space_cost    = prop_per_payload * cost_per_kg
 
                 rows.append({
-                    "vehicle":                                lv["name"],
-                    "vehicle_status":                         lv["status"],
-                    "segment":                                seg["segment"],
+                    "vehicle":                                vehicle_name,
+                    "vehicle_status":                         vehicle_status,
+                    "segment":                                segment_name,
                     "segment_dv_m_per_s":                     dv,
-                    "segment_duration_yr":                    seg["duration_yr"],
-                    "propellant":                             p["name"],
+                    "segment_duration_yr":                    duration_yr,
+                    "propellant":                             prop_name,
                     "propellant_isp_s":                       isp,
                     "propellant_cost_usd_per_kg":             cost_per_kg,
                     "launch_usd_per_kg_to_leo":               leo_cost_per_kg,

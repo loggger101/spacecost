@@ -15,8 +15,8 @@ from ._log import say
 from .config import CONFIG, SpacecostConfig as TransportConfig
 from .prices import fetch_yfinance_fuel_prices, merge_propellant_prices
 from .tables import (build_transportation_summary, load_delta_v,
-                     load_launch_vehicles, load_operational_costs,
-                     load_propellants, load_storage)
+                     load_environments, load_launch_vehicles,
+                     load_operational_costs, load_propellants, load_storage)
 from .validate import validate
 
 # MAIN PIPELINE
@@ -26,7 +26,7 @@ def build_catalog(
     catalog_date: Optional[str]   = None,
 ) -> Dict[str, pd.DataFrame]:
     """
-    Build every reference table and write the six CSVs.
+    Build every reference table and write the seven CSVs.
 
     `catalog_date` pins the `catalog_date` stamp, "YYYY-MM-DD", instead of
     taking today. Pass it when you are comparing two builds: the stamp is a
@@ -42,8 +42,15 @@ def build_catalog(
           "propellants":       DataFrame,
           "delta_v_segments":  DataFrame,
           "operational_costs": DataFrame,
+          "storage_systems":   DataFrame,
+          "environments":      DataFrame,  # v1.15.0
           "summary":           DataFrame,  # vehicle × segment × propellant
         }
+
+    validate() runs here and its findings are DISCARDED, deliberately: a build
+    must not die because a speculative row sits outside a sanity band.  If you
+    want the findings, call `validate_tables(...)` yourself, or run `spacecost
+    validate --strict`, which is what CI gates on.
     """
     t0 = datetime.now()
 
@@ -58,6 +65,7 @@ def build_catalog(
     dv_df     = load_delta_v()
     ops_df    = load_operational_costs()
     store_df  = load_storage()
+    env_df    = load_environments()
 
     # ── Step 2, Live commodity proxies ──────────────────────────────────────
     live_prop = (
@@ -68,7 +76,8 @@ def build_catalog(
     prop_df = merge_propellant_prices(prop_ref, live_prop)
 
     # ── Step 4: Validation ──────────────────────────────────────────────────
-    validate(launch_df, prop_df, dv_df, ops_df)
+    validate(launch_df, prop_df, dv_df, ops_df, env_df, store_df,
+             config=config)
 
     # ── Step 5: Composite summary ───────────────────────────────────────────
     summary_df = build_transportation_summary(launch_df, prop_df, dv_df, config)
@@ -77,7 +86,8 @@ def build_catalog(
     out_dir = config.table_dir()
     os.makedirs(out_dir, exist_ok=True)
     stamp   = catalog_date or t0.strftime("%Y-%m-%d")
-    for df in (launch_df, prop_df, dv_df, ops_df, store_df, summary_df):
+    for df in (launch_df, prop_df, dv_df, ops_df, store_df, env_df,
+               summary_df):
         df["catalog_date"]     = stamp
         df["pipeline_version"] = config.pipeline_version
 
@@ -87,6 +97,7 @@ def build_catalog(
         "delta_v_segments.csv":         dv_df,
         "operational_costs.csv":        ops_df,
         "storage_systems.csv":          store_df,
+        "environments.csv":             env_df,
         "transportation_summary.csv":   summary_df,
     }
     for fname, df in files.items():
@@ -111,6 +122,7 @@ def build_catalog(
         "delta_v_segments":  dv_df,
         "operational_costs": ops_df,
         "storage_systems":   store_df,
+        "environments":      env_df,
         "summary":           summary_df,
     }
 

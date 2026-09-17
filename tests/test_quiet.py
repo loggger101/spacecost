@@ -168,3 +168,63 @@ def test_build_survives_a_cp1252_redirect():
             )
         assert proc.returncode == 0, proc.stderr
         assert proc.stderr == "", proc.stderr
+
+
+def test_no_unused_imports():
+    """Dead imports, kept out because one of them was actively misleading.
+
+    `tables.py` imported numpy and never called it, which reads as though the
+    module does array work. It deliberately does NOT -- the summary loop stays
+    scalar because `np.exp` dispatches a different SIMD kernel for an array and
+    the committed hash is a scalar-path hash. An unused import there argued the
+    opposite of the comment three lines below it.
+    """
+    offenders = []
+    for path in _python_files():
+        src = open(path, encoding="utf-8").read()
+        tree = ast.parse(src)
+        imported = {}
+        for node in ast.walk(tree):
+            if isinstance(node, ast.Import):
+                for alias in node.names:
+                    imported[(alias.asname or alias.name).split(".")[0]] = node.lineno
+            elif isinstance(node, ast.ImportFrom):
+                for alias in node.names:
+                    imported[alias.asname or alias.name] = node.lineno
+        used = {n.id for n in ast.walk(tree) if isinstance(n, ast.Name)}
+        used |= {n.attr for n in ast.walk(tree) if isinstance(n, ast.Attribute)}
+        # A re-export counts as a use: __init__.py imports names so that
+        # `spacecost.X` resolves, and lists them as strings in __all__.
+        for node in ast.walk(tree):
+            if isinstance(node, ast.Constant) and isinstance(node.value, str):
+                used.add(node.value)
+        for name, line in sorted(imported.items()):
+            if name not in used:
+                offenders.append("%s:%d imports %s and never uses it"
+                                 % (os.path.basename(path), line, name))
+    assert not offenders, "; ".join(offenders)
+
+
+def test_tables_does_not_reach_for_numpy():
+    """The vectorisation decision, asserted rather than only commented.
+
+    `build_transportation_summary` must keep evaluating the rocket equation one
+    scalar at a time. Vectorising it is faster and changes the output bytes,
+    because numpy picks a SIMD kernel for an array that is not the scalar path,
+    and `reference/summary_meta.json` records a scalar-path hash.
+
+    The shortest way to keep that true is for the module to have no array
+    library in reach at all.
+    """
+    src = open(os.path.join(PKG_DIR, "tables.py"), encoding="utf-8").read()
+    for node in ast.walk(ast.parse(src)):
+        if isinstance(node, ast.Import):
+            names = [a.name for a in node.names]
+        elif isinstance(node, ast.ImportFrom):
+            names = [node.module or ""]
+        else:
+            continue
+        assert not any(n.startswith("numpy") for n in names), (
+            "tables.py imports numpy at line %d. If that is to vectorise the "
+            "summary, the committed hash moves; see the comment in "
+            "build_transportation_summary." % node.lineno)

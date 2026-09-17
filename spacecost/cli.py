@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
 """Command line: `python -m spacecost`.
 
-    python -m spacecost build            write the six CSVs
+    python -m spacecost build            write the seven CSVs
     python -m spacecost build --live     fetch live fuel prices first
     python -m spacecost show vehicles    print a table
     python -m spacecost propellant 6500  cheapest propellant for a given delta-v
     python -m spacecost launch leo       cheapest vehicle to a destination
+    python -m spacecost environment 2.7  the power/thermal/comms penalty at a distance
+    python -m spacecost validate         run the sanity bands, --strict to fail
     python -m spacecost example          a worked mission cost breakdown
 
 `build` is the only subcommand that writes anything.  Everything prints ASCII
@@ -13,7 +15,6 @@ only -- see tests/test_quiet.py for why that is a rule and not a preference.
 """
 
 import argparse
-import os
 import sys
 
 from . import __version__
@@ -22,7 +23,7 @@ from .build import build_catalog
 from .config import SpacecostConfig
 from .query import (cheapest_launch_to, cheapest_propellant_for,
                     mission_cost_breakdown)
-from .tables import (load_delta_v, load_launch_vehicles,
+from .tables import (load_delta_v, load_environments, load_launch_vehicles,
                      load_operational_costs, load_propellants, load_storage)
 
 _SHOW = {
@@ -36,6 +37,10 @@ _SHOW = {
     "operations":  (load_operational_costs,
                     ["category", "value", "unit", "range_low", "range_high"]),
     "storage":     (load_storage, None),
+    "environments": (load_environments,
+                     ["name", "kind", "au_mean", "solar_flux_w_per_m2",
+                      "solar_array_mass_factor", "dark_period_hr",
+                      "escape_velocity_m_per_s", "one_way_light_time_min"]),
 }
 
 
@@ -47,7 +52,7 @@ def _build_parser() -> argparse.ArgumentParser:
                    version="spacecost " + __version__)
     sub = p.add_subparsers(dest="command", required=True)
 
-    b = sub.add_parser("build", help="write the six reference CSVs")
+    b = sub.add_parser("build", help="write the seven reference CSVs")
     b.add_argument("-o", "--output-dir", default=None,
                    help="where to write (default: $SPACECOST_OUTPUT_DIR, "
                         "else ./spacecost_data)")
@@ -76,6 +81,17 @@ def _build_parser() -> argparse.ArgumentParser:
     lv.add_argument("destination", choices=["leo", "gto", "escape"])
     lv.add_argument("--min-payload-kg", type=float, default=0.0)
     lv.add_argument("-n", "--rows", type=int, default=10)
+
+    en = sub.add_parser(
+        "environment",
+        help="the power, thermal and comms penalty at a heliocentric distance")
+    en.add_argument("au", type=float,
+                    help="heliocentric distance in AU (1.0 = Earth)")
+
+    va = sub.add_parser(
+        "validate", help="run the sanity bands over the tables")
+    va.add_argument("--strict", action="store_true",
+                    help="exit non-zero if any check WARNs. NOTEs never fail")
 
     ex = sub.add_parser("example",
                         help="worked mission cost breakdown, end to end")
@@ -172,6 +188,59 @@ def main(argv=None) -> int:
         print(found.head(args.rows).to_string(index=False))
         return 0
 
+    if args.command == "environment":
+        # Not a table lookup: the derivations answer at ANY distance, and a
+        # trade study's asteroid is rarely one of the 23 rows.
+        from .environments import (blackbody_temp_k, one_way_light_time_min,
+                                   solar_array_mass_factor,
+                                   solar_flux_w_per_m2)
+        au = args.au
+        if au <= 0:
+            print("heliocentric distance must be positive")
+            return 1
+        print("    %-34s : %18s" % ("heliocentric distance (AU)",
+                                    format(au, ",.4f")))
+        print("    %-34s : %18s" % ("solar flux (W/m2)",
+                                    format(solar_flux_w_per_m2(au), ",.1f")))
+        print("    %-34s : %18s" % ("array mass per watt (x 1 AU)",
+                                    format(solar_array_mass_factor(au), ",.2f")))
+        print("    %-34s : %18s" % ("blackbody temperature (K)",
+                                    format(blackbody_temp_k(au), ",.1f")))
+        # The range at conjunction, which is the worst case a link budget and a
+        # command round trip both have to survive.
+        print("    %-34s : %18s" % ("one-way light time at conjunction (min)",
+                                    format(one_way_light_time_min(au + 1.0167),
+                                           ",.1f")))
+        return 0
+
+    if args.command == "validate":
+        import pandas as pd
+
+        from .prices import merge_propellant_prices
+        from .validate import ValidationError, validate_tables
+        frames = (load_launch_vehicles(),
+                  merge_propellant_prices(load_propellants(), pd.DataFrame()),
+                  load_delta_v(), load_operational_costs(),
+                  load_environments(), load_storage())
+        try:
+            findings = validate_tables(*frames, config=SpacecostConfig(),
+                                       strict=args.strict)
+        except ValidationError as exc:
+            for item in exc.findings:
+                print("%-5s %-18s %s" % (item["level"], item["table"],
+                                         item["message"]))
+                for line in item["detail"]:
+                    print("      " + line)
+            return 1
+        for item in findings:
+            print("%-5s %-18s %s" % (item["level"], item["table"],
+                                     item["message"]))
+            for line in item["detail"]:
+                print("      " + line)
+        warns = sum(1 for item in findings if item["level"] == "WARN")
+        print("%d finding(s), %d of them warnings" % (len(findings), warns))
+        return 0
+
     if args.command == "example":
         breakdown = mission_cost_breakdown(
             _priced_catalog(),
@@ -185,7 +254,13 @@ def main(argv=None) -> int:
         )
         for key, value in breakdown.items():
             if isinstance(value, float):
-                print("    %-30s : %18s" % (key, format(value, ",.0f")))
+                # Whole dollars and whole kilograms above 100, two decimals
+                # below it.  A single format ruined the one line that is a
+                # RATIO rather than a quantity: `,.0f` printed a 1.5x low-thrust
+                # penalty as "2", which is not a rounding of the output, it is
+                # a different claim about the mission.
+                spec = ",.0f" if abs(value) >= 100 else ",.2f"
+                print("    %-30s : %18s" % (key, format(value, spec)))
             else:
                 print("    %-30s : %s" % (key, value))
         return 0

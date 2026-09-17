@@ -59,6 +59,11 @@ class SpacecostConfig:
     # for a deterministic, offline, reproducible build: every propellant then
     # takes its reference price and `price_basis` reads "reference" on all 41
     # rows.  That is the setting the parity test runs under.
+    #
+    # Nothing here exercises the ON path, which is why CI carries a weekly
+    # canary that fetches for real: the fetcher swallows every per-ticker
+    # exception and returns an empty frame, so a renamed ticker degrades to
+    # "reference prices" in silence rather than failing.
     use_yfinance:        bool = False
     use_reference_table: bool = True   # curated launch / propellant / dv / ops
 
@@ -67,9 +72,9 @@ class SpacecostConfig:
 
     # --- OUTPUT --------------------------------------------------------------
     output_dir:       str = ""   # "" means _default_output_dir() at build time
-    # Five reference files land in `<output_dir>/<subdir>/`:
+    # Six reference files land in `<output_dir>/<subdir>/`:
     #     launch_vehicles.csv, propellants.csv, delta_v_segments.csv,
-    #     operational_costs.csv, storage_systems.csv
+    #     operational_costs.csv, storage_systems.csv, environments.csv
     # plus one composite summary file (vehicle x segment x propellant):
     #     transportation_summary.csv
     subdir:           str = "transportation"
@@ -85,9 +90,21 @@ class SpacecostConfig:
 
     # --- IN-SITU PROPELLANT --------------------------------------------------
     # If True, the return-leg propellant is assumed to be manufactured at the
-    # destination rather than launched; its $/kg drops to the on-site
-    # processing cost below.  Default False = conservative (haul fuel both
-    # ways).  Read only by `mission_cost_breakdown`.
+    # destination rather than launched, and is priced at the on-site processing
+    # cost below.  Default False = conservative (haul fuel both ways).  Read
+    # only by `mission_cost_breakdown`.
+    #
+    # WHAT ISRU SAVES IS THE LAUNCH, NOT THE PROPELLANT.  This comment used to
+    # say the $/kg "drops to" the processing cost, which is backwards for most
+    # of the table: $50/kg on site is two hundred times the $0.24/kg methalox
+    # costs on Earth, so the PROPELLANT line goes up.  What collapses is the
+    # mass: return propellant made at the asteroid is not dead mass on the
+    # outbound leg, so it is neither launched nor pushed through the outbound
+    # burn.  On the worked example that halves launched mass, 36.5 t to 17.2 t,
+    # and the total falls despite the propellant line rising 200-fold.
+    #
+    # Anyone reading the old sentence would have expected the propellant line
+    # to fall and gone looking for a bug when it did not.
     isru_return_propellant:        bool  = False
     isru_processing_usd_per_kg:    float = 50.0   # rough lit estimate
 
@@ -100,7 +117,7 @@ class SpacecostConfig:
     # Stamped into every output CSV.  BUMP IT when a change moves any number a
     # build produces.  See this module's docstring for why it is not the same
     # thing as `spacecost.__version__`, and CHANGELOG.md for what moved when.
-    pipeline_version: str = "1.14.0"
+    pipeline_version: str = "1.15.0"
     preview_rows:     int = 15   # rows per table in the CLI preview
 
     def resolved_output_dir(self) -> str:
@@ -108,7 +125,7 @@ class SpacecostConfig:
         return self.output_dir or _default_output_dir()
 
     def table_dir(self) -> str:
-        """The directory the six CSVs are written into."""
+        """The directory the seven CSVs are written into."""
         return os.path.join(self.resolved_output_dir(), self.subdir)
 
 
