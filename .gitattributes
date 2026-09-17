@@ -6,7 +6,13 @@
 # parity test would fail there while passing on Windows -- which reads exactly
 # like a code defect and is not one.
 *.csv -text
-reference/SUMMARY_SHA256 text eol=lf
+
+# summary_meta.json replaced the old reference/SUMMARY_SHA256 in the release
+# that stated the portability contract per file, and the rule naming that file
+# outlived it.  A rule for a path that does not exist is not inert: it reads as
+# if something is pinned when nothing is.  JSON is ordinary text, LF like the
+# rest of the source -- it is the CSVs beside it that are CRLF by contract.
+*.json text eol=lf
 
 # Everything else is ordinary source: normalise it.
 *.py text eol=lf

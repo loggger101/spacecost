@@ -17,7 +17,8 @@ from spacecost.cli import main
 
 
 def test_show_every_table(capsys):
-    for table in ("vehicles", "propellants", "deltav", "operations", "storage"):
+    for table in ("vehicles", "propellants", "deltav", "operations", "storage",
+                  "environments"):
         assert main(["show", table, "-n", "3"]) == 0
         out = capsys.readouterr().out
         assert out.strip(), table + " printed nothing"
@@ -53,12 +54,39 @@ def test_worked_example(capsys):
         assert line in out, line + " missing from the worked example"
 
 
-def test_build_writes_six_files(tmp_path, capsys):
+def test_build_writes_the_seven_files(tmp_path, capsys):
     assert main(["build", "-q", "-o", str(tmp_path)]) == 0
     written = sorted(os.listdir(os.path.join(str(tmp_path), "transportation")))
     assert written == sorted([
-        "delta_v_segments.csv", "launch_vehicles.csv", "operational_costs.csv",
-        "propellants.csv", "storage_systems.csv", "transportation_summary.csv"])
+        "delta_v_segments.csv", "environments.csv", "launch_vehicles.csv",
+        "operational_costs.csv", "propellants.csv", "storage_systems.csv",
+        "transportation_summary.csv"])
+
+
+def test_environment_reports_a_distance(capsys):
+    """The derivations answer at any AU, not only at the 23 tabulated rows."""
+    assert main(["environment", "2.7"]) == 0
+    out = capsys.readouterr().out
+    assert "solar flux" in out and "7.29" in out, out
+
+
+def test_environment_rejects_a_nonsense_distance(capsys):
+    assert main(["environment", "0"]) == 1
+    assert "must be positive" in capsys.readouterr().out
+
+
+def test_validate_runs_and_reports(capsys):
+    """The gate is reachable from the command line, which is the whole point.
+
+    `validate` was unhearable before v1.15.0: it printed through `say`, which
+    is off by default. A guardrail nobody can run is not a guardrail.
+    """
+    assert main(["validate"]) == 0
+    out = capsys.readouterr().out
+    assert "finding(s)" in out
+    # The committed tables are clean, so --strict must also pass. If this ever
+    # fails, a committed row has drifted outside its own band.
+    assert main(["validate", "--strict"]) == 0
 
 
 def test_build_is_quiet_when_asked(tmp_path, capsys):

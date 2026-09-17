@@ -13,6 +13,340 @@ may read a version as proof that a number moved.
 
 ## Package releases
 
+### 0.2.0 - 2026-09-17
+
+Data contract `pipeline_version` **1.14.0 → 1.15.0**. A sixth reference table
+was added, so **every output CSV changed**: the stamp is a column and it moved
+on all of them. No pre-existing VALUE moved — the five inherited tables are
+byte identical to the 1.14.0 build once the two provenance columns are
+stripped.
+
+⚠️  **REPIN economicspace.** It installs this package from a pinned tag in
+`requirements.txt` and `_MASTER_REQUIRED`, and until that tag moves it keeps
+building against 1.14.0. See [Changing a row](README.md#changing-a-row).
+
+⚠️  **The recorded reference platform for the summary hash moved**, from Python
+3.14 / numpy 2.5.2 / pandas 3.0.5 to Python 3.13 / numpy 2.2.6 / pandas 2.3.3,
+because that is the machine this release was cut on.
+`transportation_summary.csv` runs through `exp()`, so its byte hash belongs to
+a host, and `test_summary_hash_on_the_reference_platform` skips anywhere else.
+To record it on the older environment instead, run `python
+tools/refresh_reference.py` there before tagging. It does not affect the six
+reference tables, which are byte identical on every platform and checked on
+every CI leg.
+
+#### A sixth table: `environments`, 23 destinations
+
+Solar flux, array mass factor, blackbody temperature, cycle period, eclipse
+fraction, dark period, mass, mean radius, surface gravity, escape velocity,
+conjunction range and one-way light time, from Mercury orbit at 0.387 AU to the
+Jupiter Trojans at 5.204. Ten rows are named bodies rather than classes, and
+eight of those have had a spacecraft at them.
+
+The argument for it: the other five tables price a kilogram and none of them
+knows WHERE, while three rows already sitting in `operational_costs` are
+functions of heliocentric distance alone.
+
+- "Power system specific mass" is 60 W/kg and its unit string is careful to say
+  *at 1 AU*. What it could not say is what to do about it.
+  `solar_array_mass_factor` is r², so 7.3x at the main belt.
+- The eclipse FRACTION was already tabulated; what sizes a battery is the dark
+  PERIOD, and the two barely move together. 38% of a 93-minute LEO orbit is a
+  35-minute battery; 50% of a lunar synodic day is a 354-hour one — a third
+  more of the cycle, 604 times the stored energy, 341 kg of battery at this
+  dataset's own 104 usable Wh/kg.
+- "Autonomous mining control & AI (NRE)" is a $200M line that exists because
+  teleoperation stops working past a light-second. `one_way_light_time_min`
+  says where that is: 1.3 s at the Moon, 22 min at Mars, 35 at the belt.
+
+Every column that can be derived is derived, from the values a mission actually
+measures — a distance, a mass, a radius, a rotation period, an illumination
+fraction — so a row cannot disagree with itself.
+
+⚠️  **The derivations use only multiply, divide and `sqrt`**, which IEEE 754
+requires to be correctly rounded. That is what puts `environments.csv` in the
+byte-identical-everywhere contract rather than in the summary's few-ULP one,
+and `tests/test_schema.py` parses the module and fails on an `exp`, a `pow` or
+a `**`. Add a transcendental here and the file changes contract silently while
+still looking correct on the machine that wrote it.
+
+#### `validate` can now be heard, and can now fail
+
+It returns its findings as a list, `strict=True` raises `ValidationError`, and
+every finding carries a level: `WARN` for a row that looks wrong, `NOTE` for
+one that is merely unusual. `spacecost validate --strict` is the gate, and CI
+runs it.
+
+⚠️  **No band changed.** What changed is that anything reads them. Every
+finding went to `say()`, which is silent unless a caller sets verbose, and
+`build_catalog` calls the validator on every build — so the default path ran
+every check and threw the answer away. `build_catalog` still discards them
+deliberately, because a build must not die over a speculative row; the gate is
+the CLI and CI.
+
+The strict flag ignores NOTEs on purpose. The g-load line fires on the
+committed tables every single run, and a gate that fails on it is a gate
+somebody switches off.
+
+**New checks**, all for failures that produce no error at all: duplicated keys
+(a duplicate name turns `.set_index(...).loc[...]` from a row into a frame, and
+`mission_cost_breakdown` does exactly that lookup twice), the environment
+bands, and a NOTE when a `reference_year` is more than three years old.
+
+#### `tests/test_schema.py`, new
+
+That every row of a table carries the same keys, that keys are unique and
+unpadded, that `_LIVE_BLENDS`, `_THRUSTER_SYSTEMS` and every `yfinance_proxy`
+still name rows that exist, that the environment derivations recompute, and
+that the committed tables trip no WARN.
+
+The key-set check is the one to keep. `pd.DataFrame(list_of_dicts)` takes the
+UNION of the keys, so one row spelling a column differently gets NaN in the
+real column and a new column nobody reads — silently — and then falls out of
+every band that filters on the real one. The row most likely to carry a typo is
+the one somebody just added.
+
+#### The query helpers stop reading the rocket equation literally
+
+BEHAVIOUR CHANGE, and it moves the top of the ranking. The propellant table
+carries two columns whose whole purpose is to stop the arithmetic being
+believed, and `cheapest_propellant_for` read neither.
+
+**Propellantless rows are excluded by default.** A sail has no propellant, so
+its Isp is infinite, so the mass ratio is 1, so any Δv costs exactly $0.00 —
+and the three sail and tether rows swept the top three places of every ranking
+this package has ever returned, including the one `spacecost propellant 6500`
+printed. `PROPELLANTS_REFERENCE` says at the flag itself that a sail's
+characteristic acceleration is ~0.1 mm/s² and that sizing one needs a
+thrust-limited model this package does not have; `validate` already excluded
+them from its bands for the same reason. `include_propellantless=True` brings
+them back.
+
+**The low-thrust Δv penalty is applied.** `dv_penalty_factor` is 1.5 on every
+electric row because a milli-newton stage spirals rather than burns, and a
+spiral costs strictly more Δv — LEO escape is ~3.2 km/s impulsive and ~7
+spiralling. It is worth real places rather than a rounding: 17 of 38 ranked
+rows move at 6,500 m/s, 25 at the main-belt 10,500, where it costs VASIMR first
+place outright.
+
+The penalised value is RETURNED, in `effective_dv_m_per_s`, not applied out of
+sight. Silently costing a different Δv from the one the caller named would be
+its own quiet defect.
+
+`mission_cost_breakdown` takes the same penalty, and returns
+`dv_penalty_factor` with both effective Δv values. Every default it ships with
+is chemical and carries 1.0, so **the worked example does not move**; a test
+asserts that the two paths return identical dicts for methalox.
+
+⚠️  **`build_transportation_summary` does NEITHER, and must not start.** It is a
+raw cross-join, and economicspace's Stage 4 applies the penalty itself when it
+reads it — applying it in both places charges 1.5x twice, which is 2.25x, with
+nothing raising. If your caller already applies it, pass
+`apply_dv_penalty=False`. `tests/test_query.py` asserts the asymmetry from both
+ends so it cannot drift shut.
+
+#### Each table is now held against itself
+
+Three relationships the data has always had and nothing has ever checked. All
+of them are clean today, which is exactly when to write a check down.
+
+- `usd_per_kg_to_leo` restates `list_price_usd / payload_leo_kg`, and all three
+  sit on one very long row twelve columns apart — which is what makes raising a
+  price and forgetting the $/kg beside it the single most likely way that table
+  goes wrong. All 36 rows agree to within a rounding. WARN band, 1% tolerance
+  because the stated $/kg are whole dollars.
+- `operational_costs` and `storage_systems` both carry a `value` with a
+  `range_low` and `range_high` around it, and nothing checked the point
+  estimate against its own bracket. A value outside its own range is not a wide
+  estimate, it is a stale edit or a swapped pair — and a swapped bracket prints
+  as a perfectly ordinary row. 64 bracketed rows, all consistent.
+- `exhaust_vel_m_per_s` restates `isp_vac_s * g0`, and `ref_cost_usd_per_L`
+  restates `ref_cost_usd_per_kg * density_kg_per_L`. Source invariants, held in
+  `tests/test_schema.py`.
+
+The mass driver is the instructive exception on the second of those: it is
+stated the other way round, from a 3,000 m/s muzzle velocity, with its Isp
+derived and rounded to a whole second. So that check carries a rounding
+tolerance rather than a float epsilon, and the reason is written down beside
+it.
+
+`validate` gained a `storage_df` parameter for the range check. It is
+positional and optional, after `environments_df`; `strict` became **keyword
+only** in the same edit, so that a frame can be appended to the positional list
+later without turning somebody's `True` into a DataFrame argument.
+
+#### `tests/test_prices.py`, new: the live path, offline
+
+The `--live` path had no test at all. It is off by default, every committed
+file is an offline build, and `fetch_yfinance_fuel_prices` catches every
+per-ticker exception and returns an empty frame — so a renamed ticker, a
+changed quote unit or a broken conversion degrades to "reference prices" with
+no error anywhere.
+
+The weekly canary answers whether Yahoo still serves the tickers, and it cannot
+run on a pull request. This file is the half that can: a stubbed `yfinance` in
+`sys.modules`, quotes chosen as round numbers so an expected value is worked
+out in the assertion rather than copied from a previous run, and coverage of
+the three unit conversions, the latest-close selection, the mixture weighting,
+a single dead ticker, and the extra not being installed at all.
+
+`LITRES_PER_BBL` is checked against `42 * LITRES_PER_GAL`, because they are
+separate constants under separate helpers and nothing held them to the same
+world.
+
+#### A reference row was reading a mutable config singleton
+
+`OPERATIONAL_COSTS_REFERENCE`'s "Contingency reserve" row was literally
+`CONFIG.contingency_fraction * 100`, evaluated at import against the
+module-level dataclass instance. Two consequences, and neither raised:
+
+- A build with `SpacecostConfig(contingency_fraction=0.45)` charged 45% in
+  `mission_cost_breakdown` and wrote **20.0** into this row of the CSV beside
+  it, so the catalog reported a contingency the build had not used.
+- `CONFIG` is mutable, so assigning to it after import moved the dial without
+  moving the table.
+
+The two are different things and the fix is to stop pretending otherwise. The
+row is now the literal **20.0** — it is a cited industry-standard figure sitting
+in its own 15-50% band, the same kind of datum as every other row in that
+table. `contingency_fraction` is a dial on one mission's arithmetic. They agree
+at the default, and `validate` now emits a NOTE when a caller's config makes
+them disagree: `validate(..., config=cfg)`, which `build_catalog` passes
+automatically.
+
+NOTE and not WARN, because a first-of-kind mission at 45% is legitimate. The
+caller is just not entitled to be surprised by it later.
+
+**No output byte moved**: `0.20 * 100` is exactly `20.0`, which is precisely
+why nothing noticed. `tests/test_schema.py` therefore checks the SOURCE — no
+reference table may read `CONFIG` at all — rather than the value.
+
+#### Three figures were restated in two files
+
+`storage_systems` and `operational_costs` overlap by design: the first is the
+taxonomy and the citations, the second is what economicspace's Stage 4 actually
+reads, and `load_storage` tells you to add a figure to both. Three were obeying
+that instruction by being typed twice — RTG specific power, the eclipse
+fraction, and the volatile containment mass — each a literal value AND a
+literal range in two files, agreeing only because nobody had edited one yet.
+
+CITATIONS.md states the principle at the top of the file: two copies of one
+measurement is a defect waiting to happen, because one of them gets updated.
+
+`storage.py` now reads all three from the ops rows through `_mirrors_ops`.
+Direction matters: ops is what Stage 4 consumes, so ops is the authority and
+storage mirrors. Renaming an ops category raises a `KeyError` at import rather
+than silently unlinking the two, which is the whole point of doing it by lookup
+instead of by comment. The `unit` strings still differ between the tables —
+that is presentation, and only the numbers are shared.
+
+**No output byte moved**; the values were already equal.
+
+And the half that is not tautological: a test now flags any ops/storage pair
+that shares a value AND both range bounds without being declared as a mirror.
+That catches the fourth one, copy-pasted in some future edit. It matches on all
+three numbers because a bare value collision is ordinary — several unrelated
+rows happen to be 5, or 0.5, or 100 — while three agreeing is a copy.
+
+#### Dead imports, one of which argued against its own module
+
+`tables.py` imported numpy and never called it, which reads as though the
+module does array work. It deliberately does not: the summary loop stays scalar
+because `np.exp` dispatches a different SIMD kernel for an array, and
+`summary_meta.json` records a scalar-path hash. An unused import there argued
+the opposite of the comment three lines below it.
+
+Removed, along with `os` in `cli.py` and `Dict` in `propellants.py`. Two tests
+in `tests/test_quiet.py` keep them out: a general unused-import scan, and a
+specific one asserting that `tables.py` reaches for no array library at all —
+which is the shortest way to state the vectorisation decision.
+
+#### Smaller
+
+`validate` gained a keyword-only `config` parameter for the contingency check.
+`load_storage`'s docstring now says to mirror rather than to retype.
+`fuel_mass_fraction` and `_blend` are held to the same answer for every blend
+that has both, since they are two implementations of `1/(1+O/F)` over one
+shared `_OF_RATIOS`.
+
+#### Fixes
+
+**`isru_return_propellant` was documented backwards.** The comment said the
+propellant's $/kg "drops to" the on-site processing cost. It does not: $50/kg
+on site is two hundred times what methalox costs on Earth, so the propellant
+line goes UP. What ISRU saves is the LAUNCH — return propellant made at the
+destination is not dead mass on the outbound leg, so it is neither lifted nor
+pushed through the outbound burn. On the worked example that halves launched
+mass, 36.5 t to 17.2 t, and the total falls despite the propellant line rising
+two hundredfold. Anyone reading the old sentence would have expected the
+propellant line to fall and gone looking for a bug when it did not. The model
+was right; the sentence beside it was not, and the test now asserts the
+counter-intuitive direction on purpose.
+
+**The worked example printed a 1.5x penalty as "2".** One `,.0f` formatted
+every float in the breakdown, which was right while every value was dollars or
+kilograms and wrong the moment one of them became a RATIO. Values below 100 now
+print to two decimals.
+
+**`.gitattributes` named `reference/SUMMARY_SHA256`**, which `summary_meta.json`
+replaced. A rule for a path that does not exist is not inert — it reads as if
+something is pinned when nothing is. Replaced with `*.json text eol=lf`, which
+is what that directory's JSON actually wants.
+
+**`cheapest_launch_to` no longer ranks vehicles that cannot reach the
+destination.** BEHAVIOUR CHANGE. Electron, Vega C and Alpha carry nothing
+beyond LEO, so their `payload_gto_kg` is 0 and their `usd_per_kg_to_gto` is
+NaN; the filter was `payload >= min_payload_kg`, which at the default 0 is
+`0 >= 0`. All three were ranked in "cheapest to GTO", sorted last because
+pandas puts NaN last, and so invisible until somebody asked for more rows than
+there were real answers. A price of "not at any price" must not sort against a
+price.
+
+**One mixture ratio per blend, not two.** `prices.py` reconstructed the kerolox
+and methalox fuel fractions from its own copies of 2.30 and 3.60, which
+`propellants.py` also holds. Retuning a blend would have left the live path
+pricing the OLD mixture — in a `--live` build only, with both numbers
+plausible, and nothing saying so. Both now read `_OF_RATIOS`.
+
+**A live quote that matches no reference row now warns** instead of being
+skipped in silence. The symptom otherwise is `price_basis` reading "reference"
+on a row the caller asked to be live, which is exactly what an offline build
+looks like.
+
+**The summary cross-join is 4x faster**, 2.9 s to 0.7 s, by unpacking the
+segment and propellant frames once instead of calling `iterrows()` three deep —
+47,232 Series rebuilt to perform 39,852 multiplications.
+
+⚠️  **The arithmetic was deliberately NOT vectorised.** One numpy call would be
+faster still and would change the output bytes: `propellant_mass_for_dv`
+reaches `np.exp`, and numpy dispatches a SIMD kernel for an array that is not
+the scalar path. The committed hash is a scalar-path hash. Verified byte
+identical against the pre-change build.
+
+#### Automation
+
+**`tools/refresh_reference.py`**, new: regenerates `reference/` and writes
+`summary_meta.json` including the platform block, which until now was
+hand-maintained. A stale platform block does not fail —
+`test_summary_hash_on_the_reference_platform` SKIPS when it does not match the
+running host, so a wrong block turns the strictest test in the suite into a
+no-op, silently, on every machine.
+
+`--check` reports drift and is a CI step. It compares the portable half (the
+six tables, the sample, the row count and stride) and reports the platform
+block as information rather than as staleness — otherwise it would fail on
+every CI leg but one and be switched off within a week.
+
+**CI gains a strict validation gate and a weekly live-price canary.** The
+`--live` path is exercised by nothing on a normal run: it is off by default and
+every committed file is an offline build, and `fetch_yfinance_fuel_prices`
+catches every exception per ticker and returns an empty frame, so a renamed
+ticker or a changed quote unit degrades to "reference prices" in silence. The
+canary fetches for real on a schedule and fails if a quote is missing or lands
+outside $0.05-$50/kg, which is a unit error rather than a market move.
+Scheduled and manual only, so a third-party outage can never block a merge —
+and NOT `continue-on-error`, because a canary that cannot go red is a cron job.
+
 ### 0.1.1 - 2026-09-07
 
 Data contract `pipeline_version` **1.14.0**, unchanged. No table row moved and
@@ -115,7 +449,7 @@ Read them at
 ## Data contract history
 
 Every `pipeline_version` stamp these tables have carried, from `1.2.0` to
-`1.14.0`. It is the measurement record: what changed in which release, what
+`1.15.0`. It is the measurement record: what changed in which release, what
 each number used to be, and which release added which output column.
 
 **This is the only copy.** The entries below were written while the tables were
@@ -385,3 +719,26 @@ off a 28.5 deg parking orbit. They are not meant to agree.
 
 ⚠️  Does not reach `delta_v_segments.csv` until Stage 3 is next run, and Stage 3
 should not be run for it. Same call, and the same reason, as v1.13.0 above.
+
+**`1.15.0`  a sixth table, `environments`.** The first entry in this record
+written here rather than inherited: 23 destinations carrying solar flux, array
+mass factor, blackbody temperature, cycle period, eclipse fraction, dark period,
+mass, mean radius, surface gravity, escape velocity, conjunction range and
+one-way light time, 0.387 AU to 5.204 AU. New file `environments.csv`.
+
+**No existing row changed and no existing column moved.** What moved on the
+other five files is the `pipeline_version` stamp, which is a column on every
+one of them, so their bytes differ from 1.14.0 and their VALUES do not.
+
+⚠️  **Its derived columns are byte-portable and that is load-bearing.** Every
+derivation is a multiply, a divide or a `sqrt`, the three operations IEEE 754
+requires to be correctly rounded, so `environments.csv` joins the five
+inherited tables in the byte-identical-on-every-platform contract instead of
+joining the summary in the few-ULP one. Adding an `exp`, a `pow` or a `**` to
+`environments.py` would move it to the weaker contract with no visible symptom
+on the machine that wrote the file; `tests/test_schema.py` parses the module
+and refuses.
+
+The schema half, which is the part with no other home: an archived CSV stamped
+`1.15.0` or later is the first one that can tell you what the sun, the night
+and the light lag were like where the kilogram was.

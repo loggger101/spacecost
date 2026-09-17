@@ -41,6 +41,7 @@ def test_readme_row_counts_match_the_tables():
         "delta-v segments": len(spacecost.DELTA_V_REFERENCE),
         "operational cost": len(spacecost.OPERATIONAL_COSTS_REFERENCE),
         "storage systems": len(spacecost.STORAGE_REFERENCE),
+        "destinations": len(spacecost.ENVIRONMENTS_REFERENCE),
     }
     bad = []
     for phrase, actual in sizes.items():
@@ -60,6 +61,7 @@ def test_table_row_counts_in_the_what_is_in_it_table():
         "delta_v_segments": len(spacecost.DELTA_V_REFERENCE),
         "operational_costs": len(spacecost.OPERATIONAL_COSTS_REFERENCE),
         "storage_systems": len(spacecost.STORAGE_REFERENCE),
+        "environments": len(spacecost.ENVIRONMENTS_REFERENCE),
     }
     for name, n in want.items():
         m = re.search(r"\|\s*`%s`\s*\|\s*(\d+)\s*\|" % re.escape(name), readme)

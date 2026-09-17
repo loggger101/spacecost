@@ -5,7 +5,7 @@ Every cost that sits between "payload on the ground" and "payload delivered":
 
     Launch  +  Transit propellant  +  Operations  +  Return  +  Contingency
 
-Five tables, every row carrying an inline citation and a `reference_year`:
+Six tables, every row carrying an inline citation and a `reference_year`:
 
     36 launch vehicles      $/kg to LEO, GTO and escape, payload, status
     41 propellant systems   vacuum Isp, bulk density, $/kg, storage class,
@@ -13,6 +13,8 @@ Five tables, every row carrying an inline citation and a `reference_year`:
     33 delta-v segments     m/s and trip duration per trajectory leg
     44 operational costs    $/mission-year and $/kg-payload lines
     20 storage systems      the domains a kilogram can be held in
+    23 environments         WHERE the kilogram is: solar flux, dark period,
+                            gravity, escape velocity, one-way light time
 
 Each is normalised to a unit the others compose with, which is the whole point
 of collecting them together rather than separately:
@@ -22,6 +24,12 @@ of collecting them together rather than separately:
                       the rocket equivalent of "fuel cost per km"
     Mission dv    ->  m/s and trip duration (yr) per trajectory leg
     Operational   ->  USD per mission-year and USD per kg-payload
+    Environment   ->  W/m2, hours of darkness, m/s2, m/s, minutes of light lag
+
+The last is the only table that carries no money, and it is the one that says
+what the others cost SOMEWHERE ELSE: an array is r^2 heavier per watt at the
+main belt, a battery is sized by hours of night and not by a fraction, and a
+$200M autonomy line exists because Mars is 22 light-minutes away.
 
 THE OPERATIONAL TABLE ASSUMES AN UNCREWED SPACECRAFT.  No life support, no
 habitat, no crew operations, no return-vehicle uplift for people.  The
@@ -38,7 +46,7 @@ Quick start:
     >>> spacecost.cost_per_dv_usd_per_kg(               # $/kg of payload
     ...     propellant_cost_usd_per_kg=20.0, isp_s=452, delta_v_m_per_s=6500)
 
-    >>> catalog = spacecost.build_catalog()             # all six CSVs
+    >>> catalog = spacecost.build_catalog()             # all seven CSVs
 
 PROVENANCE.  Extracted from Module 3 of `economicspace`, the asteroid-mining
 profitability pipeline, at pipeline_version 1.14.0 (commit b0b18b2).  The
@@ -47,7 +55,7 @@ nothing in their schema knows what an asteroid is, and a launch price is
 useful to anyone costing a mission.  economicspace consumes this package as
 its Stage 3.
 
-THE OUTPUT IS A CONTRACT.  `build_catalog()` reproduces the six CSVs that
+THE OUTPUT IS A CONTRACT.  `build_catalog()` reproduces the seven CSVs that
 repo's Stage 4 reads, byte for byte, and `tests/test_parity.py` is that claim
 as a test.  Two details of the writer are load-bearing and must not be tidied:
 the CRLF line terminator is PINNED (`lineterminator="\r\n"`) because the
@@ -58,6 +66,9 @@ from ._log import is_verbose, say, set_verbose
 from .build import build_catalog
 from .config import CONFIG, SpacecostConfig
 from .deltav import DELTA_V_REFERENCE
+from .environments import (ENVIRONMENTS_REFERENCE, blackbody_temp_k,
+                          one_way_light_time_min, solar_array_mass_factor,
+                          solar_flux_w_per_m2)
 from .operations import OPERATIONAL_COSTS_REFERENCE
 from .propellants import PROPELLANTS_REFERENCE
 from .query import (cheapest_launch_to, cheapest_propellant_for,
@@ -65,17 +76,19 @@ from .query import (cheapest_launch_to, cheapest_propellant_for,
 from .rocket import cost_per_dv_usd_per_kg, propellant_mass_for_dv
 from .storage import STORAGE_REFERENCE
 from .tables import (build_transportation_summary, load_delta_v,
-                     load_launch_vehicles, load_operational_costs,
-                     load_propellants, load_storage)
-from .units import (COMMODITY_DENSITY_KG_PER_L, G0_M_S2, LITRES_PER_BBL,
-                    LITRES_PER_GAL)
-from .validate import validate, validate_tables
+                     load_environments, load_launch_vehicles,
+                     load_operational_costs, load_propellants, load_storage)
+from .units import (AU_LIGHT_TIME_S, BLACKBODY_TEMP_1AU_K,
+                    COMMODITY_DENSITY_KG_PER_L, G0_M_S2, LITRES_PER_BBL,
+                    LITRES_PER_GAL, NEWTON_G_M3_PER_KG_S2,
+                    SOLAR_CONSTANT_W_PER_M2)
+from .validate import ValidationError, validate, validate_tables
 from .vehicles import LAUNCH_VEHICLES_REFERENCE
 
 # The PACKAGE release. Not the data contract -- that is
 # `SpacecostConfig.pipeline_version`, which is stamped into every CSV. See
 # spacecost/config.py for why the two are deliberately separate.
-__version__ = "0.1.1"
+__version__ = "0.2.0"
 
 # The DATA contract this release ships, repeated here for convenience only.
 # config.py is the authority; this is a mirror, and a mirror can drift, so
@@ -95,13 +108,17 @@ __all__ = [
     "TransportConfig", "build_transportation_catalog",
     "LAUNCH_VEHICLES_REFERENCE", "PROPELLANTS_REFERENCE",
     "DELTA_V_REFERENCE", "OPERATIONAL_COSTS_REFERENCE", "STORAGE_REFERENCE",
+    "ENVIRONMENTS_REFERENCE",
     "load_launch_vehicles", "load_propellants", "load_delta_v",
-    "load_operational_costs", "load_storage",
+    "load_operational_costs", "load_storage", "load_environments",
     "build_transportation_summary", "build_catalog", "validate",
-    "validate_tables",
+    "validate_tables", "ValidationError",
     "propellant_mass_for_dv", "cost_per_dv_usd_per_kg",
     "cheapest_launch_to", "cheapest_propellant_for", "mission_cost_breakdown",
+    "solar_flux_w_per_m2", "solar_array_mass_factor", "blackbody_temp_k",
+    "one_way_light_time_min",
     "G0_M_S2", "LITRES_PER_GAL", "LITRES_PER_BBL",
-    "COMMODITY_DENSITY_KG_PER_L",
+    "COMMODITY_DENSITY_KG_PER_L", "SOLAR_CONSTANT_W_PER_M2",
+    "AU_LIGHT_TIME_S", "BLACKBODY_TEMP_1AU_K", "NEWTON_G_M3_PER_KG_S2",
     "say", "set_verbose", "is_verbose",
 ]
