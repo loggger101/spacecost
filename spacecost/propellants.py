@@ -6,7 +6,7 @@ Extracted verbatim from economicspace modules/transportation.py, pipeline_versio
 commit b0b18b2de301653ee23de1bd3779867ae5b617a1 (2026-09-04).
 """
 
-from typing import Dict, List
+from typing import List
 
 import numpy as np
 import pandas as pd
@@ -466,15 +466,52 @@ _COMPONENTS = {
     "CO":        {"density_kg_per_L": 0.789, "cost_usd_per_kg":      1.00, "storage_class": "mild_cryogen"},
 }
 
-_kerolox    = _blend(2.30, _COMPONENTS["RP-1"],      _COMPONENTS["LOX"])
-_hydrolox   = _blend(6.00, _COMPONENTS["LH2"],       _COMPONENTS["LOX"])
-_methalox   = _blend(3.60, _COMPONENTS["LCH4"],      _COMPONENTS["LOX"])
-_mmh_nto    = _blend(1.65, _COMPONENTS["MMH"],       _COMPONENTS["N2O4"])
-_udmh_nto   = _blend(2.60, _COMPONENTS["UDMH"],      _COMPONENTS["N2O4"])
-_a50_nto    = _blend(2.00, _COMPONENTS["Aerozine50"],_COMPONENTS["N2O4"])
-_htp_rp1    = _blend(7.00, _COMPONENTS["RP-1"],      _COMPONENTS["HTP-98"])
-_co_lox     = _blend(0.57, _COMPONENTS["CO"],        _COMPONENTS["LOX"])
-_al_water   = _blend(1.00, _COMPONENTS["Al-powder"], _COMPONENTS["Water"])
+# ─── MIXTURE RATIOS  (v1.15.0) ───────────────────────────────────────────────
+# Oxidiser-to-fuel by mass, per blend.  Named rather than written inline
+# because TWO modules weight a price by them: `_blend` below, and the live
+# commodity path in prices.py, which reconstructs the fuel mass fraction as
+# 1/(1+O/F) so that a live kerosene quote moves only the kerosene half of
+# kerolox.
+#
+# ⚠️  Those were two copies of 2.30 and 3.60 in two files until v1.15.0, and a
+# duplicated constant is a constant that gets retuned in one place.  Retuning
+# the blend alone would have left the live path pricing the OLD mixture, and
+# nothing would have said so: both numbers are plausible, the difference is a
+# few percent of a propellant cost, and only the `--live` build would carry it.
+# Anything that needs a mixture ratio reads it from here.
+_OF_RATIOS = {
+    "kerolox":    2.30,
+    "hydrolox":   6.00,
+    "methalox":   3.60,
+    "mmh_nto":    1.65,
+    "udmh_nto":   2.60,
+    "a50_nto":    2.00,
+    "htp_rp1":    7.00,
+    "co_lox":     0.57,
+    "al_water":   1.00,
+}
+
+
+def fuel_mass_fraction(blend: str) -> float:
+    """The FUEL share of one kilogram of `blend`, by mass.
+
+    `_OF_RATIOS` is oxidiser-to-fuel, so the fuel is 1/(1+O/F) of the mixture.
+    This is the weight prices.py applies to a live fuel quote before folding
+    the reference oxidiser price back in; it is a function rather than a second
+    table so there is one mixture ratio per blend and not two.
+    """
+    return 1.0 / (1.0 + _OF_RATIOS[blend])
+
+
+_kerolox    = _blend(_OF_RATIOS["kerolox"],  _COMPONENTS["RP-1"],      _COMPONENTS["LOX"])
+_hydrolox   = _blend(_OF_RATIOS["hydrolox"], _COMPONENTS["LH2"],       _COMPONENTS["LOX"])
+_methalox   = _blend(_OF_RATIOS["methalox"], _COMPONENTS["LCH4"],      _COMPONENTS["LOX"])
+_mmh_nto    = _blend(_OF_RATIOS["mmh_nto"],  _COMPONENTS["MMH"],       _COMPONENTS["N2O4"])
+_udmh_nto   = _blend(_OF_RATIOS["udmh_nto"], _COMPONENTS["UDMH"],      _COMPONENTS["N2O4"])
+_a50_nto    = _blend(_OF_RATIOS["a50_nto"],  _COMPONENTS["Aerozine50"],_COMPONENTS["N2O4"])
+_htp_rp1    = _blend(_OF_RATIOS["htp_rp1"],  _COMPONENTS["RP-1"],      _COMPONENTS["HTP-98"])
+_co_lox     = _blend(_OF_RATIOS["co_lox"],   _COMPONENTS["CO"],        _COMPONENTS["LOX"])
+_al_water   = _blend(_OF_RATIOS["al_water"], _COMPONENTS["Al-powder"], _COMPONENTS["Water"])
 # Li/F2/H2 tripropellant: Rocketdyne's 1960s test-stand mixture.  Blended in
 # two steps because _blend takes a pair, lithium against fluorine first, then
 # the hydrogen folded in as the "fuel" against that pair as the "oxidiser".

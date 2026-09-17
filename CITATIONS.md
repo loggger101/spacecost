@@ -89,7 +89,55 @@ The mission profile these are costed against is **uncrewed and fully
 autonomous**: no life support, no habitat, no crew operations. The autonomy
 development line is what that design pays in exchange.
 
-## 5. Commodity prices
+## 5. Destination environments
+
+The `environments` table is the one place here where most columns are
+**derived** rather than cited, so what a source establishes is an INPUT — a
+distance, a mass, a radius, a rotation period, an illumination fraction — and
+the flux, the array factor, the temperature, the gravity, the escape velocity
+and the light time all follow from those by formula. The formulas are in
+`spacecost/environments.py`; the inputs are cited on their rows.
+
+**Physical constants**
+
+| source | what it establishes |
+|---|---|
+| Kopp & Lean 2011, *GRL* 38 L01706 | total solar irradiance at 1 AU, 1361 W/m² — revised down from the long-quoted 1366, instrumentally |
+| CODATA 2018 | the Newtonian constant of gravitation |
+| BIPM / IAU definitions of the astronomical unit and of `c` | light time over 1 AU, which is a ratio of two defined integers and so exact |
+
+**Bodies**
+
+| source | what it establishes |
+|---|---|
+| NASA Moon Fact Sheet | lunar mass, radius and synodic day |
+| NASA Mars Fact Sheet; Willner et al. 2014 | Mars and Phobos mass, radius and rotation |
+| Lauretta et al. 2019, *Nature* (OSIRIS-REx) | Bennu mass, radius, rotation, orbit |
+| Watanabe et al. 2019, *Science* (Hayabusa2) | Ryugu mass, radius, rotation, orbit |
+| Yeomans et al. 2000, *Science* (NEAR Shoemaker) | Eros mass and radius |
+| Daly et al. 2023, *Nature* (DART) | Didymos mass, radius, rotation |
+| Russell et al. 2016, *Science* (Dawn) | Ceres mass and radius |
+| Siltala & Granvik 2021 | Psyche mass and radius |
+| JPL Small-Body Database | perihelion, semi-major axis and aphelion for every named body |
+
+**Illumination and orbits**
+
+| source | what it establishes |
+|---|---|
+| NASA ISS Facts and Figures | the LEO eclipse fraction and orbital period |
+| ITU-R S.1003 and standard GEO practice | the geostationary eclipse seasons |
+| Whitley & Martinez 2016, *Options for Staging Orbits in Cis-Lunar Space* | the NRHO period and its near-continuous illumination |
+| Mazarico et al. 2011 (LRO LOLA illumination modelling) | lunar polar ridge illumination, ~86% over a year |
+| NASA DRA 5.0 | the Mars 1-sol staging orbit |
+| Appelbaum & Flood, NASA TM-102299 | Mars surface insolation, and the dust caveat on that row |
+| Warner, Harris & Pravec, *Asteroid Lightcurve Database* | the 6-10 h rotation the generic asteroid rows use as a population median |
+
+⚠️  Five rows are GENERIC — typical low-Δv NEA, the three main-belt zones, and
+the Trojan swarm. Their distances are a class rather than a body and their
+rotation periods are a population median, not a measurement. Every such row
+says so in its own `notes`.
+
+## 6. Commodity prices
 
 Live quotes, when `use_yfinance` is on, come from Yahoo Finance via the
 `yfinance` package. Free, no API key, and **off by default**.
@@ -105,28 +153,29 @@ is redistributed by this project: a live price lands in a CSV you build
 yourself, and the committed reference files are offline builds carrying
 reference prices only.
 
-## 6. Software this package depends on
+## 7. Software this package depends on
 
 Runtime: **numpy**, **pandas**. Optional live prices: **yfinance**. Tests:
 **pytest**. All are BSD, MIT or Apache licensed.
 
-## 7. Where citations live in the code
+## 8. Where citations live in the code
 
 | what | where |
 |---|---|
-| every launch vehicle, propellant, delta-v segment, operational cost and storage system | the `notes` field of its own row in `spacecost/*.py`, with `reference_year` tagging staleness |
+| every launch vehicle, propellant, delta-v segment, operational cost, storage system and environment | the `notes` field of its own row in `spacecost/*.py`, with `reference_year` tagging staleness |
+| the environment derivations, and why they avoid transcendentals | the module docstring and `DERIVATIONS` block of `spacecost/environments.py` |
 | the tankage derivation and its flight anchors | the comment block above `_TANK_BASE_KG_PER_L` in `spacecost/propellants.py` |
 | the argon boil-off derivation | the comment block above `_LAR_BOILOFF_PCT_PER_DAY`, derived from the LOX rate rather than asserted |
 
-## 8. Citing this package
+## 9. Citing this package
 
 There is no paper. Cite the repository, the release, and the data contract
 version, because the last of those is what identifies the numbers:
 
-> spacecost, https://github.com/loggger101/spacecost, package v0.1.0,
-> data contract `pipeline_version` 1.14.0.
+> spacecost, https://github.com/loggger101/spacecost, package v0.2.0,
+> data contract `pipeline_version` 1.15.0.
 
-## 9. Citing the upstream project
+## 10. Citing the upstream project
 
 These tables were built as Module 3 of `economicspace`. If your work leans on
 the model rather than only on the tables, cite that instead:

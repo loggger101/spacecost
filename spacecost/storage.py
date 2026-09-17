@@ -8,6 +8,7 @@ commit b0b18b2de301653ee23de1bd3779867ae5b617a1 (2026-09-04).
 from typing import List
 
 from ._log import say
+from .operations import OPERATIONAL_COSTS_REFERENCE
 from .propellants import _COPV_PERFORMANCE_J_PER_KG, _TANK_BASE_KG_PER_L
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -39,6 +40,48 @@ from .propellants import _COPV_PERFORMANCE_J_PER_KG, _TANK_BASE_KG_PER_L
 # this table is the taxonomy and the citations behind those numbers.
 
 _REF_YEAR_STORAGE = 2026
+
+
+# ─── FIGURES THIS TABLE MIRRORS FROM OPERATIONAL_COSTS  (v1.15.0) ────────────
+# The comment above already says the rule: "What Module 4 consumes has a
+# matching entry in OPERATIONAL_COSTS_REFERENCE", because that is the table
+# Stage 4 reads, and `load_storage` repeats it -- add a figure here that Stage 4
+# needs and you must add it there too.
+#
+# ⚠️  THREE FIGURES WERE OBEYING THAT RULE BY BEING TYPED TWICE.  RTG specific
+# power, the eclipse fraction and the volatile containment mass each existed as
+# a literal value AND a literal range in both files, agreeing only because
+# nobody had edited one of them yet.  CITATIONS.md states the principle this
+# breaks at the top of the file: two copies of one measurement is a defect
+# waiting to happen, because one of them gets updated.
+#
+# So the copy in THIS file is now read from the other one.  Direction matters:
+# `operational_costs` is what Stage 4 consumes and this table is the taxonomy
+# and the citations behind it, so ops is the authority and storage mirrors.
+#
+# Renaming the ops category raises a KeyError at import rather than silently
+# unlinking the two, which is the whole point of doing it by lookup instead of
+# by comment.
+_OPS_BY_CATEGORY = {r["category"]: r for r in OPERATIONAL_COSTS_REFERENCE}
+
+
+def _mirrors_ops(category: str):
+    """`(value, range_low, range_high)` for a figure OPERATIONAL_COSTS states.
+
+    ⚠️  The two tables word their `unit` strings differently on purpose -- "W
+    electric per kg" against "Watts-electric per kg of RTG" -- and that is
+    presentation, not data.  Only the NUMBERS are shared, and only the numbers
+    are mirrored here.
+    """
+    row = _OPS_BY_CATEGORY[category]
+    return row["value"], row["range_low"], row["range_high"]
+
+
+# Unpacked at module level rather than called inline, so the three rows below
+# stay readable as a table and the link is visible in one place.
+_RTG_W_PER_KG    = _mirrors_ops("RTG specific power")
+_ECLIPSE_FRAC    = _mirrors_ops("Eclipse / night-side dark fraction")
+_VOLATILE_HOLDUP = _mirrors_ops("Volatile cargo containment")
 
 STORAGE_REFERENCE: List[dict] = [
     # ── PROPELLANT STORAGE ───────────────────────────────────────────────────
@@ -171,9 +214,10 @@ STORAGE_REFERENCE: List[dict] = [
         "name":            "Volatile cargo containment (water ice)",
         "domain":          "cargo",
         "unit":            "kg of containment per kg of volatile cargo",
-        "value":           0.05,
-        "range_low":       0.03,
-        "range_high":      0.12,
+        # Mirrored from OPERATIONAL_COSTS "Volatile cargo containment".
+        "value":           _VOLATILE_HOLDUP[0],
+        "range_low":       _VOLATILE_HOLDUP[1],
+        "range_high":      _VOLATILE_HOLDUP[2],
         "status":          "development",
         "trl":             4,
         "reference_year":  _REF_YEAR_STORAGE,
@@ -286,9 +330,10 @@ STORAGE_REFERENCE: List[dict] = [
         "name":            "Eclipse / night-side power fraction",
         "domain":          "energy",
         "unit":            "fraction of mission time without sunlight",
-        "value":           0.50,
-        "range_low":       0.35,
-        "range_high":      0.55,
+        # Mirrored from OPERATIONAL_COSTS "Eclipse / night-side dark fraction".
+        "value":           _ECLIPSE_FRAC[0],
+        "range_low":       _ECLIPSE_FRAC[1],
+        "range_high":      _ECLIPSE_FRAC[2],
         "status":          "operational",
         "trl":             9,
         "reference_year":  _REF_YEAR_STORAGE,
@@ -311,9 +356,10 @@ STORAGE_REFERENCE: List[dict] = [
         "name":            "RTG specific power",
         "domain":          "energy",
         "unit":            "W-electric per kg",
-        "value":           5.0,
-        "range_low":       2.4,
-        "range_high":      5.5,
+        # Mirrored from OPERATIONAL_COSTS "RTG specific power".
+        "value":           _RTG_W_PER_KG[0],
+        "range_low":       _RTG_W_PER_KG[1],
+        "range_high":      _RTG_W_PER_KG[2],
         "status":          "operational",
         "trl":             9,
         "reference_year":  _REF_YEAR_STORAGE,
