@@ -2,13 +2,16 @@
 """The acceptance test: a build reproduces the committed reference files.
 
 TWO CONTRACTS, AND THEY ARE NOT THE SAME STRENGTH.  Which one applies depends
-on whether the file contains a computed float:
+on whether the file contains a TRANSCENDENTAL:
 
-    the five reference tables    BYTE identical, on every platform
+    the six reference tables     BYTE identical, on every platform
     the composite summary        the same VALUES, to within a few ULP
 
-The tables carry no arithmetic -- every value is a table entry passed through
--- so a byte comparison is the right contract and a tolerance would hide
+The tables carry no transcendental arithmetic -- five of them pass every value
+through from a table entry, and `environments.csv` derives its columns using
+only multiplication, division and `sqrt`, which IEEE 754 requires to be
+correctly rounded -- so a byte comparison is the right contract and a
+tolerance would hide
 exactly the drift it exists to catch: a reordered column, a float formatted
 differently, a row silently dropped. These tables feed a model whose releases
 are argued from bit-identity, so what is promised there is not "the same
@@ -47,7 +50,16 @@ REFERENCE = os.path.join(HERE, "reference")
 PINNED_DATE = "2026-09-07"
 
 SMALL_TABLES = ["launch_vehicles.csv", "propellants.csv", "delta_v_segments.csv",
-                "operational_costs.csv", "storage_systems.csv"]
+                "operational_costs.csv", "storage_systems.csv",
+                # environments.csv is HERE and not with the summary on purpose.
+                # Its columns are derived, which normally means the weaker
+                # contract -- but every one of those derivations is a multiply,
+                # a divide or a sqrt, and IEEE 754 requires all three to be
+                # correctly rounded. `exp()` is what costs the summary its
+                # bytes, and this table does not call it.
+                # tests/test_schema.py holds the source to that, so the two
+                # checks together say: portable, AND still portable tomorrow.
+                "environments.csv"]
 
 
 @pytest.fixture(scope="module")
@@ -91,9 +103,9 @@ def test_summary_values_are_portable(built):
 
     ⚠️  NOT its bytes, and that distinction is the point of this test.
 
-    The five reference tables carry no computed floats -- every value is a
-    table entry passed through -- so they are byte-portable, and
-    `test_table_is_byte_identical` checks exactly that on every CI platform.
+    The six reference tables carry no transcendental arithmetic, so they are
+    byte-portable, and `test_table_is_byte_identical` checks exactly that on
+    every CI platform.
 
     The summary is different in kind. Three of its columns come out of the
     rocket equation, so they run through `exp()`: the platform libm, and

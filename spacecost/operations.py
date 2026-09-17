@@ -8,7 +8,6 @@ commit b0b18b2de301653ee23de1bd3779867ae5b617a1 (2026-09-04).
 from typing import List
 
 from ._log import say
-from .config import CONFIG
 
 # ─────────────────────────────────────────────────────────────────────────────
 # OPERATIONAL COSTS REFERENCE TABLE
@@ -798,7 +797,25 @@ OPERATIONAL_COSTS_REFERENCE: List[dict] = [
     {
         "category":         "Contingency reserve",
         "unit":             "percent of total mission cost",
-        "value":            CONFIG.contingency_fraction * 100,
+        # ⚠️  A LITERAL SINCE v1.15.0, and it must stay one.  This read
+        # `CONFIG.contingency_fraction * 100` -- a REFERENCE row taking its
+        # value from a mutable configuration singleton, at import time.
+        #
+        # Two things were wrong with that, and neither of them raised.  A build
+        # with `SpacecostConfig(contingency_fraction=0.45)` charged 45% in
+        # `mission_cost_breakdown` and wrote 20.0 into this row of the CSV, so
+        # the catalog reported a contingency the build had not used.  And
+        # `CONFIG` is a module-level dataclass instance, so anybody assigning
+        # to it after import moved the dial without moving the table, or the
+        # other way round depending on import order.
+        #
+        # The two are genuinely different things and the fix is to stop
+        # pretending otherwise.  THIS is the cited industry-standard figure,
+        # the same kind of reference datum as every other row in this table,
+        # and it belongs to the 15-50% band beside it.  `contingency_fraction`
+        # is a DIAL on one mission's arithmetic.  They agree at the default and
+        # `validate` says so when a caller's config makes them disagree.
+        "value":            20.0,
         "range_low":        15.0,
         "range_high":       50.0,
         "notes": "Industry-standard; first-of-kind missions carry the upper end.",

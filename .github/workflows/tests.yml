@@ -5,6 +5,13 @@ on:
     branches: [main]
   pull_request:
   workflow_dispatch:
+  # Mondays, 06:00 UTC.  The whole workflow runs, which catches dependency
+  # drift on a tree nobody has touched -- but the REASON for the schedule is
+  # the live-price canary below, the one job whose subject is a third party
+  # rather than this repository, and so the one job that can break while
+  # nothing here changes.
+  schedule:
+    - cron: "0 6 * * 1"
 
 jobs:
   test:
@@ -41,6 +48,28 @@ jobs:
       - name: Build the catalog from the CLI
         run: python -m spacecost build -o ./ci_out
 
+      # The sanity bands, as a GATE.  Before v1.15.0 `validate` printed through
+      # `say`, which is off by default, so every check it ran was discarded on
+      # every build -- including this one.  --strict fails on a WARN and never
+      # on a NOTE, which is what makes it safe to leave switched on.
+      - name: Validate the tables
+        run: python -m spacecost validate --strict
+
+      # reference/ must be what this tree produces.  test_parity.py already
+      # compares the bytes of the six tables; this catches the OTHER half -- a
+      # summary_meta.json whose row count or stride no longer matches the
+      # build, which parity cannot see because it reads those values FROM that
+      # file.
+      #
+      # Runs on every leg.  The two things in reference/ that belong to a
+      # MACHINE rather than to the model -- the summary hash with its platform
+      # block, and the byte layout of the summary sample -- are reported as
+      # information and not as staleness, so this is meaningful on a runner
+      # that is not the reference platform. Which, on this matrix, is five legs
+      # out of six.
+      - name: reference/ is in sync
+        run: python tools/refresh_reference.py --check
+
       # Install the BUILT DISTRIBUTION, not the working tree, and exercise the
       # public API from a directory where the source is not importable.
       #
@@ -68,3 +97,62 @@ jobs:
           print('spacecost', spacecost.__version__, 'data', spacecost.DATA_VERSION)
           "
 
+  # ───────────────────────────────────────────────────────────────────────────
+  # The live-price path, which NOTHING ELSE EXERCISES.
+  # ───────────────────────────────────────────────────────────────────────────
+  # `use_yfinance` is off by default and every committed reference file is an
+  # offline build, which is right -- and it means the fetcher, the three
+  # tickers, the unit conversions and the blend weighting are untested on every
+  # normal run.  Yahoo renaming a ticker or changing a quote unit would be
+  # discovered by a user, in a build, with no error: `fetch_yfinance_fuel_prices`
+  # catches every exception per ticker and returns an empty frame, so the whole
+  # feature degrades to "reference prices" silently.  That is the correct
+  # behaviour for a library and a terrible property for a canary.
+  #
+  # So: a weekly run that fetches for real and FAILS if a quote is missing or
+  # implausible.  Scheduled and manual only -- never on a pull request, because
+  # a third-party API being down must not block a merge.
+  live-prices:
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    # NOT continue-on-error.  A canary that cannot go red is a cron job.  It
+    # runs on `schedule` and `workflow_dispatch` only, so a Yahoo outage turns
+    # one scheduled run red and blocks no merge and no release.
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install with the live extra
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e ".[live]"
+      - name: Fetch live commodity quotes and sanity-check them
+        run: |
+          python - <<'PY'
+          import spacecost
+          from spacecost.config import SpacecostConfig
+          from spacecost.prices import (_YFINANCE_TICKERS,
+                                        fetch_yfinance_fuel_prices)
+
+          spacecost.set_verbose(True)
+          live = fetch_yfinance_fuel_prices(SpacecostConfig(use_yfinance=True))
+          if live.empty:
+              raise SystemExit(
+                  "no live quotes at all: yfinance is unreachable, or all "
+                  "three tickers %s have moved" % sorted(_YFINANCE_TICKERS))
+
+          # Bands, not values. A commodity price moves; a price that has left
+          # these is a UNIT error, which is what a ticker or quote-unit change
+          # actually looks like after the conversion helpers run on it.
+          for _, row in live.iterrows():
+              usd_kg = float(row["live_cost_usd_per_kg"])
+              if not (0.05 <= usd_kg <= 50.0):
+                  raise SystemExit(
+                      "%s resolved to $%.4f/kg, outside $0.05-$50: that is a "
+                      "unit error, not a market move"
+                      % (row["name"], usd_kg))
+              print("OK %-28s $%8.4f/kg  %s"
+                    % (row["name"], usd_kg, row["live_price_source"]))
+          print("%d of %d proxies live" % (len(live), len(_YFINANCE_TICKERS)))
+          PY

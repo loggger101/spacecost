@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "spacecost"
-version = "0.1.1"
-description = "Cited reference tables for space-mission cost and mass estimation: launch vehicles, propellants, delta-v, operations, storage."
+version = "0.2.0"
+description = "Cited reference tables for space-mission cost and mass estimation: launch vehicles, propellants, delta-v, operations, storage, destination environments."
 readme = "README.md"
 requires-python = ">=3.9"
 license = "MIT"

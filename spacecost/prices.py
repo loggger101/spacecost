@@ -12,7 +12,8 @@ import pandas as pd
 
 from ._log import say
 from .config import SpacecostConfig as TransportConfig
-from .propellants import _COMPONENTS, PROPELLANTS_REFERENCE
+from .propellants import (_COMPONENTS, PROPELLANTS_REFERENCE,
+                          fuel_mass_fraction)
 from .units import (_per_bbl_to_per_kg, _per_gal_to_per_kg,
                     _per_mmbtu_to_per_kg_ng)
 
@@ -35,6 +36,24 @@ _YFINANCE_TICKERS = {
     "NG=F":   ("Natural gas (CH4/LCH4 proxy)",     "MMBtu",   "natural_gas"),
     "CL=F":   ("WTI crude (cross-check)",          "barrel",  "crude_oil"),
 }
+
+# Which propellant ROWS are blends whose live quote prices only the fuel half,
+# and what the other half is.  Keyed by the row's exact `name`, because
+# `startswith` matched by prefix and would have silently caught a future
+# "methalox (subcooled)" row with the wrong mixture ratio.
+#
+# ⚠️  A row named here that no longer exists, or a blend key absent from
+# `_OF_RATIOS`, is a live price quietly applied as if the propellant were pure
+# fuel.  tests/test_schema.py holds both to the tables.
+_LIVE_BLENDS = {
+    "kerolox  (RP-1 / LOX)":   "kerolox",
+    "methalox  (LCH4 / LOX)":  "methalox",
+}
+_LIVE_OXIDISER = {
+    "kerolox":  "LOX",
+    "methalox": "LOX",
+}
+
 
 def fetch_yfinance_fuel_prices(
     config: TransportConfig,
@@ -106,14 +125,13 @@ def fetch_yfinance_fuel_prices(
             continue
         proxy = commodity_usd_per_kg[proxy_key]
 
-        if prop["name"].startswith("kerolox"):
-            # RP-1 fraction was 1/(1+2.30) of the combined mass
-            fuel_frac = 1.0 / (1.0 + 2.30)
-            ox_cost   = _COMPONENTS["LOX"]["cost_usd_per_kg"]
-            live_cost = fuel_frac * proxy["usd_per_kg"] + (1 - fuel_frac) * ox_cost
-        elif prop["name"].startswith("methalox"):
-            fuel_frac = 1.0 / (1.0 + 3.60)
-            ox_cost   = _COMPONENTS["LOX"]["cost_usd_per_kg"]
+        # A live quote prices the FUEL.  For a bipropellant only the fuel half
+        # moves, so the mixture ratio is read back out of propellants.py rather
+        # than restated here -- see `fuel_mass_fraction` for why that matters.
+        blend = _LIVE_BLENDS.get(prop["name"])
+        if blend is not None:
+            fuel_frac = fuel_mass_fraction(blend)
+            ox_cost   = _COMPONENTS[_LIVE_OXIDISER[blend]]["cost_usd_per_kg"]
             live_cost = fuel_frac * proxy["usd_per_kg"] + (1 - fuel_frac) * ox_cost
         else:
             live_cost = proxy["usd_per_kg"]
@@ -154,6 +172,13 @@ def merge_propellant_prices(
         for _, row in live.iterrows():
             mask = out["name"] == row["name"]
             if not mask.any():
+                # A live row that matches no reference row is a live price that
+                # silently does not apply.  It means a propellant was renamed
+                # without `_LIVE_BLENDS` and `yfinance_proxy` following it, and
+                # the only visible symptom would be `price_basis` reading
+                # "reference" on a row the caller asked to be live.
+                say("     WARN  live quote for " + str(row["name"])
+                    + " matches no reference propellant - price NOT applied")
                 continue
             idx = out.index[mask]
             out.loc[idx, "live_cost_usd_per_kg"] = row["live_cost_usd_per_kg"]
