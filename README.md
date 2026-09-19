@@ -447,6 +447,12 @@ nothing in its schema knows what an asteroid is, which is the argument for
 splitting it out: a launch price is useful to anyone costing a mission.
 economicspace consumes this package as its Stage 3.
 
+The peer-reviewed and tiered-authoritative sources behind these rows are
+collected in [General_Research](https://github.com/loggger101/General_Research):
+full texts where they are legally redistributable, otherwise metadata plus the
+extracted key tables, with one CSV of pulled numbers per source and the domains
+organised by which table they back.
+
 The extraction was done by slicing source line ranges rather than re-typing
 anything, so every citation survives byte for byte, and the parity test is the
 evidence that it changed nothing. What did change, and all it changed:
