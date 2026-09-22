@@ -20,12 +20,81 @@ passed and this failed, look at the arithmetic.  Either way the answer is to
 tell economicspace before releasing, not to update the constant here.
 """
 
+import json
 import math
+import os
+import platform
 
 import pytest
 
 import spacecost
 from spacecost import delivery
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# 🚨  EXACT ON THE RECORDED PLATFORM, TOLERANT EVERYWHERE ELSE
+# ─────────────────────────────────────────────────────────────────────────────
+# The first version of this file asserted `==` on every platform and CI went
+# red on the first push, on `lunar_surface` and nothing else: Linux returned
+# 21209.958393766807 where Windows returns 21209.9583937668.  One ULP.
+#
+# That was not a defect in the module, it was the wrong CONTRACT.  This package
+# already says so in its README and enforces it in `test_parity.py`: the six
+# reference tables are byte identical on every platform BECAUSE they pass
+# values through, and the composite summary is promised only "the same values
+# to a few ULP" BECAUSE it runs through `exp()`, which is the platform libm and
+# is not required by IEEE 754 to be correctly rounded.  Every number in this
+# file is a mass ratio, so every number in this file is `exp()`.
+#
+# ⚠️  AND `lunar_surface` FAILING ALONE IS THE TELL.  It is the only chain with
+# two burns at different dry-mass fractions, so it compounds the most rounding;
+# the single-burn chains happened to land on the same float.  A cross-platform
+# claim that holds for six of seven cases is a claim that has not been tested,
+# not a claim that is true.
+#
+# So the split below, which is `test_parity.py`'s own pattern rather than a new
+# one: **exact on the platform the reference was recorded on, and a tolerance
+# tight enough to catch any real change everywhere else.**  The smallest change
+# this module could plausibly suffer is a delta-v row moving or `TUG_ISP_S`
+# being derived, and the latter is the SMALLEST at 2.96%; 1e-12 is nine orders
+# of magnitude below that and eleven above the ULP noise.
+_TOLERANCE = 1e-12
+
+
+def _reference_platform():
+    """The platform `reference/summary_meta.json` was recorded on."""
+    here = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    with open(os.path.join(here, "reference", "summary_meta.json"),
+              encoding="utf-8") as fh:
+        return json.load(fh)["reference_platform"]
+
+
+def _on_reference_platform():
+    ref = _reference_platform()
+    return (platform.system() == ref["system"]
+            and platform.machine() == ref["machine"])
+
+
+def assert_reproduces(got, want, what):
+    """`==` on the recorded platform, a tight relative tolerance elsewhere.
+
+    Not a relaxation: on the platform the numbers were captured on this is the
+    exact comparison it always was, and the tolerance only ever applies where
+    an exact one would be asserting something `exp()` cannot deliver.
+    """
+    if _on_reference_platform():
+        assert got == want, (
+            "%s: %r != %r on the reference platform, where this file's "
+            "figures were captured.  That is a real change, not rounding."
+            % (what, got, want))
+    elif want == 0.0:
+        assert got == 0.0, "%s: %r is not zero" % (what, got)
+    else:
+        rel = abs(got - want) / abs(want)
+        assert rel < _TOLERANCE, (
+            "%s: %r vs %r is %.3g relative, past the %g this platform is "
+            "allowed for an exp()-derived value.  A libm difference is ~1e-16; "
+            "anything this large is the model." % (what, got, want, rel, _TOLERANCE))
 
 
 # Captured from economicspace modules/mineral_value.py @ pipeline_version
@@ -52,13 +121,15 @@ DOWNLEG_AT_MOVE = {
 
 
 @pytest.mark.parametrize("dest,expected", sorted(DELIVERED_AT_MOVE.items()))
-def test_delivered_cost_is_bit_exact_with_the_source(dest, expected):
-    assert delivery.delivered_cost_usd_per_kg(dest) == expected
+def test_delivered_cost_reproduces_the_source(dest, expected):
+    assert_reproduces(delivery.delivered_cost_usd_per_kg(dest), expected,
+                      "delivered_cost_usd_per_kg(%r)" % dest)
 
 
 @pytest.mark.parametrize("dest,expected", sorted(DOWNLEG_AT_MOVE.items()))
-def test_downleg_cost_is_bit_exact_with_the_source(dest, expected):
-    assert delivery.downleg_cost_usd_per_kg(dest) == expected
+def test_downleg_cost_reproduces_the_source(dest, expected):
+    assert_reproduces(delivery.downleg_cost_usd_per_kg(dest), expected,
+                      "downleg_cost_usd_per_kg(%r)" % dest)
 
 
 def test_the_launch_price_comes_off_the_vehicle_table():
@@ -133,8 +204,10 @@ def test_the_tank_can_fail_to_close():
     """`inf` is a feasibility statement, not an expensive answer."""
     assert delivery.stage_mass_ratio(0.0, 465.0, 0.10) == 1.0
     assert delivery.stage_mass_ratio(-50.0, 465.0, 0.10) == 1.0
-    assert delivery.stage_mass_ratio(1836.0, 465.0, 0.10) == 1.5829357820673113
-    assert delivery.stage_mass_ratio(4050.0, 465.0, 0.10) == 2.8899848922428553
+    assert_reproduces(delivery.stage_mass_ratio(1836.0, 465.0, 0.10),
+                      1.5829357820673113, "stage_mass_ratio(1836)")
+    assert_reproduces(delivery.stage_mass_ratio(4050.0, 465.0, 0.10),
+                      2.8899848922428553, "stage_mass_ratio(4050)")
     assert math.isinf(delivery.stage_mass_ratio(12000.0, 465.0, 0.20))
     assert math.isinf(delivery.stage_mass_ratio(20000.0, 465.0, 0.20))
 
