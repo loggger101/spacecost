@@ -40,8 +40,9 @@ handled by hand".
 
 import spacecost
 
-# Every attribute economicspace's Stage 3 adapter reaches, as of its
-# transportation 1.14.0.  Grouped the way the adapter groups them.
+# Every attribute economicspace reaches, as of its transportation 1.15.0 and
+# mineral_value 1.9.0.  Mostly its Stage 3 adapter, grouped the way that adapter
+# groups them; the last group is Stage 2, which imports this package directly.
 CONSUMER_SURFACE = (
     # The five reference tables, re-exported as attributes of the adapter
     # module because economicspace's docs harness holds README row counts to
@@ -72,6 +73,15 @@ CONSUMER_SURFACE = (
     "cheapest_launch_to",
     "cheapest_propellant_for",
     "mission_cost_breakdown",
+
+    # The delivery chains, moved out of economicspace's Module 2 at v0.3.0.
+    # ⚠️  Module 2 imports these, not Module 3, and it is the FIRST stage to
+    # reach this package -- so a name dropped here fails a pricing stage that
+    # runs before the adapter does, and the traceback will not mention Stage 3.
+    "DELIVERY_CHAINS",
+    "LEO_LAUNCH_USD_PER_KG",
+    "delivered_cost_usd_per_kg",
+    "downleg_cost_usd_per_kg",
 
     # The pipeline entry point and the collision-proof validator alias.
     "build_catalog",

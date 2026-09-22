@@ -35,6 +35,7 @@ spacecost build -o ./out           # write all seven CSVs
 - [What is in it](#what-is-in-it)
 - [The three things it does that a spreadsheet of prices does not](#the-three-things-it-does-that-a-spreadsheet-of-prices-does-not)
 - [Where the kilogram is, not just what it costs](#where-the-kilogram-is-not-just-what-it-costs)
+- [Getting a kilogram there, and getting one back](#getting-a-kilogram-there-and-getting-one-back)
 - [The API](#the-api)
 - [The rocket equation, read literally, is wrong twice](#the-rocket-equation-read-literally-is-wrong-twice)
 - [The tables check themselves](#the-tables-check-themselves)
@@ -139,6 +140,51 @@ module and fails on an `exp`, a `pow` or a `**`.
 Perihelion and aphelion are both columns; for Didymos they are a factor of 5 in
 available power. Size for `au_max`.
 
+## Getting a kilogram there, and getting one back
+
+The five cost tables price the pieces. `delivery.py` composes them into the two
+questions somebody costing a mission actually asks:
+
+```python
+>>> import spacecost
+>>> spacecost.delivered_cost_usd_per_kg("lunar_surface")
+21209.9583937668
+>>> spacecost.delivery_mass_ratio("lunar_surface")
+4.987... # kg that must reach LEO per kg landed
+>>> spacecost.downleg_cost_usd_per_kg("cislunar")
+27316.958591940387
+```
+
+**Staging is modelled leg by leg, and that is the whole point.** A destination
+is a SEQUENCE of burns flown by real stages, and the mass ratios chain. Collapse
+the lunar chain into the single 5,920 m/s figure this dataset also carries and
+the answer roughly doubles — **10.96 kg in LEO per kg landed against 4.99** —
+because a one-stage lander carries its descent structure all the way from LEO.
+Delta-v alone does not tell you what a delivery costs.
+
+An `edl` leg divides instead of multiplying: surviving 30% of Mars entry mass
+means arriving with 3.33 kg for every kg that lands. That fraction is measured,
+not assumed — MSL 27.6%, Perseverance 29.8%.
+
+| | |
+|---|---|
+| every delta-v in a chain | **looked up in `DELTA_V_REFERENCE`**, so the table is the one authority |
+| the launch price | `LAUNCH_VEHICLES_REFERENCE`, Falcon 9 reusable, the cheapest operational row |
+| the capsule, TPS and recovery lines | `OPERATIONAL_COSTS_REFERENCE` |
+| the downleg departure delta-v | **typed**, and the comment says why |
+
+⚠️  **The downleg delta-v are the exception, deliberately.** Four of the six
+agree with a table row exactly; two do not — a LEO deorbit burn is not
+tabulated at all, and the GEO figure disagrees with its row by 2 m/s. Deriving
+all six uniformly would have moved two published prices under a change that
+claims to move none, so they stay as literals with the mismatch written down
+beside them. Reconciling them is a real question and a separate release.
+
+⚠️  **`None` and `[]` are different.** `earth_surface` has no chain and avoids
+no launch, so it costs 0 $/kg; `leo` has an EMPTY chain and avoids the whole
+launch price. `if legs:` reads them as the same thing and prices LEO at zero,
+which is a defect that has actually shipped downstream. Test `is None`.
+
 ## The API
 
 | call | gives you |
@@ -151,6 +197,10 @@ available power. Size for `au_max`.
 | `cheapest_propellant_for(catalog, dv)` | the propellant table ranked by fuel cost at that delta-v, with the low-thrust penalty applied and sails excluded |
 | `mission_cost_breakdown(catalog, ...)` | launch + propellant + hardware + ops + contingency, itemised |
 | `build_transportation_summary(...)` | the vehicle x segment x propellant cross-join |
+| `delivered_cost_usd_per_kg(dest)` | launch cost avoided: what it costs to put 1 kg at a destination, through its staged leg chain |
+| `delivery_mass_ratio(dest)` | the same answer as kilograms in LEO per kilogram delivered |
+| `downleg_cost_usd_per_kg(dest)` | and the other direction: capsule, TPS, recovery and the departure burn |
+| `stage_mass_ratio(dv, isp, dry_frac)` | one propulsive leg's initial mass per kg of payload; `inf` when the tank cannot close |
 | `solar_flux_w_per_m2(au)`, `solar_array_mass_factor(au)` | the 1/r² power penalty, at any distance |
 | `blackbody_temp_k(au)`, `one_way_light_time_min(range_au)` | the thermal and comms consequences of the same number |
 | `validate_tables(...)` (alias `validate`) | sanity bands over the loaded tables; returns the findings, and raises under `strict=True` |
@@ -417,6 +467,8 @@ spacecost/          the package
     validate.py     sanity bands, and the strict gate over them
     build.py        writes the seven CSVs
     query.py        cheapest-X helpers and a worked mission breakdown
+    delivery.py     staged delivery chains, and the cost of a kilogram
+                    delivered or returned
     cli.py          `python -m spacecost`
 reference/          the six tables as committed CSVs, plus a sample of the
                     seventh and the platform its hash was taken on

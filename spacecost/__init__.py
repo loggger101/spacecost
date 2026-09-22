@@ -48,6 +48,9 @@ Quick start:
 
     >>> catalog = spacecost.build_catalog()             # all seven CSVs
 
+    >>> spacecost.delivered_cost_usd_per_kg("lunar_surface")  # launch avoided
+    >>> spacecost.delivery_mass_ratio("lunar_surface")        # kg in LEO per kg
+
 PROVENANCE.  Extracted from Module 3 of `economicspace`, the asteroid-mining
 profitability pipeline, at pipeline_version 1.14.0 (commit b0b18b2).  The
 tables were built there over fourteen releases; they are split out because
@@ -66,6 +69,10 @@ from ._log import is_verbose, say, set_verbose
 from .build import build_catalog
 from .config import CONFIG, SpacecostConfig
 from .deltav import DELTA_V_REFERENCE
+from .delivery import (DELIVERY_CHAINS, DOWNLEG_DEPARTURE_DV_M_S,
+                       LEO_LAUNCH_USD_PER_KG, MARS_LANDED_MASS_FRACTION,
+                       delivered_cost_usd_per_kg, delivery_mass_ratio,
+                       downleg_cost_usd_per_kg, stage_mass_ratio)
 from .environments import (ENVIRONMENTS_REFERENCE, blackbody_temp_k,
                           one_way_light_time_min, solar_array_mass_factor,
                           solar_flux_w_per_m2)
@@ -88,7 +95,7 @@ from .vehicles import LAUNCH_VEHICLES_REFERENCE
 # The PACKAGE release. Not the data contract -- that is
 # `SpacecostConfig.pipeline_version`, which is stamped into every CSV. See
 # spacecost/config.py for why the two are deliberately separate.
-__version__ = "0.2.0"
+__version__ = "0.3.0"
 
 # The DATA contract this release ships, repeated here for convenience only.
 # config.py is the authority; this is a mirror, and a mirror can drift, so
@@ -113,6 +120,10 @@ __all__ = [
     "load_operational_costs", "load_storage", "load_environments",
     "build_transportation_summary", "build_catalog", "validate",
     "validate_tables", "ValidationError",
+    "DELIVERY_CHAINS", "DOWNLEG_DEPARTURE_DV_M_S",
+    "LEO_LAUNCH_USD_PER_KG", "MARS_LANDED_MASS_FRACTION",
+    "stage_mass_ratio", "delivery_mass_ratio",
+    "delivered_cost_usd_per_kg", "downleg_cost_usd_per_kg",
     "propellant_mass_for_dv", "cost_per_dv_usd_per_kg",
     "cheapest_launch_to", "cheapest_propellant_for", "mission_cost_breakdown",
     "solar_flux_w_per_m2", "solar_array_mass_factor", "blackbody_temp_k",

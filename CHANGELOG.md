@@ -13,6 +13,72 @@ may read a version as proof that a number moved.
 
 ## Package releases
 
+### 0.3.0 - 2026-09-21
+
+Data contract `pipeline_version` **unchanged at 1.15.0**, and that is the
+headline rather than a footnote: `build_catalog()` writes the same seven CSVs
+byte for byte, `reference/` needed no regeneration, and **economicspace does
+not have to re-run Stage 3 for this.** A repin is enough. The rule is
+one-directional and this release is the other direction: new code, no new data.
+
+#### A seventh module: `delivery`, the staged leg chains
+
+Moved out of economicspace's `modules/mineral_value.py` (Stage 2), where it had
+lived since that module's v1.2.0. It answers two questions:
+
+- `delivered_cost_usd_per_kg(dest)` — the launch cost a kilogram already in
+  space avoids, walked backwards through a chain of real stages.
+- `downleg_cost_usd_per_kg(dest)` — capsule, TPS, a share of the recovery
+  campaign, and the departure burn that has to carry all three.
+
+plus `delivery_mass_ratio` and `stage_mass_ratio`, and the constants behind
+them: `DELIVERY_CHAINS`, `DOWNLEG_DEPARTURE_DV_M_S`, `LEO_LAUNCH_USD_PER_KG`,
+`MARS_LANDED_MASS_FRACTION`.
+
+**Why here.** The block it came from opened by admitting what it was: *"Constants
+below are cross-referenced to Module 3. They are duplicated rather than
+imported because Module 2 runs BEFORE Module 3 in the pipeline order … If you
+change one of these, change it in Module 3 too."* Nine numbers retyped by hand
+under a manual-sync instruction. That justification was concatenation order,
+and it stopped applying the moment Stage 3 became this package: a pip-installed
+package has no position in a pipeline. Nothing in the block knows what an
+asteroid is.
+
+**Every chain delta-v is now a lookup, not a literal.** `DELTA_V_REFERENCE` is
+the single authority for all nine, and `tests/test_delivery.py` fails if a
+literal creeps back in.
+
+⚠️  **The downleg delta-v are typed, and that is deliberate.** Four of six
+agree with a row exactly; a LEO deorbit burn has no row at all, and the GEO
+figure disagrees with `GEO -> Earth (deorbit to entry)` by 2 m/s. Deriving all
+six uniformly would have moved two published prices under a release that claims
+to move none. They stay as literals with the mismatch tabulated beside them.
+**Reconciling those two is a real question and a separate release**, because it
+changes what a kilogram of platinum is worth at GEO and in LEO.
+
+⚠️  **`math.exp`, not `np.exp`.** `rocket.py` is the vectorised entry point and
+this is the scalar one, and they are not interchangeable: the consumer argues
+its releases from bit-identity and the two libraries may round the last bit
+differently. Do not unify them.
+
+**Pinned bit-exact.** `tests/test_delivery.py` holds all fourteen headline
+values to full `repr` precision, captured by running the original
+implementation before a line was edited — not a regression net taken
+afterwards. An exact `==`, because a tolerance would defeat the purpose.
+Proved able to fail by perturbing the arithmetic, typing a literal into a chain,
+and collapsing the `None`/`[]` distinction.
+
+⚠️  **CONSUMER SURFACE WIDENED, and it is a new shape.** Four names joined
+`tests/test_consumer_contract.py`, and they are imported by economicspace's
+**Stage 2**, not its Stage 3 adapter. Stage 2 is the first stage to reach this
+package, so a name dropped here now fails a pricing stage that runs before the
+adapter does, and the traceback will not mention Stage 3.
+
+⚠️  **REPIN economicspace**, in the FIVE places it now types the tag:
+`requirements.txt`, `_MASTER_PIP_SPEC` in `build_master.py`, `_PIP_SPEC` in
+`modules/transportation.py`, the same in `modules/mineral_value.py` (new with
+this release), and the README sentence naming it.
+
 ### 0.2.0 - 2026-09-17
 
 Data contract `pipeline_version` **1.14.0 → 1.15.0**. A sixth reference table
