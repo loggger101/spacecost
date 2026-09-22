@@ -166,6 +166,7 @@ Runtime: **numpy**, **pandas**. Optional live prices: **yfinance**. Tests:
 | the environment derivations, and why they avoid transcendentals | the module docstring and `DERIVATIONS` block of `spacecost/environments.py` |
 | the tankage derivation and its flight anchors | the comment block above `_TANK_BASE_KG_PER_L` in `spacecost/propellants.py` |
 | the argon boil-off derivation | the comment block above `_LAR_BOILOFF_PCT_PER_DAY`, derived from the LOX rate rather than asserted |
+| the delivery chains: the tug and lander dry-mass fractions (Centaur V, DCSS, Apollo LM descent stage) and the Mars entry survival fraction (MSL 27.6%, Perseverance 29.8%) | the comment blocks above `TUG_DRY_MASS_FRAC` and `MARS_LANDED_MASS_FRACTION` in `spacecost/delivery.py`; every delta-v in a chain is a lookup into `DELTA_V_REFERENCE` and carries that row's citation |
 
 ## 9. Citing this package
 
