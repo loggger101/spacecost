@@ -95,7 +95,7 @@ from .vehicles import LAUNCH_VEHICLES_REFERENCE
 # The PACKAGE release. Not the data contract -- that is
 # `SpacecostConfig.pipeline_version`, which is stamped into every CSV. See
 # spacecost/config.py for why the two are deliberately separate.
-__version__ = "0.3.0"
+__version__ = "0.3.1"
 
 # The DATA contract this release ships, repeated here for convenience only.
 # config.py is the authority; this is a mirror, and a mirror can drift, so
