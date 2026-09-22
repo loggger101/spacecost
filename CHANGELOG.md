@@ -13,6 +13,53 @@ may read a version as proof that a number moved.
 
 ## Package releases
 
+### 0.3.2 - 2026-09-22
+
+**A test fix, and it is a fix to the CONTRACT rather than to a number.** No
+package code changed, no value moved, the data contract stays 1.15.0.
+
+#### 🚨 0.3.1's tests claimed a cross-platform guarantee this package declines to make
+
+`tests/test_delivery.py` asserted `==` on every platform. CI went red on the
+first push, on `lunar_surface` and nothing else: Linux returns
+`21209.958393766807` where Windows returns `21209.9583937668`. One ULP.
+
+That was not a defect in `delivery.py`. It was the wrong contract, and this
+package already had the right one written down. [The output is a
+contract](README.md#the-output-is-a-contract) says the six reference tables
+are byte identical on every platform BECAUSE they pass values through, and the
+composite summary is promised only "the same values, to a few ULP" BECAUSE it
+runs through `exp()` -- the platform libm, which IEEE 754 does not require to
+be correctly rounded. **Every number in `delivery.py` is a mass ratio, so
+every number in it is `exp()`.** The tests were written to the consumer's
+bit-identity standard and imported it into a package that says, in its own
+README, that it cannot promise that here.
+
+⚠️  **`lunar_surface` failing ALONE is the tell.** It is the only chain with
+two burns at different dry-mass fractions, so it compounds the most rounding;
+the single-burn chains happened to land on the same float. A cross-platform
+claim that holds for six of seven cases is a claim that has not been tested.
+
+✅  **Fixed with `test_parity.py`'s own pattern rather than a new one**: exact
+on the platform `reference/summary_meta.json` was recorded on, and a 1e-12
+relative tolerance elsewhere. Not a relaxation -- on the recording platform it
+is the same exact comparison, and the tolerance only applies where an exact
+one would assert something `exp()` cannot deliver.
+
+⚠️  **The tolerance was chosen against the smallest REAL change this module
+could suffer, not by eye.** Deriving `TUG_ISP_S` is the smallest at **2.96%**;
+1e-12 sits nine orders of magnitude below that and four above the observed
+libm spread. Proved by feeding the checker the actual value CI returned (it
+passes), the value the Isp swap would give (it fails), a 1e-9 drift (fails)
+and a 1e-15 one (passes) -- and by confirming the exact comparison still bites
+on the reference platform.
+
+⚠️  **economicspace is unaffected and does not have to move for this.** It
+runs on the reference platform, its own bit-identity is unchanged and
+independently verified, and it does not run this package's test suite. The
+repin to 0.3.2 is so the tag it pins has a green suite, not because anything
+it computes changed.
+
 ### 0.3.1 - 2026-09-21
 
 Data contract unchanged at **1.15.0**, no value moved, every `delivery` output
