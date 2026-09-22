@@ -170,3 +170,88 @@ def test_adding_this_module_did_not_move_the_data_contract():
     re-fetches live prices, so it is a deliberate release rather than a tidy-up.
     """
     assert spacecost.DATA_VERSION == "1.15.0"
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# THE REGISTER: every number in this module that is TYPED rather than derived
+# ─────────────────────────────────────────────────────────────────────────────
+# The module's claim is that it derives its values from the reference tables.
+# A claim like that decays one literal at a time, and no test of the OUTPUTS
+# can see it happen: a hardcoded 3,600 and a looked-up 3,600 produce identical
+# numbers and identical hashes, right up until the row moves and only one of
+# them follows.
+#
+# So this reads the SOURCE.  Every numeric literal in delivery.py must either
+# be algebra (0 and 1, the identities the rocket equation is written with) or
+# carry a row here saying why it cannot come from a table.
+#
+# ⚠️  BOTH HALVES ARE FINDINGS.  A literal with no row is a value that stopped
+# being derived; a row with no literal is a permission still being granted for
+# a number somebody has since removed.  That is the same rule this package's
+# consumer applies to its own `TYPED_OK` and `BORROWED` registers, and the
+# reason is the same: an allowlist nobody prunes quietly stops being a
+# decision and becomes a way past the check.
+
+TYPED = {
+    465.0:    "TUG_ISP_S, an upper-stage figure; the table's row is 452 s",
+    452.0:    "_ISP_AT_MOVE, the table value that discrepancy is asserted against",
+    0.1:      "TUG_DRY_MASS_FRAC and DOWNLEG_CAPSULE_DRY_FRAC; no structural-fraction table",
+    0.2:      "LANDER_DRY_MASS_FRAC, Apollo LM descent stage",
+    0.3:      "MARS_LANDED_MASS_FRACTION, MSL 27.6% / Perseverance 29.8%",
+    0.15:     "DOWNLEG_TPS_FRAC, mirrors economicspace's heat_shield_frac_of_payload",
+    10000.0:  "DOWNLEG_BATCH_KG, the batch the recovery campaign is spread over",
+    120.0:    "_LEO_DEORBIT_DV_M_S; a LEO deorbit burn has no row",
+    850.0:    "_LLO_TEI_DV_M_S; TEI out of low lunar orbit has no row",
+    1490.0:   "_GEO_DEORBIT_DV_M_S, a hand figure predating the 1,488 row",
+    1488.0:   "_GEO_DEORBIT_ROW_AT_MOVE, the row that is asserted against",
+    # The two *_AT_MOVE registers restate every derived delta-v on purpose:
+    # they are what turns "a row moved" from a silent re-pricing into an
+    # import error.  They are typed BECAUSE deriving them would defeat them.
+    2455.0: "_CHAIN_DV_AT_MOVE", 1836.0: "_CHAIN_DV_AT_MOVE",
+    3600.0: "_CHAIN_DV_AT_MOVE", 4050.0: "_CHAIN_DV_AT_MOVE",
+    1870.0: "_CHAIN_DV_AT_MOVE", 800.0: "_CHAIN_DV_AT_MOVE",
+    900.0:  "_CHAIN_DV_AT_MOVE / _DOWNLEG_DV_AT_MOVE",
+    450.0:  "_DOWNLEG_DV_AT_MOVE", 2720.0: "_DOWNLEG_DV_AT_MOVE",
+    6200.0: "_DOWNLEG_DV_AT_MOVE",
+}
+
+ALGEBRA = {0, 1, 0.0, 1.0}
+
+
+def _literals():
+    """Every numeric literal in delivery.py, as {value: [line, ...]}."""
+    import ast
+    import os
+    path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+                        "spacecost", "delivery.py")
+    with open(path, encoding="utf-8") as fh:
+        tree = ast.parse(fh.read())
+    found = {}
+    for node in ast.walk(tree):
+        if (isinstance(node, ast.Constant)
+                and isinstance(node.value, (int, float))
+                and not isinstance(node.value, bool)):
+            found.setdefault(float(node.value), []).append(node.lineno)
+    return found
+
+
+def test_no_number_is_typed_without_a_reason():
+    """A literal with no register row is a value that stopped being derived."""
+    undeclared = {v: ls for v, ls in _literals().items()
+                  if v not in ALGEBRA and v not in TYPED}
+    assert not undeclared, (
+        "delivery.py types these and the register does not explain them: "
+        + "; ".join("%s at line(s) %s" % (v, ls)
+                    for v, ls in sorted(undeclared.items()))
+        + ".  Derive it from a reference table, or add a row to TYPED saying "
+          "which table cannot supply it.")
+
+
+def test_the_register_has_nothing_stale_in_it():
+    """A row with no literal is a permission granted for a number that has gone."""
+    present = set(_literals())
+    stale = sorted(v for v in TYPED if v not in present)
+    assert not stale, (
+        "TYPED still allows %s, and delivery.py no longer contains them.  "
+        "Drop the row: an allowlist nobody prunes stops being a decision."
+        % (stale,))

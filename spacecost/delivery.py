@@ -25,15 +25,32 @@ concatenation order stopped applying.
 Nothing here knows what an asteroid is.  "Cost of putting 1 kg of payload at
 `destination`, launched from Earth" is this package's own scope sentence.
 
-WHAT IS DERIVED AND WHAT IS TYPED, WHICH IS THE PART TO READ.  Every Δv in
-`DELIVERY_CHAINS` is looked up in `DELTA_V_REFERENCE` by segment name, so the
-table is the single authority and a row that moves moves the chain with it.
-`DOWNLEG_DEPARTURE_DV_M_S` is NOT, and that is deliberate rather than lazy:
-two of its six values have no row at all and a third disagrees with its row by
-2 m/s.  Snapping those to the table would change published numbers that nobody
-has re-measured, so they stay as literals and the mismatch is written down in
-the comment above them.  Deriving what agrees and typing what does not is the
-honest split; quietly deriving all six would have moved a price.
+WHAT IS DERIVED AND WHAT IS TYPED, WHICH IS THE PART TO READ.  The rule is
+**derive everything that agrees with a table, type what does not, and assert
+the difference so it cannot drift quietly.**
+
+| | |
+|---|---|
+| every Δv in `DELIVERY_CHAINS` | `DELTA_V_REFERENCE` lookup |
+| the LEO launch price | `LAUNCH_VEHICLES_REFERENCE` row |
+| capsule, TPS and recovery | `OPERATIONAL_COSTS_REFERENCE` rows |
+| 4 of the 6 downleg departure burns | `DELTA_V_REFERENCE`, one of them a sum |
+| a LEO deorbit burn, and TEI out of low lunar orbit | **typed: no row exists** |
+| the GEO deorbit burn | **typed: 1,490 against the row's 1,488** |
+| `TUG_ISP_S` | **typed: 465 s against the table's 452** |
+| four structural fractions | **typed: not quantities these tables carry** |
+
+⚠️  EVERY ONE OF THOSE EXCEPTIONS IS ASSERTED AT IMPORT, against the value the
+table held when it was written.  That is the difference between a discrepancy
+that is documented and one that is checked: the comments below cannot go
+stale silently, because the row moving under them raises rather than being
+absorbed.  A number nothing checks is a number waiting to rot.
+
+⚠️  AND NONE OF THE EXCEPTIONS IS A TIDY-UP WAITING TO HAPPEN.  Snapping
+`TUG_ISP_S` to the table moves the delivered price 2.96% to 5.21% depending on
+destination, and snapping the GEO deorbit burn changes what platinum is worth
+at GEO.  Those are published numbers downstream; each is a release with a
+re-measurement behind it, not a refactor.
 
 ⚠️  THIS MODULE IS NOT A SEVENTH REFERENCE TABLE, and must not become one
 casually.  `build_catalog()` writes the same seven CSVs it wrote at v0.2.0 and
@@ -58,6 +75,7 @@ from typing import Dict, List, Optional, Tuple
 from ._log import say
 from .deltav import DELTA_V_REFERENCE
 from .operations import OPERATIONAL_COSTS_REFERENCE
+from .propellants import PROPELLANTS_REFERENCE
 from .units import G0_M_S2
 from .vehicles import LAUNCH_VEHICLES_REFERENCE
 
@@ -99,6 +117,15 @@ def _ops(category: str) -> float:
         "delivery.py needs the operational row %r and it is gone." % (category,))
 
 
+def _propellant_isp_vac_s(name: str) -> float:
+    """One named `PROPELLANTS_REFERENCE` vacuum Isp, s."""
+    for row in PROPELLANTS_REFERENCE:
+        if row["name"] == name:
+            return float(row["isp_vac_s"])
+    raise KeyError(
+        "delivery.py needs the propellant %r and it is gone." % (name,))
+
+
 def _vehicle_usd_per_kg_to_leo(name: str) -> float:
     """One named `LAUNCH_VEHICLES_REFERENCE` launch price."""
     for row in LAUNCH_VEHICLES_REFERENCE:
@@ -116,10 +143,40 @@ def _vehicle_usd_per_kg_to_leo(name: str) -> float:
 # the launch cost avoided.
 LEO_LAUNCH_USD_PER_KG = _vehicle_usd_per_kg_to_leo("Falcon 9 (reusable)")
 
-# Isp 465 s = hydrolox upper stage (PROPELLANTS_REFERENCE: LH2/LOX, 450-465 s
-# vacuum).  Dry-mass fraction 0.10 is mid-range for a cryogenic upper stage
+# 🚨  TYPED, AND IT DOES NOT EQUAL THE TABLE'S OWN HYDROLOX ROW.  This is the
+# one number here that looks derivable and is not, so it is worth reading
+# before "fixing" it.
+#
+# `PROPELLANTS_REFERENCE` carries hydrolox at **452 s**, the RS-25 / RL-10
+# datasheet figure.  The chains fly **465 s**, the top of the 450-465 s band a
+# cryogenic UPPER STAGE is quoted over, which is the right figure for a tug
+# and is what economicspace's published in-space prices were computed with.
+#
+# ⚠️  DERIVING IT IS A MODEL CHANGE, NOT A REFACTOR.  Measured: swapping 465
+# for the table's 452 moves the delivered price **+2.96% at cislunar, +3.29%
+# at geo, +3.63% at mars_orbit, +3.65% at mars_surface and +5.21% at
+# lunar_surface**.  Those are published numbers downstream, so the swap is a
+# release with a re-measurement behind it, not a tidy-up.
+#
+# What IS derived is the relationship: `_ISP_AT_MOVE` below asserts the table
+# still says what this paragraph claims it says, so the discrepancy is
+# CHECKED rather than merely written down.  If the row moves, the assertion
+# names it and this comment stops being able to go quietly stale.
+TUG_ISP_S = 465.0
+_HYDROLOX = "hydrolox  (LH2 / LOX)"
+_ISP_AT_MOVE = 452.0
+if _propellant_isp_vac_s(_HYDROLOX) != _ISP_AT_MOVE:
+    raise AssertionError(
+        "PROPELLANTS_REFERENCE now puts %s at %s s, where delivery.py's "
+        "comment is written against %s s.  The chains deliberately fly "
+        "TUG_ISP_S = %s (an upper-stage figure, not the datasheet one); "
+        "re-read that comment and re-measure before changing either."
+        % (_HYDROLOX, _propellant_isp_vac_s(_HYDROLOX), _ISP_AT_MOVE,
+           TUG_ISP_S))
+
+# Dry-mass fraction 0.10 is mid-range for a cryogenic upper stage
 # (Centaur V ~0.08, DCSS ~0.11), stage dry mass / (dry + propellant).
-TUG_ISP_S          = 465.0
+# No table row: a stage structural fraction is not one of the six tables.
 TUG_DRY_MASS_FRAC  = 0.10
 # A LANDER is structurally much heavier than a tug for the same propellant
 # load: throttleable engines, landing legs, terminal-guidance sensors.
@@ -269,14 +326,56 @@ DOWNLEG_BATCH_KG           = 10_000.0   # nominal batch the recovery is spread o
 # The surface cases are punishing, and correctly so: hauling material back UP
 # out of a gravity well you just landed in is close to the worst thing you can
 # do with it.
+# ⚠️  ~850 m/s of trans-Earth injection out of low lunar orbit.  There is no
+# row for it: the table has TEI from Mars orbit and from low Mars orbit, and
+# nothing for the Moon.  Typed, and the only hand figure in the lunar entry.
+_LLO_TEI_DV_M_S = 850.0
+# A LEO deorbit burn is likewise untabulated; ~120 m/s lowers perigee out of a
+# 200-km circular orbit onto an entry trajectory.
+_LEO_DEORBIT_DV_M_S = 120.0
+# 🚨  1,490 AND THE TABLE SAYS 1,488.  A hand figure that predates the row and
+# is within 0.13% of it.  Reconciling the two is a real question and a
+# separate release, because it changes what a kilogram of platinum is worth at
+# GEO; it is NOT a rounding to fix on the way past.  Asserted below so the gap
+# cannot widen unnoticed.
+_GEO_DEORBIT_DV_M_S = 1_490.0
+_GEO_DEORBIT_ROW_AT_MOVE = 1_488.0
+
 DOWNLEG_DEPARTURE_DV_M_S: Dict[str, float] = {
-    "leo":            120.0,
-    "geo":          1_490.0,
-    "cislunar":       450.0,
-    "lunar_surface": 2_720.0,
-    "mars_orbit":      900.0,
-    "mars_surface":  6_200.0,
+    "leo":            _LEO_DEORBIT_DV_M_S,
+    "geo":            _GEO_DEORBIT_DV_M_S,
+    # NRHO departure, symmetric with the insertion burn.
+    "cislunar":       _dv("TLI  →  NRHO insertion"),
+    # Ascent to LLO, symmetric with the descent row, plus TEI.
+    "lunar_surface":  _dv("LLO  →  lunar surface (descent)") + _LLO_TEI_DV_M_S,
+    # TEI at periapsis, symmetric with the capture.
+    "mars_orbit":     _dv("1-sol Mars orbit  →  Earth (TEI)"),
+    # Ascent to low Mars orbit, then TEI from there.
+    "mars_surface":   (_dv("Mars surface  →  low Mars orbit")
+                       + _dv("Low Mars orbit  →  Earth (TEI)")),
 }
+
+# Same contract as `_CHAIN_DV_AT_MOVE`: four of these are lookups now, so a row
+# moving under them moves a price, and it should say so rather than just
+# happen.  The two hand figures are here too, which is what stops them being
+# quietly edited.
+_DOWNLEG_DV_AT_MOVE: Dict[str, float] = {
+    "leo": 120.0, "geo": 1_490.0, "cislunar": 450.0,
+    "lunar_surface": 2_720.0, "mars_orbit": 900.0, "mars_surface": 6_200.0,
+}
+for _k, _want in _DOWNLEG_DV_AT_MOVE.items():
+    if DOWNLEG_DEPARTURE_DV_M_S[_k] != _want:
+        raise AssertionError(
+            "DOWNLEG_DEPARTURE_DV_M_S[%r] is %s where the move recorded %s.  "
+            "A delta-v row has moved under it; that changes what a commodity "
+            "with no in-space market is worth at %s."
+            % (_k, DOWNLEG_DEPARTURE_DV_M_S[_k], _want, _k))
+if _dv("GEO  →  Earth (deorbit to entry)") != _GEO_DEORBIT_ROW_AT_MOVE:
+    raise AssertionError(
+        "the GEO deorbit row is %s now, not the %s this module's comment "
+        "compares its hand figure of %s against.  Re-read that comment."
+        % (_dv("GEO  →  Earth (deorbit to entry)"),
+           _GEO_DEORBIT_ROW_AT_MOVE, _GEO_DEORBIT_DV_M_S))
 
 
 # ─────────────────────────────────────────────────────────────────────────────

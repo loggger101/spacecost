@@ -13,6 +13,56 @@ may read a version as proof that a number moved.
 
 ## Package releases
 
+### 0.3.1 - 2026-09-21
+
+Data contract unchanged at **1.15.0**, no value moved, every `delivery` output
+bit-identical to 0.3.0. An audit of what the module DERIVES against what it
+merely states.
+
+#### Four more lookups
+
+The downleg departure burns were all typed at 0.3.0 on the argument that two
+of six had no row. Four of them do, so four of them are lookups now:
+`cislunar` off `TLI -> NRHO insertion`, `mars_orbit` off `1-sol Mars orbit ->
+Earth (TEI)`, `mars_surface` off the ascent-plus-TEI pair, and the 1,870 m/s
+ascent component of `lunar_surface` off the descent row it is symmetric with.
+
+**Deriving what agrees and typing what does not is right; typing all six
+because two could not be derived was not.** That is the sharper version of the
+0.3.0 note, and the correction is worth having: a blanket exception is how a
+register stops being a decision.
+
+#### 🚨 `TUG_ISP_S` is 465 s and this package's hydrolox row says 452
+
+The chains fly a **465 s** cryogenic upper stage. `PROPELLANTS_REFERENCE`
+carries hydrolox at **452 s**, the RS-25 / RL-10 datasheet figure. 465 is the
+top of the 450-465 s band an upper STAGE is quoted over, which is the right
+figure for a tug and is what the consumer's published in-space prices were
+computed with.
+
+⚠️  **Deriving it is a model change, not a refactor.** Measured: swapping 465
+for 452 moves the delivered price **+2.96% cislunar, +3.29% geo, +3.63%
+mars_orbit, +3.65% mars_surface, +5.21% lunar_surface**. Those are published
+downstream. Left as it is; **the discrepancy is asserted at import instead**,
+so the row cannot move under the comment that describes it.
+
+The same treatment is now applied to the GEO deorbit burn, which is 1,490 m/s
+against a row of 1,488: typed, and pinned to the row it disagrees with.
+
+#### A register, because a derivation claim decays one literal at a time
+
+`tests/test_delivery.py` reads the module's **source** and requires every
+numeric literal to be either algebra (`0` and `1`) or a row on `TYPED` saying
+which table cannot supply it. No test of the outputs can catch this: a
+hardcoded 3,600 and a looked-up 3,600 give identical numbers and identical
+hashes right up until the row moves and only one follows.
+
+⚠️  **Both halves are findings.** A literal with no row is a value that
+stopped being derived; a row with no literal is a permission still granted for
+a number that has gone. Proved by planting one of each, and by planting a
+literal that changes no value at all -- the case the import assertions cannot
+reach.
+
 ### 0.3.0 - 2026-09-21
 
 Data contract `pipeline_version` **unchanged at 1.15.0**, and that is the
