@@ -99,6 +99,12 @@ def assert_reproduces(got, want, what):
 
 # Captured from economicspace modules/mineral_value.py @ pipeline_version
 # 1.9.0, before the move.  Full precision, not rounded.
+#
+# ⚠️  SINCE v0.4.0 THESE ARE THE LEGACY MODEL, not the default.  They are
+# reproduced by `delivered_cost_usd_per_kg(dest, LEGACY_LEO, stage_hardware=
+# False)`, and that reproduction is pinned exactly: it is how every result
+# economicspace measured before v0.4.0 can be re-derived rather than guessed.
+LEGACY_LEO = 4253.0
 DELIVERED_AT_MOVE = {
     "earth_surface": 0.0,
     "leo":           4253.0,
@@ -120,8 +126,30 @@ DOWNLEG_AT_MOVE = {
 }
 
 
+# v0.4.0: the default model.  Falcon Heavy (expendable) at the centre of its
+# band, plus the build cost of every stage the chain expends, at each cost
+# row's central value.  Captured on the reference platform at full precision.
+DELIVERED_V040 = {
+    "earth_surface": 0.0,
+    "leo":           2414.0,
+    "geo":           8046.4842049567105,
+    "cislunar":      6877.956811461624,
+    "lunar_surface": 42635.25435596908,
+    "mars_orbit":    8706.43063018673,
+    "mars_surface":  184810.79516416567,
+}
+
+
 @pytest.mark.parametrize("dest,expected", sorted(DELIVERED_AT_MOVE.items()))
-def test_delivered_cost_reproduces_the_source(dest, expected):
+def test_the_legacy_model_still_reproduces_the_source(dest, expected):
+    assert_reproduces(
+        delivery.delivered_cost_usd_per_kg(dest, LEGACY_LEO,
+                                           stage_hardware=False),
+        expected, "legacy delivered_cost_usd_per_kg(%r)" % dest)
+
+
+@pytest.mark.parametrize("dest,expected", sorted(DELIVERED_V040.items()))
+def test_delivered_cost_is_the_v040_model(dest, expected):
     assert_reproduces(delivery.delivered_cost_usd_per_kg(dest), expected,
                       "delivered_cost_usd_per_kg(%r)" % dest)
 
@@ -133,11 +161,76 @@ def test_downleg_cost_reproduces_the_source(dest, expected):
 
 
 def test_the_launch_price_comes_off_the_vehicle_table():
-    """Not a literal: the whole point of the move."""
-    assert delivery.LEO_LAUNCH_USD_PER_KG == 4253.0
+    """Not a literal: the whole point of the move.  The band's centre."""
+    assert delivery.LEO_LAUNCH_VEHICLE == "Falcon Heavy (expendable)"
+    assert delivery.LEO_LAUNCH_USD_PER_KG == 2414.0
     row = [r for r in spacecost.LAUNCH_VEHICLES_REFERENCE
-           if r["name"] == "Falcon 9 (reusable)"]
-    assert row and float(row[0]["usd_per_kg_to_leo"]) == delivery.LEO_LAUNCH_USD_PER_KG
+           if r["name"] == delivery.LEO_LAUNCH_VEHICLE]
+    assert row and float(row[0]["usd_per_kg_to_leo"]) == \
+        delivery.LEO_LAUNCH_USD_PER_KG
+
+
+def test_the_anchor_is_what_its_rule_selects():
+    """The rule in the comment, run.  Import asserts it too; this says why.
+
+    The two rows a reader would expect to win, and do not, are pinned out by
+    name: New Glenn is cheaper on paper but its price is a rival's estimate,
+    and Starship is cheaper still but does not fly.
+    """
+    candidates = delivery.leo_anchor_candidates()
+    assert candidates[0]["name"] == delivery.LEO_LAUNCH_VEHICLE
+    names = {r["name"] for r in candidates}
+    assert "New Glenn" not in names
+    assert "Starship (projected)" not in names
+    assert "Falcon 9 (reusable)" in names
+    for r in candidates:
+        assert r["status"] == "operational"
+        assert r["availability"] == "open"
+        assert r["price_basis"] in ("published", "contract")
+
+
+def test_the_hardware_rates_are_the_values_of_their_rows():
+    """The central figure, the one Module 4 prices the same hardware at."""
+    low = {r["category"]: float(r["value"])
+           for r in spacecost.OPERATIONAL_COSTS_REFERENCE}
+    assert delivery.STAGE_HARDWARE_USD_PER_KG[delivery.TUG_DRY_MASS_FRAC] == \
+        low["Expendable upper stage recurring cost"]
+    assert delivery.STAGE_HARDWARE_USD_PER_KG[delivery.LANDER_DRY_MASS_FRAC] == \
+        low["Surface lander recurring cost"]
+    assert delivery.ENTRY_SYSTEM_USD_PER_KG == \
+        low["Heat shield / TPS for Earth return"]
+
+
+def _cheapest_open(column):
+    rows = [r for r in spacecost.LAUNCH_VEHICLES_REFERENCE
+            if r["status"] == "operational" and r["availability"] == "open"
+            and math.isfinite(r[column])]
+    return min(r[column] for r in rows)
+
+
+def test_geo_is_not_dearer_than_buying_gto_directly():
+    """If the chain cost more than the market's direct route, a buyer would
+    take the direct route and the chain would OVERSTATE what a kilogram at GEO
+    is worth -- the one error this module must not make.
+
+    The direct route is the cheapest open GTO headline price, then the
+    chain's own GTO -> GEO leg, stage built and paid for.
+    """
+    apogee = delivery.DELIVERY_CHAINS["geo"][-1]
+    _, dv, isp, dry = apogee
+    m0 = delivery.stage_mass_ratio(dv, isp, dry)
+    r = math.exp(dv / (isp * delivery.G0_M_S2))
+    leg_hw = ((m0 / r - 1.0) * delivery.STAGE_HARDWARE_USD_PER_KG[dry]
+              + (m0 - m0 / r) * delivery.TUG_PROPELLANT_USD_PER_KG)
+    direct = _cheapest_open("usd_per_kg_to_gto") * m0 + leg_hw
+    assert delivery.delivered_cost_usd_per_kg("geo") <= direct
+
+
+def test_cislunar_is_not_dearer_than_buying_escape_directly():
+    """Same argument.  A direct escape launch reaches past NRHO, so its price
+    is an upper bound on what a cislunar kilogram can honestly be worth."""
+    assert (delivery.delivered_cost_usd_per_kg("cislunar")
+            <= _cheapest_open("usd_per_kg_to_escape"))
 
 
 def test_the_downleg_cost_lines_come_off_the_operations_table():
@@ -228,21 +321,43 @@ def test_case_and_whitespace_are_tolerated(dest):
 
 
 def test_the_launch_price_argument_still_scales_linearly():
-    """`leo_usd_per_kg` is public, so it is part of the contract."""
+    """`leo_usd_per_kg` is public, so it is part of the contract.
+
+    Linear in the launch price with the hardware term off; since v0.4.0 the
+    default adds a hardware term that does not scale with it, so the default
+    is launch price x mass ratio PLUS a constant, and both halves are held.
+    """
     for dest in DELIVERED_AT_MOVE:
-        assert delivery.delivered_cost_usd_per_kg(dest, 0.0) == 0.0
-        at_one = delivery.delivered_cost_usd_per_kg(dest, 1.0)
+        assert delivery.delivered_cost_usd_per_kg(
+            dest, 0.0, stage_hardware=False) == 0.0
+        at_one = delivery.delivered_cost_usd_per_kg(
+            dest, 1.0, stage_hardware=False)
         assert at_one == delivery.delivery_mass_ratio(dest)
+        assert delivery.delivered_cost_usd_per_kg(dest, 0.0) == \
+            delivery.delivery_hardware_usd_per_kg(dest)
 
 
-def test_adding_this_module_did_not_move_the_data_contract():
+def test_this_module_is_not_a_table_the_build_writes():
     """A derivation over the tables is not a table.
 
     If this fails somebody made `delivery` a seventh CSV.  That is allowed, but
     it restamps every output and obliges economicspace to re-run a stage that
     re-fetches live prices, so it is a deliberate release rather than a tidy-up.
+
+    Until v0.4.0 this asserted `DATA_VERSION == "1.15.0"`, which was a proxy:
+    true while nothing else moved the contract, and it failed the first time a
+    table row did -- the 1.16.0 launch re-audit -- for a reason that had
+    nothing to do with this module.  It now asks the question it meant: does
+    the build import delivery at all.
     """
-    assert spacecost.DATA_VERSION == "1.15.0"
+    import ast
+    here = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    src = open(os.path.join(here, "spacecost", "build.py"),
+               encoding="utf-8").read()
+    for node in ast.walk(ast.parse(src)):
+        if isinstance(node, ast.ImportFrom):
+            assert "delivery" not in (node.module or ""),                 "build.py imports delivery; it has become an output"
+            assert "delivery" not in {a.name for a in node.names},                 "build.py imports delivery; it has become an output"
 
 
 # ─────────────────────────────────────────────────────────────────────────────

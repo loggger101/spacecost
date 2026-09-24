@@ -32,7 +32,8 @@ the difference so it cannot drift quietly.**
 | | |
 |---|---|
 | every Δv in `DELIVERY_CHAINS` | `DELTA_V_REFERENCE` lookup |
-| the LEO launch price | `LAUNCH_VEHICLES_REFERENCE` row |
+| the LEO launch price | `LAUNCH_VEHICLES_REFERENCE`, chosen by a stated rule that is asserted at import |
+| building the stages each chain expends (v0.4.0) | `OPERATIONAL_COSTS_REFERENCE` values, and the hydrolox row's price |
 | capsule, TPS and recovery | `OPERATIONAL_COSTS_REFERENCE` rows |
 | 4 of the 6 downleg departure burns | `DELTA_V_REFERENCE`, one of them a sum |
 | a LEO deorbit burn, and TEI out of low lunar orbit | **typed: no row exists** |
@@ -52,14 +53,21 @@ destination, and snapping the GEO deorbit burn changes what platinum is worth
 at GEO.  Those are published numbers downstream; each is a release with a
 re-measurement behind it, not a refactor.
 
+⚠️  EVERY INPUT IS THE CENTRE OF ITS BAND, NOT AN END.  (v0.4.0.)  A delivered
+price is revenue, so an input read at its high end would flatter the business
+case and one read at its low end would understate it.  This module reads the
+same central figure everything else in the package does: the launch table's
+headline, which is the geometric centre of its band, and each operational
+row's `value`, which is the figure economicspace's Module 4 prices the same
+hardware at.  One number per quantity, so the two stages cannot disagree
+about what a lander costs.
+
 ⚠️  THIS MODULE IS NOT A SEVENTH REFERENCE TABLE, and must not become one
-casually.  `build_catalog()` writes the same seven CSVs it wrote at v0.2.0 and
-the data contract stays at 1.15.0, which is why this release needs no
-regenerated `reference/` and no re-run of the consumer's Stage 3.  Adding a
-CSV here would move `pipeline_version`, restamp every output, and oblige
-economicspace to re-run a stage that re-fetches live prices — the one operation
-its own notes call unrecoverable.  This is a DERIVATION over the tables, like
-`rocket.py` and `query.py`, not data.
+casually.  `build_catalog()` writes the same seven CSVs it wrote at v0.2.0.
+Adding a CSV here would move `pipeline_version`, restamp every output, and
+oblige economicspace to re-run a stage that re-fetches live prices — the one
+operation its own notes call unrecoverable.  This is a DERIVATION over the
+tables, like `rocket.py` and `query.py`, not data.
 
 ⚠️  `math.exp`, NOT `np.exp`, AND THAT IS LOAD-BEARING.  `rocket.py` is the
 vectorised entry point and this is the scalar one, and they are not
@@ -126,22 +134,88 @@ def _propellant_isp_vac_s(name: str) -> float:
         "delivery.py needs the propellant %r and it is gone." % (name,))
 
 
-def _vehicle_usd_per_kg_to_leo(name: str) -> float:
+def _vehicle_usd_per_kg_to_leo(name: str,
+                               column: str = "usd_per_kg_to_leo") -> float:
     """One named `LAUNCH_VEHICLES_REFERENCE` launch price."""
     for row in LAUNCH_VEHICLES_REFERENCE:
         if row["name"] == name:
-            return float(row["usd_per_kg_to_leo"])
+            return float(row[column])
     raise KeyError(
         "delivery.py needs the launch vehicle %r and it is gone." % (name,))
 
 
+def _propellant_usd_per_kg(name: str) -> float:
+    """One named `PROPELLANTS_REFERENCE` reference price, $/kg.
+
+    The STATIC reference price, not a live-merged one: this module is imported
+    at load time and must not depend on what a build fetched.
+    """
+    for row in PROPELLANTS_REFERENCE:
+        if row["name"] == name:
+            return float(row["ref_cost_usd_per_kg"])
+    raise KeyError(
+        "delivery.py needs the propellant %r and it is gone." % (name,))
+
+
 # ─────────────────────────────────────────────────────────────────────────────
-# THE STAGES THAT WOULD HAVE CARRIED IT
+# THE LEO PRICE: WHAT THE BUYER COULD BOOK INSTEAD, TODAY
 # ─────────────────────────────────────────────────────────────────────────────
-# Falcon 9 reusable $/kg-to-LEO, the cheapest operational figure in
-# LAUNCH_VEHICLES_REFERENCE, so every price derived from it is a LOWER bound on
-# the launch cost avoided.
-LEO_LAUNCH_USD_PER_KG = _vehicle_usd_per_kg_to_leo("Falcon 9 (reusable)")
+# A delivered price is the launch cost a kilogram already in space AVOIDS, so
+# the right LEO price is the buyer's cheapest real alternative ON THE MARKET
+# TODAY.  Stated as a rule rather than a name, so that "why this vehicle" has
+# an answer that is not taste:
+#
+#   status == operational                    it flies
+#   availability == open                     a Western buyer can book it
+#   price_basis in (published, contract)     the price is the launcher's own,
+#                                            not a rival's estimate or a target
+#   -> the lowest headline `usd_per_kg_to_leo`, the centre of its band
+#
+# That is FALCON HEAVY (EXPENDABLE): SpaceX's $150M (2017) to $159M (carried
+# to 2026) for 63.8 t, centred at $2,414/kg.  What the rule excludes, and why
+# each is not an oversight:
+#
+#   New Glenn     $1,922/kg centred on a $68-110M range whose bottom is Rocket
+#                 Lab's ESTIMATE of Blue Origin's price (`reported`), not a
+#                 quote.  If Blue Origin publishes a price, this is the row
+#                 that should win.
+#   Starship      not operational.
+#   Kinetica-2    $4,167/kg, and `restricted`.
+#   Falcon 9 (reusable)  the anchor until v0.4.0, $4,253/kg.  The deepest
+#                 flight record, but not the cheapest thing a buyer can book,
+#                 and this comment once claimed it was.
+#
+# ⚠️  63.8 t HAS NEVER BEEN FLOWN ON A FALCON HEAVY.  It is SpaceX's rated
+# figure against its own list price, which is what a buyer would be quoted.
+#
+# ⚠️  THE RULE IS ASSERTED AT IMPORT, NOT MERELY DOCUMENTED.  If a table edit
+# makes a different row win — a price change, a new vehicle, Starship going
+# operational — import raises and names it, rather than every in-space price
+# downstream moving without anybody deciding it should.  Same contract as
+# `_CHAIN_DV_AT_MOVE` below.
+_ANCHOR_PRICE_BASES = ("published", "contract")
+
+
+def leo_anchor_candidates() -> List[dict]:
+    """The launch rows the LEO-price rule chooses among, cheapest first."""
+    rows = [r for r in LAUNCH_VEHICLES_REFERENCE
+            if r["status"] == "operational"
+            and r["availability"] == "open"
+            and r["price_basis"] in _ANCHOR_PRICE_BASES
+            and math.isfinite(r["usd_per_kg_to_leo"])]
+    return sorted(rows, key=lambda r: r["usd_per_kg_to_leo"])
+
+
+LEO_LAUNCH_VEHICLE = "Falcon Heavy (expendable)"
+LEO_LAUNCH_USD_PER_KG = _vehicle_usd_per_kg_to_leo(LEO_LAUNCH_VEHICLE)
+_ANCHOR_WINNER = leo_anchor_candidates()[0]["name"]
+if _ANCHOR_WINNER != LEO_LAUNCH_VEHICLE:
+    raise AssertionError(
+        "The LEO-price rule now selects %r, not %r.  A launch row has moved "
+        "under delivery.py, and that re-prices every in-space destination "
+        "downstream.  Re-read the rule's comment, decide, then change "
+        "LEO_LAUNCH_VEHICLE deliberately and tell economicspace."
+        % (_ANCHOR_WINNER, LEO_LAUNCH_VEHICLE))
 
 # 🚨  TYPED, AND IT DOES NOT EQUAL THE TABLE'S OWN HYDROLOX ROW.  This is the
 # one number here that looks derivable and is not, so it is worth reading
@@ -182,6 +256,30 @@ TUG_DRY_MASS_FRAC  = 0.10
 # load: throttleable engines, landing legs, terminal-guidance sensors.
 # Apollo LM descent stage flew 2,134 kg dry on 8,200 kg of propellant = 0.21.
 LANDER_DRY_MASS_FRAC = 0.20
+
+# ─── WHAT THE EXPENDED STAGES COST TO BUILD  (v0.4.0) ────────────────────────
+# Every burn in a chain throws its stage away, and until v0.4.0 the chain
+# charged that stage only for being LAUNCHED: its dry mass rode the LEO $/kg
+# and cost nothing to make.  The same mass-without-a-price asymmetry the
+# `Propellant tank recurring cost` row was added to close in the consumer.
+# Each rate is its row's `value`, for the reason at the top of the file.
+#
+# Keyed by structural fraction, because that is what a chain leg carries: the
+# fraction is what says whether a leg is a tug or a lander.  Asserted distinct,
+# since two equal fractions would silently charge a lander as a tug.
+if TUG_DRY_MASS_FRAC == LANDER_DRY_MASS_FRAC:
+    raise AssertionError("tug and lander dry fractions must differ: they key "
+                         "STAGE_HARDWARE_USD_PER_KG")
+STAGE_HARDWARE_USD_PER_KG: Dict[float, float] = {
+    TUG_DRY_MASS_FRAC:    _ops("Expendable upper stage recurring cost"),
+    LANDER_DRY_MASS_FRAC: _ops("Surface lander recurring cost"),
+}
+# The heat shield, backshell and parachute an `edl` leg discards.  The TPS row
+# is the nearest priced article; an aeroshell is mostly TPS and its carrier.
+ENTRY_SYSTEM_USD_PER_KG = _ops("Heat shield / TPS for Earth return")
+# The tug's propellant, at the hydrolox row's reference price.  A couple of
+# dollars per kg delivered, and charged anyway: it is consumed.
+TUG_PROPELLANT_USD_PER_KG = _propellant_usd_per_kg(_HYDROLOX)
 
 # Fraction of Mars ENTRY mass that survives to be useful payload on the
 # surface.  Aeroshell, backshell, parachute and descent stage are all
@@ -432,15 +530,63 @@ def delivery_mass_ratio(destination: str) -> float:
     return mass
 
 
+def delivery_hardware_usd_per_kg(destination: str) -> float:
+    """What building the expended stages costs, per kg delivered.  (v0.4.0.)
+
+    Walks the chain backwards exactly as `delivery_mass_ratio` does, and at
+    each leg charges what that leg throws away:
+
+        burn   stage dry mass x its STAGE_HARDWARE_USD_PER_KG rate
+               + propellant mass x TUG_PROPELLANT_USD_PER_KG
+        edl    the mass the entry discards x ENTRY_SYSTEM_USD_PER_KG
+
+    each scaled by the mass that leg carries.  0.0 at `leo` and
+    `earth_surface`, where nothing is expended above LEO; `inf` where a tank
+    cannot close.
+    """
+    legs = DELIVERY_CHAINS.get(str(destination or "").strip().lower())
+    if not legs:
+        return 0.0
+
+    mass, cost = 1.0, 0.0
+    for leg in reversed(legs):
+        if leg[0] == "edl":
+            frac = float(leg[1])
+            if frac <= 0:
+                return float("inf")
+            entry = mass / frac
+            cost += (entry - mass) * ENTRY_SYSTEM_USD_PER_KG
+            mass = entry
+        else:
+            _, dv, isp, dry = leg
+            m0 = stage_mass_ratio(dv, isp, dry)
+            if not math.isfinite(m0):
+                return float("inf")
+            # m0 = R(1 + d): the stage dry mass and propellant fall out of it.
+            r = math.exp(float(dv) / (isp * G0_M_S2))
+            stage_dry = m0 / r - 1.0
+            propellant = m0 - 1.0 - stage_dry
+            cost += mass * (stage_dry * STAGE_HARDWARE_USD_PER_KG[dry]
+                            + propellant * TUG_PROPELLANT_USD_PER_KG)
+            mass *= m0
+    return cost
+
+
 def delivered_cost_usd_per_kg(
     destination:    str,
     leo_usd_per_kg: float = LEO_LAUNCH_USD_PER_KG,
+    stage_hardware: bool = True,
 ) -> float:
     """Cost of putting 1 kg of payload at `destination`, launched from Earth.
 
     This is the "launch cost avoided" that gives material already in space its
-    value.  Derived, not tabulated: the leg chain's mass ratio, charged at the
-    LEO launch price.
+    value.  Derived, not tabulated: the leg chain's mass ratio charged at the
+    LEO launch price, plus (v0.4.0) what the stages the chain expends cost to
+    build.
+
+    `stage_hardware=False` with `leo_usd_per_kg=4253.0` reproduces every
+    pre-v0.4.0 figure bit for bit, which is how a result measured before this
+    release is re-derived rather than re-guessed.
 
     Unknown destinations return 0.0 rather than raising, which is the
     behaviour its consumer has always had: a destination with no chain avoids
@@ -449,7 +595,10 @@ def delivered_cost_usd_per_kg(
     mass = delivery_mass_ratio(destination)
     if not math.isfinite(mass):
         return float("inf")
-    return float(leo_usd_per_kg) * mass
+    cost = float(leo_usd_per_kg) * mass
+    if stage_hardware:
+        cost += delivery_hardware_usd_per_kg(destination)
+    return cost
 
 
 def downleg_cost_usd_per_kg(destination: str) -> float:
