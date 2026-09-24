@@ -133,6 +133,38 @@ def test_launch_ranking_is_sorted(catalog):
             catalog, dest)[col].is_monotonic_increasing, dest
 
 
+def test_an_unpublished_payload_is_not_ranked_either(catalog):
+    """NaN payload means "no figure published", not "free" and not "far".
+
+    Long March 10B has no published GTO figure.  It must drop out of a GTO
+    ranking the same way a vehicle that cannot go there does, rather than
+    sorting anywhere at all.
+    """
+    gto = spacecost.cheapest_launch_to(catalog, "gto")
+    assert "Long March 10B" not in set(gto["name"])
+    assert "Long March 10B" in set(
+        spacecost.cheapest_launch_to(catalog, "leo")["name"])
+
+
+def test_purchasable_only_drops_what_you_cannot_buy(catalog):
+    """`status` says it flies; `availability` says you can book it.
+
+    Off by default so the ranking is unchanged for existing callers.  On, the
+    sanctioned, export-controlled, sold-out and government-only rows go.
+    """
+    every = spacecost.cheapest_launch_to(catalog, "leo")
+    assert {"Proton-M", "Angara A5", "SLS Block 1",
+            "Atlas V 551"} <= set(every["name"])
+
+    open_only = spacecost.cheapest_launch_to(catalog, "leo",
+                                             purchasable_only=True)
+    assert (open_only["availability"] == "open").all()
+    assert not {"Proton-M", "Angara A5", "SLS Block 1",
+                "Atlas V 551"} & set(open_only["name"])
+    assert "Falcon 9 (reusable)" in set(open_only["name"])
+    assert open_only["usd_per_kg_to_leo"].is_monotonic_increasing
+
+
 # --------------------------------------------------- mission_cost_breakdown
 def _mission(catalog, propellant, **kw):
     kwargs = dict(payload_kg=1_000.0, delta_v_outbound=6_500.0,

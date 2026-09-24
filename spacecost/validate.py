@@ -257,10 +257,11 @@ def validate(
     # `usd_per_kg_to_leo` is `list_price_usd / payload_leo_kg`, and the table
     # carries all three.  Three copies of two measurements, in other words, and
     # the arithmetic between them is the only thing keeping the third honest.
-    # All 36 rows agree to within a rounding today; the check exists for the
-    # edit that raises a price and forgets the $/kg beside it, which is the
-    # single most likely way this table goes wrong, because the two live twelve
-    # columns apart on one very long line.
+    # Since v1.16.0 `vehicles.py` DERIVES the $/kg at import rather than
+    # letting a row type it, so the committed table cannot fail this.  It stays
+    # for the frame a caller edits after loading -- raise a price in a notebook
+    # and forget the $/kg beside it, twelve columns apart on one very long row,
+    # and this is what says so.
     #
     # 1% rather than exact: every stated $/kg in the table is rounded to whole
     # dollars, and on Electron at $23,438/kg a single dollar is 0.004%.
@@ -277,6 +278,25 @@ def validate(
                ["%s: quoted %.0f, price/payload gives %.0f"
                 % (r["name"], quoted[i], implied[i])
                 for i, r in inconsistent.iterrows()])
+
+    # ── A launch headline sits inside its own band  (v1.16.0) ────────────────
+    # The same rule `value_within_range` applies to the two tables below, for
+    # the launch table's price and payload bands.  `vehicles.py` raises on
+    # this at import, so again it is the caller's edited frame being checked.
+    for mid in ("list_price_usd", "payload_leo_kg", "payload_gto_kg",
+                "payload_escape_kg"):
+        if mid + "_low" not in launch_df.columns:
+            continue
+        v = pd.to_numeric(launch_df[mid], errors="coerce")
+        lo = pd.to_numeric(launch_df[mid + "_low"], errors="coerce")
+        hi = pd.to_numeric(launch_df[mid + "_high"], errors="coerce")
+        outside = launch_df[v.notna() & ((v < lo) | (v > hi))]
+        if not outside.empty:
+            f.warn("launch_vehicles", "value_within_range",
+                   "%d launch rows hold a %s outside their own band:"
+                   % (len(outside), mid),
+                   ["%s: %s not in [%s, %s]" % (r["name"], v[i], lo[i], hi[i])
+                    for i, r in outside.iterrows()])
 
     # ── A value sits inside its own stated range  (v1.15.0) ──────────────────
     # `operational_costs` and `storage_systems` both carry `value`,

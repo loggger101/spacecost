@@ -31,18 +31,30 @@ here.** If you are vendoring from that project rather than this one, read its
 
 ## 1. Launch vehicles
 
-Pricing and payload figures, verified May 2026:
+Pricing and payload figures, verified May 2026 and re-audited September 2026
+(data contract 1.16.0). Every row names its own source in `notes`; these are the
+ones that carry more than one row.
 
 | source | what it establishes |
 |---|---|
-| SatBase 2026-02 SpaceX price update | Falcon 9 and Falcon Heavy list prices |
-| SpaceX / Voyager Technologies contract, 2026 | Starship dedicated-launch price |
-| NASA Office of Inspector General, IG-24-015 | SLS per-flight cost |
-| ULA RocketBuilder, and SpaceNews 2024-2026 | Atlas V and Vulcan Centaur pricing |
-| Blue Origin and Geekwire, April 2026 | New Glenn list price and payload |
-| Rocket Lab Form 10-Q, FY2026 Q1 | Electron pricing |
-| TASS / Glavkosmos 2018, escalated | Soyuz-2.1b pricing |
-| Wikipedia (Vulcan, New Glenn, Ariane 6, H3) | payload masses, cross-checked |
+| SatBase 2026-02 SpaceX price update | Falcon 9 list price, and the rise used to carry Falcon Heavy's older quotes forward |
+| SpaceX / Voyager Technologies contract, 2026 | Starship dedicated-launch price (low end of its range) |
+| NASA Office of Inspector General, IG-22-003 (Nov 2021) and Oct 2023 audit | SLS launch-only cost: $2.2B vehicle + $568M ground, "at least $2.5B" |
+| NASA, Feb 2026 Artemis restructuring (SpaceNews, SatNews) | SLS Block 1B and the Exploration Upper Stage cancelled |
+| ULA RocketBuilder, and SpaceNews 2024-2026 | Atlas V pricing and sales end; Vulcan's "starting at $110M" |
+| Blue Origin via Wikipedia and Spaceflight Now, 2025-2026 | New Glenn price range, payloads, and the NG-1 to NG-3 record; 9x4 payloads |
+| Rocket Lab Form 10-Q, FY2026 Q1, and Spaceflight Now Aug 2026 | Electron pricing; Neutron price and schedule |
+| TASS / Glavkosmos 2018 | Soyuz-2.1b pricing |
+| ISRO / NSIL, and The Week Jan 2026 | LVM3, PSLV, GSLV and SSLV pricing; PSLV-C61 and C62 failures |
+| CAS Space, Apr 2026 (30,000 yuan/kg) | Kinetica-2 price, the only published Chinese per-kg rate |
+| SpaceNews, Spaceflight Now, NASASpaceFlight, 2025-2026 | Zhuque-3, Long March 10B, Tianlong-3, Pallas-1 and Soyuz-5 flight outcomes |
+| Pielke & Byerly, Nature 2011 | Space Shuttle whole-programme cost per flight |
+| Wikipedia vehicle articles and "Comparison of orbital launch systems", Sep 2026 | payload masses by configuration and orbit, cross-checked against the manufacturer where one publishes |
+
+⚠️  **Most Chinese prices, and every price marked `estimate` in
+`price_basis`, are not sourced numbers.** They are bands chosen against the
+nearest vehicle that does have a price, and the headline is their centre. Filter on
+`price_basis` if a study cannot use them.
 
 Non-rocket concepts (mass drivers, launch loops, tethers, light-gas guns) are
 cited individually in their own rows and are marked `concept`. They are included

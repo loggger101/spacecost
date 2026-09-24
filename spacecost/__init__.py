@@ -7,11 +7,12 @@ Every cost that sits between "payload on the ground" and "payload delivered":
 
 Six tables, every row carrying an inline citation and a `reference_year`:
 
-    36 launch vehicles      $/kg to LEO, GTO and escape, payload, status
+    76 launch vehicles      $/kg to LEO, GTO and escape, payload, status,
+                            who can buy it, and a low/high band on each
     41 propellant systems   vacuum Isp, bulk density, $/kg, storage class,
                             derived tankage, and the thruster device
     33 delta-v segments     m/s and trip duration per trajectory leg
-    44 operational costs    $/mission-year and $/kg-payload lines
+    45 operational costs    $/mission-year and $/kg-payload lines
     20 storage systems      the domains a kilogram can be held in
     23 environments         WHERE the kilogram is: solar flux, dark period,
                             gravity, escape velocity, one-way light time
@@ -70,8 +71,10 @@ from .build import build_catalog
 from .config import CONFIG, SpacecostConfig
 from .deltav import DELTA_V_REFERENCE
 from .delivery import (DELIVERY_CHAINS, DOWNLEG_DEPARTURE_DV_M_S,
-                       LEO_LAUNCH_USD_PER_KG, MARS_LANDED_MASS_FRACTION,
-                       delivered_cost_usd_per_kg, delivery_mass_ratio,
+                       LEO_LAUNCH_USD_PER_KG, LEO_LAUNCH_VEHICLE,
+                       MARS_LANDED_MASS_FRACTION,
+                       delivered_cost_usd_per_kg, delivery_hardware_usd_per_kg,
+                       delivery_mass_ratio, leo_anchor_candidates,
                        downleg_cost_usd_per_kg, stage_mass_ratio)
 from .environments import (ENVIRONMENTS_REFERENCE, blackbody_temp_k,
                           one_way_light_time_min, solar_array_mass_factor,
@@ -95,7 +98,7 @@ from .vehicles import LAUNCH_VEHICLES_REFERENCE
 # The PACKAGE release. Not the data contract -- that is
 # `SpacecostConfig.pipeline_version`, which is stamped into every CSV. See
 # spacecost/config.py for why the two are deliberately separate.
-__version__ = "0.3.2"
+__version__ = "0.4.0"
 
 # The DATA contract this release ships, repeated here for convenience only.
 # config.py is the authority; this is a mirror, and a mirror can drift, so
@@ -121,9 +124,10 @@ __all__ = [
     "build_transportation_summary", "build_catalog", "validate",
     "validate_tables", "ValidationError",
     "DELIVERY_CHAINS", "DOWNLEG_DEPARTURE_DV_M_S",
-    "LEO_LAUNCH_USD_PER_KG", "MARS_LANDED_MASS_FRACTION",
+    "LEO_LAUNCH_USD_PER_KG", "LEO_LAUNCH_VEHICLE", "MARS_LANDED_MASS_FRACTION",
     "stage_mass_ratio", "delivery_mass_ratio",
-    "delivered_cost_usd_per_kg", "downleg_cost_usd_per_kg",
+    "delivered_cost_usd_per_kg", "delivery_hardware_usd_per_kg",
+    "leo_anchor_candidates", "downleg_cost_usd_per_kg",
     "propellant_mass_for_dv", "cost_per_dv_usd_per_kg",
     "cheapest_launch_to", "cheapest_propellant_for", "mission_cost_breakdown",
     "solar_flux_w_per_m2", "solar_array_mass_factor", "blackbody_temp_k",

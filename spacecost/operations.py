@@ -130,6 +130,29 @@ OPERATIONAL_COSTS_REFERENCE: List[dict] = [
         "reference_year":   _REF_YEAR_OPS,
     },
     {
+        "category":         "Expendable upper stage recurring cost",
+        "unit":             "USD per kg of stage dry mass",
+        "value":              4_800,
+        "range_low":          1_750,
+        "range_high":        13_400,
+        "notes": "v1.16.0.  The whole stage — tanks, engine, avionics — not the "
+                 "tank alone, which is the row below.  Read by "
+                 "spacecost.delivery, whose chains expend a stage on every burn "
+                 "and until v1.16.0 charged it only for being LAUNCHED, never "
+                 "for being built.\n"
+                 "Low: Falcon 9's upper stage, ~$10M to build (Musk 2018) or "
+                 "~$7M (2026 third-party estimate) on ~4,000 kg dry, "
+                 "$1,750-2,500/kg: the cheapest flying upper stage, because it "
+                 "is mass-produced, but kerolox.  High: Centaur III, ~$30M (the "
+                 "same figure the tank row below derives from) on ~2,250 kg "
+                 "dry = ~$13,400/kg: the hydrolox stage whose Isp the delivery "
+                 "chains actually fly, but built at a low rate.  Neither is the "
+                 "stage the chain describes, so the value is the geometric "
+                 "centre of the two, $4,840, rounded to $4,800 — the same rule "
+                 "the launch table uses for its own bands.",
+        "reference_year":   _REF_YEAR_OPS,
+    },
+    {
         "category":         "Propellant tank recurring cost",
         "unit":             "USD per kg of tank dry mass",
         "value":              6_000,

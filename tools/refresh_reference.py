@@ -51,7 +51,7 @@ REFERENCE = os.path.join(HERE, "reference")
 # every file in reference/ changes on every regeneration, and a real data diff
 # becomes impossible to see.  Move it deliberately, when a release wants to say
 # when these tables were cut.
-PINNED_DATE = "2026-09-07"
+PINNED_DATE = "2026-09-23"
 
 # Files committed whole.  These are the byte-identical-everywhere contract.
 COMMITTED = ["launch_vehicles.csv", "propellants.csv", "delta_v_segments.csv",
