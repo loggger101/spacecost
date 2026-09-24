@@ -13,6 +13,176 @@ may read a version as proof that a number moved.
 
 ## Package releases
 
+### 0.4.0 - 2026-09-23
+
+**The launch table, re-audited and more than doubled: 36 rows to 76, every
+figure given a stated range with the headline at its centre, and a new
+delivered-price model built on it.** Data contract **1.15.0 → 1.16.0**, and
+VALUES moved, so this is the direction of the rule that obliges the bump.
+`operational_costs` gains one row (below). The other four tables are
+value-for-value identical apart from their `catalog_date` and
+`pipeline_version` stamps.
+
+🚨  **This release re-prices economicspace in BOTH Stage 2 and Stage 3.**
+Stage 2: every in-space price comes from `delivered_cost_usd_per_kg`, and that
+model changed (next section). Stage 3: the launch CSV, the cross-join summary
+(39,852 → 84,132 rows) and every $/kg a Module 4 ranking reads have moved. The
+20-cell campaign and its frozen `campaign/stage2/` prices were measured under
+0.3.x, so nothing measured there compares across this release until it is
+re-run. `delivered_cost_usd_per_kg(dest, 4253.0, stage_hardware=False)`
+reproduces every 0.3.x delivered price bit for bit, which is what re-deriving
+an old result needs. `downleg_cost_usd_per_kg` did not move.
+
+#### Delivered prices: a new model, chosen for today's market
+
+`delivered_cost_usd_per_kg` is the launch cost a kilogram already in space
+avoids, and it is the miner's REVENUE. Two things were wrong with it. Both are
+fixed against **today's** market, reading the same central figures as the
+rest of the package: each launch row's headline and each cost row's `value`.
+
+- **The LEO price was Falcon 9 (reusable) at $4,253/kg, chosen as "the
+  cheapest operational figure", which it never was.** It is now whatever a
+  stated rule selects: operational, `open`, priced by the launcher itself
+  (`published` or `contract`), lowest headline `usd_per_kg_to_leo`. That is
+  **Falcon Heavy (expendable), $2,414/kg**, SpaceX's $150-159M for 63.8 t. New
+  Glenn's $1,922 is excluded because the bottom of its range is a rival's
+  estimate; Starship because it does not fly. The rule is asserted at import, so a table edit
+  that changes the winner fails loudly instead of re-pricing every
+  destination. New exports: `LEO_LAUNCH_VEHICLE`, `leo_anchor_candidates()`.
+- **Every stage a chain expends was charged for its launch and never for
+  being built.** `delivery_hardware_usd_per_kg()` now charges tug dry mass at
+  the new `Expendable upper stage recurring cost` row, lander dry mass at
+  `Surface lander recurring cost`, what an entry discards at the TPS rate, and
+  the propellant at the hydrolox price, each at its row's `value`.
+
+| destination | 0.3.x | 0.4.0 | of which hardware |
+|---|---:|---:|---:|
+| `leo` | 4,253 | 2,414 | 0 |
+| `geo` | 12,526 | 8,046 | 937 |
+| `cislunar` | 10,810 | 6,878 | 742 |
+| `mars_orbit` | 13,496 | 8,706 | 1,046 |
+| `lunar_surface` | 21,210 | 42,635 | 30,597 |
+| `mars_surface` | 45,105 | 184,811 | 159,209 |
+
+Orbital destinations fall about a third; the two surfaces rise steeply,
+because a lander ($200k/kg) and an aeroshell ($50k/kg) were being thrown away
+for free. Two new tests hold the result
+against the market: GEO may not exceed buying GTO directly and flying only the
+apogee burn, and cislunar may not exceed the cheapest direct escape launch.
+`delivered_cost_usd_per_kg` gains `stage_hardware=True`; with it `False` the
+function is linear in `leo_usd_per_kg` again, as before.
+
+⚠️  **Still a lower bound, and meant to be.** No NRE, no programme overhead,
+and a hydrolox tug nobody sells as a product yet. Lunar surface at $42,635/kg
+sits against real CLPS delivery at roughly $1M/kg.
+
+New `operational_costs` row **`Expendable upper stage recurring cost`**,
+$4,800/kg of stage dry mass: the geometric centre of a range from $1,750
+(Falcon 9's mass-produced kerolox stage, $7-10M on ~4 t) to $13,400 (Centaur
+III, the hydrolox stage the chains actually fly, built at a low rate).
+
+**Falcon Heavy (reusable)'s optimistic 57 t LEO is removed.** It had no
+source, and a headline centred on an unsourced end would carry the error into
+every figure derived from it. Its band collapses onto 30 t.
+
+#### Errors fixed in existing rows
+
+These were wrong rather than stale. Each row's `notes` now says what it used
+to carry.
+
+- **SLS Block 1B** was `operational`; it never flew, and NASA cancelled it
+  with the Exploration Upper Stage in Feb 2026. Now `concept`. Its $4.1B
+  was NASA OIG's per-Artemis-flight figure *including Orion*; it now carries
+  the launch-only $2.5-2.8B. Its 41 t GTO had been scaled, not published, and
+  is gone. **SLS Block 1**, which has flown twice, is added.
+- **Zhuque-3** carried 21 t / 18.3 t LEO, which are the figures for the
+  enlarged ZQ-3E. The ZQ-3 that flies lifts 8 t reusable (11.8 t expendable).
+  Promoted to `operational` after two successful orbital flights.
+- **Terran R** paired its 33.5 t *expendable* LEO with a reusable price; now
+  23.5 t. **Nova** carried 5 t as fully reusable; the figure is 3 t.
+- **Vulcan VC6** was priced at $110M, which is ULA's *starting* price for the
+  smallest configuration. Its 7,200 kg "escape" was the GEO payload. And it
+  has never flown (every Vulcan to date was VC2S or VC4S), so it drops from
+  TRL 9 to 8 while staying `operational` as a configuration of a flying
+  vehicle.
+- **PSLV-XL** carried 1,100 kg to escape. Chandrayaan-1 and the Mars Orbiter
+  Mission were both put into Earth orbit and raised themselves; now 0.
+- **H3 (24L)** cited the ¥5B target, which is for the H3-30.
+- **Soyuz-2.1b** GTO was the Kourou figure; Soyuz has not flown from Kourou
+  since 2022.
+- **Atlas V** is still `operational` but ULA stopped selling it in 2021; it is
+  now marked `sold_out`.
+- Prose: LVM3 was called human-rated (Gaganyaan has not flown crew); H-IIA was
+  "49 flights" (50); New Glenn's "3 successful flights" omitted that NG-3 left
+  its payload in the wrong orbit.
+
+#### Every figure is a range, and the headline is its centre
+
+Where a source gave a range, the row used whichever end was to hand, which for
+New Glenn was the LOW price. Every row now states either one figure, where the
+source gives one, or the low and high ends of a credible range, and a ranged
+headline price and payload are DERIVED as the range's geometric centre,
+`sqrt(low x high)` to three significant figures (`vehicles.band_centre`). A
+narrow range barely moves; a wide one lands in the middle rather than at an
+end. Geometric rather than arithmetic, because launch prices are uncertain by
+factors: the Shuttle's $450M-$2.1B centres at $972M, not $1.28B.
+
+The ranges themselves lean conservative, and that is where the conservatism
+now lives: a target (anything not yet flying) is always the optimistic end,
+never the headline. The largest LEO moves: Zhuque-3 $1,429 → $4,425/kg,
+Starship $900 → $1,603 (a 35-100 t range, from what Block 2 delivered to the V3
+target), Falcon Heavy reusable $1,702 → $3,333 (30 t, since SpaceX publishes no
+LEO figure for that mode), Vega C $11,212 → $16,581, New Glenn $1,511 → $1,922.
+Starship's `tanker_flights_for_escape` stays at 12, the centre of the 8-16
+quoted. The full value-by-value list is recoverable with a `git diff` of
+`reference/launch_vehicles.csv`.
+
+#### 40 new rows
+
+Configurations people actually price: Falcon 9 and Falcon Heavy expendable,
+Vulcan VC2 and VC4, H3-30. Flying vehicles that were missing: SLS Block 1,
+Minotaur IV, Soyuz-2.1a, Angara A5, Proton-M, Spectrum, GSLV Mk II, SSLV, Nuri,
+Long March 2C, 2D, 3B/E, 4C, 6A, 8A, 10B and 12, Kuaizhou-1A and -11, Ceres-1,
+Gravity-1, Kinetica-1 and -2, Jielong-3, Zhuque-2E, Pallas-1. In development:
+New Glenn 9x4, Soyuz-5, Epsilon S, Hyperbola-3. Retired, for the historical
+figures a reader will meet: Pegasus XL, Ariane 5 ECA, Vega, Space Shuttle,
+Saturn V.
+
+**Deliberately not added**, for want of a price or payload worth citing:
+Angara-1.2, Antares 330, Long March 11, 12A and 12B, Hyperbola-1, Ceres-2,
+RFA One, Astra Rocket 4, and the Iranian and North Korean launchers, which are
+not a market.
+
+#### Schema: 20 new columns on `launch_vehicles.csv`
+
+Appended after the existing 18, so no existing column moved position.
+
+- `country`, `availability` (`open` / `restricted` / `government_only` /
+  `sold_out` / `unavailable`), `reusability`, `core_propellant`,
+  `first_flight_year`, `price_basis`.
+- `list_price_usd_low` / `_high` and `payload_{leo,gto,escape}_kg_low` /
+  `_high`.
+- `usd_per_kg_to_{leo,gto,escape}_low` / `_high`, derived.
+
+⚠️  **`usd_per_kg_to_*` is now DERIVED at import, not typed.** A row that
+types one raises. So does a headline outside its own band, a vocabulary typo,
+an unknown key, or a row that does not state `availability`.
+
+⚠️  **`payload_gto_kg` and `payload_escape_kg` are now float columns.** A
+payload of NaN means "no figure published", which is not the same as 0, "does
+not go there", and a column holding NaN cannot be int64. The CSV writes
+`5500.0` where it wrote `5500`. `first_flight_year` is nullable `Int64`, so it
+writes `2010`, or nothing for a vehicle that has not flown.
+
+#### API
+
+- `cheapest_launch_to(..., purchasable_only=False)` and `spacecost launch
+  --open-only`: keep only `availability == "open"`. Off by default.
+- `validate` holds the launch price and payload bands to the same
+  inside-its-own-range rule as `operational_costs`.
+- `tests/test_delivery.py` pinned `DATA_VERSION == "1.15.0"` as a stand-in for
+  "delivery is not an output". It now checks that directly.
+
 ### 0.3.2 - 2026-09-22
 
 **A test fix, and it is a fix to the CONTRACT rather than to a number.** No
@@ -905,3 +1075,24 @@ and refuses.
 The schema half, which is the part with no other home: an archived CSV stamped
 `1.15.0` or later is the first one that can tell you what the sun, the night
 and the light lag were like where the kilogram was.
+
+**`1.16.0`  the launch table re-audited, 36 → 76 rows.** Full write-up under
+package release 0.4.0 above. Every launch figure is now one number or a
+stated range, and a ranged headline is the range's geometric centre. Errors
+fixed: SLS Block 1B `operational` → `concept` and $4.1B → $2.65B launch-only
+(centre of $2.5-2.8B); Zhuque-3 LEO 21 t → 8 t (the old figure was the
+ZQ-3E); Terran R 33.5 → 23.5 t; Nova 5 → 3 t; Vulcan VC6 $110M → $128M (centre
+of $110-150M); PSLV-XL escape 1,100 kg → 0.
+Falcon 9 (reusable) is unchanged at $4,253/kg; it is no longer what the
+delivery prices read.
+
+`operational_costs` gains `Expendable upper stage recurring cost` ($4,800/kg,
+range $1,750-$13,400), read by the delivery chains, and
+Falcon Heavy (reusable) loses its unsourced 57 t optimistic LEO payload.
+
+The schema half: 20 columns appended to `launch_vehicles.csv`, and
+`usd_per_kg_to_*` is derived rather than typed. An archived CSV stamped
+`1.16.0` or later is the first that can say whether a launcher could be BOUGHT
+(`availability`), how far to trust its price (`price_basis`), and how wide its
+uncertainty is. `payload_gto_kg` and `payload_escape_kg` are float from here
+on, NaN meaning unpublished.

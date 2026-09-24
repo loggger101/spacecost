@@ -117,7 +117,7 @@ class SpacecostConfig:
     # Stamped into every output CSV.  BUMP IT when a change moves any number a
     # build produces.  See this module's docstring for why it is not the same
     # thing as `spacecost.__version__`, and CHANGELOG.md for what moved when.
-    pipeline_version: str = "1.15.0"
+    pipeline_version: str = "1.16.0"
     preview_rows:     int = 15   # rows per table in the CLI preview
 
     def resolved_output_dir(self) -> str:
