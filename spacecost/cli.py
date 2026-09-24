@@ -28,8 +28,9 @@ from .tables import (load_delta_v, load_environments, load_launch_vehicles,
 
 _SHOW = {
     "vehicles":    (load_launch_vehicles,
-                    ["name", "operator", "status", "payload_leo_kg",
-                     "usd_per_kg_to_leo", "usd_per_kg_to_gto"]),
+                    ["name", "operator", "status", "availability",
+                     "payload_leo_kg", "usd_per_kg_to_leo",
+                     "usd_per_kg_to_gto"]),
     "propellants": (load_propellants,
                     ["name", "type", "isp_vac_s", "density_kg_per_L",
                      "cost_usd_per_kg", "storage_class"]),
@@ -80,6 +81,9 @@ def _build_parser() -> argparse.ArgumentParser:
                         help="cheapest launch vehicle to a destination")
     lv.add_argument("destination", choices=["leo", "gto", "escape"])
     lv.add_argument("--min-payload-kg", type=float, default=0.0)
+    lv.add_argument("--open-only", action="store_true",
+                    help="only vehicles on the open market (drops sanctioned, "
+                         "export-controlled, sold-out and government-only rows)")
     lv.add_argument("-n", "--rows", type=int, default=10)
 
     en = sub.add_parser(
@@ -176,14 +180,17 @@ def main(argv=None) -> int:
 
     if args.command == "launch":
         found = cheapest_launch_to(_priced_catalog(), args.destination,
-                                   min_payload_kg=args.min_payload_kg)
+                                   min_payload_kg=args.min_payload_kg,
+                                   purchasable_only=args.open_only)
         if found is None or (hasattr(found, "empty") and found.empty):
             print("no vehicle carries " + str(args.min_payload_kg)
                   + " kg to " + args.destination)
             return 1
-        cols = ["name", "operator", "status", "payload_leo_kg",
-                "payload_gto_kg", "payload_escape_kg",
-                "usd_per_kg_to_" + args.destination, "list_price_usd"]
+        cols = ["name", "operator", "status", "availability",
+                "payload_leo_kg", "payload_gto_kg", "payload_escape_kg",
+                "usd_per_kg_to_" + args.destination,
+                "usd_per_kg_to_" + args.destination + "_low",
+                "list_price_usd"]
         found = found[[c for c in cols if c in found.columns]]
         print(found.head(args.rows).to_string(index=False))
         return 0

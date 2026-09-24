@@ -23,7 +23,7 @@ spacecost.cost_per_dv_usd_per_kg(
 spacecost show vehicles -n 10      # or propellants, deltav, operations,
                                    #    storage, environments
 spacecost propellant 6500          # rank propellants by fuel cost for a delta-v
-spacecost launch leo --min-payload-kg 5000
+spacecost launch leo --min-payload-kg 5000 --open-only
 spacecost environment 2.7          # the power/thermal/comms penalty at 2.7 AU
 spacecost validate --strict        # run the sanity bands; non-zero on a WARN
 spacecost example                  # a worked mission cost breakdown, end to end
@@ -33,6 +33,7 @@ spacecost build -o ./out           # write all seven CSVs
 ## Contents
 
 - [What is in it](#what-is-in-it)
+- [Launch prices are the centre of a stated range](#launch-prices-are-the-centre-of-a-stated-range)
 - [The three things it does that a spreadsheet of prices does not](#the-three-things-it-does-that-a-spreadsheet-of-prices-does-not)
 - [Where the kilogram is, not just what it costs](#where-the-kilogram-is-not-just-what-it-costs)
 - [Getting a kilogram there, and getting one back](#getting-a-kilogram-there-and-getting-one-back)
@@ -53,17 +54,20 @@ spacecost build -o ./out           # write all seven CSVs
 
 | table | rows | holds |
 |---|---|---|
-| `launch_vehicles` | 36 | $/kg to LEO, GTO and escape, payload masses, fairing volume, list price, status |
+| `launch_vehicles` | 76 | $/kg to LEO, GTO and escape with a low/high band, payload masses, list price, status, who can buy it |
 | `propellants` | 41 | vacuum Isp, bulk density, $/kg and $/L, storage class, derived tankage, thruster device |
 | `delta_v_segments` | 33 | m/s and trip duration per trajectory leg, 100 to 10,500 m/s |
-| `operational_costs` | 44 | $/mission-year and $/kg-payload lines, with low/high bands |
+| `operational_costs` | 45 | $/mission-year and $/kg-payload lines, with low/high bands |
 | `storage_systems` | 20 | how a kilogram is held, across the cargo, depot, propellant and energy domains |
 | `environments` | 23 | where it is being priced: solar flux, dark period, gravity, light time |
 
-The launch table spans **17 operational** vehicles, 9 in development, 8 concepts
-and 2 retired, from a lunar mass driver at a notional $10/kg to LEO up to SLS
-Block 1B at $39,048/kg. The propellant table spans 15 propulsion types, from
-cold gas at 70 s to speculative concepts at 10^5 s, across 8 storage classes.
+The launch table spans **48 operational** vehicles, 12 in development, 9
+concepts and 7 retired, across the US, Europe, Russia, China, Japan, India and
+South Korea, from a lunar mass driver at a notional $10/kg to LEO up to Pegasus
+XL at $89,686/kg. The cheapest operational row you can actually book is New
+Glenn at $1,922/kg, on a 45 t payload it has not yet flown. The propellant
+table spans 15 propulsion types, from cold gas at 70 s to speculative concepts
+at 10^5 s, across 8 storage classes.
 
 The environment table holds 23 destinations spanning 0.39 to 5.20 AU, from
 Mercury orbit to the Jupiter Trojans. Ten rows are named bodies rather than
@@ -73,6 +77,52 @@ classes, and eight of those have had a spacecraft at them; Psyche arrives in
 Concept and retired rows are present **and marked**. Filter on `status` if you
 want only things that fly; the speculative rows are there so a study can say
 what it excluded rather than silently not having it.
+
+## Launch prices are the centre of a stated range
+
+A launch row states either one figure, where the source gives one, or the low
+and high ends of a credible range. With a range, the headline price and payload
+are **derived as the geometric centre** of it, `sqrt(low x high)` to three
+significant figures, so a wide range lands in the middle rather than at
+whichever end was to hand:
+
+| column | holds |
+|---|---|
+| `list_price_usd_low` / `_high`, `payload_*_kg_low` / `_high` | the range, as stated |
+| `list_price_usd`, `payload_*_kg` | its geometric centre, derived |
+| `usd_per_kg_to_*` | the headline price over the headline payload |
+| `usd_per_kg_to_*_low` / `_high` | low price over high payload, and the reverse |
+| `price_basis` | `published`, `contract`, `reported`, `estimate` or `target` |
+
+Geometric rather than arithmetic, because launch prices are uncertain by
+factors: the Space Shuttle's $450M-$2.1B per flight centres at $972M, where a
+plain midpoint would say $1.28B. Narrow ranges barely move; wide ones move a
+lot, which is the point. And because price and payload are both geometric
+centres, the headline $/kg is the centre of its own $/kg range too.
+
+The ranges are conservative even though the headline is not at an end. Where
+the source is a target (anything not yet flying), the target is the
+**optimistic** end, never the headline, because launch-vehicle targets are
+optimistic by construction. `tests/test_schema.py` asserts the rule for every
+row, and import raises if a row states a headline beside a range. Every
+`usd_per_kg_*` column is derived at import; none is typed.
+
+⚠️  **`status` says whether it flies. `availability` says whether you can buy
+it.** 28 of the 48 operational rows fly for somebody else: Atlas V and Proton
+are sold out, SLS and Minotaur IV fly government missions only, and every
+Chinese and Russian row is `restricted`, by export control or sanctions.
+`cheapest_launch_to(..., purchasable_only=True)` and `spacecost launch
+--open-only` keep only `open` rows. Both are off by default, so existing
+rankings don't move.
+
+⚠️  **A payload of `0` and a payload of NaN are different.** `0` means the
+vehicle does not go there (Electron to GTO). NaN means it could, but nobody has
+published a figure, and this table will not invent one. The ranking drops both,
+since neither is a price.
+
+`payload_escape_kg` is C3 ≈ 0 where that is published, otherwise trans-lunar
+injection (slightly easier) or Mars transfer (harder). Each row's `notes` says
+which, and names its source.
 
 ## The three things it does that a spreadsheet of prices does not
 
@@ -148,7 +198,7 @@ questions somebody costing a mission actually asks:
 ```python
 >>> import spacecost
 >>> spacecost.delivered_cost_usd_per_kg("lunar_surface")
-21209.9583937668
+26813.641828225067
 >>> spacecost.delivery_mass_ratio("lunar_surface")
 4.987... # kg that must reach LEO per kg landed
 >>> spacecost.downleg_cost_usd_per_kg("cislunar")
@@ -169,7 +219,8 @@ not assumed — MSL 27.6%, Perseverance 29.8%.
 | | |
 |---|---|
 | every delta-v in a chain | **looked up in `DELTA_V_REFERENCE`**, so the table is the one authority |
-| the launch price | `LAUNCH_VEHICLES_REFERENCE`, Falcon 9 reusable, the cheapest operational row |
+| the launch price | `LAUNCH_VEHICLES_REFERENCE`: the cheapest vehicle a buyer can book today, by a stated rule, at the **low** end of its band |
+| building the stages each chain throws away | `OPERATIONAL_COSTS_REFERENCE` values |
 | the capsule, TPS and recovery lines | `OPERATIONAL_COSTS_REFERENCE` |
 | the downleg departure delta-v | **typed**, and the comment says why |
 
@@ -179,6 +230,52 @@ tabulated at all, and the GEO figure disagrees with its row by 2 m/s. Deriving
 all six uniformly would have moved two published prices under a change that
 claims to move none, so they stay as literals with the mismatch written down
 beside them. Reconciling them is a real question and a separate release.
+
+### What a delivered price reads
+
+A delivered price is what a kilogram already in space is **worth**: the launch
+the buyer no longer has to buy. It is the miner's revenue, so an input read at
+a high end would flatter the business case and one read at a low end would
+understate it. `delivery.py` reads the same central figure the rest of the
+package does: each launch row's headline, and each cost row's `value`.
+
+**The LEO price is the buyer's cheapest real alternative today.** The rule is
+stated in code and asserted at import: operational, on the open market, priced
+by the launcher itself (`published` or `contract`), lowest headline
+`usd_per_kg_to_leo`. That is **Falcon Heavy (expendable), $2,414/kg**: SpaceX's
+$150M (2017) to $159M (carried to 2026) for 63.8 t. `leo_anchor_candidates()`
+returns the ranked list. New Glenn is cheaper on paper at $1,922/kg, but the
+bottom of its price range is a rival's estimate rather than a Blue Origin
+quote. Starship is cheaper still, and does not fly. If a table edit ever makes
+a different row win, import fails rather than re-pricing every destination
+quietly.
+
+**The stages a chain throws away are paid for.** Until v0.4.0 every expended
+tug and lander was charged only for being launched, never for being built.
+`delivery_hardware_usd_per_kg()` now charges each stage's dry mass at its
+recurring cost, the propellant at its price, and the aeroshell an entry
+discards at the TPS rate:
+
+| destination | before (Falcon 9, no hardware) | v0.4.0 | of which hardware |
+|---|---:|---:|---:|
+| `leo` | 4,253 | 2,414 | 0 |
+| `geo` | 12,526 | 8,046 | 937 |
+| `cislunar` | 10,810 | 6,878 | 742 |
+| `mars_orbit` | 13,496 | 8,706 | 1,046 |
+| `lunar_surface` | 21,210 | 42,635 | 30,597 |
+| `mars_surface` | 45,105 | 184,811 | 159,209 |
+
+Orbital destinations fall by about a third, because the anchor is cheaper.
+The two surfaces rise steeply, because a lander ($200k/kg) and an aeroshell
+($50k/kg) are expensive things to throw away, and until now they were free. Two tests hold the result against
+the market: GEO must not cost more than buying GTO directly and flying only
+the last burn, and cislunar must not cost more than the cheapest direct
+escape launch. Either way round, a buyer would take the cheaper route, and a
+chain above it would overstate what a kilogram is worth.
+
+`delivered_cost_usd_per_kg(dest, 4253.0, stage_hardware=False)` reproduces
+every pre-v0.4.0 figure bit for bit, so a result measured before this release
+can be re-derived rather than guessed.
 
 ⚠️  **`None` and `[]` are different.** `earth_surface` has no chain and avoids
 no launch, so it costs 0 $/kg; `leo` has an EMPTY chain and avoids the whole
@@ -193,11 +290,13 @@ which is a defect that has actually shipped downstream. Test `is None`.
 | `LAUNCH_VEHICLES_REFERENCE` and the five other `*_REFERENCE` | the same data as plain dicts, no pandas needed to read it |
 | `propellant_mass_for_dv(payload_kg, dv, isp)` | Tsiolkovsky, vectorised over arrays |
 | `cost_per_dv_usd_per_kg(cost, isp, dv)` | the headline normalised metric: USD of propellant to move 1 kg through a delta-v |
-| `cheapest_launch_to(catalog, "leo", min_payload_kg=...)` | the launch table filtered and ranked |
+| `cheapest_launch_to(catalog, "leo", min_payload_kg=..., purchasable_only=False)` | the launch table filtered and ranked; `purchasable_only` drops what you cannot buy |
 | `cheapest_propellant_for(catalog, dv)` | the propellant table ranked by fuel cost at that delta-v, with the low-thrust penalty applied and sails excluded |
 | `mission_cost_breakdown(catalog, ...)` | launch + propellant + hardware + ops + contingency, itemised |
 | `build_transportation_summary(...)` | the vehicle x segment x propellant cross-join |
 | `delivered_cost_usd_per_kg(dest)` | launch cost avoided: what it costs to put 1 kg at a destination, through its staged leg chain |
+| `delivery_hardware_usd_per_kg(dest)` | the part of that which is building the stages the chain throws away |
+| `leo_anchor_candidates()` | the launch rows the delivery LEO price is chosen from, cheapest first; `LEO_LAUNCH_VEHICLE` is the winner |
 | `delivery_mass_ratio(dest)` | the same answer as kilograms in LEO per kilogram delivered |
 | `downleg_cost_usd_per_kg(dest)` | and the other direction: capsule, TPS, recovery and the departure burn |
 | `stage_mass_ratio(dv, isp, dry_frac)` | one propulsive leg's initial mass per kg of payload; `inf` when the tank cannot close |
@@ -362,9 +461,11 @@ The bands also hold each table against **itself**. `usd_per_kg_to_leo` is
 `list_price_usd / payload_leo_kg` and the table carries all three, twelve
 columns apart on one very long row; `operational_costs` and `storage_systems`
 each carry a `value` with a `range_low` and `range_high` around it. Nothing
-checked either relationship until v0.2.0. All 36 launch rows and all 64
+checked either relationship until v0.2.0. All 76 launch rows and all 64
 bracketed rows are consistent today, which is exactly when to write the check
-down.
+down. Since v0.4.0 the launch $/kg is derived at import rather than typed, and
+the launch price and payload bands get the same inside-its-own-range check, so
+on the launch table these now guard the frame a caller edits after loading.
 
 And against **each other**, where they overlap. `storage_systems` is the
 taxonomy and the citations; `operational_costs` is what a consumer reads. Three
@@ -483,7 +584,7 @@ tests/              parity against reference/, table invariants, structural
 `reference/` holds the six tables as committed CSVs, so `curl` and a
 spreadsheet are enough. The seventh file, the composite
 `transportation_summary.csv` cross-joining vehicle x segment x propellant, is
-7.4 MB and is **not** committed. `reference/summary_sample.csv` is a 411-row
+15.5 MB and is **not** committed. `reference/summary_sample.csv` is an 868-row
 stride sample of it at full precision, and `reference/summary_meta.json` records
 its row count, its hash and the platform that hash was taken on. `spacecost
 build` rebuilds the whole thing.
@@ -493,7 +594,7 @@ build` rebuilds the whole thing.
 These tables were built over fourteen releases as **Module 3 of
 [economicspace](https://github.com/loggger101/economicspace)**, an asteroid
 mining profitability pipeline, and extracted at `pipeline_version` 1.14.0
-(the contract is 1.15.0 as of this release)
+(the contract is 1.16.0 as of this release)
 (commit `b0b18b2`). Two thirds of that module was annotated reference data and
 nothing in its schema knows what an asteroid is, which is the argument for
 splitting it out: a launch price is useful to anyone costing a mission.
@@ -524,10 +625,13 @@ this is the table you price the answer with afterwards.
 It does not know today's price. Every row carries `reference_year` precisely so
 staleness is visible; most are 2026. Launch pricing in particular moves.
 
-The surface delivery figures are **marginal-transport lower bounds**: no
-non-recurring engineering, no programme overhead, no cadence limit. They answer
-"what could this cost at industrial scale", not "what would this cost today".
-Real CLPS lunar delivery is roughly $1M/kg at ~100 kg scale.
+The delivery figures are **marginal-transport lower bounds**, on purpose. The
+launch price is one a buyer can book today, and the stages are paid for, but
+there is no non-recurring engineering, no programme overhead and no cadence
+limit, and the chain flies an efficient hydrolox tug that nobody sells as a
+product yet. They answer "what is the least a kilogram there could be worth",
+which is the right question for revenue. Real CLPS lunar delivery is roughly
+$1M/kg at ~100 kg scale, against this model's $42,635.
 
 **The operational table assumes an uncrewed spacecraft.** No life support, no
 habitat, no crew operations, no return-vehicle uplift for people. The

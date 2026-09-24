@@ -21,8 +21,17 @@ def cheapest_launch_to(
     destination: str = "leo",       # "leo" | "gto" | "escape"
     min_payload_kg: float = 0.0,
     operational_only: bool = True,
+    purchasable_only: bool = False,
 ) -> pd.DataFrame:
     """Rank launch vehicles by $/kg to a given destination.
+
+    `purchasable_only` (v0.4.0) keeps only rows whose `availability` is
+    `open`.  Off by default so the ranking is unchanged for existing callers,
+    but read what it removes before leaving it off: `status` says whether a
+    vehicle FLIES, and 28 of the 48 operational rows fly for somebody else --
+    sanctioned, export-controlled, sold out or government-only.  The cheapest
+    LEO price in an unfiltered ranking is not always one a Western mission can
+    book.
 
     ⚠️  v1.15.0 BEHAVIOUR CHANGE: a vehicle that does not REACH the destination
     is now dropped rather than ranked last.
@@ -46,6 +55,8 @@ def cheapest_launch_to(
     df = catalog["launch_vehicles"].copy()
     if operational_only:
         df = df[df["status"] == "operational"]
+    if purchasable_only:
+        df = df[df["availability"] == "open"]
     df = df[df[pay] >= min_payload_kg]
     # Reachability, checked on BOTH columns: a missing price and a zero payload
     # are two different ways for the table to say the vehicle does not go there,

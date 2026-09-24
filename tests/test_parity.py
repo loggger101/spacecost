@@ -25,8 +25,10 @@ and its byte hash is checked only on the platform it was recorded on.
 
 The reference files were produced by economicspace
 modules/transportation.py at pipeline_version 1.14.0 (commit b0b18b2) and by
-this package, byte for byte identically, on 2026-09-07.  If a table test fails
-and you did not mean to change a row, the extraction has drifted.
+this package, byte for byte identically, on 2026-09-07; they were regenerated
+by `tools/refresh_reference.py` for data contract 1.16.0 on 2026-09-23, when
+the launch table was re-audited.  If a table test fails and you did not mean to
+change a row, the extraction has drifted.
 """
 
 import hashlib
@@ -47,7 +49,7 @@ REFERENCE = os.path.join(HERE, "reference")
 # The stamp the committed reference files carry.  `catalog_date` is PROVENANCE,
 # not a model value; pinning it is what stops midnight falling mid-run from
 # reading like a defect.
-PINNED_DATE = "2026-09-07"
+PINNED_DATE = "2026-09-23"
 
 SMALL_TABLES = ["launch_vehicles.csv", "propellants.csv", "delta_v_segments.csv",
                 "operational_costs.csv", "storage_systems.csv",

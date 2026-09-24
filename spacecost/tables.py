@@ -24,6 +24,9 @@ def load_launch_vehicles() -> pd.DataFrame:
     """`LAUNCH_VEHICLES_REFERENCE` as a frame. Always on; nothing is fetched."""
     say("\n  Loading launch-vehicles reference ...")
     df = pd.DataFrame(LAUNCH_VEHICLES_REFERENCE)
+    # A year is an integer, and an unflown vehicle has none.  Plain pandas
+    # makes that column float, and the CSV would say "2010.0".
+    df["first_flight_year"] = df["first_flight_year"].astype("Int64")
     say(f"     OK  {len(df)} vehicles")
     return df
 

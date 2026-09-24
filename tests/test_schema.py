@@ -16,6 +16,8 @@ it was most needed on.
 
 import math
 
+import numpy as np
+
 import pytest
 
 import spacecost
@@ -494,6 +496,145 @@ def test_no_undeclared_figure_is_restated_in_both_tables():
         + "; ".join(undeclared)
         + ".  Read one from the other through storage.py's `_mirrors_ops`, or "
           "say here why the collision is a coincidence.")
+
+
+# ------------------------------------------------ the launch table's bands
+# v1.16.0.  The launch table carries a low / high band beside every price and
+# payload, and derives every $/kg from them.  These hold the contract the
+# README states: the headline is the geometric CENTRE of its band, and nothing
+# that can be derived is typed.
+
+
+def test_launch_vocabularies_are_closed():
+    """Filter columns, so a typo silently empties a filtered search."""
+    from spacecost.vehicles import _LAUNCH_VOCAB
+    for key, allowed in _LAUNCH_VOCAB.items():
+        got = {v[key] for v in spacecost.LAUNCH_VEHICLES_REFERENCE}
+        assert got <= allowed, "unknown %s: %s" % (key, got - allowed)
+
+
+def test_the_launch_headline_is_the_centre_of_its_band():
+    """The stated rule, asserted: geometric centre, 3 significant figures.
+
+    A wide range lands in the middle rather than at whichever end was to hand.
+    If a row ever needs its headline somewhere else in its band, that is a
+    decision to write down here, not an edit to make quietly.
+    """
+    from spacecost.vehicles import band_centre
+    bad = []
+    for v in spacecost.LAUNCH_VEHICLES_REFERENCE:
+        for mid in ("list_price_usd", "payload_leo_kg", "payload_gto_kg",
+                    "payload_escape_kg"):
+            want = band_centre(v[mid + "_low"], v[mid + "_high"])
+            got = v[mid]
+            if not (got == want or (math.isnan(got) and math.isnan(want))):
+                bad.append("%s: %s is %s, band centre is %s"
+                           % (v["name"], mid, got, want))
+    assert not bad, "; ".join(bad)
+
+
+def test_band_centre_is_geometric_rounded_and_clamped():
+    from spacecost.vehicles import band_centre
+    assert band_centre(450_000_000, 2_100_000_000) == 972_000_000
+    assert band_centre(17_400, 17_400) == 17_400
+    # 18,832 rounds to 18,800, which is outside [18,814, 18,850]: clamped.
+    assert band_centre(18_814, 18_850) == 18_814
+    assert math.isnan(band_centre(np.nan, np.nan))
+    # Narrow bands barely move; wide ones move a lot.  That is the point.
+    assert band_centre(100, 110) == 105
+    assert band_centre(100, 10_000) == 1_000
+
+
+def test_every_launch_band_is_ordered():
+    for v in spacecost.LAUNCH_VEHICLES_REFERENCE:
+        for mid in ("list_price_usd", "payload_leo_kg", "payload_gto_kg",
+                    "payload_escape_kg"):
+            lo, m, hi = v[mid + "_low"], v[mid], v[mid + "_high"]
+            if math.isfinite(m):
+                assert lo <= m <= hi, "%s: %s band" % (v["name"], mid)
+            else:
+                assert not math.isfinite(lo) and not math.isfinite(hi),                     "%s: %s is unpublished but its band is not" % (v["name"], mid)
+
+
+def test_launch_price_per_kg_bands_are_derived_from_the_ends():
+    """Low $/kg is low price over HIGH payload, and the reverse.
+
+    Swapping the pairing is the natural typo, and it produces a band that looks
+    plausible and is too narrow.
+    """
+    for v in spacecost.LAUNCH_VEHICLES_REFERENCE:
+        for dest in ("leo", "gto", "escape"):
+            col = "usd_per_kg_to_" + dest
+            pay = "payload_%s_kg" % dest
+            if not (math.isfinite(v[pay]) and v[pay] > 0):
+                for suffix in ("", "_low", "_high"):
+                    assert math.isnan(v[col + suffix]),                         "%s: %s priced where it does not go" % (v["name"], col)
+                continue
+            assert v[col + "_low"] == round(v["list_price_usd_low"]
+                                            / v[pay + "_high"]), v["name"]
+            assert v[col + "_high"] == round(v["list_price_usd_high"]
+                                             / v[pay + "_low"]), v["name"]
+            assert v[col + "_low"] <= v[col] <= v[col + "_high"], v["name"]
+
+
+def _launch_row(**over):
+    row = {"name": "Test rocket", "operator": "x", "country": "x",
+           "status": "operational", "availability": "open",
+           "core_propellant": "kerolox", "first_flight_year": 2020,
+           "payload_leo_kg": 1_000, "payload_gto_kg": 0,
+           "payload_escape_kg": 0, "fairing_volume_m3": 1.0,
+           "list_price_usd": 10_000_000, "price_basis": "published",
+           "reference_year": 2026, "notes": "x"}
+    row.update(over)
+    return row
+
+
+@pytest.mark.parametrize("over,message", [
+    ({"usd_per_kg_to_leo": 10_000}, "derived"),
+    ({"list_price_usd_high": 12_000_000}, "AND a band"),
+    ({"payload_leo_kg_low": 900}, "AND a band"),
+    ({"availability": "for sale"}, "availability"),
+    ({"core_propellant": "RP-1"}, "core_propellant"),
+    ({"payload_leo_kg_hi": 1_200}, "unknown keys"),
+])
+def test_a_bad_launch_row_raises_at_import(over, message):
+    """The failures that would otherwise be quiet: a typed $/kg that drifts
+    from its price, a band that excludes its own headline, a vocabulary typo,
+    and a band key spelled wrong -- which would otherwise just never apply."""
+    from spacecost.vehicles import _apply_launch_defaults
+    with pytest.raises(ValueError, match=message):
+        _apply_launch_defaults([_launch_row(**over)])
+
+
+def test_a_launch_band_must_be_whole_and_ordered():
+    from spacecost.vehicles import _apply_launch_defaults
+    row = _launch_row()
+    del row["list_price_usd"]
+    row["list_price_usd_low"] = 12_000_000
+    with pytest.raises(ValueError, match="nor both"):
+        _apply_launch_defaults([dict(row)])
+    row["list_price_usd_high"] = 10_000_000
+    with pytest.raises(ValueError, match="is above"):
+        _apply_launch_defaults([dict(row)])
+    row["list_price_usd_high"] = 14_000_000
+    _apply_launch_defaults([row])
+    assert row["list_price_usd"] == 13_000_000      # sqrt(12 x 14) = 12.96
+
+
+def test_a_launch_row_must_state_where_it_can_be_bought():
+    from spacecost.vehicles import _apply_launch_defaults
+    row = _launch_row()
+    del row["availability"]
+    with pytest.raises(ValueError, match="does not state"):
+        _apply_launch_defaults([row])
+
+
+def test_first_flight_year_is_an_integer_or_blank_in_the_csv():
+    """Plain pandas writes a year beside a None as "2010.0"."""
+    df = spacecost.load_launch_vehicles()
+    assert str(df["first_flight_year"].dtype) == "Int64"
+    text = df[["name", "first_flight_year"]].to_csv(index=False)
+    assert ".0" not in text
 
 
 # --------------------------------------------------------- validation gate
