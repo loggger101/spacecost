@@ -13,6 +13,28 @@ may read a version as proof that a number moved.
 
 ## Package releases
 
+### Unreleased
+
+**Tests only; no name, table or number moved, so no release is cut for it.**
+`tests/test_consumer_contract.py` now lists what economicspace actually reads,
+as of its master v1.36.0. It had mirrored that repo's Stage 3 adapter, which
+re-exported most of `__all__`; the adapter now re-exports only what something
+there reads, and the list follows it:
+
+- **dropped**, because nothing in economicspace reaches them: `LITRES_PER_GAL`,
+  `LITRES_PER_BBL`, `COMMODITY_DENSITY_KG_PER_L`, `load_storage`,
+  `propellant_mass_for_dv`, `cost_per_dv_usd_per_kg`,
+  `build_transportation_summary`, `cheapest_launch_to`,
+  `mission_cost_breakdown`. They stay public here; they are simply no longer a
+  promise to that consumer.
+- **added**, because economicspace's Stage 2 reads them and the list had missed
+  them since v0.4.0: `LEO_LAUNCH_VEHICLE`, `delivery_mass_ratio`,
+  `delivery_hardware_usd_per_kg`, and `ENVIRONMENTS_REFERENCE`.
+- **new**, `SUBMODULE_SURFACE`: four names reached through a submodule, which
+  neither `__all__` nor the wheel check can see (`delivery`'s three hardware
+  rates, read by the worked calculation, and `prices.merge_propellant_prices`,
+  read by `verify_stage3.py`).
+
 ### 0.4.0 - 2026-09-23
 
 **The launch table, re-audited and more than doubled: 36 rows to 76, every
