@@ -2,8 +2,9 @@
 """The surface `economicspace` imports, declared here so removing one is loud.
 
 WHY THIS FILE EXISTS.  This package was extracted from economicspace's Module 3
-and that project is its consumer: `modules/transportation.py` is a 374-line
-adapter that re-exports the names below and delegates everything else.  The
+and that project is its consumer: `modules/transportation.py` is the adapter
+that drives Stage 3, `modules/mineral_value.py` takes Stage 2's delivery chains
+from here, and two of its harnesses reach into submodules.  The
 consumer pins a TAG, so what it gets is whatever a release contains, and a name
 dropped between releases is not discovered until somebody installs the new tag
 and an import fails.
@@ -40,39 +41,38 @@ handled by hand".
 
 import spacecost
 
-# Every attribute economicspace reaches, as of its transportation 1.15.0 and
-# mineral_value 1.9.0.  Mostly its Stage 3 adapter, grouped the way that adapter
-# groups them; the last group is Stage 2, which imports this package directly.
+# Every attribute economicspace reaches, as of its master v1.36.0
+# (transportation 1.16.0, mineral_value 1.10.0).
+#
+# ⚠️  THIS LIST IS WHAT THE CONSUMER READS, NOT WHAT IT ONCE RE-EXPORTED.
+# Until economicspace v1.36.0 its adapter mirrored most of `__all__` -- unit
+# constants, every loader, the rocket-equation and query helpers -- and this
+# list mirrored the mirror, pinning eight names nothing there read while
+# missing four that Stage 2 does.  Both halves were found by grepping the
+# consumer for `spacecost.<name>`, which is the way to refresh it.
 CONSUMER_SURFACE = (
-    # The five reference tables, re-exported as attributes of the adapter
-    # module because economicspace's docs harness holds README row counts to
-    # them and its dashboard renders them.
+    # The six reference tables, re-exported as attributes of the adapter:
+    # economicspace's docs harness holds README row counts to them, and its
+    # Stage 3 banner counts them.
     "LAUNCH_VEHICLES_REFERENCE",
     "PROPELLANTS_REFERENCE",
     "DELTA_V_REFERENCE",
     "OPERATIONAL_COSTS_REFERENCE",
     "STORAGE_REFERENCE",
+    "ENVIRONMENTS_REFERENCE",
 
-    # Physical constants and unit helpers.
+    # Stage 2's standard gravity.
     "G0_M_S2",
-    "LITRES_PER_GAL",
-    "LITRES_PER_BBL",
-    "COMMODITY_DENSITY_KG_PER_L",
 
-    # Loaders.
+    # Loaders.  `verify_stage3.py` rebuilds the reference CSVs through them to
+    # compare the adapter's output with the package's own.
     "load_launch_vehicles",
     "load_propellants",
     "load_delta_v",
     "load_operational_costs",
-    "load_storage",
 
-    # Rocket-equation helpers and the query utilities.
-    "propellant_mass_for_dv",
-    "cost_per_dv_usd_per_kg",
-    "build_transportation_summary",
-    "cheapest_launch_to",
+    # The adapter's standalone preview.
     "cheapest_propellant_for",
-    "mission_cost_breakdown",
 
     # The delivery chains, moved out of economicspace's Module 2 at v0.3.0.
     # ⚠️  Module 2 imports these, not Module 3, and it is the FIRST stage to
@@ -80,7 +80,10 @@ CONSUMER_SURFACE = (
     # runs before the adapter does, and the traceback will not mention Stage 3.
     "DELIVERY_CHAINS",
     "LEO_LAUNCH_USD_PER_KG",
+    "LEO_LAUNCH_VEHICLE",
     "delivered_cost_usd_per_kg",
+    "delivery_hardware_usd_per_kg",
+    "delivery_mass_ratio",
     "downleg_cost_usd_per_kg",
 
     # The pipeline entry point and the collision-proof validator alias.
@@ -93,6 +96,28 @@ CONSUMER_SURFACE = (
     "DATA_VERSION",
     "__version__",
 )
+
+# Names reached through a SUBMODULE rather than the top level, so neither the
+# wheel check nor `__all__` covers them.  economicspace's worked calculation
+# re-derives the delivered price from the three rates, and `verify_stage3.py`
+# merges live fuel prices the way the adapter's build does.
+SUBMODULE_SURFACE = (
+    ("delivery", "STAGE_HARDWARE_USD_PER_KG"),
+    ("delivery", "TUG_PROPELLANT_USD_PER_KG"),
+    ("delivery", "ENTRY_SYSTEM_USD_PER_KG"),
+    ("prices", "merge_propellant_prices"),
+)
+
+
+def test_every_submodule_name_the_consumer_reaches_still_exists():
+    """The half of the contract that `__all__` cannot see."""
+    import importlib
+    missing = ["spacecost.%s.%s" % (mod, name)
+               for mod, name in SUBMODULE_SURFACE
+               if not hasattr(importlib.import_module("spacecost." + mod), name)]
+    assert not missing, (
+        "economicspace reaches these and this package no longer has them: "
+        + ", ".join(missing))
 
 
 def test_every_name_the_consumer_imports_still_exists():
