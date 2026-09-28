@@ -157,6 +157,20 @@ jobs:
   # under which a mismatch FAILS instead of skipping.
   reference-platform:
     runs-on: windows-latest
+    env:
+      # ⚠️  THE ONE THING summary_meta.json CANNOT PIN IS THE CPU.  numpy picks
+      # its float64 exp() kernel at run time, and on an AVX512 host it takes
+      # its own AVX512F implementation instead of the path an AVX2 host
+      # takes.  The platform was recorded on an AVX2-only machine, and the
+      # first run of this job landed on an AVX2-only runner and reproduced
+      # the hash.  Hosted runners are not all the same hardware, so AVX512 is
+      # switched off here: the kernel is then the recorded one on any runner,
+      # and the job cannot go red on the luck of which VM it drew.  Disabling
+      # a feature the CPU lacks changes nothing and raises nothing (checked
+      # with numpy 2.2.6 on an AVX2 machine).  These are numpy 2.2's feature
+      # names; if the recorded numpy moves, check them against the
+      # `show_runtime` step below.
+      NPY_DISABLE_CPU_FEATURES: "AVX512F AVX512CD AVX512_SKX AVX512_CLX AVX512_CNL AVX512_ICL"
     steps:
       - uses: actions/checkout@v5
       - name: Read the recorded platform
