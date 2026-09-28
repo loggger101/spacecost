@@ -22,10 +22,9 @@ computes, so no release is cut for it yet.
 #### The consumer contract follows what economicspace reads
 
 `tests/test_consumer_contract.py` now lists what economicspace actually
-reads, found by grepping it for `spacecost.<name>` on its main (master
-v1.35.0) and on its pending master v1.36.0. It had mirrored that repo's Stage
-3 adapter, which re-exports most of `__all__`, and so had missed what Stage 2
-reads directly:
+reads, found by grepping it for `spacecost.<name>` on its main, now master
+v1.36.0. It had mirrored that repo's Stage 3 adapter, which re-exported most
+of `__all__`, and so had missed what Stage 2 reads directly:
 
 - **added**: `LEO_LAUNCH_VEHICLE`, `delivery_mass_ratio` and
   `delivery_hardware_usd_per_kg`, which Stage 2 reads, and
@@ -35,19 +34,22 @@ reads directly:
   `__all__` does not cover (`delivery`'s three hardware rates, read by the
   worked calculation, and `prices.merge_propellant_prices`, read by
   `verify_stage3.py`).
-- **new**, `REEXPORTED_ON_CONSUMER_MAIN`: ten names the adapter on
-  economicspace's main re-exports at import and nothing there reads:
-  `LITRES_PER_GAL`, `LITRES_PER_BBL`, `COMMODITY_DENSITY_KG_PER_L`,
-  `load_storage`, `load_environments`, `propellant_mass_for_dv`,
-  `cost_per_dv_usd_per_kg`, `build_transportation_summary`,
-  `cheapest_launch_to` and `mission_cost_breakdown`.
 
-⚠️  **The first draft of this change dropped nine of those ten**, because
-master v1.36.0 stops re-exporting them. v1.36.0 is on an unmerged branch.
-economicspace's main still assigns every one at import, so a contract taken
-from the branch would have let this package delete a name the released
-consumer cannot import without. They stay until v1.36.0 merges there. The
-tenth, `load_environments`, had never been listed.
+⚠️  **Ten names left the contract only once the consumer had stopped using
+them.** Before master v1.36.0, economicspace's Stage 3 adapter assigned
+`LITRES_PER_GAL`, `LITRES_PER_BBL`, `COMMODITY_DENSITY_KG_PER_L`,
+`load_storage`, `load_environments`, `propellant_mass_for_dv`,
+`cost_per_dv_usd_per_kg`, `build_transportation_summary`,
+`cheapest_launch_to` and `mission_cost_breakdown` at import, though nothing
+read them. The first draft of this change dropped nine of them (the tenth,
+`load_environments`, had never been listed) on the strength of v1.36.0, which
+was then an unmerged branch; a contract taken from the branch would have let
+this package delete a name the released consumer could not import without.
+They were held in a `REEXPORTED_ON_CONSUMER_MAIN` tuple until v1.36.0 reached
+economicspace's main (#113, 2026-09-27), then dropped, after a fresh grep of
+that main found none of them read anywhere, the generated `master.py`
+included. **All ten are still exported**; they are just no longer promised
+to economicspace.
 
 **CI now asks the contract of the built wheel**, from outside the tree, as
 well as of the source. The wheel step walked `__all__` alone, so it could see
