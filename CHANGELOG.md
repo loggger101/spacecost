@@ -96,7 +96,15 @@ A new CI job, `reference-platform`, reads that block out of
 `summary_meta.json`, installs exactly those versions, and runs
 `tests/test_parity.py` with `SPACECOST_REQUIRE_REFERENCE_PLATFORM=1`, under
 which a platform mismatch FAILS instead of skipping. Because the job reads the
-block, re-recording the platform moves the job with it.
+block, re-recording the platform moves the job with it. Its first run passed
+the hash test outright: 17 passed, none skipped.
+
+⚠️  **The block pins versions, not the CPU**, and numpy picks its float64
+`exp()` kernel by CPU at run time; an AVX512 host takes numpy's own AVX512F
+implementation. The platform was recorded on an AVX2-only machine and the
+first run drew an AVX2-only runner. Hosted runners vary, so the job sets
+`NPY_DISABLE_CPU_FEATURES` to switch AVX512 off, and prints numpy's dispatch
+so a mismatch can be read from the log.
 
 Nothing in `reference/` moved. The recorded hash still reproduces off the
 reference platform too: Windows, Python 3.14, numpy 2.5.2 and pandas 3.0.5 on
