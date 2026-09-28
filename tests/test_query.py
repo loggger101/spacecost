@@ -126,6 +126,14 @@ def test_only_vehicles_that_reach_the_destination_are_ranked(catalog):
     assert "Electron" in set(leo["name"])
 
 
+def test_an_unknown_destination_says_what_it_wanted(catalog):
+    """Still a KeyError, as it always was, but not a bare echo of the key."""
+    with pytest.raises(KeyError, match="'leo', 'gto' or 'escape'"):
+        spacecost.cheapest_launch_to(catalog, "mars")
+    # Case is still forgiven.
+    assert len(spacecost.cheapest_launch_to(catalog, "LEO")) > 0
+
+
 def test_launch_ranking_is_sorted(catalog):
     for dest in ("leo", "gto", "escape"):
         col = "usd_per_kg_to_" + dest
