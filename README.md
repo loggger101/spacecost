@@ -545,11 +545,18 @@ last check worth doing by hand.
 The wheel step above walks `__all__`, which proves the names this package
 currently declares are packaged; it cannot see a name being deleted from the
 package and from `__all__` in one commit, which is what happened with
-`validate_tables`. That file lists what economicspace actually imports, so
-removing one fails here rather than at a consumer's import three steps later.
-A failure is not an instruction to put the name back: it says the change is
-**breaking**, so it wants a major bump, a CHANGELOG entry, and the matching
-edit to `modules/transportation.py` in the same breath.
+`validate_tables`. That file lists what economicspace actually reads,
+including the four names it reaches through `spacecost.delivery` and
+`spacecost.prices`, which `__all__` does not cover. CI runs it against the
+built wheel as well as the tree, so removing one fails here rather than at a
+consumer's import three steps later. A failure is not an instruction to put
+the name back: it says the change is **breaking**, so it wants a major bump, a
+CHANGELOG entry, and the matching edit to the economicspace module that reads
+it in the same breath.
+
+The list follows economicspace's **main**, not its branches. A name the
+consumer is about to stop reading stays in the contract until that change has
+merged there.
 
 ## Layout
 

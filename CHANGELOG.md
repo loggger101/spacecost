@@ -13,6 +13,44 @@ may read a version as proof that a number moved.
 
 ## Package releases
 
+### Unreleased
+
+**Tests and CI only; no name, table or number moved, so no release is cut for
+it.** `tests/test_consumer_contract.py` now lists what economicspace actually
+reads, found by grepping it for `spacecost.<name>` on its main (master
+v1.35.0) and on its pending master v1.36.0. It had mirrored that repo's Stage
+3 adapter, which re-exports most of `__all__`, and so had missed what Stage 2
+reads directly:
+
+- **added**: `LEO_LAUNCH_VEHICLE`, `delivery_mass_ratio` and
+  `delivery_hardware_usd_per_kg`, which Stage 2 reads, and
+  `ENVIRONMENTS_REFERENCE`, which the Stage 3 adapter re-exports and its
+  banner counts.
+- **new**, `SUBMODULE_SURFACE`: four names reached through a submodule, which
+  `__all__` does not cover (`delivery`'s three hardware rates, read by the
+  worked calculation, and `prices.merge_propellant_prices`, read by
+  `verify_stage3.py`).
+- **new**, `REEXPORTED_ON_CONSUMER_MAIN`: ten names the adapter on
+  economicspace's main re-exports at import and nothing there reads:
+  `LITRES_PER_GAL`, `LITRES_PER_BBL`, `COMMODITY_DENSITY_KG_PER_L`,
+  `load_storage`, `load_environments`, `propellant_mass_for_dv`,
+  `cost_per_dv_usd_per_kg`, `build_transportation_summary`,
+  `cheapest_launch_to` and `mission_cost_breakdown`.
+
+⚠️  **The first draft of this change dropped nine of those ten**, because
+master v1.36.0 stops re-exporting them. v1.36.0 is on an unmerged branch.
+economicspace's main still assigns every one at import, so a contract taken
+from the branch would have let this package delete a name the released
+consumer cannot import without. They stay until v1.36.0 merges there. The
+tenth, `load_environments`, had never been listed.
+
+**CI now asks the contract of the built wheel**, from outside the tree, as
+well as of the source. The wheel step walked `__all__` alone, so it could see
+neither a name deleted together with its `__all__` entry nor anything reached
+through a submodule. Checked both ways: the step passes with the tree broken
+and the wheel intact, and fails naming `spacecost.delivery.STAGE_HARDWARE_USD_PER_KG`
+when that one name is removed from the installed wheel.
+
 ### 0.4.0 - 2026-09-23
 
 **The launch table, re-audited and more than doubled: 36 rows to 76, every
