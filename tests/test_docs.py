@@ -70,6 +70,69 @@ def test_table_row_counts_in_the_what_is_in_it_table():
             "README table says %s %s, actual %d" % (name, m.group(1), n))
 
 
+def test_readme_bracketed_row_count():
+    """"All 64 bracketed rows" stood for a release after the 65th was added.
+
+    A bracketed row is one carrying both `range_low` and `range_high`, which
+    is what the inside-its-own-range band checks, across the two tables that
+    have them.
+    """
+    n = sum(1 for table in (spacecost.OPERATIONAL_COSTS_REFERENCE,
+                            spacecost.STORAGE_REFERENCE)
+            for row in table
+            if row.get("range_low") is not None
+            and row.get("range_high") is not None)
+    quoted = [int(m.group(1)) for m in
+              re.finditer(r"(\d+)\s+bracketed rows", _read("README.md"))]
+    assert quoted, "README no longer quotes a bracketed-row count"
+    assert all(q == n for q in quoted), (
+        "README says %s bracketed rows, the tables have %d" % (quoted, n))
+
+
+# ---------------------------------------------------------- code examples
+def _python_blocks(text):
+    """(line number, source) of every ```python fence."""
+    out, lines, i = [], text.split("\n"), 0
+    while i < len(lines):
+        if lines[i].strip() == "```python":
+            start, body = i + 2, []
+            i += 1
+            while i < len(lines) and not lines[i].startswith("```"):
+                body.append(lines[i])
+                i += 1
+            out.append((start, "\n".join(body) + "\n"))
+        i += 1
+    return out
+
+
+def test_readme_python_examples_run():
+    """Every README Python block runs, and a `>>>` block prints what it says.
+
+    The delivery example printed the pre-v0.4.0 lunar price for a whole
+    release, beside a table quoting the new one.  Nothing read it.
+
+    A `>>>` block is a doctest with ELLIPSIS, so an example can stop its
+    digits short -- and must, for anything that goes through `exp()`, which
+    the platform libm need not round identically everywhere.  Any other block
+    is executed and only has to not raise.
+    """
+    import doctest
+
+    blocks = _python_blocks(_read("README.md"))
+    assert blocks, "README has no ```python blocks to check"
+    parser = doctest.DocTestParser()
+    for lineno, src in blocks:
+        where = "README.md:%d" % lineno
+        if ">>>" not in src:
+            exec(compile(src, where, "exec"), {})
+            continue
+        test = parser.get_doctest(src, {}, where, "README.md", lineno)
+        runner = doctest.DocTestRunner(optionflags=doctest.ELLIPSIS)
+        out = []
+        result = runner.run(test, out=out.append)
+        assert result.failed == 0, "".join(out)
+
+
 # ----------------------------------------------------------------- versions
 def test_package_version_agrees_everywhere():
     """`__version__`, pyproject and the newest CHANGELOG entry are one number."""

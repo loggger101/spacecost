@@ -25,15 +25,31 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest]
         python-version: ["3.9", "3.12", "3.14"]
+        # `ubuntu-latest` becomes Ubuntu 26.04 from 2026-10-19, and
+        # actions/python-versions builds 3.9 for 22.04 and 24.04 only -- 3.9
+        # is past end of life and will not get one.  Left on `latest`, the
+        # floor leg would fail at setup-python one Monday with nothing here
+        # changed.  It moves to the last Ubuntu that has it, so
+        # `requires-python = ">=3.9"` stays tested on Linux; the other Linux
+        # legs keep tracking `latest`.
+        exclude:
+          - os: ubuntu-latest
+            python-version: "3.9"
+        include:
+          - os: ubuntu-24.04
+            python-version: "3.9"
 
     steps:
-      - uses: actions/checkout@v4
+      # checkout v5 and setup-python v6 are the first majors on Node 24.  The
+      # v4 / v5 pair targeted Node 20, which the runners deprecated, and every
+      # run carried a warning that they were being forced onto Node 24.
+      - uses: actions/checkout@v5
         with:
           # Do NOT let git normalise line endings on checkout: reference/*.csv
           # are CRLF on purpose and the parity test compares bytes.
           fetch-depth: 1
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: ${{ matrix.python-version }}
 
@@ -146,8 +162,8 @@ jobs:
     # runs on `schedule` and `workflow_dispatch` only, so a Yahoo outage turns
     # one scheduled run red and blocks no merge and no release.
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
       - name: Install with the live extra
