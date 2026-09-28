@@ -45,12 +45,14 @@ def cheapest_launch_to(
     answers.  A price of "not at any price" is not a large price, and the two
     must not sort against each other.
     """
-    col = {"leo":    "usd_per_kg_to_leo",
-           "gto":    "usd_per_kg_to_gto",
-           "escape": "usd_per_kg_to_escape"}[destination.lower()]
-    pay = {"leo":    "payload_leo_kg",
-           "gto":    "payload_gto_kg",
-           "escape": "payload_escape_kg"}[destination.lower()]
+    dest = destination.lower()
+    if dest not in ("leo", "gto", "escape"):
+        # Still a KeyError, which is what this raised before; it just says
+        # what it wanted instead of echoing the bad key back.
+        raise KeyError("destination must be 'leo', 'gto' or 'escape', not %r"
+                       % (destination,))
+    col = "usd_per_kg_to_" + dest
+    pay = "payload_" + dest + "_kg"
 
     df = catalog["launch_vehicles"].copy()
     if operational_only:
