@@ -414,7 +414,8 @@ architecture, and neither is required by IEEE 754 to be correctly rounded. CI
 demonstrated it on the first push, where Linux 3.9 and 3.12 agreed with each
 other and 3.14 did not, which is a numpy version choosing different kernels
 rather than an OS difference. Its byte hash is therefore recorded with the
-platform it was taken on and checked only there.
+platform it was taken on and checked only there, and CI's `reference-platform`
+job rebuilds that platform on every run so the check actually happens.
 
 `tests/test_parity.py` is both contracts as tests.
 
@@ -519,7 +520,11 @@ not a commit.
    `summary_meta.json`, whose platform block is the one thing that rots
    invisibly — `test_summary_hash_on_the_reference_platform` SKIPS when that
    block does not match the running host, so a stale block turns the strictest
-   test in the suite into a no-op on every machine and never fails.
+   test in the suite into a no-op on every machine and never fails. CI's
+   `reference-platform` job is the backstop: it installs the versions the
+   block names and fails, rather than skips, when it cannot match them. It
+   pins the CPU only by switching AVX512 off, so record from a machine without
+   AVX512, or move that pin in the same commit.
    `--check` answers "is `reference/` stale" without writing anything.
 4. **Run `spacecost validate --strict`**, which exits non-zero on a WARN. A
    NOTE never fails it; see [The tables check
