@@ -15,8 +15,13 @@ may read a version as proof that a number moved.
 
 ### Unreleased
 
-**Tests and CI only; no name, table or number moved, so no release is cut for
-it.** `tests/test_consumer_contract.py` now lists what economicspace actually
+**Tests, CI, docs and the build floor; no name, table or number moved, and the
+data contract stays 1.16.0.** Nothing here changes what a consumer imports or
+computes, so no release is cut for it yet.
+
+#### The consumer contract follows what economicspace reads
+
+`tests/test_consumer_contract.py` now lists what economicspace actually
 reads, found by grepping it for `spacecost.<name>` on its main (master
 v1.35.0) and on its pending master v1.36.0. It had mirrored that repo's Stage
 3 adapter, which re-exports most of `__all__`, and so had missed what Stage 2
@@ -50,6 +55,46 @@ neither a name deleted together with its `__all__` entry nor anything reached
 through a submodule. Checked both ways: the step passes with the tree broken
 and the wheel intact, and fails naming `spacecost.delivery.STAGE_HARDWARE_USD_PER_KG`
 when that one name is removed from the installed wheel.
+
+#### An audit of the prose against the code
+
+Four README passages still described an earlier release, each beside a
+correct one:
+
+- **The delivery example printed `26813.64` for `lunar_surface`.** The model
+  has said **42,635** since v0.4.0, and the table two screens further down
+  says so. `tests/test_docs.py` now runs every Python block in the README, as
+  a doctest with ELLIPSIS where it shows `>>>`, so the example is held to the
+  code rather than to memory. It stops its digits short because every figure
+  in it is an `exp()`.
+- **"The launch price ... at the low end of its band."** Since v0.4.0 the
+  delivery chains read the headline, the band's centre, and the section below
+  that table says so. Now it says centre.
+- **"The downleg departure delta-v: typed."** That was v0.3.0. Since v0.3.1
+  four of the six are `DELTA_V_REFERENCE` lookups. Three figures are still
+  typed: the LEO deorbit, the GEO deorbit and the lunar TEI component.
+- **"All 64 bracketed rows".** v0.4.0's `Expendable upper stage recurring
+  cost` made it 65. A test now holds the figure to the tables.
+
+Smaller: LH2 carries about **twenty** times kerolox's tank per kilogram
+burnt, not fourteen. Fourteen is the volume ratio, before the deep-cryogen
+tank multiplier. The package docstring promised all seven CSVs "byte for
+byte", which the README declined to promise for the summary; it now states
+both contracts. And it and the README now say Stage 2 reads this package too.
+
+#### The build floor, and two things CI would have tripped on
+
+- **`setuptools>=68` could not build this package.** The PEP 639
+  `license = "MIT"` string needs 77: 76.1.0 rejects `pyproject.toml` and 77.0.3
+  builds it, both tried. The floor is 77 now. pip's isolated build always
+  fetched a newer one, which is why it never showed.
+- **The Python 3.9 leg moves to `ubuntu-24.04`.** `ubuntu-latest` becomes
+  26.04 from 2026-10-19, and there is no 3.9 build for it, so that leg would
+  have gone red with nothing here changed. The other Linux legs still track
+  `latest`.
+- **`actions/checkout` v5 and `actions/setup-python` v6**, the first majors on
+  Node 24. Every run was carrying a warning that the v4 / v5 pair was being
+  forced off the deprecated Node 20.
 
 ### 0.4.0 - 2026-09-23
 

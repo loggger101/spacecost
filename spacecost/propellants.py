@@ -59,8 +59,10 @@ _REF_YEAR_PROP = 2026
 # ever used it.  That is not a cosmetic gap: the mass a tank adds scales with
 # the VOLUME it encloses, not with the propellant mass inside it, so leaving it
 # out hands the low-density propellants a free ride.  LH2 is 0.0708 kg/L
-# against kerolox at 1.015, fourteen times the tank per kilogram burnt, and
-# the model was awarding hydrolox its 452 s with no volumetric penalty at all.
+# against kerolox at 1.015, fourteen times the volume per kilogram burnt (and,
+# once the deep-cryogen class multiplier below applies, about twenty times the
+# tank), and the model was awarding hydrolox its 452 s with no volumetric
+# penalty at all.
 # It is the same failure shape as the v1.10.0 electric stage: a mass in the
 # rocket equation with no line anywhere else.
 #
