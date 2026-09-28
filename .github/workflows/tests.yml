@@ -97,6 +97,33 @@ jobs:
           print('spacecost', spacecost.__version__, 'data', spacecost.DATA_VERSION)
           "
 
+      # The consumer contract, asked of the WHEEL rather than the tree.  The
+      # `__all__` walk above cannot see a name deleted together with its
+      # `__all__` entry, nor anything economicspace reaches through a
+      # submodule (`spacecost.delivery`'s three hardware rates,
+      # `spacecost.prices.merge_propellant_prices`).  tests/test_consumer_contract.py
+      # can, and here it runs against the installed wheel: spacecost is
+      # imported, and asserted to be the installed copy, BEFORE pytest loads
+      # the test module, so the test's own `import spacecost` cannot reach the
+      # tree.
+      - name: Hold the built distribution to the consumer contract
+        shell: bash
+        run: |
+          if [ -d fresh/Scripts ]; then PY=fresh/Scripts/python; else PY=fresh/bin/python; fi
+          "$PY" -m pip install --quiet pytest
+          cd elsewhere
+          "../$PY" - <<'PY'
+          import sys
+          import pytest
+          import spacecost
+          assert "site-packages" in spacecost.__file__, (
+              "the contract would be tested against the tree, not the wheel: "
+              + spacecost.__file__)
+          sys.exit(pytest.main(["-q", "-p", "no:cacheprovider",
+                                "--import-mode=importlib",
+                                "../tests/test_consumer_contract.py"]))
+          PY
+
   # ───────────────────────────────────────────────────────────────────────────
   # The live-price path, which NOTHING ELSE EXERCISES.
   # ───────────────────────────────────────────────────────────────────────────
