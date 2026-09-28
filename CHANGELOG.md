@@ -96,6 +96,21 @@ both contracts. And it and the README now say Stage 2 reads this package too.
   Node 24. Every run was carrying a warning that the v4 / v5 pair was being
   forced off the deprecated Node 20.
 
+#### `spacecost launch` prints the whole band
+
+It printed the headline and the LOW end of its range, which since v0.4.0 is
+half a band around a centre, and all three payload columns whichever
+destination was asked about. It now prints the destination's payload, then
+`_low`, headline and `_high`, and `price_basis`, which is what says whether a
+price is the launcher's own or somebody's estimate. New Glenn, cheapest on the
+open market at $1,922/kg, reads `reported` there, and that is the whole reason
+the delivery chains do not anchor on it. Output only; the ranking is
+unchanged.
+
+`cheapest_launch_to` with an unknown destination still raises `KeyError`, as
+it did, but the message names the three it accepts instead of echoing the bad
+key back.
+
 ### 0.4.0 - 2026-09-23
 
 **The launch table, re-audited and more than doubled: 36 rows to 76, every
