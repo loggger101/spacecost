@@ -82,6 +82,34 @@ tank multiplier. The package docstring promised all seven CSVs "byte for
 byte", which the README declined to promise for the summary; it now states
 both contracts. And it and the README now say Stage 2 reads this package too.
 
+#### The strictest test had never run in CI
+
+`test_summary_hash_on_the_reference_platform` holds the summary's BYTES, and
+it skips on any host that is not the recorded platform: Windows, AMD64,
+**Python 3.13, numpy 2.2.6, pandas 2.3.3**. The matrix runs 3.9, 3.12 and
+3.14 on the newest numpy and pandas, so no leg ever matched. The test was
+skipped on every run, which is the rot the README's "Changing a row" warns
+about, reached a different way: not a stale block, but a matrix that moved
+around a correct one.
+
+A new CI job, `reference-platform`, reads that block out of
+`summary_meta.json`, installs exactly those versions, and runs
+`tests/test_parity.py` with `SPACECOST_REQUIRE_REFERENCE_PLATFORM=1`, under
+which a platform mismatch FAILS instead of skipping. Because the job reads the
+block, re-recording the platform moves the job with it. Its first run passed
+the hash test outright: 17 passed, none skipped.
+
+⚠️  **The block pins versions, not the CPU**, and numpy picks its float64
+`exp()` kernel by CPU at run time; an AVX512 host takes numpy's own AVX512F
+implementation. The platform was recorded on an AVX2-only machine and the
+first run drew an AVX2-only runner. Hosted runners vary, so the job sets
+`NPY_DISABLE_CPU_FEATURES` to switch AVX512 off, and prints numpy's dispatch
+so a mismatch can be read from the log.
+
+Nothing in `reference/` moved. The recorded hash still reproduces off the
+reference platform too: Windows, Python 3.14, numpy 2.5.2 and pandas 3.0.5 on
+an AVX2 machine give the same bytes.
+
 #### The build floor, and two things CI would have tripped on
 
 - **`setuptools>=68` could not build this package.** The PEP 639
