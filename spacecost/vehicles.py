@@ -12,6 +12,7 @@ from typing import List
 import numpy as np
 
 from ._log import say
+from .fairings import FAIRINGS
 
 # ─────────────────────────────────────────────────────────────────────────────
 # LAUNCH VEHICLE REFERENCE TABLE
@@ -105,6 +106,10 @@ from ._log import say
 #
 # DERIVED, never typed (a row that types one raises at import):
 #
+#   fairing_volume_m3, fairing_basis        from fairings.FAIRINGS, by name;
+#                                           see that module.  `notes` gains a
+#                                           closing "Fairing volume:" sentence
+#                                           naming the source.  (v1.17.0)
 #   usd_per_kg_to_{leo,gto,escape}          list_price_usd / payload
 #   usd_per_kg_to_{leo,gto,escape}_low      list_price_usd_low / payload_high
 #   usd_per_kg_to_{leo,gto,escape}_high     list_price_usd_high / payload_low
@@ -145,7 +150,6 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "payload_leo_kg_high":           17_500,    # SpaceX reusable figure
         "payload_gto_kg":                 5_500,    # reusable drone-ship (8,300 is EXPENDABLE)
         "payload_escape_kg":              2_500,    # C3=0 reusable estimate (expendable row lifts 4,020)
-        "fairing_volume_m3":                145,
         "list_price_usd":            74_000_000,    # SatBase 2026-02 price hike (was $70M)
         "price_basis":                   "published",
         "reference_year":          _REF_YEAR_LAUNCH,
@@ -168,7 +172,6 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "payload_leo_kg":                22_800,
         "payload_gto_kg":                 8_300,
         "payload_escape_kg":              4_020,    # Mars transfer, SpaceX figure
-        "fairing_volume_m3":                145,
         "list_price_usd_high":      120_000_000,
         "list_price_usd_low":        90_000_000,
         "price_basis":                   "estimate",
@@ -191,7 +194,6 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "payload_leo_kg":                30_000,    # conservative partial-reuse figure
         "payload_gto_kg":                 8_000,    # SpaceX: "$97M, up to 8 t to GTO"
         "payload_escape_kg":              3_500,    # partial-reusable interplanetary
-        "fairing_volume_m3":                145,
         "list_price_usd_high": int(round(97_000_000 * _SPACEX_2026_RISE, -6)),
         "list_price_usd_low":        97_000_000,    # SpaceX list price (2022)
         "price_basis":                   "published",
@@ -218,7 +220,6 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "payload_leo_kg":                63_800,
         "payload_gto_kg":                26_700,
         "payload_escape_kg":             16_800,    # Mars transfer
-        "fairing_volume_m3":                145,
         "list_price_usd_high": int(round(150_000_000 * _SPACEX_2026_RISE, -6)),
         "list_price_usd_low":       150_000_000,    # SpaceX (2017)
         "price_basis":                   "published",
@@ -240,7 +241,6 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "payload_leo_kg":                95_000,    # 200 km, 28.5 deg
         "payload_gto_kg":                np.nan,    # none published
         "payload_escape_kg":             27_000,    # TLI, ">27 t"
-        "fairing_volume_m3":             np.nan,    # has only ever flown Orion
         "list_price_usd_high":    2_800_000_000,
         "list_price_usd_low":     2_500_000_000,
         "price_basis":                   "reported",
@@ -251,8 +251,9 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
                  "per Artemis flight and includes Orion and its service module. "
                  "Artemis I (Nov 2022) and Artemis II (crewed, Apr 2026).  In Feb "
                  "2026 NASA cancelled Block 1B and the Exploration Upper Stage "
-                 "and standardised on this configuration.  It has no cargo "
-                 "fairing in service, so there is no fairing volume.",
+                 "and standardised on this configuration.  It has only ever flown "
+                 "Orion; the fairing volume is the cargo configuration NASA "
+                 "documents for it, which has not flown.",
     },
     {
         "name":                          "Atlas V 551",
@@ -266,7 +267,6 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "payload_leo_kg_high":           18_850,
         "payload_gto_kg":                 8_900,
         "payload_escape_kg":              6_500,
-        "fairing_volume_m3":                233,
         "list_price_usd":           153_000_000,
         "price_basis":                   "published",
         "reference_year":          _REF_YEAR_LAUNCH,
@@ -289,7 +289,6 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "payload_gto_kg":                 8_300,
         "payload_escape_kg_low":          3_600,    # Mars transfer
         "payload_escape_kg_high":         6_200,    # TLI
-        "fairing_volume_m3":                233,
         "list_price_usd":           110_000_000,
         "price_basis":                   "published",
         "reference_year":          _REF_YEAR_LAUNCH,
@@ -311,7 +310,6 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "payload_gto_kg":                11_600,
         "payload_escape_kg_low":          6_000,    # Mars transfer
         "payload_escape_kg_high":         9_100,    # TLI
-        "fairing_volume_m3":                233,
         "list_price_usd_high":      130_000_000,
         "list_price_usd_low":       110_000_000,
         "price_basis":                   "estimate",
@@ -337,7 +335,6 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "payload_gto_kg_high":           15_300,    # with RL10E
         "payload_escape_kg_low":          7_600,    # Mars transfer
         "payload_escape_kg_high":        11_300,    # TLI
-        "fairing_volume_m3":                233,
         "list_price_usd_high":      150_000_000,
         "list_price_usd_low":       110_000_000,
         "price_basis":                   "estimate",
@@ -364,7 +361,6 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "payload_leo_kg":                45_000,
         "payload_gto_kg":                13_600,
         "payload_escape_kg":              7_000,    # TLI
-        "fairing_volume_m3":                480,
         "list_price_usd_high":      110_000_000,
         "list_price_usd_low":        68_000_000,
         "price_basis":                   "reported",
@@ -388,7 +384,6 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "payload_leo_kg_high":              320,
         "payload_gto_kg":                     0,
         "payload_escape_kg":                  0,
-        "fairing_volume_m3":               1.85,
         "list_price_usd":             7_500_000,
         "price_basis":                   "reported",
         "reference_year":          _REF_YEAR_LAUNCH,
@@ -409,7 +404,6 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "payload_leo_kg":                 1_030,
         "payload_gto_kg":                     0,
         "payload_escape_kg":                  0,
-        "fairing_volume_m3":                 22,
         "list_price_usd_high":       17_600_000,
         "list_price_usd_low":        15_000_000,
         "price_basis":                   "published",
@@ -431,7 +425,6 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "payload_leo_kg_high":            1_735,
         "payload_gto_kg":                     0,
         "payload_escape_kg":                  0,
-        "fairing_volume_m3":             np.nan,
         "list_price_usd_high":       72_000_000,
         "list_price_usd_low":        50_000_000,
         "price_basis":                   "estimate",
@@ -458,7 +451,6 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "payload_leo_kg_high":            7_430,    # Baikonur, 51.6 deg
         "payload_gto_kg":                np.nan,
         "payload_escape_kg":             np.nan,
-        "fairing_volume_m3":                 80,
         "list_price_usd_high":       35_000_000,
         "list_price_usd_low":        30_000_000,
         "price_basis":                   "estimate",
@@ -481,7 +473,6 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "payload_gto_kg_low":             2_900,    # with Fregat, from Russian soil
         "payload_gto_kg_high":            3_250,    # from Kourou, ended 2022
         "payload_escape_kg":              2_400,
-        "fairing_volume_m3":                 80,
         "list_price_usd":            48_500_000,    # Glavkosmos 2018 with Fregat
         "price_basis":                   "reported",
         "reference_year":          _REF_YEAR_LAUNCH,
@@ -503,7 +494,6 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "payload_gto_kg_low":             5_400,    # with Briz-M
         "payload_gto_kg_high":            7_500,    # with KVTK, not yet flown
         "payload_escape_kg":             np.nan,
-        "fairing_volume_m3":             np.nan,
         "list_price_usd":           100_000_000,
         "price_basis":                   "reported",
         "reference_year":          _REF_YEAR_LAUNCH,
@@ -524,7 +514,6 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "payload_gto_kg_low":             6_300,    # GTO-1500
         "payload_gto_kg_high":            6_920,    # GTO-1800
         "payload_escape_kg":              4_300,    # ExoMars TGO 2016, to Mars
-        "fairing_volume_m3":             np.nan,
         "list_price_usd":            65_000_000,
         "price_basis":                   "reported",
         "reference_year":          _REF_YEAR_LAUNCH,
@@ -550,7 +539,6 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "payload_gto_kg":                 4_500,
         "payload_escape_kg_low":          3_000,
         "payload_escape_kg_high":         3_500,    # lunar transfer
-        "fairing_volume_m3":                124,
         "list_price_usd_high": int(round(100_000_000 * _USD_PER_EUR, -6)),
         "list_price_usd_low":        80_000_000,
         "price_basis":                   "estimate",
@@ -574,7 +562,6 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "payload_gto_kg":                11_500,
         "payload_escape_kg_low":          8_000,
         "payload_escape_kg_high":         8_600,    # lunar transfer
-        "fairing_volume_m3":                124,
         "list_price_usd_high": int(round(115_000_000 * _USD_PER_EUR, -6)),
         "list_price_usd_low":       115_000_000,
         "price_basis":                   "estimate",
@@ -595,7 +582,6 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "payload_leo_kg_high":            3_300,    # low equatorial-class figure
         "payload_gto_kg":                     0,
         "payload_escape_kg":                  0,
-        "fairing_volume_m3":                 47,
         "list_price_usd_high": int(round(48_000_000 * _USD_PER_EUR, -6)),
         "list_price_usd_low":        37_000_000,
         "price_basis":                   "reported",
@@ -618,7 +604,6 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "payload_leo_kg":                 1_000,
         "payload_gto_kg":                     0,
         "payload_escape_kg":                  0,
-        "fairing_volume_m3":             np.nan,
         "list_price_usd":     int(round(10_000_000 * _USD_PER_EUR, -5)),
         "price_basis":                   "target",
         "reference_year":          _REF_YEAR_LAUNCH,
@@ -645,7 +630,6 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "payload_gto_kg_high":            7_900,
         "payload_escape_kg_low":          4_000,
         "payload_escape_kg_high":         6_000,    # TLI, "over 6 t"
-        "fairing_volume_m3":                184,
         "list_price_usd_high":       75_000_000,
         "list_price_usd_low":        50_000_000,
         "price_basis":                   "estimate",
@@ -668,7 +652,6 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "payload_leo_kg":                 4_000,    # 500 km SSO; no LEO figure published
         "payload_gto_kg":                 2_100,
         "payload_escape_kg":                  0,
-        "fairing_volume_m3":             np.nan,
         "list_price_usd_high":       40_000_000,
         "list_price_usd_low":        33_000_000,
         "price_basis":                   "target",
@@ -692,7 +675,6 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "payload_gto_kg_high":            4_200,
         "payload_escape_kg_low":          2_000,
         "payload_escape_kg_high":         3_000,    # TLI
-        "fairing_volume_m3":                110,
         "list_price_usd_high":       51_000_000,
         "list_price_usd_low":        42_000_000,    # ISRO ₹402 crore
         "price_basis":                   "reported",
@@ -715,7 +697,6 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "payload_gto_kg_low":             1_300,
         "payload_gto_kg_high":            1_425,    # sub-GTO
         "payload_escape_kg":                  0,
-        "fairing_volume_m3":                 34,
         "list_price_usd_high":       31_000_000,
         "list_price_usd_low":        16_000_000,
         "price_basis":                   "reported",
@@ -740,7 +721,6 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "payload_gto_kg_low":             2_250,
         "payload_gto_kg_high":            2_500,
         "payload_escape_kg":             np.nan,
-        "fairing_volume_m3":             np.nan,
         "list_price_usd":            47_000_000,
         "price_basis":                   "reported",
         "reference_year":          _REF_YEAR_LAUNCH,
@@ -759,7 +739,6 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "payload_leo_kg":                   500,
         "payload_gto_kg":                     0,
         "payload_escape_kg":                  0,
-        "fairing_volume_m3":             np.nan,
         "list_price_usd_high":        4_000_000,
         "list_price_usd_low":         3_500_000,
         "price_basis":                   "reported",
@@ -779,7 +758,6 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "payload_leo_kg":                 3_300,
         "payload_gto_kg":                     0,
         "payload_escape_kg":                  0,
-        "fairing_volume_m3":             np.nan,
         "list_price_usd_high":       45_000_000,
         "list_price_usd_low":        30_000_000,
         "price_basis":                   "estimate",
@@ -806,7 +784,6 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "payload_leo_kg":                 3_850,
         "payload_gto_kg":                 1_250,    # 2C/SM
         "payload_escape_kg":                  0,
-        "fairing_volume_m3":             np.nan,
         "list_price_usd_high":       35_000_000,
         "list_price_usd_low":        25_000_000,
         "price_basis":                   "estimate",
@@ -826,7 +803,6 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "payload_leo_kg":                 3_500,
         "payload_gto_kg":                     0,
         "payload_escape_kg":                  0,
-        "fairing_volume_m3":             np.nan,
         "list_price_usd":            30_000_000,
         "price_basis":                   "reported",
         "reference_year":          _REF_YEAR_LAUNCH,
@@ -843,7 +819,6 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "payload_leo_kg":                11_500,
         "payload_gto_kg":                 5_500,
         "payload_escape_kg":              3_780,    # Chang'e-3 TLI mass
-        "fairing_volume_m3":             np.nan,
         "list_price_usd_high":       70_000_000,
         "list_price_usd_low":        50_000_000,
         "price_basis":                   "reported",
@@ -863,7 +838,6 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "payload_leo_kg":                 4_200,
         "payload_gto_kg":                 1_500,
         "payload_escape_kg":                  0,
-        "fairing_volume_m3":             np.nan,
         "list_price_usd_high":       50_000_000,
         "list_price_usd_low":        30_000_000,
         "price_basis":                   "estimate",
@@ -883,7 +857,6 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "payload_gto_kg":                14_000,
         "payload_escape_kg_low":          8_200,    # Chang'e-5 TLI
         "payload_escape_kg_high":         9_400,    # rated TLI
-        "fairing_volume_m3":                157,
         "list_price_usd_high":      160_000_000,
         "list_price_usd_low":       110_000_000,
         "price_basis":                   "estimate",
@@ -906,7 +879,6 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "payload_leo_kg":                 8_000,
         "payload_gto_kg":                np.nan,
         "payload_escape_kg":             np.nan,
-        "fairing_volume_m3":             np.nan,
         "list_price_usd_high":       60_000_000,
         "list_price_usd_low":        35_000_000,
         "price_basis":                   "estimate",
@@ -927,7 +899,6 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "payload_leo_kg":                13_500,
         "payload_gto_kg":                 7_000,    # the three-stage 7A
         "payload_escape_kg":             np.nan,
-        "fairing_volume_m3":                111,
         "list_price_usd_high":       70_000_000,
         "list_price_usd_low":        50_000_000,
         "price_basis":                   "estimate",
@@ -949,7 +920,6 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "payload_leo_kg":                10_000,
         "payload_gto_kg":                 3_500,
         "payload_escape_kg":             np.nan,
-        "fairing_volume_m3":             np.nan,
         "list_price_usd_high":       70_000_000,
         "list_price_usd_low":        40_000_000,
         "price_basis":                   "estimate",
@@ -970,7 +940,6 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "payload_leo_kg_high":           12_000,    # 200 km
         "payload_gto_kg":                np.nan,
         "payload_escape_kg":             np.nan,
-        "fairing_volume_m3":             np.nan,
         "list_price_usd_high":       80_000_000,
         "list_price_usd_low":        50_000_000,
         "price_basis":                   "estimate",
@@ -991,7 +960,6 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "payload_leo_kg":                16_000,    # 200 km
         "payload_gto_kg":                np.nan,
         "payload_escape_kg":             np.nan,
-        "fairing_volume_m3":             np.nan,
         "list_price_usd_high":       70_000_000,
         "list_price_usd_low":        40_000_000,
         "price_basis":                   "estimate",
@@ -1014,7 +982,6 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "payload_leo_kg_high":              400,
         "payload_gto_kg":                     0,
         "payload_escape_kg":                  0,
-        "fairing_volume_m3":             np.nan,
         "list_price_usd_high":        8_000_000,
         "list_price_usd_low":         6_000_000,
         "price_basis":                   "reported",
@@ -1034,7 +1001,6 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "payload_leo_kg":                 1_500,
         "payload_gto_kg":                     0,
         "payload_escape_kg":                  0,
-        "fairing_volume_m3":             np.nan,
         "list_price_usd_high":       15_000_000,
         "list_price_usd_low":        10_000_000,
         "price_basis":                   "reported",
@@ -1053,7 +1019,6 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "payload_leo_kg":                   400,
         "payload_gto_kg":                     0,
         "payload_escape_kg":                  0,
-        "fairing_volume_m3":             np.nan,
         "list_price_usd":             4_500_000,
         "price_basis":                   "reported",
         "reference_year":          _REF_YEAR_LAUNCH,
@@ -1072,7 +1037,6 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "payload_leo_kg":                 6_500,
         "payload_gto_kg":                     0,
         "payload_escape_kg":                  0,
-        "fairing_volume_m3":             np.nan,
         "list_price_usd":            39_000_000,
         "price_basis":                   "reported",
         "reference_year":          _REF_YEAR_LAUNCH,
@@ -1091,7 +1055,6 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "payload_leo_kg":                 2_000,
         "payload_gto_kg":                     0,
         "payload_escape_kg":                  0,
-        "fairing_volume_m3":             np.nan,
         "list_price_usd_high":       15_000_000,
         "list_price_usd_low":         8_000_000,
         "price_basis":                   "estimate",
@@ -1110,7 +1073,6 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "payload_leo_kg":                12_000,
         "payload_gto_kg":                np.nan,
         "payload_escape_kg":             np.nan,
-        "fairing_volume_m3":             np.nan,
         "list_price_usd":            50_000_000,
         "price_basis":                   "published",
         "reference_year":          _REF_YEAR_LAUNCH,
@@ -1130,7 +1092,6 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "payload_leo_kg":                 1_600,    # 500 km SSO; no LEO figure published
         "payload_gto_kg":                     0,
         "payload_escape_kg":                  0,
-        "fairing_volume_m3":             np.nan,
         "list_price_usd_high":       20_000_000,
         "list_price_usd_low":        10_000_000,
         "price_basis":                   "estimate",
@@ -1150,7 +1111,6 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "payload_leo_kg":                 6_000,
         "payload_gto_kg":                np.nan,
         "payload_escape_kg":             np.nan,
-        "fairing_volume_m3":             np.nan,
         "list_price_usd_high":       35_000_000,
         "list_price_usd_low":        20_000_000,
         "price_basis":                   "estimate",
@@ -1172,7 +1132,6 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "payload_leo_kg":                 8_000,    # reusable, downrange landing
         "payload_gto_kg":                np.nan,
         "payload_escape_kg":             np.nan,
-        "fairing_volume_m3":                190,
         "list_price_usd_high":       50_000_000,
         "list_price_usd_low":        25_000_000,
         "price_basis":                   "estimate",
@@ -1196,7 +1155,6 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "payload_leo_kg":                 5_000,    # 400 km
         "payload_gto_kg":                np.nan,
         "payload_escape_kg":             np.nan,
-        "fairing_volume_m3":             np.nan,
         "list_price_usd_high":       40_000_000,
         "list_price_usd_low":        20_000_000,
         "price_basis":                   "estimate",
@@ -1224,7 +1182,6 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "payload_leo_kg":                28_790,
         "payload_gto_kg":                14_220,
         "payload_escape_kg":             10_000,
-        "fairing_volume_m3":                310,
         "list_price_usd":           440_000_000,
         "price_basis":                   "reported",
         "reference_year":          _REF_YEAR_LAUNCH,
@@ -1243,7 +1200,6 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "payload_leo_kg":                15_000,
         "payload_gto_kg":                 6_000,
         "payload_escape_kg":              3_600,
-        "fairing_volume_m3":                122,
         "list_price_usd":            90_000_000,
         "price_basis":                   "reported",
         "reference_year":          _REF_YEAR_LAUNCH,
@@ -1264,7 +1220,6 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "payload_leo_kg_high":              450,
         "payload_gto_kg":                     0,
         "payload_escape_kg":                  0,
-        "fairing_volume_m3":             np.nan,
         "list_price_usd":            40_000_000,
         "price_basis":                   "reported",
         "reference_year":          _REF_YEAR_LAUNCH,
@@ -1285,7 +1240,6 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "payload_gto_kg_low":            10_500,
         "payload_gto_kg_high":           10_865,    # record, 2016
         "payload_escape_kg":              6_100,    # JWST to Sun-Earth L2
-        "fairing_volume_m3":             np.nan,
         "list_price_usd_high":      220_000_000,
         "list_price_usd_low":       165_000_000,
         "price_basis":                   "estimate",
@@ -1306,7 +1260,6 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "payload_leo_kg":                 1_500,    # 700 km SSO-class
         "payload_gto_kg":                     0,
         "payload_escape_kg":                  0,
-        "fairing_volume_m3":             np.nan,
         "list_price_usd":     int(round(32_000_000 * _USD_PER_EUR, -5)),
         "price_basis":                   "reported",
         "reference_year":          _REF_YEAR_LAUNCH,
@@ -1326,7 +1279,6 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "payload_leo_kg_high":           27_500,    # 204 km, 28.5 deg
         "payload_gto_kg":                np.nan,
         "payload_escape_kg":              2_380,    # Galileo on IUS
-        "fairing_volume_m3":                300,    # 4.6 m x 18.3 m cargo bay
         "list_price_usd_high":    2_100_000_000,
         "list_price_usd_low":       450_000_000,
         "price_basis":                   "estimate",
@@ -1352,7 +1304,6 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "payload_gto_kg":                np.nan,
         "payload_escape_kg_low":         43_500,
         "payload_escape_kg_high":        48_600,    # Apollo 17 TLI
-        "fairing_volume_m3":             np.nan,
         "list_price_usd_high":    1_550_000_000,
         "list_price_usd_low":     1_230_000_000,
         "price_basis":                   "estimate",
@@ -1392,7 +1343,6 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "payload_gto_kg_low":             7_000,    # 21 t scaled to the 35 t LEO floor
         "payload_gto_kg_high":           21_000,    # SpaceX single-launch figure
         "payload_escape_kg":             27_000,    # WITH orbital refueling
-        "fairing_volume_m3":              1_000,
         "list_price_usd_high":      100_000_000,    # SpaceX, expendable
         "list_price_usd_low":        90_000_000,    # Voyager Technologies contract 2026
         "price_basis":                   "contract",
@@ -1421,7 +1371,6 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "payload_leo_kg":                70_000,    # ">70 t"
         "payload_gto_kg":                np.nan,    # only a GSO figure (>14 t) is published
         "payload_escape_kg":             20_000,    # TLI, ">20 t"
-        "fairing_volume_m3":             np.nan,
         "list_price_usd_high":      250_000_000,
         "list_price_usd_low":       150_000_000,
         "price_basis":                   "estimate",
@@ -1446,7 +1395,6 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "payload_gto_kg":                 1_500,
         "payload_escape_kg_low":          1_000,
         "payload_escape_kg_high":         1_500,    # Mars / Venus, Rocket Lab
-        "fairing_volume_m3":                113,
         "list_price_usd_high":       55_000_000,
         "list_price_usd_low":        50_000_000,
         "price_basis":                   "target",
@@ -1470,7 +1418,6 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "payload_leo_kg":                23_500,    # reusable first stage
         "payload_gto_kg":                 5_500,
         "payload_escape_kg":              4_000,
-        "fairing_volume_m3":                340,
         "list_price_usd_high":       70_000_000,
         "list_price_usd_low":        55_000_000,
         "price_basis":                   "target",
@@ -1494,7 +1441,6 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "payload_leo_kg":                 3_000,    # fully reusable; 7,000 expendable
         "payload_gto_kg":                   720,
         "payload_escape_kg":                480,
-        "fairing_volume_m3":                 80,
         "list_price_usd_high":       30_000_000,
         "list_price_usd_low":        20_000_000,
         "price_basis":                   "estimate",
@@ -1522,7 +1468,6 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "payload_gto_kg_high":            3_200,
         "payload_escape_kg_low":          2_000,
         "payload_escape_kg_high":         2_300,    # TLI
-        "fairing_volume_m3":                160,
         "list_price_usd":            80_000_000,
         "price_basis":                   "estimate",
         "reference_year":          _REF_YEAR_LAUNCH,
@@ -1542,7 +1487,6 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "payload_leo_kg":                17_000,
         "payload_gto_kg":                np.nan,
         "payload_escape_kg":             np.nan,
-        "fairing_volume_m3":                150,
         "list_price_usd_high":       45_000_000,
         "list_price_usd_low":        25_000_000,
         "price_basis":                   "estimate",
@@ -1565,7 +1509,6 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "payload_leo_kg":                70_000,
         "payload_gto_kg":                np.nan,
         "payload_escape_kg":             27_000,    # TLI, crewed lunar architecture
-        "fairing_volume_m3":                310,
         "list_price_usd_high":      300_000_000,
         "list_price_usd_low":       150_000_000,
         "price_basis":                   "estimate",
@@ -1591,7 +1534,6 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "payload_gto_kg":                np.nan,
         "payload_escape_kg_low":         50_000,
         "payload_escape_kg_high":        54_000,    # TLI, 2023 design
-        "fairing_volume_m3":              1_000,
         "list_price_usd_high":    1_000_000_000,
         "list_price_usd_low":       500_000_000,
         "price_basis":                   "estimate",
@@ -1615,7 +1557,6 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "payload_leo_kg_high":           18_000,
         "payload_gto_kg":                 5_000,
         "payload_escape_kg":             np.nan,
-        "fairing_volume_m3":             np.nan,
         "list_price_usd_high":       60_000_000,
         "list_price_usd_low":        40_000_000,
         "price_basis":                   "estimate",
@@ -1637,7 +1578,6 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "payload_leo_kg":                 1_400,    # 500 km
         "payload_gto_kg":                     0,
         "payload_escape_kg":                  0,
-        "fairing_volume_m3":             np.nan,
         "list_price_usd_high":       38_000_000,
         "list_price_usd_low":        25_000_000,
         "price_basis":                   "estimate",
@@ -1661,7 +1601,6 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "payload_leo_kg":                 8_500,    # reusable; 13,400 expendable
         "payload_gto_kg":                np.nan,
         "payload_escape_kg":             np.nan,
-        "fairing_volume_m3":             np.nan,
         "list_price_usd_high":       60_000_000,
         "list_price_usd_low":        30_000_000,
         "price_basis":                   "estimate",
@@ -1687,7 +1626,6 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "payload_leo_kg":               105_000,    # Block 1B Cargo LEO (NASA SLS factsheet)
         "payload_gto_kg":                np.nan,
         "payload_escape_kg":             42_000,    # TLI (NASA Block 1B factsheet)
-        "fairing_volume_m3":                340,
         "list_price_usd_high":    2_800_000_000,
         "list_price_usd_low":     2_500_000_000,
         "price_basis":                   "reported",
@@ -1733,7 +1671,6 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "payload_leo_kg":                   200,
         "payload_gto_kg":                     0,
         "payload_escape_kg":                  0,
-        "fairing_volume_m3":                0.6,
         "list_price_usd":             1_250_000,
         "price_basis":                   "target",
         "reference_year":          _REF_YEAR_LAUNCH,
@@ -1761,7 +1698,6 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "payload_leo_kg":                    30,
         "payload_gto_kg":                     0,
         "payload_escape_kg":                  0,
-        "fairing_volume_m3":               0.05,
         "list_price_usd":               300_000,
         "price_basis":                   "target",
         "reference_year":          _REF_YEAR_LAUNCH,
@@ -1786,7 +1722,6 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "payload_leo_kg":                40_000,
         "payload_gto_kg":                15_000,
         "payload_escape_kg":             10_000,
-        "fairing_volume_m3":                200,
         "list_price_usd":             1_600_000,
         "price_basis":                   "target",
         "reference_year":          _REF_YEAR_LAUNCH,
@@ -1815,7 +1750,6 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "payload_leo_kg":                15_000,
         "payload_gto_kg":                 4_000,
         "payload_escape_kg":              2_000,
-        "fairing_volume_m3":                140,
         "list_price_usd":            15_000_000,
         "price_basis":                   "target",
         "reference_year":          _REF_YEAR_LAUNCH,
@@ -1841,7 +1775,6 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "payload_leo_kg":               550_000,
         "payload_gto_kg":               200_000,
         "payload_escape_kg":            150_000,
-        "fairing_volume_m3":              6_000,
         "list_price_usd":           300_000_000,
         "price_basis":                   "target",
         "reference_year":          _REF_YEAR_LAUNCH,
@@ -1869,7 +1802,6 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "payload_leo_kg":               100_000,     # per year, to lunar escape; see notes
         "payload_gto_kg":                     0,
         "payload_escape_kg":            100_000,
-        "fairing_volume_m3":               np.nan,
         "list_price_usd":             1_000_000,
         "price_basis":                   "target",
         "reference_year":          _REF_YEAR_LAUNCH,
@@ -1901,7 +1833,6 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "payload_leo_kg":                50_000,     # per year; see notes
         "payload_gto_kg":                     0,
         "payload_escape_kg":             50_000,
-        "fairing_volume_m3":               np.nan,
         "list_price_usd":               500_000,
         "price_basis":                   "target",
         "reference_year":          _REF_YEAR_LAUNCH,
@@ -1930,7 +1861,6 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "payload_leo_kg":                20_000,     # per year; see notes
         "payload_gto_kg":                20_000,
         "payload_escape_kg":             20_000,
-        "fairing_volume_m3":               np.nan,
         "list_price_usd":             2_000_000,
         "price_basis":                   "target",
         "reference_year":          _REF_YEAR_LAUNCH,
@@ -1987,6 +1917,8 @@ _LAUNCH_COLUMNS = (
     "usd_per_kg_to_leo_low", "usd_per_kg_to_leo_high",
     "usd_per_kg_to_gto_low", "usd_per_kg_to_gto_high",
     "usd_per_kg_to_escape_low", "usd_per_kg_to_escape_high",
+    # v1.17.0
+    "fairing_basis",
 )
 
 
@@ -2039,7 +1971,7 @@ def _check_band(row: dict, low_key: str, mid_key: str, high_key: str) -> None:
             f"about whether a figure is published")
 
 
-def _apply_launch_defaults(rows: List[dict]) -> None:
+def _apply_launch_defaults(rows: List[dict], fairings: dict = None) -> None:
     """Fill the defaulted fields, derive the $/kg columns, and check the row.
 
     Keeps a conventional expendable rocket's entry to the fields that make it
@@ -2107,6 +2039,23 @@ def _apply_launch_defaults(rows: List[dict]) -> None:
             row[col + "_high"] = _usd_per_kg(row["list_price_usd_high"],
                                              row[pay + "_low"])
 
+        # Derived, never typed: the fairing volume and how it was obtained.
+        for col in ("fairing_volume_m3", "fairing_basis"):
+            if col in row:
+                raise ValueError(
+                    f"launch vehicle {row['name']!r} types {col}; it is derived "
+                    f"in fairings.py from a cited source, so delete it")
+        fairing = (FAIRINGS if fairings is None else fairings).get(row["name"])
+        if fairing is None:
+            raise ValueError(
+                f"launch vehicle {row['name']!r} has no entry in fairings.py; "
+                f"every row states where its fairing volume comes from, or "
+                f"why there is none")
+        row["fairing_volume_m3"] = fairing["volume"]
+        row["fairing_basis"] = fairing["basis"]
+        row["notes"] = (row["notes"].rstrip()
+                        + "  Fairing volume: " + fairing["source"] + ".")
+
         unknown = set(row) - set(_LAUNCH_COLUMNS)
         if unknown:
             raise ValueError(
@@ -2118,6 +2067,13 @@ def _apply_launch_defaults(rows: List[dict]) -> None:
 
 
 _apply_launch_defaults(LAUNCH_VEHICLES_REFERENCE)
+
+# The other half of the register: a fairing entry with no row behind it is a
+# source still being cited for a vehicle that has gone.
+_orphans = set(FAIRINGS) - {v["name"] for v in LAUNCH_VEHICLES_REFERENCE}
+if _orphans:
+    raise ValueError(f"fairings.py cites vehicles with no launch row: "
+                     f"{sorted(_orphans)}")
 
 say(f"OK  Launch vehicles reference loaded - {len(LAUNCH_VEHICLES_REFERENCE)} vehicles "
       f"({sum(1 for v in LAUNCH_VEHICLES_REFERENCE if v['status'] == 'operational')} operational, "

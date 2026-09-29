@@ -34,6 +34,7 @@ spacecost build -o ./out           # write all seven CSVs
 
 - [What is in it](#what-is-in-it)
 - [Launch prices are the centre of a stated range](#launch-prices-are-the-centre-of-a-stated-range)
+- [A fairing volume is read off a drawing, or left blank](#a-fairing-volume-is-read-off-a-drawing-or-left-blank)
 - [The three things it does that a spreadsheet of prices does not](#the-three-things-it-does-that-a-spreadsheet-of-prices-does-not)
 - [Where the kilogram is, not just what it costs](#where-the-kilogram-is-not-just-what-it-costs)
 - [Getting a kilogram there, and getting one back](#getting-a-kilogram-there-and-getting-one-back)
@@ -123,6 +124,42 @@ since neither is a price.
 `payload_escape_kg` is C3 ≈ 0 where that is published, otherwise trans-lunar
 injection (slightly easier) or Mars transfer (harder). Each row's `notes` says
 which, and names its source.
+
+## A fairing volume is read off a drawing, or left blank
+
+`fairing_volume_m3` is the **usable** payload envelope, the volume a spacecraft
+may occupy, not the fairing's outer volume. Since data contract 1.17.0 it is
+derived at import in `spacecost/fairings.py` and never typed on a row, and
+`fairing_basis` says how each figure was obtained:
+
+| `fairing_basis` | the volume is |
+|---|---|
+| `guide` | the envelope a manufacturer's user's guide draws with its dimensions printed, revolved about the vehicle axis |
+| `published` | a usable volume the manufacturer states as a number |
+| `estimate` | the fairing's published outer cylinder times the median fill ratio of the `guide` rows that print both |
+| `none` | NaN: no envelope, volume or outer length is published, or there is no fairing |
+
+Every row's `notes` closes with a `Fairing volume:` sentence naming the
+document and figure, or the reason there is none. The import banner prints how
+many rows fall in each class.
+
+The drawing is read literally. Consecutive dimensioned points are joined by
+straight lines, a nose drawn as an arc of printed radius is followed along the
+arc, and a cone drawn with a printed half-angle takes its top diameter from the
+angle. A top diameter the drawing does not print closes to a point, and access
+notches and "negotiable" zones are left out, so a `guide` figure errs small. Two
+guides also print a total, and the method returns both: New Glenn's 458 m³ and
+SLS Block 1B's 621 m³. Import asserts it.
+
+⚠️  **An `estimate` is a ratio applied to an outside, not a measurement of an
+inside.** The fill ratio runs from 0.27 (Atlas V's 5-m fairing also encloses the
+Centaur) to 0.63 across the calibration rows, and `fairings.FILL_RATIOS` lists
+them. Filter on `fairing_basis` if a study needs a drawn envelope.
+
+⚠️  **`none` is common, and it is not a zero.** Most Chinese commercial vehicles
+publish a fairing diameter and nothing else. This table does not invent the
+length. A consumer that fills the blank with a default is choosing a number on
+the vehicle's behalf and should say so.
 
 ## The three things it does that a spreadsheet of prices does not
 
@@ -594,7 +631,7 @@ build` rebuilds the whole thing.
 These tables were built over fourteen releases as **Module 3 of
 [economicspace](https://github.com/loggger101/economicspace)**, an asteroid
 mining profitability pipeline, and extracted at `pipeline_version` 1.14.0
-(the contract is 1.16.0 as of this release)
+(the contract is 1.17.0 as of this release)
 (commit `b0b18b2`). Two thirds of that module was annotated reference data and
 nothing in its schema knows what an asteroid is, which is the argument for
 splitting it out: a launch price is useful to anyone costing a mission.

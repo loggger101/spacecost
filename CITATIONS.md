@@ -32,7 +32,7 @@ here.** If you are vendoring from that project rather than this one, read its
 ## 1. Launch vehicles
 
 Pricing and payload figures, verified May 2026 and re-audited September 2026
-(data contract 1.16.0). Every row names its own source in `notes`; these are the
+(data contract 1.16.0, fairing volumes 1.17.0). Every row names its own source in `notes`; these are the
 ones that carry more than one row.
 
 | source | what it establishes |
@@ -50,6 +50,37 @@ ones that carry more than one row.
 | SpaceNews, Spaceflight Now, NASASpaceFlight, 2025-2026 | Zhuque-3, Long March 10B, Tianlong-3, Pallas-1 and Soyuz-5 flight outcomes |
 | Pielke & Byerly, Nature 2011 | Space Shuttle whole-programme cost per flight |
 | Wikipedia vehicle articles and "Comparison of orbital launch systems", Sep 2026 | payload masses by configuration and orbit, cross-checked against the manufacturer where one publishes |
+
+### Fairing volumes (data contract 1.17.0)
+
+Each `fairing_volume_m3` is derived in `spacecost/fairings.py` from the
+document below, and the row's `notes` name the figure. `guide` means the
+usable envelope is read off the drawing, and `published` means the maker
+states the volume.
+
+| source | rows |
+|---|---|
+| SpaceX, Falcon User's Guide (Sep 2021, Fig 12-5; outer size from the May 2025 edition) | Falcon 9 and Falcon Heavy, all four |
+| SpaceX, Starship Users Guide Rev 1.0 (Mar 2020), Fig 4 | Starship |
+| ULA, Atlas V Launch Services User's Guide Rev 11 (Mar 2010), Fig 6-4 | Atlas V 551 |
+| ULA, Vulcan Launch Systems User's Guide (Oct 2023), Fig 4.3.1-1 | Vulcan VC2, VC4, VC6 |
+| Boeing Launch Services, Delta IV Technical Summary, payload fairing envelopes | Delta IV Heavy; SLS Block 1 |
+| NASA, SLS Mission Planner's Guide ESD 30000 Rev A (Dec 2018), s6.2.1 and Fig 6-7 | SLS Block 1 (which fairing), SLS Block 1B (Cargo) |
+| NASA, NSTS 21492 Space Shuttle Payload Bay Payload User's Guide, s4.0 | Space Shuttle |
+| Douglas, SM-47274 Saturn V Payload Planner's Guide (1965) | Saturn V |
+| Blue Origin, New Glenn Payload User's Guide Rev C (Oct 2018), Fig 5-2 | New Glenn |
+| Rocket Lab, Electron Payload User's Guide 7.0; Neutron Payload User's Guide 1.0 (Jan 2025), Fig 13 | Electron, Neutron |
+| Firefly, Alpha Payload User's Guide v2.0 (Aug 2019), Fig 8 | Alpha |
+| Northrop Grumman, Minotaur IV/V/VI User's Guide Rel 2.5 (Nov 2025); Pegasus User's Guide Rel 8.2 (Sep 2020) | Minotaur IV, Pegasus XL |
+| Arianespace, Ariane 5 User's Manual Iss 5 Rev 1; Ariane 6 User's Manual Iss 2; Vega User's Manual Iss 4; Vega C User's Manual Iss 0; Soyuz CSG User's Manual Iss 2 | Ariane 5 ECA, Ariane 6 A62 and A64, Vega, Vega C, Soyuz-2.1a and 2.1b |
+| ILS, Proton Mission Planner's Guide Rev 7 (Jul 2009), App E | Proton-M |
+| MHI, H-IIA User's Manual Ver 4.0, Fig 4.5-2 | H-IIA 204 |
+| CALT, LM-2C User's Manual (1999); CGWIC, LM-3A Series User's Manual (2011), Fig 4-5b | Long March 2C, Long March 3B/E |
+| Galactic Energy, Ceres-1 and Pallas-1 User's Manuals (2023) | Ceres-1, Pallas-1 |
+| Reaction Engines, SKYLON Users' Manual Rev 1, Fig 13 | Skylon |
+| VSSC (ISRO), GSLV MkIII specifications (`published`, 110 m³) | LVM3 |
+| Orienspace via Tencent News, 2023-11-22 (`published`, 100 m³) | Gravity-1 |
+| Kawasaki Heavy Industries; CGWIC; RussianSpaceWeb; Sohu 2024-05-06; Tencent News 2026-07-13 (outer size only, `estimate`) | H3 (24L) and (30), Long March 2D, Angara A5, Long March 5, Long March 10B |
 
 ⚠️  **Most Chinese prices, and every price marked `estimate` in
 `price_basis`, are not sourced numbers.** They are bands chosen against the
