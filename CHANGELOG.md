@@ -13,6 +13,105 @@ may read a version as proof that a number moved.
 
 ## Package releases
 
+### 0.5.0 - 2026-09-25
+
+**Every fairing volume is now derived from a cited drawing, or left blank with
+a reason.** Data contract **1.16.0 → 1.17.0**, and values moved.
+
+Until now, 37 of the 76 launch rows had no `fairing_volume_m3`, and the other
+39 typed one with no source. A consumer that filled the blanks with a default
+was pricing those rows on a number nobody had chosen. economicspace's Stage 4
+used 100 m³, and SLS Block 1 won 332 rows of a cislunar sample on it. The
+column is the **usable** payload envelope, and the new `spacecost/fairings.py`
+derives it at import. A row that types it raises.
+
+- **`guide`**: the envelope a user's guide draws with its dimensions printed,
+  revolved about the axis. Arcs with a printed radius are followed, cones take
+  their top diameter from a printed half-angle, and an unprinted top closes to
+  a point.
+- **`published`**: the maker states the usable volume (LVM3, Gravity-1,
+  Saturn V).
+- **`estimate`**: only the outer diameter and length are published. The
+  volume is that cylinder times `FAIRING_FILL_RATIO`, the median envelope fill
+  of the guide rows that print both (0.482, range 0.27-0.63). It is derived,
+  never typed.
+- **`none`**: NaN, with the reason in `notes`. Most Chinese commercial
+  vehicles publish a diameter only.
+
+The method reproduces the two totals a guide prints, and import asserts both:
+New Glenn's 458 m³ and SLS Block 1B's 621 m³. New column `fairing_basis`, and
+every launch row's `notes` gains a closing `Fairing volume:` sentence naming the
+document and figure. Sources are in [CITATIONS.md](CITATIONS.md).
+
+Every row whose volume moved:
+
+| row | status | was | now | basis |
+|---|---|---:|---:|---|
+| Falcon 9 (reusable) | operational | 145 | 157 | `guide` |
+| Falcon 9 (expendable) | operational | 145 | 157 | `guide` |
+| Falcon Heavy (reusable side cores) | operational | 145 | 157 | `guide` |
+| Falcon Heavy (expendable) | operational | 145 | 157 | `guide` |
+| SLS Block 1 | operational | blank | 216 | `guide` |
+| Atlas V 551 | operational | 233 | 127 | `guide` |
+| Vulcan Centaur VC2 | operational | 233 | 171 | `guide` |
+| Vulcan Centaur VC4 | operational | 233 | 171 | `guide` |
+| Vulcan Centaur VC6 | operational | 233 | 171 | `guide` |
+| New Glenn | operational | 480 | 458 | `guide` |
+| Electron | operational | 1.85 | 1.19 | `guide` |
+| Alpha | operational | 22 | 12 | `guide` |
+| Minotaur IV | operational | blank | 13.4 | `guide` |
+| Soyuz-2.1a | operational | 80 | 75.1 | `guide` |
+| Soyuz-2.1b | operational | 80 | 75.1 | `guide` |
+| Angara A5 | operational | blank | 127 | `estimate` |
+| Proton-M | operational | blank | 91.1 | `guide` |
+| Ariane 6 (A62) | operational | 124 | 140 | `guide` |
+| Ariane 6 (A64) | operational | 124 | 245 | `guide` |
+| Vega C | operational | 47 | 38.8 | `guide` |
+| H3 (24L) | operational | 184 | 168 | `estimate` |
+| H3 (30) | operational | blank | 107 | `estimate` |
+| PSLV-XL | operational | 34 | blank | `none` |
+| Long March 2C | operational | blank | 35.7 | `guide` |
+| Long March 2D | operational | blank | 29.7 | `estimate` |
+| Long March 3B/E | operational | blank | 63.7 | `guide` |
+| Long March 5 | operational | 157 | 126 | `estimate` |
+| Long March 7 | operational | 111 | blank | `none` |
+| Long March 10B | operational | blank | 128 | `estimate` |
+| Ceres-1 | operational | blank | 3.41 | `guide` |
+| Gravity-1 | operational | blank | 100 | `published` |
+| Zhuque-3 | operational | 190 | blank | `none` |
+| Pallas-1 | operational | blank | 75.4 | `guide` |
+| Delta IV Heavy | retired | 310 | 216 | `guide` |
+| H-IIA 204 | retired | 122 | 82.5 | `guide` |
+| Pegasus XL | retired | blank | 2.04 | `guide` |
+| Ariane 5 ECA | retired | blank | 209 | `guide` |
+| Vega | retired | blank | 20 | `guide` |
+| Saturn V | retired | blank | 91.5 | `published` |
+| Starship (projected) | development | 1000 | 684 | `guide` |
+| Neutron | development | 113 | 183 | `guide` |
+| Terran R | development | 340 | blank | `none` |
+| Nova | development | 80 | blank | `none` |
+| Eclipse (MLV) | development | 160 | blank | `none` |
+| Tianlong-3 | development | 150 | blank | `none` |
+| Long March 10 | development | 310 | blank | `none` |
+| Long March 9 | development | 1000 | blank | `none` |
+| SLS Block 1B (Cargo) | concept | 340 | 621 | `guide` |
+| SpinLaunch Orbital | concept | 0.6 | blank | `none` |
+| Light-gas gun (orbital) | concept | 0.05 | blank | `none` |
+| StarTram (maglev) | concept | 200 | blank | `none` |
+| Skylon / SABRE | concept | 140 | 212 | `guide` |
+| Sea Dragon | concept | 6000 | blank | `none` |
+
+⚠️  **The largest moves are rows that were typed without a source.** Delta
+IV Heavy's 310 m³ and Starship's 1,000 m³ read as outer volumes; the drawn
+envelopes are 216 and 684. Atlas V 551 is quoted with the 5-m Short fairing,
+not the 5-m Long that 233 m³ implies. SLS Block 1 takes the 5-m Delta IV
+fairing NASA documents for a Block 1 cargo flight (ESD 30000 s6.2.1). That
+configuration has never flown, and the row's note says so.
+
+⚠️  **Rows that had a typed volume and now read blank** (PSLV-XL, Long March
+7, Zhuque-3 and several development and concept rows) had no source for it. A
+consumer that defaults a blank now defaults these too.
+
 ### 0.4.0 - 2026-09-23
 
 **The launch table, re-audited and more than doubled: 36 rows to 76, every
@@ -1096,3 +1195,12 @@ The schema half: 20 columns appended to `launch_vehicles.csv`, and
 (`availability`), how far to trust its price (`price_basis`), and how wide its
 uncertainty is. `payload_gto_kg` and `payload_escape_kg` are float from here
 on, NaN meaning unpublished.
+
+**`1.17.0`  fairing volumes derived from cited drawings.** Full write-up under
+package release 0.5.0 above. `fairing_volume_m3` is the usable payload
+envelope, derived in `fairings.py`, and is NaN wherever nothing is published.
+
+The schema half: `fairing_basis` is appended to `launch_vehicles.csv`
+(`guide`, `published`, `estimate` or `none`), and every row's `notes` ends with
+its fairing source. An archived CSV stamped `1.16.0` or earlier carries
+fairing volumes that were typed without a source, and 37 blanks.
