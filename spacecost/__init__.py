@@ -57,11 +57,14 @@ profitability pipeline, at pipeline_version 1.14.0 (commit b0b18b2).  The
 tables were built there over fourteen releases; they are split out because
 nothing in their schema knows what an asteroid is, and a launch price is
 useful to anyone costing a mission.  economicspace consumes this package as
-its Stage 3.
+its Stage 3, and its Stage 2 takes the delivery chains from here.
 
-THE OUTPUT IS A CONTRACT.  `build_catalog()` reproduces the seven CSVs that
-repo's Stage 4 reads, byte for byte, and `tests/test_parity.py` is that claim
-as a test.  Two details of the writer are load-bearing and must not be tidied:
+THE OUTPUT IS A CONTRACT.  `build_catalog()` writes the seven CSVs that
+repo's Stage 4 reads.  The six reference tables are byte-identical on every
+platform; the composite summary runs through `exp()`, so it is promised the
+same values to a few ULP, and its byte hash only on the platform recorded in
+`reference/summary_meta.json`.  `tests/test_parity.py` is both claims as
+tests.  Two details of the writer are load-bearing and must not be tidied:
 the CRLF line terminator is PINNED (`lineterminator="\r\n"`) because the
 committed hashes are hashes of CRLF, and column order is the file's order.
 """
@@ -98,7 +101,7 @@ from .vehicles import LAUNCH_VEHICLES_REFERENCE
 # The PACKAGE release. Not the data contract -- that is
 # `SpacecostConfig.pipeline_version`, which is stamped into every CSV. See
 # spacecost/config.py for why the two are deliberately separate.
-__version__ = "0.5.0"
+__version__ = "0.4.0"
 
 # The DATA contract this release ships, repeated here for convenience only.
 # config.py is the authority; this is a mirror, and a mirror can drift, so

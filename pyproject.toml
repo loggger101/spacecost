@@ -1,10 +1,14 @@
 [build-system]
-requires = ["setuptools>=68"]
+# 77 is the first setuptools that reads PEP 639's `license = "MIT"` string and
+# `license-files`.  76 rejects this file ("`project.license` must be valid
+# exactly by one definition"), so a floor of 68 was a promise that only held
+# because pip's isolated build fetches the newest setuptools anyway.
+requires = ["setuptools>=77"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "spacecost"
-version = "0.5.0"
+version = "0.4.0"
 description = "Cited reference tables for space-mission cost and mass estimation: launch vehicles, propellants, delta-v, operations, storage, destination environments, and the delivery chains that compose them."
 readme = "README.md"
 requires-python = ">=3.9"

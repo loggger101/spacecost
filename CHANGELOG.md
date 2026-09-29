@@ -13,10 +13,15 @@ may read a version as proof that a number moved.
 
 ## Package releases
 
-### 0.5.0 - 2026-09-25
+### Unreleased
 
-**Every fairing volume is now derived from a cited drawing, or left blank with
-a reason.** Data contract **1.16.0 → 1.17.0**, and values moved.
+**Data contract 1.16.0 → 1.17.0: every fairing volume is now derived from a
+cited drawing, or left blank with a reason, and values moved.** A consumer
+reading `fairing_volume_m3` should take the release that carries this and
+re-run. The tests, CI, docs and build-floor changes below it moved no name,
+table or number.
+
+#### Fairing volumes are read off a drawing, or left blank
 
 Until now, 37 of the 76 launch rows had no `fairing_volume_m3`, and the other
 39 typed one with no source. A consumer that filled the blanks with a default
@@ -111,6 +116,127 @@ configuration has never flown, and the row's note says so.
 ⚠️  **Rows that had a typed volume and now read blank** (PSLV-XL, Long March
 7, Zhuque-3 and several development and concept rows) had no source for it. A
 consumer that defaults a blank now defaults these too.
+
+
+#### The consumer contract follows what economicspace reads
+
+`tests/test_consumer_contract.py` now lists what economicspace actually
+reads, found by grepping it for `spacecost.<name>` on its main (master
+v1.35.0) and on its pending master v1.36.0. It had mirrored that repo's Stage
+3 adapter, which re-exports most of `__all__`, and so had missed what Stage 2
+reads directly:
+
+- **added**: `LEO_LAUNCH_VEHICLE`, `delivery_mass_ratio` and
+  `delivery_hardware_usd_per_kg`, which Stage 2 reads, and
+  `ENVIRONMENTS_REFERENCE`, which the Stage 3 adapter re-exports and its
+  banner counts.
+- **new**, `SUBMODULE_SURFACE`: four names reached through a submodule, which
+  `__all__` does not cover (`delivery`'s three hardware rates, read by the
+  worked calculation, and `prices.merge_propellant_prices`, read by
+  `verify_stage3.py`).
+- **new**, `REEXPORTED_ON_CONSUMER_MAIN`: ten names the adapter on
+  economicspace's main re-exports at import and nothing there reads:
+  `LITRES_PER_GAL`, `LITRES_PER_BBL`, `COMMODITY_DENSITY_KG_PER_L`,
+  `load_storage`, `load_environments`, `propellant_mass_for_dv`,
+  `cost_per_dv_usd_per_kg`, `build_transportation_summary`,
+  `cheapest_launch_to` and `mission_cost_breakdown`.
+
+⚠️  **The first draft of this change dropped nine of those ten**, because
+master v1.36.0 stops re-exporting them. v1.36.0 is on an unmerged branch.
+economicspace's main still assigns every one at import, so a contract taken
+from the branch would have let this package delete a name the released
+consumer cannot import without. They stay until v1.36.0 merges there. The
+tenth, `load_environments`, had never been listed.
+
+**CI now asks the contract of the built wheel**, from outside the tree, as
+well as of the source. The wheel step walked `__all__` alone, so it could see
+neither a name deleted together with its `__all__` entry nor anything reached
+through a submodule. Checked both ways: the step passes with the tree broken
+and the wheel intact, and fails naming `spacecost.delivery.STAGE_HARDWARE_USD_PER_KG`
+when that one name is removed from the installed wheel.
+
+#### An audit of the prose against the code
+
+Four README passages still described an earlier release, each beside a
+correct one:
+
+- **The delivery example printed `26813.64` for `lunar_surface`.** The model
+  has said **42,635** since v0.4.0, and the table two screens further down
+  says so. `tests/test_docs.py` now runs every Python block in the README, as
+  a doctest with ELLIPSIS where it shows `>>>`, so the example is held to the
+  code rather than to memory. It stops its digits short because every figure
+  in it is an `exp()`.
+- **"The launch price ... at the low end of its band."** Since v0.4.0 the
+  delivery chains read the headline, the band's centre, and the section below
+  that table says so. Now it says centre.
+- **"The downleg departure delta-v: typed."** That was v0.3.0. Since v0.3.1
+  four of the six are `DELTA_V_REFERENCE` lookups. Three figures are still
+  typed: the LEO deorbit, the GEO deorbit and the lunar TEI component.
+- **"All 64 bracketed rows".** v0.4.0's `Expendable upper stage recurring
+  cost` made it 65. A test now holds the figure to the tables.
+
+Smaller: LH2 carries about **twenty** times kerolox's tank per kilogram
+burnt, not fourteen. Fourteen is the volume ratio, before the deep-cryogen
+tank multiplier. The package docstring promised all seven CSVs "byte for
+byte", which the README declined to promise for the summary; it now states
+both contracts. And it and the README now say Stage 2 reads this package too.
+
+#### The strictest test had never run in CI
+
+`test_summary_hash_on_the_reference_platform` holds the summary's BYTES, and
+it skips on any host that is not the recorded platform: Windows, AMD64,
+**Python 3.13, numpy 2.2.6, pandas 2.3.3**. The matrix runs 3.9, 3.12 and
+3.14 on the newest numpy and pandas, so no leg ever matched. The test was
+skipped on every run, which is the rot the README's "Changing a row" warns
+about, reached a different way: not a stale block, but a matrix that moved
+around a correct one.
+
+A new CI job, `reference-platform`, reads that block out of
+`summary_meta.json`, installs exactly those versions, and runs
+`tests/test_parity.py` with `SPACECOST_REQUIRE_REFERENCE_PLATFORM=1`, under
+which a platform mismatch FAILS instead of skipping. Because the job reads the
+block, re-recording the platform moves the job with it. Its first run passed
+the hash test outright: 17 passed, none skipped.
+
+⚠️  **The block pins versions, not the CPU**, and numpy picks its float64
+`exp()` kernel by CPU at run time; an AVX512 host takes numpy's own AVX512F
+implementation. The platform was recorded on an AVX2-only machine and the
+first run drew an AVX2-only runner. Hosted runners vary, so the job sets
+`NPY_DISABLE_CPU_FEATURES` to switch AVX512 off, and prints numpy's dispatch
+so a mismatch can be read from the log.
+
+Nothing in `reference/` moved. The recorded hash still reproduces off the
+reference platform too: Windows, Python 3.14, numpy 2.5.2 and pandas 3.0.5 on
+an AVX2 machine give the same bytes.
+
+#### The build floor, and two things CI would have tripped on
+
+- **`setuptools>=68` could not build this package.** The PEP 639
+  `license = "MIT"` string needs 77: 76.1.0 rejects `pyproject.toml` and 77.0.3
+  builds it, both tried. The floor is 77 now. pip's isolated build always
+  fetched a newer one, which is why it never showed.
+- **The Python 3.9 leg moves to `ubuntu-24.04`.** `ubuntu-latest` becomes
+  26.04 from 2026-10-19, and there is no 3.9 build for it, so that leg would
+  have gone red with nothing here changed. The other Linux legs still track
+  `latest`.
+- **`actions/checkout` v5 and `actions/setup-python` v6**, the first majors on
+  Node 24. Every run was carrying a warning that the v4 / v5 pair was being
+  forced off the deprecated Node 20.
+
+#### `spacecost launch` prints the whole band
+
+It printed the headline and the LOW end of its range, which since v0.4.0 is
+half a band around a centre, and all three payload columns whichever
+destination was asked about. It now prints the destination's payload, then
+`_low`, headline and `_high`, and `price_basis`, which is what says whether a
+price is the launcher's own or somebody's estimate. New Glenn, cheapest on the
+open market at $1,922/kg, reads `reported` there, and that is the whole reason
+the delivery chains do not anchor on it. Output only; the ranking is
+unchanged.
+
+`cheapest_launch_to` with an unknown destination still raises `KeyError`, as
+it did, but the message names the three it accepts instead of echoing the bad
+key back.
 
 ### 0.4.0 - 2026-09-23
 
@@ -1197,7 +1323,7 @@ uncertainty is. `payload_gto_kg` and `payload_escape_kg` are float from here
 on, NaN meaning unpublished.
 
 **`1.17.0`  fairing volumes derived from cited drawings.** Full write-up under
-package release 0.5.0 above. `fairing_volume_m3` is the usable payload
+"Unreleased" above. `fairing_volume_m3` is the usable payload
 envelope, derived in `fairings.py`, and is NaN wherever nothing is published.
 
 The schema half: `fairing_basis` is appended to `launch_vehicles.csv`

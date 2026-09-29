@@ -37,6 +37,17 @@ def test_launch_ranking(capsys):
     # The notes column is long enough to make the table unreadable; the CLI
     # trims to the columns somebody comparing vehicles actually wants.
     assert "Source:" not in out
+    # Both ends of the band, not just the low one: the headline is its centre.
+    assert "usd_per_kg_to_leo_low" in out and "usd_per_kg_to_leo_high" in out
+    assert "price_basis" in out
+
+
+def test_launch_ranking_names_its_destination_columns(capsys):
+    """GTO shows GTO's payload and band, not LEO's."""
+    assert main(["launch", "gto", "-n", "3"]) == 0
+    out = capsys.readouterr().out
+    assert "payload_gto_kg" in out and "usd_per_kg_to_gto_high" in out
+    assert "payload_leo_kg" not in out
 
 
 def test_launch_with_an_impossible_payload(capsys):

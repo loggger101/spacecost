@@ -186,10 +186,15 @@ def main(argv=None) -> int:
             print("no vehicle carries " + str(args.min_payload_kg)
                   + " kg to " + args.destination)
             return 1
-        cols = ["name", "operator", "status", "availability",
-                "payload_leo_kg", "payload_gto_kg", "payload_escape_kg",
-                "usd_per_kg_to_" + args.destination,
-                "usd_per_kg_to_" + args.destination + "_low",
+        # The whole band, low / headline / high, because the headline is the
+        # CENTRE of a stated range (v0.4.0) and printing one end of it beside
+        # the centre reads as if the other end did not exist.  `price_basis`
+        # says whose number it is: a published price and a target are not the
+        # same kind of claim.
+        price = "usd_per_kg_to_" + args.destination
+        cols = ["name", "operator", "status", "availability", "price_basis",
+                "payload_" + args.destination + "_kg",
+                price + "_low", price, price + "_high",
                 "list_price_usd"]
         found = found[[c for c in cols if c in found.columns]]
         print(found.head(args.rows).to_string(index=False))

@@ -164,8 +164,9 @@ the vehicle's behalf and should say so.
 ## The three things it does that a spreadsheet of prices does not
 
 **Tank mass is derived, not asserted.** A tank scales with the VOLUME it
-encloses, not the propellant mass inside it, which is why LH2 at 0.0708 kg/L
-costs fourteen times the tank per kilogram burnt that kerolox at 1.015 does.
+encloses, not the propellant mass inside it. LH2 at 0.0708 kg/L encloses
+fourteen times the volume per kilogram burnt that kerolox at 1.015 does, and
+once its colder tank is priced in it carries twenty times the tank.
 `_tank_kg_per_L` derives kg of tank per litre per storage class from a
 thin-walled pressure vessel, anchored on flight articles (Shuttle ET at 0.0129
 kg/L, Falcon 9 second stage at 0.033, Centaur III at 0.035), with COPVs sized
@@ -235,12 +236,18 @@ questions somebody costing a mission actually asks:
 ```python
 >>> import spacecost
 >>> spacecost.delivered_cost_usd_per_kg("lunar_surface")
-26813.641828225067
->>> spacecost.delivery_mass_ratio("lunar_surface")
-4.987... # kg that must reach LEO per kg landed
+42635.25...
+>>> spacecost.delivery_mass_ratio("lunar_surface")  # kg in LEO per kg landed
+4.987...
 >>> spacecost.downleg_cost_usd_per_kg("cislunar")
-27316.958591940387
+27316.95...
 ```
+
+`tests/test_docs.py` runs that block, and every other Python block here, so
+it cannot go stale again the way it did: through v0.4.0 it still printed the
+lunar figure from before the stages were paid for. The digits stop short
+because every one of these is an `exp()`, which is not bit-identical across
+platforms.
 
 **Staging is modelled leg by leg, and that is the whole point.** A destination
 is a SEQUENCE of burns flown by real stages, and the mass ratios chain. Collapse
@@ -256,17 +263,19 @@ not assumed — MSL 27.6%, Perseverance 29.8%.
 | | |
 |---|---|
 | every delta-v in a chain | **looked up in `DELTA_V_REFERENCE`**, so the table is the one authority |
-| the launch price | `LAUNCH_VEHICLES_REFERENCE`: the cheapest vehicle a buyer can book today, by a stated rule, at the **low** end of its band |
+| the launch price | `LAUNCH_VEHICLES_REFERENCE`: the cheapest vehicle a buyer can book today, by a stated rule, at its headline, the **centre** of its band |
 | building the stages each chain throws away | `OPERATIONAL_COSTS_REFERENCE` values |
 | the capsule, TPS and recovery lines | `OPERATIONAL_COSTS_REFERENCE` |
-| the downleg departure delta-v | **typed**, and the comment says why |
+| the downleg departure delta-v | four of six **looked up in `DELTA_V_REFERENCE`**; three hand figures **typed**, and the comment says why |
 
-⚠️  **The downleg delta-v are the exception, deliberately.** Four of the six
-agree with a table row exactly; two do not — a LEO deorbit burn is not
-tabulated at all, and the GEO figure disagrees with its row by 2 m/s. Deriving
-all six uniformly would have moved two published prices under a change that
-claims to move none, so they stay as literals with the mismatch written down
-beside them. Reconciling them is a real question and a separate release.
+⚠️  **Three downleg figures are typed, deliberately.** Four of the six
+departure burns are table lookups, one of them a sum. A LEO deorbit burn is
+not tabulated at all, the GEO figure disagrees with its row by 2 m/s, and the
+lunar-surface burn is a lookup plus ~850 m/s of trans-Earth injection that has
+no row either. Snapping the GEO figure to its row would move a published price
+under a change that claims to move none, so the hand figures stay as literals,
+asserted at import against what the table held when they were written.
+Reconciling them is a real question and a separate release.
 
 ### What a delivered price reads
 
@@ -442,7 +451,8 @@ architecture, and neither is required by IEEE 754 to be correctly rounded. CI
 demonstrated it on the first push, where Linux 3.9 and 3.12 agreed with each
 other and 3.14 did not, which is a numpy version choosing different kernels
 rather than an OS difference. Its byte hash is therefore recorded with the
-platform it was taken on and checked only there.
+platform it was taken on and checked only there, and CI's `reference-platform`
+job rebuilds that platform on every run so the check actually happens.
 
 `tests/test_parity.py` is both contracts as tests.
 
@@ -498,7 +508,7 @@ The bands also hold each table against **itself**. `usd_per_kg_to_leo` is
 `list_price_usd / payload_leo_kg` and the table carries all three, twelve
 columns apart on one very long row; `operational_costs` and `storage_systems`
 each carry a `value` with a `range_low` and `range_high` around it. Nothing
-checked either relationship until v0.2.0. All 76 launch rows and all 64
+checked either relationship until v0.2.0. All 76 launch rows and all 65
 bracketed rows are consistent today, which is exactly when to write the check
 down. Since v0.4.0 the launch $/kg is derived at import rather than typed, and
 the launch price and payload bands get the same inside-its-own-range check, so
@@ -547,7 +557,11 @@ not a commit.
    `summary_meta.json`, whose platform block is the one thing that rots
    invisibly — `test_summary_hash_on_the_reference_platform` SKIPS when that
    block does not match the running host, so a stale block turns the strictest
-   test in the suite into a no-op on every machine and never fails.
+   test in the suite into a no-op on every machine and never fails. CI's
+   `reference-platform` job is the backstop: it installs the versions the
+   block names and fails, rather than skips, when it cannot match them. It
+   pins the CPU only by switching AVX512 off, so record from a machine without
+   AVX512, or move that pin in the same commit.
    `--check` answers "is `reference/` stale" without writing anything.
 4. **Run `spacecost validate --strict`**, which exits non-zero on a WARN. A
    NOTE never fails it; see [The tables check
@@ -582,11 +596,18 @@ last check worth doing by hand.
 The wheel step above walks `__all__`, which proves the names this package
 currently declares are packaged; it cannot see a name being deleted from the
 package and from `__all__` in one commit, which is what happened with
-`validate_tables`. That file lists what economicspace actually imports, so
-removing one fails here rather than at a consumer's import three steps later.
-A failure is not an instruction to put the name back: it says the change is
-**breaking**, so it wants a major bump, a CHANGELOG entry, and the matching
-edit to `modules/transportation.py` in the same breath.
+`validate_tables`. That file lists what economicspace actually reads,
+including the four names it reaches through `spacecost.delivery` and
+`spacecost.prices`, which `__all__` does not cover. CI runs it against the
+built wheel as well as the tree, so removing one fails here rather than at a
+consumer's import three steps later. A failure is not an instruction to put
+the name back: it says the change is **breaking**, so it wants a major bump, a
+CHANGELOG entry, and the matching edit to the economicspace module that reads
+it in the same breath.
+
+The list follows economicspace's **main**, not its branches. A name the
+consumer is about to stop reading stays in the contract until that change has
+merged there.
 
 ## Layout
 
@@ -631,11 +652,11 @@ build` rebuilds the whole thing.
 These tables were built over fourteen releases as **Module 3 of
 [economicspace](https://github.com/loggger101/economicspace)**, an asteroid
 mining profitability pipeline, and extracted at `pipeline_version` 1.14.0
-(the contract is 1.17.0 as of this release)
-(commit `b0b18b2`). Two thirds of that module was annotated reference data and
-nothing in its schema knows what an asteroid is, which is the argument for
-splitting it out: a launch price is useful to anyone costing a mission.
-economicspace consumes this package as its Stage 3.
+(commit `b0b18b2`; the contract is 1.17.0 as of this release). Two thirds of
+that module was annotated reference data and nothing in its schema knows what
+an asteroid is, which is the argument for splitting it out: a launch price is
+useful to anyone costing a mission. economicspace consumes this package as its
+Stage 3, and since v0.3.0 its Stage 2 takes the delivery chains from here too.
 
 The peer-reviewed and tiered-authoritative sources behind these rows are
 collected in [General_Research](https://github.com/loggger101/General_Research):
