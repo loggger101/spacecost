@@ -577,12 +577,18 @@ def test_launch_price_per_kg_bands_are_derived_from_the_ends():
             assert v[col + "_low"] <= v[col] <= v[col + "_high"], v["name"]
 
 
+# A fairing source for the synthetic row, so the checks below reach the check
+# they are testing rather than stopping at "has no entry in fairings.py".
+_TEST_FAIRINGS = {"Test rocket": {"volume": 1.0, "basis": "guide",
+                                  "source": "test"}}
+
+
 def _launch_row(**over):
     row = {"name": "Test rocket", "operator": "x", "country": "x",
            "status": "operational", "availability": "open",
            "core_propellant": "kerolox", "first_flight_year": 2020,
            "payload_leo_kg": 1_000, "payload_gto_kg": 0,
-           "payload_escape_kg": 0, "fairing_volume_m3": 1.0,
+           "payload_escape_kg": 0,
            "list_price_usd": 10_000_000, "price_basis": "published",
            "reference_year": 2026, "notes": "x"}
     row.update(over)
@@ -603,7 +609,7 @@ def test_a_bad_launch_row_raises_at_import(over, message):
     and a band key spelled wrong -- which would otherwise just never apply."""
     from spacecost.vehicles import _apply_launch_defaults
     with pytest.raises(ValueError, match=message):
-        _apply_launch_defaults([_launch_row(**over)])
+        _apply_launch_defaults([_launch_row(**over)], _TEST_FAIRINGS)
 
 
 def test_a_launch_band_must_be_whole_and_ordered():
@@ -612,12 +618,12 @@ def test_a_launch_band_must_be_whole_and_ordered():
     del row["list_price_usd"]
     row["list_price_usd_low"] = 12_000_000
     with pytest.raises(ValueError, match="nor both"):
-        _apply_launch_defaults([dict(row)])
+        _apply_launch_defaults([dict(row)], _TEST_FAIRINGS)
     row["list_price_usd_high"] = 10_000_000
     with pytest.raises(ValueError, match="is above"):
-        _apply_launch_defaults([dict(row)])
+        _apply_launch_defaults([dict(row)], _TEST_FAIRINGS)
     row["list_price_usd_high"] = 14_000_000
-    _apply_launch_defaults([row])
+    _apply_launch_defaults([row], _TEST_FAIRINGS)
     assert row["list_price_usd"] == 13_000_000      # sqrt(12 x 14) = 12.96
 
 
@@ -626,7 +632,7 @@ def test_a_launch_row_must_state_where_it_can_be_bought():
     row = _launch_row()
     del row["availability"]
     with pytest.raises(ValueError, match="does not state"):
-        _apply_launch_defaults([row])
+        _apply_launch_defaults([row], _TEST_FAIRINGS)
 
 
 def test_first_flight_year_is_an_integer_or_blank_in_the_csv():
