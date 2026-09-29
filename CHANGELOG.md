@@ -13,13 +13,13 @@ may read a version as proof that a number moved.
 
 ## Package releases
 
-### Unreleased
+### 0.5.0 - 2026-09-29
 
 **Data contract 1.16.0 → 1.17.0: every fairing volume is now derived from a
 cited drawing, or left blank with a reason, and values moved.** A consumer
 reading `fairing_volume_m3` should take the release that carries this and
-re-run. The tests, CI, docs and build-floor changes below it moved no name,
-table or number.
+re-run. economicspace repins to this tag. The tests, CI, docs and
+build-floor changes below it moved no name, table or number.
 
 #### Fairing volumes are read off a drawing, or left blank
 
@@ -1323,7 +1323,7 @@ uncertainty is. `payload_gto_kg` and `payload_escape_kg` are float from here
 on, NaN meaning unpublished.
 
 **`1.17.0`  fairing volumes derived from cited drawings.** Full write-up under
-"Unreleased" above. `fairing_volume_m3` is the usable payload
+package release 0.5.0 above. `fairing_volume_m3` is the usable payload
 envelope, derived in `fairings.py`, and is NaN wherever nothing is published.
 
 The schema half: `fairing_basis` is appended to `launch_vehicles.csv`
