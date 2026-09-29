@@ -91,13 +91,23 @@ def _summary_meta():
         return json.load(fh)
 
 
+def _running_platform() -> dict:
+    """This host, in the shape `summary_meta.json` records a platform."""
+    return {"system": platform.system(),
+            "machine": platform.machine(),
+            "python": ".".join(map(str, sys.version_info[:2])),
+            "numpy": np.__version__,
+            "pandas": pd.__version__}
+
+
 def _on_reference_platform(meta) -> bool:
-    ref = meta["reference_platform"]
-    return (platform.system() == ref["system"]
-            and platform.machine() == ref["machine"]
-            and ".".join(map(str, sys.version_info[:2])) == ref["python"]
-            and np.__version__ == ref["numpy"]
-            and pd.__version__ == ref["pandas"])
+    return _running_platform() == meta["reference_platform"]
+
+
+# Set by the CI job that rebuilds the recorded platform on purpose.  There, a
+# mismatch is the job being wrong, not a different host, so the hash test
+# FAILS instead of skipping.
+REQUIRE_REFERENCE_PLATFORM = "SPACECOST_REQUIRE_REFERENCE_PLATFORM"
 
 
 def test_summary_values_are_portable(built):
@@ -152,14 +162,31 @@ def test_summary_hash_on_the_reference_platform(built):
 
     Skipped elsewhere rather than relaxed, because a hash that is only
     sometimes meaningful is worse than one that says when it applies.
+
+    ⚠️  A SKIP HERE IS ALSO HOW THIS TEST DIES.  Until the `reference-platform`
+    CI job, no leg of the matrix ran Python 3.13 with the recorded numpy and
+    pandas, so this was skipped on every run and could not fail.  That job
+    rebuilds the recorded platform from `summary_meta.json` and sets
+    SPACECOST_REQUIRE_REFERENCE_PLATFORM, which turns the skip into a failure.
     """
     meta = _summary_meta()
     if not _on_reference_platform(meta):
+        if os.environ.get(REQUIRE_REFERENCE_PLATFORM):
+            pytest.fail(
+                "%s is set, so this host is meant to BE the reference platform, "
+                "and it is not: recorded %r, running %r"
+                % (REQUIRE_REFERENCE_PLATFORM, meta["reference_platform"],
+                   _running_platform()))
         pytest.skip("not the reference platform: " + repr(meta["reference_platform"]))
     table_dir, _ = built
     path = os.path.join(table_dir, "transportation_summary.csv")
     got = hashlib.sha256(open(path, "rb").read()).hexdigest()
-    assert got == meta["sha256"]
+    assert got == meta["sha256"], (
+        "the summary's bytes moved on the reference platform.  If "
+        "test_summary_values_are_portable passed, the VALUES agree to a few "
+        "ULP and the difference is in exp() -- on the same versions that "
+        "means numpy chose a different CPU kernel on this host; otherwise it "
+        "is the model.")
 
 
 def _bare_lf_outside_quotes(raw: bytes) -> int:
