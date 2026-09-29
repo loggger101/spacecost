@@ -43,15 +43,13 @@ handled by hand".
 
 import spacecost
 
-# Every attribute economicspace reaches on BOTH its main, master v1.35.0, and
-# its pending master v1.36.0 (transportation 1.16.0, mineral_value 1.10.0 on
-# each).  Found by grepping the consumer for `spacecost.<name>`, which is the
-# way to refresh it.
+# Every attribute economicspace reaches on its main, master v1.37.0
+# (transportation 1.17.0, mineral_value 1.10.0).  Found by grepping the
+# consumer for `spacecost.<name>`, which is the way to refresh it.
 #
 # ⚠️  THIS LIST IS WHAT THE CONSUMER READS, NOT WHAT IT ONCE RE-EXPORTED.  It
 # used to mirror the Stage 3 adapter, which re-exports most of `__all__`, and
-# so it missed four names Stage 2 reads directly.  The names the adapter
-# re-exports and nothing reads are REEXPORTED_ON_CONSUMER_MAIN, below.
+# so it missed four names Stage 2 reads directly.
 CONSUMER_SURFACE = (
     # The six reference tables, re-exported as attributes of the adapter:
     # economicspace's docs harness holds README row counts to them, and its
@@ -99,34 +97,6 @@ CONSUMER_SURFACE = (
     "__version__",
 )
 
-# Re-exported by the Stage 3 adapter on economicspace's MAIN, at module level:
-# `LITRES_PER_GAL = spacecost.LITRES_PER_GAL` and nine lines like it.  Nothing
-# there reads them after that, but the assignment itself runs at import, so
-# removing any one of them fails `import modules.transportation` on the
-# revision that is actually released.
-#
-# 🚨  NOT DROPPED UNTIL THE CONSUMER DROPS THEM.  economicspace v1.36.0 stops
-# re-exporting all ten, and it sits on an unmerged branch.  A contract taken
-# from an unmerged branch lets this package remove a name the consumer's main
-# still imports, which is the exact failure this file exists to catch.  When
-# v1.36.0 reaches economicspace's main, delete this tuple and its CHANGELOG
-# line in the same commit.
-#
-# `load_environments` was never in this file at all, though the adapter
-# re-exports it beside the other five loaders.
-REEXPORTED_ON_CONSUMER_MAIN = (
-    "LITRES_PER_GAL",
-    "LITRES_PER_BBL",
-    "COMMODITY_DENSITY_KG_PER_L",
-    "load_storage",
-    "load_environments",
-    "propellant_mass_for_dv",
-    "cost_per_dv_usd_per_kg",
-    "build_transportation_summary",
-    "cheapest_launch_to",
-    "mission_cost_breakdown",
-)
-
 # Names reached through a SUBMODULE rather than the top level, so `__all__`
 # does not cover them.  economicspace's worked calculation re-derives the
 # delivered price from the three rates, and `verify_stage3.py` merges live
@@ -152,7 +122,7 @@ def test_every_submodule_name_the_consumer_reaches_still_exists():
 
 def test_every_name_the_consumer_imports_still_exists():
     """The contract itself.  A missing name is a breaking change, not a patch."""
-    missing = [n for n in CONSUMER_SURFACE + REEXPORTED_ON_CONSUMER_MAIN
+    missing = [n for n in CONSUMER_SURFACE
                if not hasattr(spacecost, n)]
     assert not missing, (
         "economicspace imports these and this package no longer exports them: "
@@ -173,7 +143,7 @@ def test_the_contract_is_public():
     `__version__` is exempt only if the package chooses not to list it.
     """
     declared = set(spacecost.__all__)
-    undeclared = [n for n in CONSUMER_SURFACE + REEXPORTED_ON_CONSUMER_MAIN
+    undeclared = [n for n in CONSUMER_SURFACE
                   if n not in declared and n != "__version__"]
     assert not undeclared, (
         "these are part of the consumer contract but absent from __all__: "

@@ -13,6 +13,17 @@ may read a version as proof that a number moved.
 
 ## Package releases
 
+### Unreleased
+
+**Tests only; no name, table or number moved, and the data contract stays
+1.17.0.** `REEXPORTED_ON_CONSUMER_MAIN` is retired from
+`tests/test_consumer_contract.py`. It held ten names economicspace's Stage 3
+adapter re-exported at import and nothing read, kept "until v1.36.0 merges
+there". It has, and economicspace's main (master v1.37.0) references none of
+the ten anywhere. `CONSUMER_SURFACE` was re-checked against that main by the
+same grep and matches it name for name. The 0.5.0 entry below still describes
+the tuple as it shipped.
+
 ### 0.5.0 - 2026-09-29
 
 **Data contract 1.16.0 → 1.17.0: every fairing volume is now derived from a
