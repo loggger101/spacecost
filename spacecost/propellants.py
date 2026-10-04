@@ -373,8 +373,12 @@ def _blend(of_ratio: float, fuel: dict, ox: dict) -> dict:
 #   UDMH       Wikipedia / Astronautix, Proton and Long March heritage.
 #              ~$80/kg; Chinese and Russian production, no Western market.
 #   Aerozine-50 50/50 UDMH-hydrazine by mass, Titan / Apollo SPS.
-#   HTP-98     98% hydrogen peroxide.  Bulk ~$5/kg (Evonik / Peroxide Propulsion
-#              propellant-grade quotes 2024).  Cheapest storable oxidiser there is.
+#   HTP-98     98% hydrogen peroxide.  Bulk ~$5/kg, UNSOURCED since 1.17.1: it
+#              was cited to "Evonik / Peroxide Propulsion propellant-grade
+#              quotes 2024" on peroxidepropulsion.com, which no longer carries
+#              them (the domain now serves unrelated content), and no
+#              institutional HTP price has been found to replace it.  The value
+#              stands pending re-sourcing.  Cheapest storable oxidiser there is.
 #   GN2        Cold gas.  Nitrogen is nearly free; the COPV is the whole cost.
 #              Stored at 30 MPa, ρ ≈ 0.25 kg/L.
 #   Krypton    Bulk industrial ~$300/kg (air-separation by-product; roughly 30×
@@ -869,7 +873,9 @@ PROPELLANTS_REFERENCE: List[dict] = [
         "reference_year":        _REF_YEAR_PROP,
         "notes": "Silver-screen decomposition.  Centaur RCS, Soyuz turbopump gas "
                  "generator, Black Arrow.  Cheapest propellant in this table at "
-                 "~$5/kg and the lowest Isp of any liquid in it — the reason it "
+                 "~$5/kg (an unsourced estimate pending re-sourcing: the 2024 "
+                 "quote it came from is no longer published) and the lowest "
+                 "Isp of any liquid in it — the reason it "
                  "is here is the boil-off column: 0.002%/day is self-"
                  "decomposition, not evaporation, so unlike a cryogen the loss "
                  "does not accelerate with mission length.",
@@ -897,7 +903,8 @@ PROPELLANTS_REFERENCE: List[dict] = [
         "reference_year":        _REF_YEAR_PROP,
         "notes": "Black Arrow flew HTP/kerosene to orbit in 1971 — the only "
                  "British orbital launch.  Isp 320 s vac at 7:1 O/F, ρ 1.30 kg/L, "
-                 "fully storable, and the cheapest bipropellant here.  The "
+                 "fully storable, and the cheapest bipropellant here, on the "
+                 "HTP row's unsourced ~$5/kg.  The "
                  "combination that keeps getting rediscovered and keeps losing to "
                  "kerolox on Isp.",
     },
