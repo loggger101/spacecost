@@ -589,7 +589,12 @@ OPERATIONAL_COSTS_REFERENCE: List[dict] = [
         "range_low":        100,
         "range_high":     2_000,
         "notes": "Magnetic / electrostatic / thermal concentration to ~50% purity. "
-                 "Lunar / asteroid ISRU literature (NASA Money-Mass-ematics 2023). "
+                 "Engineering estimate, unsourced: no published figure for "
+                 "beneficiation energy per kg of refined product has been found, "
+                 "and the value stands until one is.  (Until 1.17.1 this cited "
+                 "'NASA Money-Mass-ematics 2023', a grades 7-8 classroom "
+                 "worksheet on laser communications that never mentions "
+                 "beneficiation.)  "
                  "Trades in-flight energy for a much smaller return-mass × prop bill.",
         "reference_year":   _REF_YEAR_OPS,
     },

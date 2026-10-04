@@ -13,10 +13,44 @@ may read a version as proof that a number moved.
 
 ## Package releases
 
-### Unreleased
+### 0.5.1 - 2026-10-04
 
-**Tests only; no name, table or number moved, and the data contract stays
-1.17.0.** `REEXPORTED_ON_CONSUMER_MAIN` is retired from
+**Data contract 1.17.0 → 1.17.1: two citations that could not back their
+numbers are withdrawn, and the numbers are now labelled unsourced. No value
+moved.** Only three `notes` cells and the `pipeline_version` stamp changed;
+every number in every table is the one 0.5.0 shipped. economicspace repins to
+this tag only to carry the corrected notes.
+
+#### Two rows cited sources that do not hold their numbers
+
+Both were found by the General_Research evidence registry (its revision
+candidates rc-048 and rc-061).
+
+- **`Beneficiation / on-site processing energy`** (`operational_costs.csv`,
+  500 Wh/kg of refined product, range 100-2,000) cited "NASA
+  Money-Mass-ematics 2023". The only NASA document of that name is a 4-page
+  classroom worksheet for grades 7-8 about laser communications, and it never
+  mentions beneficiation, ISRU or processing energy. The row now says it is an
+  unsourced engineering estimate. No published per-kg beneficiation energy
+  figure has been found to replace it.
+- **`HTP-98`** (component price ~$5/kg, which feeds the `HTP` and
+  `HTP / RP-1` rows of `propellants.csv`) cited "Evonik / Peroxide Propulsion
+  propellant-grade quotes 2024" on peroxidepropulsion.com. That domain now
+  serves unrelated content and the quote is gone. Three NASA peroxide-program
+  reports were read in its place and none carries a price. The component
+  comment and both rows' notes now say the price is unsourced and awaits
+  re-sourcing.
+
+⚠️  **Unsourced is not the same as wrong.** Both values stay because nothing
+better has been found, not because anything confirmed them. Treat them as
+judgement, the same as the other rows whose notes say so.
+
+The summary hash was re-recorded on the reference platform (Windows AMD64,
+Python 3.13, numpy 2.2.6, pandas 2.3.3, AVX512 off). That environment
+reproduced the 1.17.0 hash before the change, and the new hash differs only
+because of the `pipeline_version` column.
+
+**Also in this release, tests only:** `REEXPORTED_ON_CONSUMER_MAIN` is retired from
 `tests/test_consumer_contract.py`. It held ten names economicspace's Stage 3
 adapter re-exported at import and nothing read, kept "until v1.36.0 merges
 there". It has, and economicspace's main (master v1.37.0) references none of
@@ -1341,3 +1375,9 @@ The schema half: `fairing_basis` is appended to `launch_vehicles.csv`
 (`guide`, `published`, `estimate` or `none`), and every row's `notes` ends with
 its fairing source. An archived CSV stamped `1.16.0` or earlier carries
 fairing volumes that were typed without a source, and 37 blanks.
+
+**`1.17.1`  two dead citations withdrawn.** Full write-up under package
+release 0.5.1 above. No value and no column moved: the `Beneficiation /
+on-site processing energy` row and the `HTP` and `HTP / RP-1` rows keep their
+numbers, and their `notes` now call them unsourced instead of citing a
+classroom worksheet and a defunct vendor page.
