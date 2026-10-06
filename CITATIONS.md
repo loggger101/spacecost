@@ -164,9 +164,10 @@ and the light time all follow from those by formula. The formulas are in
 | Lauretta et al. 2019, *Nature* (OSIRIS-REx) | Bennu mass, radius, rotation, orbit |
 | Watanabe et al. 2019, *Science* (Hayabusa2) | Ryugu mass, radius, rotation, orbit |
 | Yeomans et al. 2000, *Science* (NEAR Shoemaker) | Eros mass and radius |
-| Daly et al. 2023, *Nature* (DART) | Didymos mass, radius, rotation |
+| Daly et al. 2023, *Nature* (DART) | Didymos rotation, and the system mass and diameter the row's unsourced mass and radius sit inside |
 | Russell et al. 2016, *Science* (Dawn) | Ceres mass and radius |
-| Siltala & Granvik 2021 | Psyche mass and radius |
+| Kretlow 2020, SiMDA data set (as tabulated in Kretlow 2022, *A&A* 668:A141, Table 2) | Psyche mass |
+| Siltala & Granvik 2021 | Psyche radius, and a mass 3% below the row's as a cross-check |
 | JPL Small-Body Database | perihelion, semi-major axis and aphelion for every named body |
 
 **Illumination and orbits**
