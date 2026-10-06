@@ -132,7 +132,11 @@ DELTA_V_REFERENCE: List[dict] = [
      "notes": "Terminal propulsive descent after aeroentry and parachutes. "
               "MSL's sky-crane phase used ~0.4 km/s; Starship-class EDL "
               "estimates run 0.5-1.0 km/s for supersonic retropropulsion of a "
-              "heavy lander.  Mid-range taken.  The aeroshell and parachute "
+              "heavy lander.  800, near the middle of that band, is taken.  "
+              "NASA DRA 5.0 Table 4-3 sizes its 110-t lander's descent at 595 "
+              "m/s plus 15 m/s of deorbit, inside the band, so 800 is the "
+              "conservative side of the one institutional figure.  The "
+              "aeroshell and parachute "
               "mass is carried separately as a landed-mass fraction — see "
               "Module 2's _MARS_LANDED_MASS_FRACTION."},
     {"segment": "Mars surface  →  low Mars orbit", "dv_m_per_s": 4_100, "duration_yr": 0.001,
@@ -175,9 +179,14 @@ DELTA_V_REFERENCE: List[dict] = [
               "mars_surface there is no 30% entry-survival fraction stacked "
               "on top of it."},
     {"segment": "1-sol Mars orbit  →  Earth (TEI)", "dv_m_per_s": 900, "duration_yr": 0.7,
-     "notes": "Trans-Earth injection at periapsis, symmetric with MOI.  A "
-              "seventh of the 6,200 m/s a kilogram on the SURFACE has to pay "
-              "(4,100 ascent + 2,100 TEI from LMO), which is why material "
+     "notes": "Trans-Earth injection at periapsis, symmetric with MOI: the "
+              "minimum-energy Hohmann floor, which no NASA DRA 5.0 opportunity "
+              "reaches.  DRA's all-propulsive TEI from this orbit is 1.563 km/s "
+              "in all eight 2031-2046 opportunities (Fig 4-2), because it flies "
+              "a fast return.  The floor is used, so a return from this orbit "
+              "is priced at its cheapest.  A seventh of the 6,200 m/s a "
+              "kilogram on the SURFACE has to pay (a quarter at DRA's figure; "
+              "4,100 ascent + 2,100 TEI from LMO), which is why material "
               "mined for a Mars-orbit depot can still route home when "
               "material landed on Mars cannot."},
 
