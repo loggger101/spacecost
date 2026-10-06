@@ -281,7 +281,11 @@ ENVIRONMENTS_REFERENCE: List[dict] = [
          1.0128, 1.6443, 2.2758, 2.260, 0.50, 3.2925,
          "DART hit its moonlet Dimorphos in 2022 and moved it, and Hera "
          "arrives in 2026 to measure what that did.  Mass 5.28e11 kg, mean "
-         "radius 390 m (Daly et al. 2023, Nature).  ⚠️  The 2.26-hour rotation "
+         "radius 390 m: neither figure is in Daly et al. 2023 (Nature), whose "
+         "Table 1 gives (5.6 ± 0.5)e11 kg for the binary system (Dimorphos "
+         "~4.3e9 of it) and a 761 ± 26 m volume-equivalent diameter (radius "
+         "380.5 m).  Both cells sit inside that 1-sigma and their own source "
+         "is not recorded.  ⚠️  The 2.26-hour rotation "
          "puts its equator within a few percent of the spin barrier, so "
          "effective gravity there is near zero and the derived escape velocity "
          "is an upper bound.  A factor of 5 in flux between perihelion and "
@@ -342,8 +346,12 @@ ENVIRONMENTS_REFERENCE: List[dict] = [
          mass_kg=9.3835e20, mean_radius_m=469_730.0),
     _env("16 Psyche", "main_belt",
          2.5136, 2.9230, 3.3287, 4.196, 0.50, 4.3454,
-         "The Psyche mission arrives 2029.  Mass 2.29e19 kg, mean radius ~111 "
-         "km (Siltala & Granvik 2021).  Present because it is the body most "
+         "The Psyche mission arrives 2029.  Mass 2.29e19 kg, the Kretlow "
+         "(2020) SiMDA value as Kretlow 2022 (A&A 668:A141) Table 2 lists it; "
+         "Siltala & Granvik 2021 give GM 1.482 ± 0.052 km3/s2, i.e. 2.22e19 "
+         "kg, 3% lower.  Mean radius ~111 km, from the 222 ± 4 km "
+         "volume-equivalent diameter Siltala & Granvik adopt (Ferrais et al. "
+         "2020).  Present because it is the body most "
          "often named as a metal resource; ⚠️  the '$10 quintillion' framing "
          "that follows it around is a spot price multiplied by a mass, which "
          "is not a market, and nothing in this dataset supports it.",
