@@ -65,7 +65,7 @@ spacecost build -o ./out           # write all seven CSVs
 The launch table spans **48 operational** vehicles, 12 in development, 9
 concepts and 7 retired, across the US, Europe, Russia, China, Japan, India and
 South Korea, from a lunar mass driver at a notional $10/kg to LEO up to Pegasus
-XL at $89,686/kg. The cheapest operational row you can actually book is New
+XL at $121,076/kg. The cheapest operational row you can actually book is New
 Glenn at $1,922/kg, on a 45 t payload it has not yet flown. The propellant
 table spans 15 propulsion types, from cold gas at 70 s to speculative concepts
 at 10^5 s, across 8 storage classes.
@@ -486,7 +486,7 @@ spacecost validate --strict     # exit 1 on a WARN; a NOTE never fails
 ```
 
 Findings carry a **level**, and the distinction is what makes the gate usable.
-`WARN` means a row looks wrong: a launch price outside $100-$100,000/kg, a
+`WARN` means a row looks wrong: a launch price outside $100-$200,000/kg, a
 propellant with no price, a tank that outweighs its contents, a duplicated key.
 `NOTE` means a row is unusual and you should know — three launchers really do
 pull over 50 g, and that fires on the committed tables every single run. If a
@@ -652,7 +652,7 @@ build` rebuilds the whole thing.
 These tables were built over fourteen releases as **Module 3 of
 [economicspace](https://github.com/loggger101/economicspace)**, an asteroid
 mining profitability pipeline, and extracted at `pipeline_version` 1.14.0
-(commit `b0b18b2`; the contract is 1.17.3 as of this release). Two thirds of
+(commit `b0b18b2`; the contract is 1.18.0 as of this release). Two thirds of
 that module was annotated reference data and nothing in its schema knows what
 an asteroid is, which is the argument for splitting it out: a launch price is
 useful to anyone costing a mission. economicspace consumes this package as its
