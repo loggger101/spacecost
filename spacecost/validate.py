@@ -124,16 +124,19 @@ def validate(
     # and tripping it would be meaningless, because those figures are
     # infrastructure amortisations rather than launch prices.  Concepts are
     # checked against a wider band of their own; only the flying fleet is held
-    # to $100-$100,000.
+    # to $100-$200,000.  The ceiling was $100,000 until 0.6.0, when Pegasus XL
+    # carried to 2026 dollars came out at $121,076/kg; it is a real vehicle at
+    # a real price (NASA paid $127,088/kg for ICON in 2017 dollars, Zapata
+    # 2017), and a band that fires on a true row stops being read.
     flying = launch_df[launch_df["status"].isin(["operational", "development",
                                                  "retired"])]
     bad_launch = flying[
         (flying["usd_per_kg_to_leo"] < 100)
-        | (flying["usd_per_kg_to_leo"] > 100_000)
+        | (flying["usd_per_kg_to_leo"] > 200_000)
     ]
     if not bad_launch.empty:
         f.warn("launch_vehicles", "leo_price_band",
-               "%d flying launch rows outside $100-$100 000 / kg-to-LEO "
+               "%d flying launch rows outside $100-$200 000 / kg-to-LEO "
                "sanity band:" % len(bad_launch),
                _detail(bad_launch, "name", "usd_per_kg_to_leo", "{:,.0f}"))
 

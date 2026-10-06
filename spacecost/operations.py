@@ -199,12 +199,15 @@ OPERATIONAL_COSTS_REFERENCE: List[dict] = [
     {
         "category":         "Deep Space Network time",
         "unit":             "USD per DSN hour (34-m dish)",
-        "value":            1_530,              # FY09 $1057 × 1.45 CPI
+        "value":            2_082,              # Rev H $1,792/hr × CPI-U
         "range_low":        1_000,
         "range_high":       4_000,
-        "notes": "DSN aperture fee for 34-m antenna.  NASA Mission Operations "
-                 "and Communications Services (MOCS) cited $1057/hr in FY09; "
-                 "CPI-adjusted to 2026 ≈ $1530/hr.  70-m apertures ~$4k/hr. "
+        "notes": "DSN aperture fee for one 34-m antenna.  JPL DSN Services "
+                 "Catalog 820-100 Rev H (Jun 2022) gives the hourly rate base "
+                 "as $1,792; carried to Aug 2026 by BLS CPI-U (x1.1617) that "
+                 "is ~$2,082/hr.  A 70-m aperture weighs 3.0 in the fee "
+                 "formula, ~$6,245/hr.  Until 0.6.0 this row carried a "
+                 "superseded FY09 MOCS rate ($1,057) forward to $1,530.  "
                  "Authoritative current rates: dse.jpl.nasa.gov/ext/ calculator.",
         "reference_year":   _REF_YEAR_OPS,
     },
