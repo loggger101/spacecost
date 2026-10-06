@@ -13,6 +13,89 @@ may read a version as proof that a number moved.
 
 ## Package releases
 
+### 0.5.2 - 2026-10-06
+
+**Data contract 1.17.1 → 1.17.2: twenty-one notes cells now say what their
+sources actually hold. No value moved.** Only `notes` cells, one code comment
+and the `pipeline_version` stamp changed; every number in every table is the
+one 0.5.0 shipped. economicspace repins to this tag only to carry the
+corrected notes.
+
+All of it comes from the General_Research evidence registry, which read the
+cited documents and found the attribution, not the number, wrong. Each item
+names its revision candidate.
+
+#### A figure attributed to a document that does not contain it
+
+- **NASA DRA 5.0, four times** (`delta_v_segments.csv`). The 2.65 km/s Mars
+  arrival v-infinity on the MOI row (rc-017) and the 2,100 m/s LMO
+  trans-Earth injection (rc-073) are two-body derivations this table already
+  shows its working for; DRA carries neither, and its only TEI is 1.563 km/s
+  from the 1-sol orbit. The 4,100 m/s Mars ascent (rc-074) appears nowhere in
+  DRA, which sizes its ascent vehicle by mass and engines, so that row is now
+  labelled an unsourced estimate. And the TMI note's "3.6-4.3 km/s" swing
+  (rc-071) is DRA's Fig 4-2 read wrongly: 3.545-4.103 km/s over 2028-2046,
+  departing a 407-km orbit rather than the row's 200 km. The 3,600 cell is the
+  low end and stays.
+- **NASA SP-125** (rc-060) is an engine-design handbook with no ascent
+  delta-v in it; the 9,400 m/s surface-to-LEO note now cites Curtis alone.
+- **arXiv:1406.5027** (rc-015) is a 13-object targeted survey with no
+  population statistic, so "median NEA Δv" pointed at nothing. The 6,500 m/s
+  row now cites the 6.65 km/s **peak** of the Benner compilation in Elvis et
+  al. 2011, and says the population median runs higher (8.88 km/s, ssoBFT).
+- **ITU-R S.1003** (rc-079) is a disposal-orbit recommendation that never
+  says "eclipse". The GEO row's 72-minute maximum now cites ECSS-E-HB-31-01
+  Part 15A, and the ~45-day season is stated as geometry.
+- **NASA ISS Facts and Figures** (rc-069) says ~90 minutes and 16 sunrises a
+  day, not 92.7 min and ~36 min of shadow. Those are now attributed to orbital
+  mechanics for a 400-km circular orbit, which is what the cells encode.
+- **The ESA Ariane 6 overview** (rc-080) states payloads and no price. Both
+  Ariane 6 rows now say their prices are estimates with no institutional
+  source, since Arianespace publishes no list price.
+
+#### A note whose own fact was off
+
+- **Launch insurance** (rc-031): the 2023 rate reset followed the Viasat-3
+  and Inmarsat 6-F2 losses, not Intelsat 33e (Plane Talking Q4-2023).
+- **RTG specific power** (rc-041, rc-043): the MMRTG is 110 We at **44** kg,
+  2.5 W/kg (NASA OIG IG-23-010 Table 1), in both `operational_costs.csv` and
+  `storage_systems.csv`; and 1.5 kg/yr of Pu-238 is DOE's **goal** for 2026,
+  where actual output 2018-2021 was 0.77 kg against 1.5 kg planned. The
+  row's allocation-not-cost argument gets stronger.
+- **Electric propulsion efficiency** (rc-040): Hall thrusters run ~0.51-0.69,
+  the AEPS ETU-2 measurement across its throttle range. The 0.60 value and its
+  0.45-0.72 band already contain it.
+- **Mission operations** (rc-047): OSIRIS-REx operations obligated $210.0M
+  over FY2017-FY2023 ($30.0M/yr) per the Planetary Society budget dataset;
+  the $283M over 9 years the row was set from was the pre-return plan. 31.4 is
+  within 5% of the prime-mission rate and stays.
+- **Nuclear thermal** (rc-042): NERVA reactor tests through early 1968
+  demonstrated ~800 s; 825 s was the engine rating, and the XE engine tests had
+  not yet run.
+- **ALICE** (rc-044): 210 s is near the ideal value; static motors delivered
+  56-133 s, 27-64% of ideal. The row is gated out of runs either way.
+- **Aerobraked LEO return** (rc-053): Mars Global Surveyor flew it first, and
+  "~6 months" matched no campaign (Odyssey ~2.5, MRO ~5, MGS ~10).
+- **`MARS_LANDED_MASS_FRACTION`'s comment** (rc-039): on JPL's
+  best-estimated entry masses, MSL is 28.5% and Perseverance 30.5%, not 27.6%
+  and 29.8%. The constant, 0.30, is unaffected; README and CITATIONS.md quote
+  the new pair.
+
+#### A citation that named no document
+
+- **Space Shuttle** (rc-021): "Pielke & Byerly" now names its venue, Nature
+  472:38 (2011), with NASA OIG IG-24-001's ~$1.45B a launch as a cross-check.
+- **Drilling / excavation energy** (rc-026): "Zacny et al." now names
+  Metzger, Zacny & Morrison 2020 and Zeng et al. 2007.
+- **In-space propellant transfer loss** (rc-028): the 1% low end now cites a
+  ground LH2 transfer study, flagged as a preprint that assumes space-rated
+  pumps.
+
+The summary hash was re-recorded on the reference platform (Windows AMD64,
+Python 3.13, numpy 2.2.6, pandas 2.3.3, AVX512 off), which reproduced the
+1.17.1 hash first. A column-by-column comparison of all seven committed files
+against 0.5.1 differs in `notes` (21 cells) and `pipeline_version` only.
+
 ### 0.5.1 - 2026-10-04
 
 **Data contract 1.17.0 → 1.17.1: two citations that could not back their
@@ -1381,3 +1464,8 @@ release 0.5.1 above. No value and no column moved: the `Beneficiation /
 on-site processing energy` row and the `HTP` and `HTP / RP-1` rows keep their
 numbers, and their `notes` now call them unsourced instead of citing a
 classroom worksheet and a defunct vendor page.
+
+**`1.17.2`  twenty-one attributions corrected.** Full write-up under package
+release 0.5.2 above. No value and no column moved: 21 `notes` cells across all
+six tables now cite what their sources actually hold, or say a figure is a
+derivation or unsourced, where they named a document that does not contain it.

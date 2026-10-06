@@ -187,8 +187,12 @@ OPERATIONAL_COSTS_REFERENCE: List[dict] = [
         "value":             31_400_000,        # OSIRIS-REx $283M / 9 yr
         "range_low":         15_000_000,
         "range_high":       100_000_000,
-        "notes": "Anchor: OSIRIS-REx prime ops = $283M over 9 yr = $31.4M/yr "
-                 "(NASA / Planetary Society).  Ground team + mission control + planning. "
+        "notes": "Anchor: OSIRIS-REx operations obligated $210.0M over "
+                 "FY2017-FY2023, prime mission to sample return = $30.0M/yr, "
+                 "and $232.2M through FY2025 = $25.8M/yr (Planetary Society "
+                 "Planetary Exploration Budget Dataset); the $283M over 9 yr "
+                 "($31.4M/yr) this row was set from was the pre-return plan. "
+                 "Ground team + mission control + planning. "
                  "Range covers SmallSat ($15M) → flagship ($100M+).",
         "reference_year":   _REF_YEAR_OPS,
     },
@@ -249,11 +253,13 @@ OPERATIONAL_COSTS_REFERENCE: List[dict] = [
     {
         "category":         "Launch insurance",
         "unit":             "percent of launch+payload value",
-        "value":           10.0,                # 2024 market post-Intelsat 33e loss
+        "value":           10.0,                # 2024 market, after the 2023 rate reset
         "range_low":        5.0,
         "range_high":      15.0,
         "notes": "Market rate per Plane Talking (Gallagher) Q1 2024 — premiums "
-                 "rose from ~6% (early 2023) to ~10% post-Intelsat 33e loss. "
+                 "rose from ~6% (early 2023) to ~10%, the 2023 reset following "
+                 "the Viasat-3 and Inmarsat 6-F2 losses (post-separation "
+                 "spacecraft failures, >85% of 2023 losses). "
                  "First-of-kind vehicles at upper end.",
         "reference_year":   _REF_YEAR_OPS,
     },
@@ -377,7 +383,8 @@ OPERATIONAL_COSTS_REFERENCE: List[dict] = [
         "range_low":        0.45,
         "range_high":       0.72,
         "notes": "v1.6.0.  Total efficiency (anode × mass-utilisation × PPU). "
-                 "Hall thrusters run 0.50-0.60; gridded ion (NEXT) reaches "
+                 "Hall thrusters run ~0.51-0.69 (AEPS ETU-2 measured 51.4-69.4% "
+                 "across its throttle range, Frieman et al. 2021); gridded ion (NEXT) reaches "
                  "0.65-0.70 at high specific impulse.  Sets thrust for a given "
                  "power: T = 2·η·P / (Isp·g0), which is what makes low-thrust "
                  "trip time computable at all.",
@@ -431,8 +438,8 @@ OPERATIONAL_COSTS_REFERENCE: List[dict] = [
                  "mass', and the reason it is a separate row: this one does NOT "
                  "scale with heliocentric distance.\n"
                  "GPHS-RTG (Cassini, New Horizons, Galileo): 290 We at 56 kg = "
-                 "5.2 W/kg.  MMRTG (Curiosity, Perseverance): 110 We at 45 kg = "
-                 "2.4 W/kg, worse because it is qualified to run in an "
+                 "5.2 W/kg.  MMRTG (Curiosity, Perseverance): 110 We at 44 kg = "
+                 "2.5 W/kg (NASA OIG IG-23-010 Table 1), worse because it is qualified to run in an "
                  "atmosphere as well as vacuum.  5.0 W/kg takes the "
                  "deep-space-only design.\n"
                  "The crossover against the 60 W/kg-at-1-AU solar row is at "
@@ -441,9 +448,10 @@ OPERATIONAL_COSTS_REFERENCE: List[dict] = [
                  "more per watt ($500k vs $800), so the model buys the smallest "
                  "one that does the job, which is exactly how real outer-planet "
                  "missions are sized.  Supply is the real constraint and it is "
-                 "NOT priced here: DOE Pu-238 production runs ~1.5 kg/yr, "
-                 "enough for roughly one flagship RTG a year for the entire "
-                 "world, so any programme flying more than a couple of these "
+                 "NOT priced here: 1.5 kg/yr is DOE's Pu-238 production GOAL "
+                 "for 2026, and actual output 2018-2021 was 0.77 kg against "
+                 "1.5 kg planned (NASA OIG IG-23-010).  Even the goal is "
+                 "roughly one flagship RTG a year for the entire world, so any programme flying more than a couple of these "
                  "does not have a cost problem, it has an allocation problem.",
         "reference_year":   _REF_YEAR_OPS,
     },
@@ -576,8 +584,10 @@ OPERATIONAL_COSTS_REFERENCE: List[dict] = [
         "value":            200,
         "range_low":         50,
         "range_high":       500,
-        "notes": "Range derived from Zacny et al. (NIAC studies on asteroid / "
-                 "lunar regolith excavation) — loose regolith ≲50 Wh/kg, "
+        "notes": "Range derived from the Zacny / Honeybee Robotics excavation "
+                 "literature (Metzger, Zacny & Morrison 2020, ASCE J. Aerosp. "
+                 "Eng., thermal side; Zeng et al. 2007, NASA Glenn, excavation "
+                 "force model) — loose regolith ≲50 Wh/kg, "
                  "consolidated rock ≳500 Wh/kg.  Pairs with the power-system "
                  "row to size mining rig (kg-extracted per installed-kW-hr).",
         "reference_year":   _REF_YEAR_OPS,

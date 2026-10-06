@@ -364,7 +364,7 @@ STORAGE_REFERENCE: List[dict] = [
         "trl":             9,
         "reference_year":  _REF_YEAR_STORAGE,
         "notes": "GPHS-RTG: 290 We at 56 kg = 5.2 W/kg (Cassini, New Horizons). "
-                 "MMRTG: 110 We at 45 kg = 2.4 W/kg (Curiosity, Perseverance) — "
+                 "MMRTG: 110 We at 44 kg = 2.5 W/kg (Curiosity, Perseverance) — "
                  "worse, because it is designed to work in an atmosphere too. "
                  "Flat with heliocentric distance, which is the entire point: "
                  "at 1 AU the 60 W/kg solar row beats it twelve times over, at "
@@ -438,7 +438,11 @@ STORAGE_REFERENCE: List[dict] = [
         "trl":             4,
         "reference_year":  _REF_YEAR_STORAGE,
         "notes": "Chill-down of the receiving tank, residuals in the transfer "
-                 "line, and ullage settling.  Cryogenic transfer in microgravity "
+                 "line, and ullage settling.  The 1% low end is consistent with "
+                 "a ground LH2 transfer study (0.00-0.24 wt% with a "
+                 "variable-speed pump, 0.76-1.06 wt% fixed-speed; Krog & "
+                 "Berstad, arXiv:2512.04609, a preprint), which assumes "
+                 "space-rated pump hardware nobody has flown.  Cryogenic transfer in microgravity "
                  "has been done at small scale (Robotic Refueling Mission, "
                  "storables) and never at stage scale.  Not modelled by Module 4 "
                  "— tanker flights are charged, transfer losses are not.",

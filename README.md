@@ -258,7 +258,7 @@ Delta-v alone does not tell you what a delivery costs.
 
 An `edl` leg divides instead of multiplying: surviving 30% of Mars entry mass
 means arriving with 3.33 kg for every kg that lands. That fraction is measured,
-not assumed — MSL 27.6%, Perseverance 29.8%.
+not assumed — MSL 28.5%, Perseverance 30.5%.
 
 | | |
 |---|---|
@@ -652,7 +652,7 @@ build` rebuilds the whole thing.
 These tables were built over fourteen releases as **Module 3 of
 [economicspace](https://github.com/loggger101/economicspace)**, an asteroid
 mining profitability pipeline, and extracted at `pipeline_version` 1.14.0
-(commit `b0b18b2`; the contract is 1.17.1 as of this release). Two thirds of
+(commit `b0b18b2`; the contract is 1.17.2 as of this release). Two thirds of
 that module was annotated reference data and nothing in its schema knows what
 an asteroid is, which is the argument for splitting it out: a launch price is
 useful to anyone costing a mission. economicspace consumes this package as its

@@ -110,9 +110,11 @@ table's $/kg-to-orbit.
 
 | source | what it establishes |
 |---|---|
-| NASA SP-125, and Curtis, *Orbital Mechanics for Engineering Students* | ascent and textbook segment values |
+| Curtis, *Orbital Mechanics for Engineering Students* | ascent and textbook segment values |
 | Taylor et al. 2018, "Delta-v map of Main Belt Asteroids" | LEO to main-belt transfer |
-| arXiv 1105.4152, arXiv 1406.5027 | near-Earth object delta-v accessibility distribution |
+| Elvis et al. 2011, arXiv 1105.4152 | near-Earth object delta-v accessibility distribution, and its 6.65 km/s peak |
+| NASA DRA 5.0 (SP-2009-566), Fig 4-2 | the swing of trans-Mars injection across the synodic cycle |
+| Lyons (JPL), Magellan / MGS aerobraking; Long et al. 2007, MRO aerobraking operations | the aerobraked return's flight record |
 | NASA NTRS and JPL design handbooks | the remaining trajectory legs |
 
 ⚠️  These are **representative means**, not a trajectory. A real transfer needs a
@@ -124,7 +126,11 @@ Lambert solve against an ephemeris; these are what you price the answer with.
 |---|---|
 | NASA DSN Services Catalog 820-100-H | deep space network aperture fees, FY09 base |
 | NASA / Planetary Society, and Wikipedia | OSIRIS-REx mission total cost |
-| Plane Talking / Slingshot Aerospace, 2024 | launch insurance market rate |
+| The Planetary Society, Planetary Exploration Budget Dataset | OSIRIS-REx operations obligations by fiscal year |
+| NASA OIG IG-23-010 | MMRTG mass, and Pu-238 production against its goal |
+| Frieman et al. 2021 (AEPS ETU-2) | Hall thruster total efficiency across the throttle range |
+| Metzger, Zacny & Morrison 2020; Zeng et al. 2007 | the excavation energy literature |
+| Plane Talking (Gallagher) / Slingshot Aerospace, 2024 | launch insurance market rate, and the 2023 losses behind it |
 | Damodaran (NYU Stern), Boeing and Howmet filings | cost-of-capital benchmark |
 | NASA Mars 2020 / Perseverance autonomy programme | autonomous control development cost |
 
@@ -167,8 +173,8 @@ and the light time all follow from those by formula. The formulas are in
 
 | source | what it establishes |
 |---|---|
-| NASA ISS Facts and Figures | the LEO eclipse fraction and orbital period |
-| ITU-R S.1003 and standard GEO practice | the geostationary eclipse seasons |
+| orbital mechanics for a 400-km circular orbit; NASA ISS Facts and Figures as the ~90-min cross-check | the LEO eclipse fraction and orbital period |
+| ECSS-E-HB-31-01 Part 15A, and GEO geometry | the geostationary eclipse seasons and their 72-minute maximum |
 | Whitley & Martinez 2016, *Options for Staging Orbits in Cis-Lunar Space* | the NRHO period and its near-continuous illumination |
 | Mazarico et al. 2011 (LRO LOLA illumination modelling) | lunar polar ridge illumination, ~86% over a year |
 | NASA DRA 5.0 | the Mars 1-sol staging orbit |
@@ -209,7 +215,7 @@ Runtime: **numpy**, **pandas**. Optional live prices: **yfinance**. Tests:
 | the environment derivations, and why they avoid transcendentals | the module docstring and `DERIVATIONS` block of `spacecost/environments.py` |
 | the tankage derivation and its flight anchors | the comment block above `_TANK_BASE_KG_PER_L` in `spacecost/propellants.py` |
 | the argon boil-off derivation | the comment block above `_LAR_BOILOFF_PCT_PER_DAY`, derived from the LOX rate rather than asserted |
-| the delivery chains: the tug and lander dry-mass fractions (Centaur V, DCSS, Apollo LM descent stage) and the Mars entry survival fraction (MSL 27.6%, Perseverance 29.8%) | the comment blocks above `TUG_DRY_MASS_FRAC` and `MARS_LANDED_MASS_FRACTION` in `spacecost/delivery.py`; every delta-v in a chain is a lookup into `DELTA_V_REFERENCE` and carries that row's citation |
+| the delivery chains: the tug and lander dry-mass fractions (Centaur V, DCSS, Apollo LM descent stage) and the Mars entry survival fraction (MSL 28.5%, Perseverance 30.5%, on JPL's best-estimated entry masses) | the comment blocks above `TUG_DRY_MASS_FRAC` and `MARS_LANDED_MASS_FRACTION` in `spacecost/delivery.py`; every delta-v in a chain is a lookup into `DELTA_V_REFERENCE` and carries that row's citation |
 
 ## 9. Citing this package
 

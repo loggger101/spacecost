@@ -187,15 +187,18 @@ ENVIRONMENTS_REFERENCE: List[dict] = [
     _env("Low Earth orbit (400 km)", "earth_orbit",
          0.9833, 1.0000, 1.0167, 1.545, 0.38, 0.000_002_674,
          "ISS-class orbit: 92.7-min period, up to ~36 min of it in Earth's "
-         "shadow (NASA ISS Facts and Figures).  The most demanding eclipse "
+         "shadow, both from orbital mechanics for a 400-km circular orbit "
+         "(NASA's ISS Facts and Figures gives ~90 min and 16 sunrises and "
+         "sunsets a day).  The most demanding eclipse "
          "DUTY CYCLE anywhere in this table - 16 charge/discharge cycles a day, "
          "5,800 a year - and the least demanding dark PERIOD.  Battery sizing "
          "reads the second, battery LIFE reads the first."),
     _env("Geostationary orbit", "earth_orbit",
          0.9833, 1.0000, 1.0167, 23.934, 0.012, 0.000_239_2,
-         "Eclipses only near the equinoxes: two 45-day seasons, up to 72 min a "
-         "day, so ~1.2% of the year averaged over it (ITU-R S.1003 / standard "
-         "GEO mission practice).  Full sun the rest of the time, which is why "
+         "Eclipses only near the equinoxes: two ~45-day seasons (GEO "
+         "geometry), up to 72 min a day (ECSS-E-HB-31-01 Part 15A, "
+         "'Maximum eclipse of 72 minutes'), so ~1.2% of the year averaged "
+         "over it.  Full sun the rest of the time, which is why "
          "GEO arrays are sized on end-of-life radiation damage rather than on "
          "eclipse."),
     _env("Sun-Earth L2", "libration_point",
