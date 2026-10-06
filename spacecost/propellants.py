@@ -1311,8 +1311,10 @@ PROPELLANTS_REFERENCE: List[dict] = [
         "yfinance_proxy":        None,
         "reference_year":        _REF_YEAR_PROP,
         "notes": "Heat hydrogen in a fission core: twice the Isp of the best "
-                 "chemistry at full chemical thrust.  NERVA's NRX/XE ran on a "
-                 "test stand at 825 s in 1968; DRACO targeted 900 s before being "
+                 "chemistry at full chemical thrust.  NERVA reactor tests through "
+                 "early 1968 demonstrated ~800 s (vacuum-corrected); ~825 s was "
+                 "the NERVA engine RATING, and the XE engine tests had not yet "
+                 "run (NERVA program status reports, 1968).  DRACO targeted 900 s before being "
                  "descoped in 2025.  TRL 5 — the reactor physics is 60 years "
                  "proven and nothing has flown.\n"
                  "This row is the clearest case for the v1.9.0 tank model.  Bare "
@@ -1539,7 +1541,11 @@ PROPELLANTS_REFERENCE: List[dict] = [
         "yfinance_proxy":        None,
         "reference_year":        _REF_YEAR_PROP,
         "notes": "Nano-aluminium burnt in water — Purdue/NASA ALICE flew a "
-                 "sounding rocket in 2009.  Isp only 210 s, but BOTH components "
+                 "sounding rocket in 2009.  Isp 210 s is near the IDEAL value "
+                 "(207 s sea level / 230 s vacuum at 1000 psia, 74.5% active "
+                 "Al); static motor tests delivered 56 / 83 / 133 s in 1.91 / "
+                 "3.81 / 7.62 cm motors, 27-64% of ideal and rising with size "
+                 "(Risha et al. 2014, J. Propulsion & Power).  BOTH components "
                  "are asteroid-derivable: metallic aluminium from silicate "
                  "reduction and water from phyllosilicates.  isru_feed is 0.5 "
                  "because half the mixture is metal, which this pipeline does "

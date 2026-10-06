@@ -543,8 +543,11 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "list_price_usd_low":        80_000_000,
         "price_basis":                   "estimate",
         "reference_year":          _REF_YEAR_LAUNCH,
-        "notes": "Source: ESA Ariane 6 overview; price €100M (2024 est.) at "
-                 "$1.15/€ = $115M, against the ~€70M this row used to assume.  "
+        "notes": "Price €100M (2024 est.) at $1.15/€ = $115M, an estimate "
+                 "with no institutional source: Arianespace publishes no list "
+                 "price (contracts are negotiated) and the ESA Ariane 6 "
+                 "overview, which this row once cited, states payloads only.  "
+                 "Against the ~€70M this row used to assume.  "
                  "Worse $/kg than A64, which is the usual result when a vehicle "
                  "is flown below its designed lift.  Nine Ariane 6 flights to "
                  "Aug 2026, one partial failure (VA262, Jul 2024).",
@@ -566,8 +569,9 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "list_price_usd_low":       115_000_000,
         "price_basis":                   "estimate",
         "reference_year":          _REF_YEAR_LAUNCH,
-        "notes": "Source: ESA Ariane 6 overview; €115M (2018 est.) at $1.15/€ = "
-                 "$132M as the high end, with the $115M this row used to carry "
+        "notes": "€115M (2018 est.) at $1.15/€ = $132M as the high end, an "
+                 "estimate with no institutional source (Arianespace publishes "
+                 "no list price; the ESA overview states payloads only), with the $115M this row used to carry "
                  "as the low end.  Four-booster config; first flew Feb 2026.",
     },
     {
@@ -1284,7 +1288,9 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "price_basis":                   "estimate",
         "reference_year":          _REF_YEAR_LAUNCH,
         "notes": "Retired 2011.  Whole-programme cost per flight was ~$1.5B in "
-                 "2011 dollars (Pielke & Byerly) — the source of the famous "
+                 "2011 dollars (Pielke & Byerly, Nature 472:38, 2011; NASA "
+                 "OIG IG-24-001 independently puts it at ~$1.45B a launch) — "
+                 "the source of the famous "
                  "$54,500/kg — carried to 2026 dollars (~x1.44) as the "
                  "high end; the marginal cost of one more flight, ~$450M, is "
                  "the low end.  Mixed dollar years on purpose: the band is "

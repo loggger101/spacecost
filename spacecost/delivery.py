@@ -284,9 +284,10 @@ TUG_PROPELLANT_USD_PER_KG = _propellant_usd_per_kg(_HYDROLOX)
 # Fraction of Mars ENTRY mass that survives to be useful payload on the
 # surface.  Aeroshell, backshell, parachute and descent stage are all
 # discarded.  Measured, not assumed:
-#     MSL           entry 3,257 kg  ->  rover   899 kg  = 27.6%
-#     Perseverance  entry 3,440 kg  ->  rover 1,025 kg  = 29.8%
-# 0.30 takes the better of the two and is generous to Mars; larger entry
+#     MSL           entry 3,153 kg  ->  rover   899 kg  = 28.5%
+#     Perseverance  entry 3,369 kg  ->  rover 1,026 kg  = 30.5%
+# (entry masses are JPL's best-estimated trajectories, Edquist et al. 2022.)
+# 0.30 sits at the better of the two and is generous to Mars; larger entry
 # vehicles should scale better than MSL's sky-crane, but nothing that size
 # has flown.
 MARS_LANDED_MASS_FRACTION = 0.30
