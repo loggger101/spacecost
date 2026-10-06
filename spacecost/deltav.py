@@ -21,8 +21,8 @@ from ._log import say
 
 DELTA_V_REFERENCE: List[dict] = [
     {"segment": "surface  →  LEO ascent",         "dv_m_per_s":  9_400, "duration_yr": 0.001,
-     "notes": "Textbook value including gravity + drag losses (NASA SP-125, "
-              "Curtis 'Orbital Mechanics for Engineering Students').  "
+     "notes": "Textbook value including gravity + drag losses (Curtis "
+              "'Orbital Mechanics for Engineering Students').  "
               "Already priced into LAUNCH_VEHICLES."},
     {"segment": "LEO  →  GTO",                    "dv_m_per_s":  2_440, "duration_yr": 0.001,
      "notes": "Standard GEO transfer Δv (NASA orbital mechanics handbook)."},
@@ -32,8 +32,10 @@ DELTA_V_REFERENCE: List[dict] = [
      "notes": "Per Elvis et al. 2011 (arXiv:1105.4152): ultra-low Δv NEAs are "
               "~65 of 6699 known NEOs as of 2010 — bottom decile of accessibility."},
     {"segment": "LEO  →  average NEA",            "dv_m_per_s":  6_500, "duration_yr": 1.5,
-     "notes": "Median NEA Δv per low-Δv NEA survey (arXiv:1406.5027); "
-              "matches OSIRIS-REx Bennu mission profile."},
+     "notes": "Near the peak of the NEA Δv distribution, 6.65 km/s in the "
+              "Benner compilation per Elvis et al. 2011 (arXiv:1105.4152); a "
+              "peak, not a median (SsODNet's ssoBFT puts the NEA median at "
+              "8.88 km/s).  Matches OSIRIS-REx Bennu mission profile."},
     {"segment": "LEO  →  hard NEA",               "dv_m_per_s":  8_500, "duration_yr": 2.0,
      "notes": "Upper-decile NEA (inclined or eccentric); approaches MBA territory."},
     {"segment": "LEO  →  main-belt asteroid",     "dv_m_per_s": 10_500, "duration_yr": 3.5,
@@ -122,8 +124,9 @@ DELTA_V_REFERENCE: List[dict] = [
     # ── Mars  (v1.5.0) ───────────────────────────────────────────────────────
     {"segment": "LEO  →  trans-Mars injection",  "dv_m_per_s":  3_600, "duration_yr": 0.7,
      "notes": "Minimum-energy Hohmann TMI at a favourable opportunity; the "
-              "real figure swings 3.6-4.3 km/s across the 26-month synodic "
-              "cycle (NASA DRA 5.0).  The low end is used, so the delivered "
+              "real figure swings ~3.5-4.1 km/s across the 26-month synodic "
+              "cycle (NASA DRA 5.0 Fig 4-2: 3.545-4.103 km/s over 2028-2046, "
+              "departing a 407-km orbit).  The low end is used, so the delivered "
               "cost is a LOWER bound."},
     {"segment": "Mars entry  →  surface (retroprop)", "dv_m_per_s": 800, "duration_yr": 0.001,
      "notes": "Terminal propulsive descent after aeroentry and parachutes. "
@@ -133,12 +136,16 @@ DELTA_V_REFERENCE: List[dict] = [
               "mass is carried separately as a landed-mass fraction — see "
               "Module 2's _MARS_LANDED_MASS_FRACTION."},
     {"segment": "Mars surface  →  low Mars orbit", "dv_m_per_s": 4_100, "duration_yr": 0.001,
-     "notes": "Mars ascent including gravity and drag losses (NASA DRA 5.0 "
-              "MAV sizing).  Relevant only to the downleg — shipping material "
+     "notes": "Mars ascent including gravity and drag losses; unsourced "
+              "estimate (NASA DRA 5.0 sizes its MAV by mass and engines and "
+              "states no ascent Δv).  Relevant only to the downleg — shipping material "
               "OFF Mars — and it is brutal enough that nothing mined for a "
               "Mars base is worth flying home."},
     {"segment": "Low Mars orbit  →  Earth (TEI)", "dv_m_per_s": 2_100, "duration_yr": 0.7,
-     "notes": "Trans-Earth injection from LMO (NASA DRA 5.0)."},
+     "notes": "Trans-Earth injection from LMO, two-body derivation: the "
+              "circularise-from-hyperbola burn at v_inf 2.65 km/s (see the MOI "
+              "row) run in reverse.  Not a DRA 5.0 figure; DRA's only TEI is "
+              "1.563 km/s from the 1-sol orbit."},
 
     # ── Mars orbit depot  (v1.13.0) ─────────────────────────────────────
     # The 1-sol elliptical staging orbit, 250 x 33,793 km altitude, is where
@@ -153,7 +160,9 @@ DELTA_V_REFERENCE: List[dict] = [
     # here; if you retune the depot orbit, retune it in this table first.
     {"segment": "Mars arrival  →  1-sol orbit (MOI)", "dv_m_per_s": 900, "duration_yr": 0.01,
      "notes": "Propulsive capture into the 250 x 33,793 km 1-sol orbit at a "
-              "Hohmann arrival v_infinity of 2.65 km/s (NASA DRA 5.0).  The "
+              "Hohmann arrival v_infinity of 2.65 km/s (two-body Hohmann "
+              "derivation, 2.649 km/s; DRA 5.0 parks in this orbit but states "
+              "no arrival v_infinity).  The "
               "periapsis burn sqrt(v_esc^2 + v_inf^2) - v_ellipse at a radius "
               "of 3,646 km is 0.90 km/s, against 2.10 km/s to circularise "
               "into a 200-km orbit at the same arrival energy.  The saving is "
@@ -195,9 +204,11 @@ DELTA_V_REFERENCE: List[dict] = [
     {"segment": "NEA  →  LEO delivery (aerobraked)", "dv_m_per_s": 100, "duration_yr": 2.0,
      "notes": "Aerocapture into a high ellipse, then multi-pass aerobraking to "
               "circularise; drag does the work, so the propulsive cost is only "
-              "the periapsis-raise burn out of the atmosphere.  Mars Odyssey / "
-              "MRO flew this for real, saving ~1.2 km/s over ~6 months of "
-              "passes (JPL).  Buys Δv with TPS mass and MONTHS of time — the "
+              "the periapsis-raise burn out of the atmosphere.  Mars Global "
+              "Surveyor (1997-99), Odyssey (2001-02) and MRO (2006) all flew "
+              "this for real; drag removed ~1.2 km/s from Magellan's and MGS's "
+              "orbits, and campaigns ran ~2.5-10 months of passes (Lyons, JPL; "
+              "Long et al. 2007).  Buys Δv with TPS mass and MONTHS of time — the "
               "duration figure carries that."},
 ]
 

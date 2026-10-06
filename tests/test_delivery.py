@@ -385,7 +385,7 @@ TYPED = {
     452.0:    "_ISP_AT_MOVE, the table value that discrepancy is asserted against",
     0.1:      "TUG_DRY_MASS_FRAC and DOWNLEG_CAPSULE_DRY_FRAC; no structural-fraction table",
     0.2:      "LANDER_DRY_MASS_FRAC, Apollo LM descent stage",
-    0.3:      "MARS_LANDED_MASS_FRACTION, MSL 27.6% / Perseverance 29.8%",
+    0.3:      "MARS_LANDED_MASS_FRACTION, MSL 28.5% / Perseverance 30.5%",
     0.15:     "DOWNLEG_TPS_FRAC, mirrors economicspace's heat_shield_frac_of_payload",
     10000.0:  "DOWNLEG_BATCH_KG, the batch the recovery campaign is spread over",
     120.0:    "_LEO_DEORBIT_DV_M_S; a LEO deorbit burn has no row",
