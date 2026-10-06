@@ -124,7 +124,7 @@ Lambert solve against an ephemeris; these are what you price the answer with.
 
 | source | what it establishes |
 |---|---|
-| NASA DSN Services Catalog 820-100-H | deep space network aperture fees, FY09 base |
+| NASA DSN Services Catalog 820-100-H | deep space network aperture fees: the $1,792 hourly rate base (Jun 2022), carried to 2026 by CPI-U |
 | NASA / Planetary Society, and Wikipedia | OSIRIS-REx mission total cost |
 | The Planetary Society, Planetary Exploration Budget Dataset | OSIRIS-REx operations obligations by fiscal year |
 | NASA OIG IG-23-010 | MMRTG mass, and Pu-238 production against its goal |

@@ -13,6 +13,49 @@ may read a version as proof that a number moved.
 
 ## Package releases
 
+### 0.6.0 - 2026-10-06
+
+**Data contract 1.17.3 → 1.18.0: four values re-pinned to their sources.**
+Every one is a General_Research revision candidate whose source the registry
+read and whose number the row's own method, applied correctly, moves. Each is
+named.
+
+- **Atlas V 551** (rc-051, `launch_vehicles.csv`): $153M is ULA's 2016
+  RocketBuilder base, and the row is labelled 2026 dollars. Carried by CPI-U
+  (Dec 2016 to Aug 2026, x1.3771) it is **$211M**, $11,215/kg to LEO where it
+  was $8,132.
+- **Minotaur IV** (rc-050): the high end carried ~$50M (2010) forward at x1.45,
+  an annual CPI chain that stopped at 2024. CPI-U to Aug 2026 is x1.5155, so
+  the high end is **$76M** and the band centre $61.6M where it was $60M.
+- **Pegasus XL** (rc-052): $40M (2017), unescalated, becomes **$54M** at CPI-U
+  x1.3484, $121,076/kg. The row is `retired`, so nothing searching operational
+  vehicles reads it.
+- **Deep Space Network time** (rc-030, `operational_costs.csv`): the row
+  carried a superseded FY09 MOCS rate ($1,057) forward to $1,530/hr. JPL's DSN
+  Services Catalog 820-100 Rev H (Jun 2022) gives the hourly rate base as
+  $1,792; at CPI-U to Aug 2026 that is **$2,082/hr** for one 34-m antenna and
+  ~$6,245 for a 70-m. The 1,000-4,000 band already held it and stays.
+
+A column-by-column comparison against 0.5.3 differs in those four rows (prices,
+the $/kg columns derived from them, and their notes), in 35
+`summary_sample.csv` rows that fly Atlas V or Minotaur IV, and in
+`pipeline_version`. Nothing else moved. The summary hash was re-recorded on the
+reference platform (Windows AMD64, Python 3.13, numpy 2.2.6, pandas 2.3.3).
+
+`validate()`'s flying-fleet launch band rises from $100-$100,000 to
+$100-$200,000 per kg to LEO. Pegasus XL at its 2026 price, $121,076/kg, is a
+real vehicle at a real price (NASA paid $127,088/kg for ICON in 2017 dollars),
+and a band that fires on a true row stops being read. The concept band is
+unchanged.
+
+Not taken, and recorded as owner decisions in the registry: raising Falcon
+Heavy (expendable)'s band to NASA's $178M Europa Clipper price (rc-022) and
+anchoring Pegasus on NASA's ICON price (rc-078) would move a commercial list
+price toward a government full-service one, which this table keeps apart
+elsewhere (Atlas V's note). The lunar descent row (rc-016) is right to move and
+moves every archived lunar price with it, so it waits for a release that
+versions the delivery chain.
+
 ### 0.5.3 - 2026-10-06
 
 **Data contract 1.17.2 → 1.17.3: four notes cells now say what their sources
@@ -1507,3 +1550,8 @@ derivation or unsourced, where they named a document that does not contain it.
 0.5.3 above. No value and no column moved: the Psyche and Didymos rows in
 `environments.csv` and two Mars rows in `delta_v_segments.csv` now cite what
 their sources hold, or say a figure's own source is not recorded.
+
+**`1.18.0`  four values re-pinned to their sources.** Full write-up under
+package release 0.6.0 above. Atlas V 551, Minotaur IV (high end) and Pegasus XL
+list prices carried to 2026 dollars by CPI-U, and Deep Space Network time
+re-derived from the DSN Services Catalog's rate base. No column moved.

@@ -267,10 +267,12 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "payload_leo_kg_high":           18_850,
         "payload_gto_kg":                 8_900,
         "payload_escape_kg":              6_500,
-        "list_price_usd":           153_000_000,
+        "list_price_usd":           211_000_000,
         "price_basis":                   "published",
         "reference_year":          _REF_YEAR_LAUNCH,
-        "notes": "Source: ULA RocketBuilder $153M base (2016); government missions "
+        "notes": "Source: ULA RocketBuilder $153M base (2016), carried to 2026 "
+                 "dollars by CPI-U (Dec 2016 to Aug 2026, x1.3771): $211M.  "
+                 "Until 0.6.0 the 2016 figure stood unescalated.  Government missions "
                  "add $30-80M for mission assurance (SpaceNews 2024).  NOT FOR "
                  "SALE: ULA stopped selling Atlas V in Aug 2021 and every "
                  "remaining vehicle is allocated, the last of them to Starliner. "
@@ -425,12 +427,14 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "payload_leo_kg_high":            1_735,
         "payload_gto_kg":                     0,
         "payload_escape_kg":                  0,
-        "list_price_usd_high":       72_000_000,
+        "list_price_usd_high":       76_000_000,
         "list_price_usd_low":        50_000_000,
         "price_basis":                   "estimate",
         "reference_year":          _REF_YEAR_LAUNCH,
         "notes": "Source: Wikipedia — ~$50M (2010), carried to 2026 dollars by "
-                 "CPI (x1.45) for the high end.  US GOVERNMENT MISSIONS ONLY: it "
+                 "CPI-U (Dec 2010 to Aug 2026, x1.5155) for the high end; it "
+                 "used x1.45, an annual chain that stopped at 2024, until 0.6.0.  "
+                 "US GOVERNMENT MISSIONS ONLY: it "
                  "flies surplus Peacekeeper ICBM motors, which law restricts to "
                  "government use.  Still flying (NROL-174 Apr 2025, STP Apr "
                  "2026).",
@@ -1224,10 +1228,12 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "payload_leo_kg_high":              450,
         "payload_gto_kg":                     0,
         "payload_escape_kg":                  0,
-        "list_price_usd":            40_000_000,
+        "list_price_usd":            54_000_000,
         "price_basis":                   "reported",
         "reference_year":          _REF_YEAR_LAUNCH,
-        "notes": "Air-launched from an L-1011.  $40M (2017).  Final flight Jul "
+        "notes": "Air-launched from an L-1011.  $40M (2017), carried to 2026 "
+                 "dollars by CPI-U (Dec 2017 to Aug 2026, x1.3484): $54M.  "
+                 "Until 0.6.0 the 2017 figure stood unescalated.  Final flight Jul "
                  "2026, the Swift reboost mission.  46 flights, 3 failures and "
                  "2 partial.  The price per kilogram is why nobody asks for it "
                  "any more.",
