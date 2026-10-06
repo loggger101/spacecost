@@ -13,6 +13,39 @@ may read a version as proof that a number moved.
 
 ## Package releases
 
+### 0.5.3 - 2026-10-06
+
+**Data contract 1.17.2 → 1.17.3: four notes cells now say what their sources
+actually hold. No value moved.** Only `notes` cells, the CITATIONS table and
+the `pipeline_version` stamp changed; every number in every table is the one
+0.5.0 shipped. economicspace repins to this tag only to carry the corrected
+notes. Each item names its General_Research revision candidate.
+
+- **16 Psyche** (rc-068, `environments.csv`): 2.29e19 kg is the Kretlow (2020)
+  SiMDA perturber mass, as Kretlow 2022 (A&A 668:A141) Table 2 lists it, not a
+  Siltala & Granvik 2021 figure. Their GM of 1.482 ± 0.052 km3/s2 (2.22e19 kg,
+  3% lower) is now quoted beside it, and the ~111 km radius stays attributed to
+  them, from the 222 ± 4 km diameter they adopt.
+- **65803 Didymos** (rc-067, `environments.csv`): neither 5.28e11 kg nor 390 m
+  is in Daly et al. 2023, whose Table 1 gives (5.6 ± 0.5)e11 kg for the binary
+  system and a 761 ± 26 m volume-equivalent diameter. Both cells sit inside
+  that 1-sigma, so they stay, and the note now says their own source is not
+  recorded rather than naming one that does not hold them.
+- **1-sol Mars orbit → Earth (TEI)** (rc-070, `delta_v_segments.csv`): 900 m/s
+  is now labelled the minimum-energy Hohmann floor. NASA DRA 5.0's
+  all-propulsive TEI from the same orbit is 1.563 km/s in all eight 2031-2046
+  opportunities (Fig 4-2), because DRA flies a fast return; the floor is kept,
+  so a return from this orbit is priced at its cheapest.
+- **Mars entry → surface (retroprop)** (rc-072, `delta_v_segments.csv`): DRA
+  5.0 Table 4-3 (595 m/s descent plus 15 m/s deorbit for a 110-t lander) is
+  now cited as the institutional figure. It sits inside the note's own 0.5-1.0
+  km/s band, so 800 stays as the conservative side of it.
+
+The summary hash was re-recorded on the reference platform (Windows AMD64,
+Python 3.13, numpy 2.2.6, pandas 2.3.3), which reproduced the 1.17.2 hash
+first. A column-by-column comparison of all seven committed files against
+0.5.2 differs in `notes` (4 cells) and `pipeline_version` only.
+
 ### 0.5.2 - 2026-10-06
 
 **Data contract 1.17.1 → 1.17.2: twenty-one notes cells now say what their
@@ -1469,3 +1502,8 @@ classroom worksheet and a defunct vendor page.
 release 0.5.2 above. No value and no column moved: 21 `notes` cells across all
 six tables now cite what their sources actually hold, or say a figure is a
 derivation or unsourced, where they named a document that does not contain it.
+
+**`1.17.3`  four attributions corrected.** Full write-up under package release
+0.5.3 above. No value and no column moved: the Psyche and Didymos rows in
+`environments.csv` and two Mars rows in `delta_v_segments.csv` now cite what
+their sources hold, or say a figure's own source is not recorded.
