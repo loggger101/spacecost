@@ -146,8 +146,9 @@ DELIVERED_V040 = {
 @pytest.mark.parametrize("dest,expected", sorted(DELIVERED_AT_MOVE.items()))
 def test_the_legacy_model_still_reproduces_the_source(dest, expected):
     assert_reproduces(
-        delivery.delivered_cost_usd_per_kg(dest, LEGACY_LEO,
-                                           stage_hardware=False),
+        delivery.delivered_cost_usd_per_kg(
+            dest, LEGACY_LEO, stage_hardware=False,
+            burn_dv=delivery.CHAIN_BURN_DV_BEFORE_V090.get(dest)),
         expected, "legacy delivered_cost_usd_per_kg(%r)" % dest)
 
 
@@ -164,20 +165,45 @@ DELIVERED_V080 = {
 }
 
 
+# v0.9.0: the default.  v0.8.0's anchor, with the lunar descent re-pinned to
+# what Apollo 15-17 flew (1,870 -> 2,050 m/s); only lunar_surface moves.
+DELIVERED_V090 = dict(DELIVERED_V080, lunar_surface=48226.347276656146)
+DOWNLEG_V090 = dict(DOWNLEG_AT_MOVE, lunar_surface=44742.2736509585)
+
+
 @pytest.mark.parametrize("dest,expected", sorted(DELIVERED_V040.items()))
 def test_the_v040_anchor_still_reproduces(dest, expected):
-    assert_reproduces(delivery.delivered_cost_usd_per_kg(dest, V040_LEO),
-                      expected, "delivered_cost_usd_per_kg(%r, 2414.0)" % dest)
+    assert_reproduces(
+        delivery.delivered_cost_usd_per_kg(
+            dest, V040_LEO,
+            burn_dv=delivery.CHAIN_BURN_DV_BEFORE_V090.get(dest)),
+        expected, "delivered_cost_usd_per_kg(%r, 2414.0)" % dest)
 
 
 @pytest.mark.parametrize("dest,expected", sorted(DELIVERED_V080.items()))
-def test_delivered_cost_is_the_v080_model(dest, expected):
+def test_the_v080_chain_still_reproduces(dest, expected):
+    assert_reproduces(
+        delivery.delivered_cost_usd_per_kg(
+            dest, burn_dv=delivery.CHAIN_BURN_DV_BEFORE_V090.get(dest)),
+        expected, "pre-v0.9.0 delivered_cost_usd_per_kg(%r)" % dest)
+
+
+@pytest.mark.parametrize("dest,expected", sorted(DELIVERED_V090.items()))
+def test_delivered_cost_is_the_v090_model(dest, expected):
     assert_reproduces(delivery.delivered_cost_usd_per_kg(dest), expected,
                       "delivered_cost_usd_per_kg(%r)" % dest)
 
 
 @pytest.mark.parametrize("dest,expected", sorted(DOWNLEG_AT_MOVE.items()))
 def test_downleg_cost_reproduces_the_source(dest, expected):
+    assert_reproduces(
+        delivery.downleg_cost_usd_per_kg(
+            dest, delivery.DOWNLEG_DV_BEFORE_V090.get(dest)),
+        expected, "pre-v0.9.0 downleg_cost_usd_per_kg(%r)" % dest)
+
+
+@pytest.mark.parametrize("dest,expected", sorted(DOWNLEG_V090.items()))
+def test_downleg_cost_is_the_v090_model(dest, expected):
     assert_reproduces(delivery.downleg_cost_usd_per_kg(dest), expected,
                       "downleg_cost_usd_per_kg(%r)" % dest)
 
@@ -296,11 +322,12 @@ def test_none_and_empty_chain_are_not_the_same_thing():
 
 
 def test_staging_beats_a_single_burn_to_the_lunar_surface():
-    """The reason the chains are chains: 4.99 kg in LEO, not 10.96.
+    """The reason the chains are chains: 5.28 kg in LEO, not 12.81.
 
     A single stage burning the table's own composite "LEO -> lunar surface"
-    5,920 m/s costs roughly twice the two-stage chain.  If this ever stops
-    being true the leg-by-leg model has lost its argument.
+    6,100 m/s costs roughly twice the two-stage chain.  If this ever stops
+    being true the leg-by-leg model has lost its argument.  (4.99 against
+    10.96 on 5,920 m/s, until v0.9.0 re-pinned the descent.)
     """
     staged = delivery.delivery_mass_ratio("lunar_surface")
     composite = [r for r in spacecost.DELTA_V_REFERENCE
@@ -310,8 +337,8 @@ def test_staging_beats_a_single_burn_to_the_lunar_surface():
     single = delivery.stage_mass_ratio(
         float(composite[0]["dv_m_per_s"]),
         delivery.TUG_ISP_S, delivery.LANDER_DRY_MASS_FRAC)
-    assert round(staged, 2) == 4.99
-    assert round(single, 2) == 10.96
+    assert round(staged, 2) == 5.28
+    assert round(single, 2) == 12.81
     assert single > 2.0 * staged * 0.99
 
 
@@ -419,9 +446,12 @@ TYPED = {
     # import error.  They are typed BECAUSE deriving them would defeat them.
     2455.0: "_CHAIN_DV_AT_MOVE", 1836.0: "_CHAIN_DV_AT_MOVE",
     3600.0: "_CHAIN_DV_AT_MOVE", 4050.0: "_CHAIN_DV_AT_MOVE",
-    1870.0: "_CHAIN_DV_AT_MOVE", 800.0: "_CHAIN_DV_AT_MOVE",
+    2050.0: "_CHAIN_DV_AT_MOVE", 800.0: "_CHAIN_DV_AT_MOVE",
     900.0:  "_CHAIN_DV_AT_MOVE / _DOWNLEG_DV_AT_MOVE",
-    450.0:  "_DOWNLEG_DV_AT_MOVE", 2720.0: "_DOWNLEG_DV_AT_MOVE",
+    450.0:  "_DOWNLEG_DV_AT_MOVE", 2700.0: "_DOWNLEG_DV_AT_MOVE",
+    # What v0.9.0 replaced, kept so a pre-v0.9.0 lunar price reproduces: the
+    # rows they were derived from now say 2,050 and 1,850.
+    1870.0: "CHAIN_BURN_DV_BEFORE_V090", 2720.0: "DOWNLEG_DV_BEFORE_V090",
     6200.0: "_DOWNLEG_DV_AT_MOVE",
 }
 

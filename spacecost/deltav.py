@@ -110,16 +110,30 @@ DELTA_V_REFERENCE: List[dict] = [
     {"segment": "NRHO  →  low lunar orbit",      "dv_m_per_s":    730, "duration_yr": 0.01,
      "notes": "Gateway-to-LLO transfer, ~0.73 km/s (Whitley & Martinez 2016). "
               "The price a cislunar depot pays to service the surface."},
-    {"segment": "LLO  →  lunar surface (descent)", "dv_m_per_s": 1_870, "duration_yr": 0.001,
-     "notes": "Apollo LM powered descent, 1.87 km/s including hover and "
-              "terminal guidance reserve (NASA SP-4029).  No atmosphere means "
-              "no aerobraking is available — every metre per second is paid "
-              "for propulsively, which is why the Moon is expensive to reach "
-              "despite being close."},
-    {"segment": "LEO  →  lunar surface",         "dv_m_per_s":  5_920, "duration_yr": 0.02,
-     "notes": "TLI (3,150) + LOI (900) + descent (1,870).  Sets the "
-              "lunar-base sale price in Module 2.  Apollo's LEO-to-surface "
-              "budget was ~6 km/s, which this matches."},
+    {"segment": "LLO  →  lunar surface (descent)", "dv_m_per_s": 2_050, "duration_yr": 0.001,
+     "notes": "Apollo LM powered descent as flown: the descent engine's "
+              "velocity change on Apollo 15, 16 and 17 was 6,813, 6,703 and "
+              "6,698 ft/s, i.e. 2,077, 2,043 and 2,042 m/s (NASA SP-4029, "
+              "lunar-orbit phase tables), mean 2,054, rounded to 2,050.  That "
+              "includes the hover and terminal-guidance reserve the J-missions "
+              "actually burned.  Until 0.9.0 this row carried 1,870 m/s, "
+              "attributed to the same source, which holds no such figure.  No "
+              "atmosphere means no aerobraking is available — every metre per "
+              "second is paid for propulsively, which is why the Moon is "
+              "expensive to reach despite being close."},
+    {"segment": "Lunar surface  →  LLO (ascent)", "dv_m_per_s": 1_850, "duration_yr": 0.001,
+     "notes": "Apollo LM ascent to lunar orbit as flown: the ascent engine's "
+              "velocity change on Apollo 14, 15 and 17 was 6,066, 6,059 and "
+              "6,076 ft/s, i.e. 1,849, 1,847 and 1,852 m/s (NASA SP-4029), "
+              "mean 1,849, rounded to 1,850.  Smaller than the descent, which "
+              "carries the hover and landing reserve an ascent does not.  New "
+              "in 0.9.0; until then the downleg took the descent row as a "
+              "symmetric ascent."},
+    {"segment": "LEO  →  lunar surface",         "dv_m_per_s":  6_100, "duration_yr": 0.02,
+     "notes": "TLI (3,150) + LOI (900) + descent (2,050); 5,920 until 0.9.0, "
+              "when the descent row was re-pinned to what Apollo flew.  The "
+              "single-stage composite: the delivery chain flies TLI + LOI and "
+              "the descent as two stages instead."},
 
     # ── Mars  (v1.5.0) ───────────────────────────────────────────────────────
     {"segment": "LEO  →  trans-Mars injection",  "dv_m_per_s":  3_600, "duration_yr": 0.7,

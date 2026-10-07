@@ -57,7 +57,7 @@ spacecost build -o ./out           # write all seven CSVs
 |---|---|---|
 | `launch_vehicles` | 76 | $/kg to LEO, GTO and escape with a low/high band, payload masses, list price, status, who can buy it |
 | `propellants` | 41 | vacuum Isp, bulk density, $/kg and $/L, storage class, derived tankage, thruster device |
-| `delta_v_segments` | 33 | m/s and trip duration per trajectory leg, 100 to 10,500 m/s |
+| `delta_v_segments` | 34 | m/s and trip duration per trajectory leg, 100 to 10,500 m/s |
 | `operational_costs` | 45 | $/mission-year and $/kg-payload lines, with low/high bands |
 | `storage_systems` | 20 | how a kilogram is held, across the cargo, depot, propellant and energy domains |
 | `environments` | 23 | where it is being priced: solar flux, dark period, gravity, light time |
@@ -236,9 +236,9 @@ questions somebody costing a mission actually asks:
 ```python
 >>> import spacecost
 >>> spacecost.delivered_cost_usd_per_kg("lunar_surface")
-43338.42...
+48226.34...
 >>> spacecost.delivery_mass_ratio("lunar_surface")  # kg in LEO per kg landed
-4.987...
+5.279...
 >>> spacecost.downleg_cost_usd_per_kg("cislunar")
 27316.95...
 ```
@@ -251,8 +251,8 @@ platforms.
 
 **Staging is modelled leg by leg, and that is the whole point.** A destination
 is a SEQUENCE of burns flown by real stages, and the mass ratios chain. Collapse
-the lunar chain into the single 5,920 m/s figure this dataset also carries and
-the answer roughly doubles — **10.96 kg in LEO per kg landed against 4.99** —
+the lunar chain into the single 6,100 m/s figure this dataset also carries and
+the answer more than doubles — **12.81 kg in LEO per kg landed against 5.28** —
 because a one-stage lander carries its descent structure all the way from LEO.
 Delta-v alone does not tell you what a delivery costs.
 
@@ -303,14 +303,19 @@ tug and lander was charged only for being launched, never for being built.
 recurring cost, the propellant at its price, and the aeroshell an entry
 discards at the TPS rate:
 
-| destination | before (Falcon 9, no hardware) | v0.4.0 | v0.8.0 | of which hardware |
+| destination | before (Falcon 9, no hardware) | v0.4.0 | now (v0.9.0) | of which hardware |
 |---|---:|---:|---:|---:|
 | `leo` | 4,253 | 2,414 | 2,555 | 0 |
 | `geo` | 12,526 | 8,046 | 8,462 | 937 |
 | `cislunar` | 10,810 | 6,878 | 7,236 | 742 |
 | `mars_orbit` | 13,496 | 8,706 | 9,154 | 1,046 |
-| `lunar_surface` | 21,210 | 42,635 | 43,338 | 30,597 |
+| `lunar_surface` | 21,210 | 42,635 | 48,226 | 34,737 |
 | `mars_surface` | 45,105 | 184,811 | 186,306 | 159,209 |
+
+The `now` column has moved twice since v0.4.0: every destination above LEO
+with the anchor in v0.8.0, and the lunar surface again in v0.9.0, when its
+powered descent was re-pinned from 1,870 to the 2,050 m/s Apollo 15-17 flew
+(43,338 between the two).
 
 Orbital destinations fall by about a third, because the anchor is cheaper.
 The two surfaces rise steeply, because a lander ($200k/kg) and an aeroshell
@@ -653,7 +658,7 @@ build` rebuilds the whole thing.
 These tables were built over fourteen releases as **Module 3 of
 [economicspace](https://github.com/loggger101/economicspace)**, an asteroid
 mining profitability pipeline, and extracted at `pipeline_version` 1.14.0
-(commit `b0b18b2`; the contract is 1.20.0 as of this release). Two thirds of
+(commit `b0b18b2`; the contract is 1.21.0 as of this release). Two thirds of
 that module was annotated reference data and nothing in its schema knows what
 an asteroid is, which is the argument for splitting it out: a launch price is
 useful to anyone costing a mission. economicspace consumes this package as its
@@ -690,7 +695,7 @@ there is no non-recurring engineering, no programme overhead and no cadence
 limit, and the chain flies an efficient hydrolox tug that nobody sells as a
 product yet. They answer "what is the least a kilogram there could be worth",
 which is the right question for revenue. Real CLPS lunar delivery is roughly
-$1M/kg at ~100 kg scale, against this model's $43,338.
+$1M/kg at ~100 kg scale, against this model's $48,226.
 
 **The operational table assumes an uncrewed spacecraft.** No life support, no
 habitat, no crew operations, no return-vehicle uplift for people. The

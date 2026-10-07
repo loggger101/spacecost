@@ -13,6 +13,43 @@ may read a version as proof that a number moved.
 
 ## Package releases
 
+### 0.9.0 - 2026-10-07
+
+**Data contract 1.20.0 → 1.21.0: the lunar descent is what Apollo flew, and the
+ascent has a row of its own.** General_Research revision candidate rc-016.
+
+- **LLO → lunar surface (descent)** (`delta_v_segments.csv`): **1,870 →
+  2,050 m/s**. The row cited NASA SP-4029 for 1.87 km/s, and SP-4029's
+  lunar-orbit phase tables give the descent engine's velocity change on Apollo
+  15, 16 and 17 as 6,813, 6,703 and 6,698 ft/s: 2,077, 2,043 and 2,042 m/s,
+  mean 2,054.
+- **Lunar surface → LLO (ascent)**, a new row: **1,850 m/s**, the ascent
+  engine's velocity change on Apollo 14, 15 and 17 (6,066, 6,059 and 6,076
+  ft/s; mean 1,849). The downleg used to take the descent row as a symmetric
+  ascent; it now reads this, so a lunar downleg departs on 2,700 m/s where it
+  was 2,720.
+- **LEO → lunar surface**, the single-stage composite: **5,920 → 6,100 m/s**.
+
+Only `lunar_surface` moves in the delivery module:
+
+| quantity | 0.8.0 | 0.9.0 |
+|---|---:|---:|
+| `delivered_cost_usd_per_kg("lunar_surface")` | 43,338 | **48,226** (+11.3%) |
+| of which stage hardware | 30,597 | 34,737 |
+| `delivery_mass_ratio("lunar_surface")` | 4.99 | 5.28 |
+| `downleg_cost_usd_per_kg("lunar_surface")` | 44,939 | 44,742 |
+| single-stage alternative, kg in LEO per kg landed | 10.96 | 12.81 |
+
+**Every earlier lunar price is still reproducible bit for bit**: the delivery
+functions take `burn_dv=` (and the downleg `departure_dv_m_s=`), and
+`CHAIN_BURN_DV_BEFORE_V090` / `DOWNLEG_DV_BEFORE_V090` hold what the lunar legs
+burned before this release. `tests/test_delivery.py` pins the 0.3.x, 0.4.0-0.7.0
+and 0.8.0 lunar prices through them, because every economicspace Stage 2 table
+priced before this release has to be re-derivable. Left unset, both arguments
+take exactly the old code path.
+
+`delta_v_segments` has 34 rows, where it had 33.
+
 ### 0.8.0 - 2026-10-07
 
 **Data contract 1.19.0 → 1.20.0: Falcon Heavy (expendable)'s band now reaches
@@ -1664,3 +1701,9 @@ write-up under package release 0.8.0 above. The band's high end is the $178M
 NASA paid for Europa Clipper's launch; the centre is $163M, $2,555/kg, and
 since that row is the LEO price anchor every delivered price above LEO moves
 0.8-5.8%. No column moved.
+
+**`1.21.0`  the lunar descent re-pinned, and an ascent row.** Full write-up
+under package release 0.9.0 above. "LLO → lunar surface (descent)" 1,870 →
+2,050 m/s and "LEO → lunar surface" 5,920 → 6,100, from Apollo 15-17 as flown
+(NASA SP-4029); a new row, "Lunar surface → LLO (ascent)", 1,850 m/s. One row
+added (`delta_v_segments` 33 → 34); no column moved.

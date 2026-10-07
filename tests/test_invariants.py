@@ -16,7 +16,7 @@ def test_row_counts():
     """The documented sizes.  A count stated in prose is a number waiting to rot."""
     assert len(spacecost.LAUNCH_VEHICLES_REFERENCE) == 76
     assert len(spacecost.PROPELLANTS_REFERENCE) == 41
-    assert len(spacecost.DELTA_V_REFERENCE) == 33
+    assert len(spacecost.DELTA_V_REFERENCE) == 34
     assert len(spacecost.OPERATIONAL_COSTS_REFERENCE) == 45
     assert len(spacecost.STORAGE_REFERENCE) == 20
 
