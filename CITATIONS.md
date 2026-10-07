@@ -43,7 +43,7 @@ ones that carry more than one row.
 | NASA, Feb 2026 Artemis restructuring (SpaceNews, SatNews) | SLS Block 1B and the Exploration Upper Stage cancelled |
 | ULA RocketBuilder, and SpaceNews 2024-2026 | Atlas V pricing and sales end; Vulcan's "starting at $110M" |
 | Blue Origin via Wikipedia and Spaceflight Now, 2025-2026 | New Glenn price range, payloads, and the NG-1 to NG-3 record; 9x4 payloads |
-| Rocket Lab Form 10-Q, FY2026 Q1, and Spaceflight Now Aug 2026 | Electron pricing; Neutron price and schedule |
+| Rocket Lab Form 10-Q, FY2026 Q1 (MD&A, revenue per launch), and Spaceflight Now Aug 2026 | Electron pricing (the band is Q1 2025 and Q1 2026 actual revenue per launch); Neutron price and schedule |
 | TASS / Glavkosmos 2018 | Soyuz-2.1b pricing |
 | ISRO / NSIL, and The Week Jan 2026 | LVM3, PSLV, GSLV and SSLV pricing; PSLV-C61 and C62 failures |
 | CAS Space, Apr 2026 (30,000 yuan/kg) | Kinetica-2 price, the only published Chinese per-kg rate |

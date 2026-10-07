@@ -13,6 +13,33 @@ may read a version as proof that a number moved.
 
 ## Package releases
 
+### 0.7.0 - 2026-10-07
+
+**Data contract 1.18.1 → 1.19.0: two launch prices become the bands their
+sources give.** Both are General_Research revision candidates, and both rows
+are ones no economicspace mission can fly (Electron carries nothing past LEO,
+Pegasus XL is retired), so the change reaches this table and nothing priced
+from it.
+
+- **Electron** (rc-081, `launch_vehicles.csv`): $7.5M was attributed to Rocket
+  Lab's FY2026 Q1 10-Q, which does not contain it. The filing's MD&A gives
+  revenue per launch of **$7.1M (Q1 2025) and $9.3M (Q1 2026)**, rising with
+  customer mix, and those are now the band; its geometric centre is **$8.13M**,
+  $26,226/kg to LEO where it was $24,194.
+- **Pegasus XL** (rc-078): the band now runs from the $40M (2017) list price
+  carried to 2026 by CPI-U ($54M) up to what NASA's Launch Services Program
+  paid for ICON, $56M (2017) at the same factor ($76M; Zapata 2017, p16). Its
+  centre is **$64.1M**, $143,722/kg where it was $121,076. A government
+  full-service price now bounds a list price by decision: the same choice is
+  coming for Falcon Heavy (rc-022), where it moves every in-space price
+  downstream and needs its own release.
+
+A column-by-column comparison against 0.6.1 differs in those two rows (price,
+band and the $/kg columns derived from them, and their notes), in the 23
+`summary_sample.csv` rows that fly them, and in `pipeline_version`. Nothing
+else moved, and the LEO price anchor (Falcon Heavy (expendable), $2,414/kg)
+did not.
+
 ### 0.6.1 - 2026-10-07
 
 **Data contract 1.18.0 → 1.18.1: four notes cells now say what their sources
@@ -1592,3 +1619,8 @@ re-derived from the DSN Services Catalog's rate base. No column moved.
 cites MIL-HDBK-189C's Table II, Starship's $90M cites Voyager's 424B4
 prospectus, and the two hypergolic rows quote DLA's FY2025 standard prices
 beside the FY20 basis that can no longer be checked.
+
+**`1.19.0`  two launch prices become bands.** Full write-up under package
+release 0.7.0 above. Electron's band is Rocket Lab's reported revenue per launch
+for Q1 2025 and Q1 2026 ($7.1M-$9.3M), and Pegasus XL's runs from its list
+price to NASA's ICON price ($54M-$76M, 2026 dollars). No column moved.
