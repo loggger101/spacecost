@@ -236,7 +236,7 @@ questions somebody costing a mission actually asks:
 ```python
 >>> import spacecost
 >>> spacecost.delivered_cost_usd_per_kg("lunar_surface")
-42635.25...
+43338.42...
 >>> spacecost.delivery_mass_ratio("lunar_surface")  # kg in LEO per kg landed
 4.987...
 >>> spacecost.downleg_cost_usd_per_kg("cislunar")
@@ -288,8 +288,9 @@ package does: each launch row's headline, and each cost row's `value`.
 **The LEO price is the buyer's cheapest real alternative today.** The rule is
 stated in code and asserted at import: operational, on the open market, priced
 by the launcher itself (`published` or `contract`), lowest headline
-`usd_per_kg_to_leo`. That is **Falcon Heavy (expendable), $2,414/kg**: SpaceX's
-$150M (2017) to $159M (carried to 2026) for 63.8 t. `leo_anchor_candidates()`
+`usd_per_kg_to_leo`. That is **Falcon Heavy (expendable), $2,555/kg**: SpaceX's
+$150M (2017) up to the $178M NASA paid for Europa Clipper's, for 63.8 t (until
+v0.8.0 the top was $159M and the anchor $2,414/kg). `leo_anchor_candidates()`
 returns the ranked list. New Glenn is cheaper on paper at $1,922/kg, but the
 bottom of its price range is a rival's estimate rather than a Blue Origin
 quote. Starship is cheaper still, and does not fly. If a table edit ever makes
@@ -302,14 +303,14 @@ tug and lander was charged only for being launched, never for being built.
 recurring cost, the propellant at its price, and the aeroshell an entry
 discards at the TPS rate:
 
-| destination | before (Falcon 9, no hardware) | v0.4.0 | of which hardware |
-|---|---:|---:|---:|
-| `leo` | 4,253 | 2,414 | 0 |
-| `geo` | 12,526 | 8,046 | 937 |
-| `cislunar` | 10,810 | 6,878 | 742 |
-| `mars_orbit` | 13,496 | 8,706 | 1,046 |
-| `lunar_surface` | 21,210 | 42,635 | 30,597 |
-| `mars_surface` | 45,105 | 184,811 | 159,209 |
+| destination | before (Falcon 9, no hardware) | v0.4.0 | v0.8.0 | of which hardware |
+|---|---:|---:|---:|---:|
+| `leo` | 4,253 | 2,414 | 2,555 | 0 |
+| `geo` | 12,526 | 8,046 | 8,462 | 937 |
+| `cislunar` | 10,810 | 6,878 | 7,236 | 742 |
+| `mars_orbit` | 13,496 | 8,706 | 9,154 | 1,046 |
+| `lunar_surface` | 21,210 | 42,635 | 43,338 | 30,597 |
+| `mars_surface` | 45,105 | 184,811 | 186,306 | 159,209 |
 
 Orbital destinations fall by about a third, because the anchor is cheaper.
 The two surfaces rise steeply, because a lander ($200k/kg) and an aeroshell
@@ -652,7 +653,7 @@ build` rebuilds the whole thing.
 These tables were built over fourteen releases as **Module 3 of
 [economicspace](https://github.com/loggger101/economicspace)**, an asteroid
 mining profitability pipeline, and extracted at `pipeline_version` 1.14.0
-(commit `b0b18b2`; the contract is 1.19.0 as of this release). Two thirds of
+(commit `b0b18b2`; the contract is 1.20.0 as of this release). Two thirds of
 that module was annotated reference data and nothing in its schema knows what
 an asteroid is, which is the argument for splitting it out: a launch price is
 useful to anyone costing a mission. economicspace consumes this package as its
@@ -689,7 +690,7 @@ there is no non-recurring engineering, no programme overhead and no cadence
 limit, and the chain flies an efficient hydrolox tug that nobody sells as a
 product yet. They answer "what is the least a kilogram there could be worth",
 which is the right question for revenue. Real CLPS lunar delivery is roughly
-$1M/kg at ~100 kg scale, against this model's $42,635.
+$1M/kg at ~100 kg scale, against this model's $43,338.
 
 **The operational table assumes an uncrewed spacecraft.** No life support, no
 habitat, no crew operations, no return-vehicle uplift for people. The
