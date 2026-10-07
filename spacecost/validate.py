@@ -127,7 +127,8 @@ def validate(
     # to $100-$200,000.  The ceiling was $100,000 until 0.6.0, when Pegasus XL
     # carried to 2026 dollars came out at $121,076/kg; it is a real vehicle at
     # a real price (NASA paid $127,088/kg for ICON in 2017 dollars, Zapata
-    # 2017), and a band that fires on a true row stops being read.
+    # 2017), and a band that fires on a true row stops being read.  Since 0.7.0
+    # its band spans that ICON price too, and the centre is $143,722/kg.
     flying = launch_df[launch_df["status"].isin(["operational", "development",
                                                  "retired"])]
     bad_launch = flying[
@@ -267,7 +268,7 @@ def validate(
     # and this is what says so.
     #
     # 1% rather than exact: every stated $/kg in the table is rounded to whole
-    # dollars, and on Electron at $23,438/kg a single dollar is 0.004%.
+    # dollars, and on Electron at $26,226/kg a single dollar is 0.004%.
     price = pd.to_numeric(launch_df["list_price_usd"], errors="coerce")
     payload = pd.to_numeric(launch_df["payload_leo_kg"], errors="coerce")
     quoted = pd.to_numeric(launch_df["usd_per_kg_to_leo"], errors="coerce")

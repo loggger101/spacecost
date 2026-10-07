@@ -386,11 +386,17 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "payload_leo_kg_high":              320,
         "payload_gto_kg":                     0,
         "payload_escape_kg":                  0,
-        "list_price_usd":             7_500_000,
+        "list_price_usd_low":         7_100_000,    # 10-Q FY2026 Q1: Q1 2025 actual
+        "list_price_usd_high":        9_300_000,    # 10-Q FY2026 Q1: Q1 2026 actual
         "price_basis":                   "reported",
         "reference_year":          _REF_YEAR_LAUNCH,
-        "notes": "Source: Rocket Lab Form 10-Q FY2026 Q1 — $7.5M; current "
-                 "published capacity 300 kg LEO / 200 kg SSO.  Small-sat "
+        "notes": "Source: Rocket Lab Form 10-Q FY2026 Q1, MD&A: revenue per "
+                 "launch was $9.3M in Q1 2026 and $7.1M in Q1 2025, which "
+                 "are the band's ends; the filing puts the rise down to "
+                 "customer mix and mission complexity, and gives cost per "
+                 "launch as $5.4M and $5.7M.  Until 0.7.0 the row carried "
+                 "$7.5M, attributed to this filing, which does not contain "
+                 "it.  Current published capacity 300 kg LEO / 200 kg SSO.  Small-sat "
                  "dedicated; useful for prospector probes only.  Its Photon "
                  "kick stage did send CAPSTONE (~25 kg) to the Moon, but that "
                  "is a spacecraft bus, not a launch capability, so escape is 0.",
@@ -1228,12 +1234,19 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "payload_leo_kg_high":              450,
         "payload_gto_kg":                     0,
         "payload_escape_kg":                  0,
-        "list_price_usd":            54_000_000,
+        "list_price_usd_low":        54_000_000,    # $40M (2017) list, CPI-U
+        "list_price_usd_high":       76_000_000,    # NASA LSP ICON, $56M (2017), CPI-U
         "price_basis":                   "reported",
         "reference_year":          _REF_YEAR_LAUNCH,
-        "notes": "Air-launched from an L-1011.  $40M (2017), carried to 2026 "
+        "notes": "Air-launched from an L-1011.  Low end: a $40M (2017) list "
+                 "price, whose own source is not recorded, carried to 2026 "
                  "dollars by CPI-U (Dec 2017 to Aug 2026, x1.3484): $54M.  "
-                 "Until 0.6.0 the 2017 figure stood unescalated.  Final flight Jul "
+                 "High end: what NASA's Launch Services Program paid for ICON, "
+                 "$56M (2017) for a 443 kg LEO capacity (Zapata 2017, 'State of "
+                 "Play', p16), at the same factor: $76M.  That is a government "
+                 "full-service price, which the band now spans by decision.  "
+                 "Until 0.6.0 the 2017 figure stood unescalated; until 0.7.0 "
+                 "the row carried the list price alone.  Final flight Jul "
                  "2026, the Swift reboost mission.  46 flights, 3 failures and "
                  "2 partial.  The price per kilogram is why nobody asks for it "
                  "any more.",
