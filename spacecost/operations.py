@@ -716,13 +716,20 @@ OPERATIONAL_COSTS_REFERENCE: List[dict] = [
         "notes": "v1.9.0.  Reliability is not static across a programme — it "
                  "grows as failure modes are found and designed out.  The "
                  "Duane model has failure probability fall as n^(-alpha) with "
-                 "cumulative production, and MIL-HDBK-189 puts alpha at "
-                 "0.3-0.6 for an ACTIVE reliability-growth programme (one that "
-                 "root-causes every anomaly and feeds fixes back) against "
-                 "0.1-0.2 for passive fielding.  0.30 is the bottom of the "
-                 "active band — appropriate for hardware that flies once every "
-                 "few years, where each mission is a slow, expensive lesson "
-                 "and there is no test fleet to accelerate the learning.",
+                 "cumulative production (MIL-HDBK-189C, Jun 2011, 5.2.6).  "
+                 "The handbook's Table II gives historical growth rates of "
+                 "0.27-0.64 for one-shot systems (median 0.47; the mean is "
+                 "printed '.046', evidently 0.46) and 0.23-0.53 for time-based "
+                 "ones (0.34 mean, 0.32 median), and rejects Duane's universal "
+                 "0.5.  0.30 sits near the bottom of both ranges — appropriate "
+                 "for hardware that flies once every few years, where each "
+                 "mission is a slow, expensive lesson and there is no test "
+                 "fleet to accelerate the learning.  The 0.10 low end of the "
+                 "range is below every historical figure the handbook gives: "
+                 "a pessimistic sensitivity bound, not a sourced value.  Until "
+                 "0.6.1 this note credited MIL-HDBK-189 with a 0.3-0.6 'active' "
+                 "and 0.1-0.2 'passive' band; the handbook draws no such "
+                 "split.",
         "reference_year":   _REF_YEAR_OPS,
     },
     {

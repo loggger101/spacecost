@@ -1356,11 +1356,16 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "payload_gto_kg_high":           21_000,    # SpaceX single-launch figure
         "payload_escape_kg":             27_000,    # WITH orbital refueling
         "list_price_usd_high":      100_000_000,    # SpaceX, expendable
-        "list_price_usd_low":        90_000_000,    # Voyager Technologies contract 2026
+        "list_price_usd_low":        90_000_000,    # Voyager 424B4 prospectus, Jun 2025
         "price_basis":                   "contract",
         "reference_year":          _REF_YEAR_LAUNCH,
-        "notes": "Source: SpaceX-Voyager Technologies dedicated-launch contract "
-                 "(2026) at $90M; SpaceX's own $100M expendable figure as the "
+        "notes": "Source: Voyager Technologies final prospectus (Form 424B4, "
+                 "Jun 2025), Commitments and Contingencies: a commitment for "
+                 "ONE Starship launch for Starlab at $90.0M, as of Dec 31 2024 "
+                 "and Mar 31 2025 (cancelling for convenience owes the "
+                 "provider $13.5M).  Voyager's FY2025 10-K names the contract "
+                 "but states no price, and until 0.6.1 this note cited it as a "
+                 "2026 contract.  SpaceX's own $100M expendable figure is the "
                  "high end.  NOT YET ORBITAL: 13 test flights to Jul 2026, 8 "
                  "successful, all suborbital by design.  Block 2 was built for "
                  "100 t and fell to ~35 t, which is the low end; the V3 target "
