@@ -115,6 +115,7 @@ table's $/kg-to-orbit.
 | Taylor et al. 2018, "Delta-v map of Main Belt Asteroids" | LEO to main-belt transfer |
 | Elvis et al. 2011, arXiv 1105.4152 | near-Earth object delta-v accessibility distribution, and its 6.65 km/s peak |
 | NASA DRA 5.0 (SP-2009-566), Fig 4-2 | the swing of trans-Mars injection across the synodic cycle |
+| Orloff, *Apollo by the Numbers* (NASA SP-2000-4029), lunar-orbit phase tables | trans-lunar injection, lunar orbit insertion, and the Lunar Module's powered descent and ascent as flown on Apollo 14-17 |
 | Lyons (JPL), Magellan / MGS aerobraking; Long et al. 2007, MRO aerobraking operations | the aerobraked return's flight record |
 | NASA NTRS and JPL design handbooks | the remaining trajectory legs |
 

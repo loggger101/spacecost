@@ -374,7 +374,7 @@ _CHAIN_DV_AT_MOVE: Dict[str, Tuple[float, ...]] = {
     "leo":           (),
     "geo":           (2_455.0, 1_836.0),
     "cislunar":      (3_600.0,),
-    "lunar_surface": (4_050.0, 1_870.0),
+    "lunar_surface": (4_050.0, 2_050.0),    # descent 1,870 until v0.9.0
     "mars_orbit":    (3_600.0, 900.0),
     "mars_surface":  (3_600.0, 800.0),
 }
@@ -414,8 +414,9 @@ DOWNLEG_BATCH_KG           = 10_000.0   # nominal batch the recovery is spread o
 #   leo                120    (no row: a LEO deorbit burn is not tabulated)
 #   geo              1,490    "GEO -> Earth (deorbit to entry)"  1,488   NO, 2 m/s
 #   cislunar           450    "TLI -> NRHO insertion"              450   yes, symmetric
-#   lunar_surface    2,720    1,870 ascent (symmetric with the descent
-#                             row) + ~850 TEI, which has no row
+#   lunar_surface    2,700    "Lunar surface -> LLO (ascent)" 1,850 +
+#                             ~850 TEI, which has no row (2,720 until v0.9.0,
+#                             when the ascent was the descent row, 1,870)
 #   mars_orbit         900    "1-sol Mars orbit -> Earth (TEI)"     900   yes
 #   mars_surface     6,200    "Mars surface -> low Mars orbit" 4,100 +
 #                             "Low Mars orbit -> Earth (TEI)"  2,100     yes, sum
@@ -448,8 +449,9 @@ DOWNLEG_DEPARTURE_DV_M_S: Dict[str, float] = {
     "geo":            _GEO_DEORBIT_DV_M_S,
     # NRHO departure, symmetric with the insertion burn.
     "cislunar":       _dv("TLI  →  NRHO insertion"),
-    # Ascent to LLO, symmetric with the descent row, plus TEI.
-    "lunar_surface":  _dv("LLO  →  lunar surface (descent)") + _LLO_TEI_DV_M_S,
+    # Ascent to LLO, its own row since v0.9.0 (it was the descent row,
+    # taken as symmetric, until the descent was re-pinned), plus TEI.
+    "lunar_surface":  _dv("Lunar surface  →  LLO (ascent)") + _LLO_TEI_DV_M_S,
     # TEI at periapsis, symmetric with the capture.
     "mars_orbit":     _dv("1-sol Mars orbit  →  Earth (TEI)"),
     # Ascent to low Mars orbit, then TEI from there.
@@ -463,7 +465,7 @@ DOWNLEG_DEPARTURE_DV_M_S: Dict[str, float] = {
 # quietly edited.
 _DOWNLEG_DV_AT_MOVE: Dict[str, float] = {
     "leo": 120.0, "geo": 1_490.0, "cislunar": 450.0,
-    "lunar_surface": 2_720.0, "mars_orbit": 900.0, "mars_surface": 6_200.0,
+    "lunar_surface": 2_700.0, "mars_orbit": 900.0, "mars_surface": 6_200.0,
 }
 for _k, _want in _DOWNLEG_DV_AT_MOVE.items():
     if DOWNLEG_DEPARTURE_DV_M_S[_k] != _want:
@@ -483,6 +485,35 @@ if _dv("GEO  →  Earth (deorbit to entry)") != _GEO_DEORBIT_ROW_AT_MOVE:
 # ─────────────────────────────────────────────────────────────────────────────
 # THE ARITHMETIC
 # ─────────────────────────────────────────────────────────────────────────────
+
+# What the lunar legs burned before v0.9.0 re-pinned the descent to what
+# Apollo flew (1,870 -> 2,050 m/s) and gave the ascent its own row (the downleg
+# took the descent as symmetric, 2,720 -> 2,700).  Pass these as `burn_dv` /
+# `departure_dv_m_s` to reproduce a pre-v0.9.0 price bit for bit; tests pin
+# that, because every economicspace Stage 2 table priced before it has to be
+# re-derivable.  Every other destination's chain is unchanged.
+CHAIN_BURN_DV_BEFORE_V090: Dict[str, Tuple[float, ...]] = {
+    "lunar_surface": (4_050.0, 1_870.0),
+}
+DOWNLEG_DV_BEFORE_V090: Dict[str, float] = {"lunar_surface": 2_720.0}
+
+
+def _chain(destination: str, burn_dv=None):
+    """The chain for `destination`, with each burn's Δv replaced from
+    `burn_dv` (in chain order) when one is given.  None leaves it as is."""
+    legs = DELIVERY_CHAINS.get(str(destination or "").strip().lower())
+    if legs is None or burn_dv is None:
+        return legs
+    burns = [i for i, l in enumerate(legs) if l[0] == "burn"]
+    if len(burn_dv) != len(burns):
+        raise ValueError("burn_dv gives %d values for %r, whose chain has %d "
+                         "burns" % (len(burn_dv), destination, len(burns)))
+    legs = list(legs)
+    for i, dv in zip(burns, burn_dv):
+        _, _, isp, dry = legs[i]
+        legs[i] = ("burn", float(dv), isp, dry)
+    return legs
+
 
 def stage_mass_ratio(dv_m_s: float, isp_s: float, dry_mass_frac: float) -> float:
     """Initial mass needed per kg of payload for one propulsive leg.
@@ -506,7 +537,7 @@ def stage_mass_ratio(dv_m_s: float, isp_s: float, dry_mass_frac: float) -> float
     return r * (1.0 + d)
 
 
-def delivery_mass_ratio(destination: str) -> float:
+def delivery_mass_ratio(destination: str, burn_dv=None) -> float:
     """Kilograms that must reach LEO per kilogram delivered to `destination`.
 
     Walk the chain BACKWARDS from the payload, multiplying up the mass each leg
@@ -515,9 +546,10 @@ def delivery_mass_ratio(destination: str) -> float:
     lands.
 
     1.0 at `leo`, which has an empty chain; 0.0 at `earth_surface`, which has
-    no chain at all.  `inf` where a tank cannot close.
+    no chain at all.  `inf` where a tank cannot close.  `burn_dv` replaces each
+    burn's Δv, in chain order (see `CHAIN_BURN_DV_BEFORE_V090`).
     """
-    legs = DELIVERY_CHAINS.get(str(destination or "").strip().lower())
+    legs = _chain(destination, burn_dv)
     if legs is None:
         return 0.0                       # earth_surface avoids no launch at all
 
@@ -534,7 +566,7 @@ def delivery_mass_ratio(destination: str) -> float:
     return mass
 
 
-def delivery_hardware_usd_per_kg(destination: str) -> float:
+def delivery_hardware_usd_per_kg(destination: str, burn_dv=None) -> float:
     """What building the expended stages costs, per kg delivered.  (v0.4.0.)
 
     Walks the chain backwards exactly as `delivery_mass_ratio` does, and at
@@ -546,9 +578,9 @@ def delivery_hardware_usd_per_kg(destination: str) -> float:
 
     each scaled by the mass that leg carries.  0.0 at `leo` and
     `earth_surface`, where nothing is expended above LEO; `inf` where a tank
-    cannot close.
+    cannot close.  `burn_dv` as for `delivery_mass_ratio`.
     """
-    legs = DELIVERY_CHAINS.get(str(destination or "").strip().lower())
+    legs = _chain(destination, burn_dv)
     if not legs:
         return 0.0
 
@@ -580,6 +612,7 @@ def delivered_cost_usd_per_kg(
     destination:    str,
     leo_usd_per_kg: float = LEO_LAUNCH_USD_PER_KG,
     stage_hardware: bool = True,
+    burn_dv=None,
 ) -> float:
     """Cost of putting 1 kg of payload at `destination`, launched from Earth.
 
@@ -590,22 +623,26 @@ def delivered_cost_usd_per_kg(
 
     `stage_hardware=False` with `leo_usd_per_kg=4253.0` reproduces every
     pre-v0.4.0 figure bit for bit, which is how a result measured before this
-    release is re-derived rather than re-guessed.
+    release is re-derived rather than re-guessed.  `leo_usd_per_kg=2414.0`
+    reproduces v0.4.0-v0.7.0, and adding
+    `burn_dv=CHAIN_BURN_DV_BEFORE_V090["lunar_surface"]` reproduces a lunar
+    price from before v0.9.0's descent re-pin.
 
     Unknown destinations return 0.0 rather than raising, which is the
     behaviour its consumer has always had: a destination with no chain avoids
     no launch.
     """
-    mass = delivery_mass_ratio(destination)
+    mass = delivery_mass_ratio(destination, burn_dv)
     if not math.isfinite(mass):
         return float("inf")
     cost = float(leo_usd_per_kg) * mass
     if stage_hardware:
-        cost += delivery_hardware_usd_per_kg(destination)
+        cost += delivery_hardware_usd_per_kg(destination, burn_dv)
     return cost
 
 
-def downleg_cost_usd_per_kg(destination: str) -> float:
+def downleg_cost_usd_per_kg(destination: str,
+                            departure_dv_m_s: Optional[float] = None) -> float:
     """Cost of moving 1 kg from an in-space depot to the terrestrial market.
 
     Capsule + TPS + a share of the recovery campaign, all scaled by the mass
@@ -613,7 +650,8 @@ def downleg_cost_usd_per_kg(destination: str) -> float:
     to be built and flown.
 
     Returns 0.0 for `earth_surface` and for anything unrecognised; the material
-    is already there.
+    is already there.  `departure_dv_m_s` replaces the departure burn
+    (`DOWNLEG_DV_BEFORE_V090` reproduces a pre-v0.9.0 lunar downleg).
     """
     key = str(destination or "").strip().lower()
     if key not in DOWNLEG_DEPARTURE_DV_M_S:
@@ -624,7 +662,9 @@ def downleg_cost_usd_per_kg(destination: str) -> float:
                   + tps_kg * DOWNLEG_TPS_USD_PER_KG)
     recovery   = DOWNLEG_RECOVERY_USD / DOWNLEG_BATCH_KG
     # Departure burn shows up as extra mass to be built and flown.
-    r = math.exp(DOWNLEG_DEPARTURE_DV_M_S[key] / (TUG_ISP_S * G0_M_S2))
+    dv = (DOWNLEG_DEPARTURE_DV_M_S[key] if departure_dv_m_s is None
+          else float(departure_dv_m_s))
+    r = math.exp(dv / (TUG_ISP_S * G0_M_S2))
     return (hardware + recovery) * r
 
 
