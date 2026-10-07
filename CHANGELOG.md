@@ -13,6 +13,40 @@ may read a version as proof that a number moved.
 
 ## Package releases
 
+### 0.8.0 - 2026-10-07
+
+**Data contract 1.19.0 → 1.20.0: Falcon Heavy (expendable)'s band now reaches
+the price NASA paid for one, and the LEO price anchor moves with it.**
+General_Research revision candidate rc-022, settled by the owner's decision
+(the same one 0.7.0 took for Pegasus XL) that a launch band may span a
+government full-service price as well as a list price.
+
+- **Falcon Heavy (expendable)** (`launch_vehicles.csv`): the band's high end
+  was SpaceX's $150M (2017) carried forward by the 2026 Falcon 9 rise, $159M.
+  It is now **$178M**, what NASA paid for the Falcon Heavy that launched Europa
+  Clipper (NASA OIG IG-24-001, p24; a 2021 award, stated unescalated). The low
+  end stays $150M. The centre goes **$154M → $163M**, and $/kg to LEO
+  **$2,414 → $2,555**.
+
+**That row is the LEO price anchor**, so every delivered price above LEO moves
+with it, and the anchor rule still selects it (the next candidate, Falcon Heavy
+with reusable side cores, is $3,333/kg):
+
+| destination | 0.7.0 | 0.8.0 | change |
+|---|---:|---:|---:|
+| `leo` | 2,414 | 2,555 | +5.8% |
+| `geo` | 8,046 | 8,462 | +5.2% |
+| `cislunar` | 6,878 | 7,236 | +5.2% |
+| `mars_orbit` | 8,706 | 9,154 | +5.1% |
+| `lunar_surface` | 42,635 | 43,338 | +1.6% |
+| `mars_surface` | 184,811 | 186,306 | +0.8% |
+
+The surfaces move least because most of their price is the stages a chain
+expends, which the anchor does not touch. **Every 0.4.0-0.7.0 price is still
+reproducible bit for bit** as `delivered_cost_usd_per_kg(dest, 2414.0)`, and
+`tests/test_delivery.py` pins that, because every economicspace Stage 2 table
+priced in that span has to be re-derivable.
+
 ### 0.7.0 - 2026-10-07
 
 **Data contract 1.18.1 → 1.19.0: two launch prices become the bands their
@@ -1624,3 +1658,9 @@ beside the FY20 basis that can no longer be checked.
 release 0.7.0 above. Electron's band is Rocket Lab's reported revenue per launch
 for Q1 2025 and Q1 2026 ($7.1M-$9.3M), and Pegasus XL's runs from its list
 price to NASA's ICON price ($54M-$76M, 2026 dollars). No column moved.
+
+**`1.20.0`  Falcon Heavy (expendable)'s band reaches NASA's price.** Full
+write-up under package release 0.8.0 above. The band's high end is the $178M
+NASA paid for Europa Clipper's launch; the centre is $163M, $2,555/kg, and
+since that row is the LEO price anchor every delivered price above LEO moves
+0.8-5.8%. No column moved.

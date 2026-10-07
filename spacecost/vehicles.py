@@ -220,12 +220,17 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "payload_leo_kg":                63_800,
         "payload_gto_kg":                26_700,
         "payload_escape_kg":             16_800,    # Mars transfer
-        "list_price_usd_high": int(round(150_000_000 * _SPACEX_2026_RISE, -6)),
+        "list_price_usd_high":      178_000_000,    # NASA, Europa Clipper (2021)
         "list_price_usd_low":       150_000_000,    # SpaceX (2017)
         "price_basis":                   "published",
         "reference_year":          _REF_YEAR_LAUNCH,
-        "notes": "Source: SpaceX $150M (2017) for the fully expendable config, "
-                 "carried forward by the 2026 Falcon 9 rise to $159M.  The "
+        "notes": "Source: SpaceX $150M (2017) for the fully expendable config "
+                 "is the low end.  The high end is what NASA paid for the "
+                 "Falcon Heavy that launched Europa Clipper, $178M (NASA OIG "
+                 "IG-24-001, p24; awarded 2021), a government full-service "
+                 "price the band spans by decision.  Until 0.8.0 the high end "
+                 "was the $150M carried forward by the 2026 Falcon 9 rise "
+                 "($159M), and the centre $154M.  The "
                  "63.8 t LEO figure has never been flown; no Falcon Heavy "
                  "payload has come close to it.  Volume, not mass, binds first "
                  "at this size: the fairing is the Falcon 9 fairing.",

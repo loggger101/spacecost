@@ -126,9 +126,12 @@ DOWNLEG_AT_MOVE = {
 }
 
 
-# v0.4.0: the default model.  Falcon Heavy (expendable) at the centre of its
-# band, plus the build cost of every stage the chain expends, at each cost
-# row's central value.  Captured on the reference platform at full precision.
+# v0.4.0 to v0.7.0: Falcon Heavy (expendable) at the centre of its $150-159M
+# band ($2,414/kg), plus the build cost of every stage the chain expends, at
+# each cost row's central value.  Captured on the reference platform at full
+# precision.  Since v0.8.0 an override anchor, pinned exactly, because every
+# economicspace Stage 2 table priced in that span is re-derived through it.
+V040_LEO = 2414.0
 DELIVERED_V040 = {
     "earth_surface": 0.0,
     "leo":           2414.0,
@@ -148,8 +151,27 @@ def test_the_legacy_model_still_reproduces_the_source(dest, expected):
         expected, "legacy delivered_cost_usd_per_kg(%r)" % dest)
 
 
+# v0.8.0: the default.  The same model, with Falcon Heavy (expendable)'s band
+# topped by NASA's $178M Europa Clipper price, centre $163M, $2,555/kg.
+DELIVERED_V080 = {
+    "earth_surface": 0.0,
+    "leo":           2555.0,
+    "geo":           8461.770763441396,
+    "cislunar":      7236.339285426234,
+    "lunar_surface": 43338.42955783156,
+    "mars_orbit":    9153.85477258178,
+    "mars_surface":  186306.17728731583,
+}
+
+
 @pytest.mark.parametrize("dest,expected", sorted(DELIVERED_V040.items()))
-def test_delivered_cost_is_the_v040_model(dest, expected):
+def test_the_v040_anchor_still_reproduces(dest, expected):
+    assert_reproduces(delivery.delivered_cost_usd_per_kg(dest, V040_LEO),
+                      expected, "delivered_cost_usd_per_kg(%r, 2414.0)" % dest)
+
+
+@pytest.mark.parametrize("dest,expected", sorted(DELIVERED_V080.items()))
+def test_delivered_cost_is_the_v080_model(dest, expected):
     assert_reproduces(delivery.delivered_cost_usd_per_kg(dest), expected,
                       "delivered_cost_usd_per_kg(%r)" % dest)
 
@@ -163,7 +185,7 @@ def test_downleg_cost_reproduces_the_source(dest, expected):
 def test_the_launch_price_comes_off_the_vehicle_table():
     """Not a literal: the whole point of the move.  The band's centre."""
     assert delivery.LEO_LAUNCH_VEHICLE == "Falcon Heavy (expendable)"
-    assert delivery.LEO_LAUNCH_USD_PER_KG == 2414.0
+    assert delivery.LEO_LAUNCH_USD_PER_KG == 2555.0
     row = [r for r in spacecost.LAUNCH_VEHICLES_REFERENCE
            if r["name"] == delivery.LEO_LAUNCH_VEHICLE]
     assert row and float(row[0]["usd_per_kg_to_leo"]) == \

@@ -171,9 +171,12 @@ def _propellant_usd_per_kg(name: str) -> float:
 #                                            not a rival's estimate or a target
 #   -> the lowest headline `usd_per_kg_to_leo`, the centre of its band
 #
-# That is FALCON HEAVY (EXPENDABLE): SpaceX's $150M (2017) to $159M (carried
-# to 2026) for 63.8 t, centred at $2,414/kg.  What the rule excludes, and why
-# each is not an oversight:
+# That is FALCON HEAVY (EXPENDABLE): SpaceX's $150M (2017) to the $178M NASA
+# paid for Europa Clipper's, for 63.8 t, centred at $2,555/kg.  Until v0.8.0
+# the band's top was the $150M carried to 2026 ($159M) and the centre
+# $2,414/kg; `delivered_cost_usd_per_kg(dest, 2414.0)` reproduces every
+# v0.4.0-v0.7.0 price bit for bit.  What the rule excludes, and why each is
+# not an oversight:
 #
 #   New Glenn     $1,922/kg centred on a $68-110M range whose bottom is Rocket
 #                 Lab's ESTIMATE of Blue Origin's price (`reported`), not a
