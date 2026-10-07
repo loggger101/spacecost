@@ -13,6 +13,37 @@ may read a version as proof that a number moved.
 
 ## Package releases
 
+### 0.6.1 - 2026-10-07
+
+**Data contract 1.18.0 → 1.18.1: four notes cells now say what their sources
+actually hold. No value moved.** Only `notes` cells, CITATIONS.md and the
+`pipeline_version` stamp changed. Each item names its General_Research revision
+candidate.
+
+- **Mining reliability growth exponent** (rc-084, `operational_costs.csv`): the
+  note credited MIL-HDBK-189 with alpha at 0.3-0.6 for an "active" growth
+  programme against 0.1-0.2 for "passive" fielding. MIL-HDBK-189C draws no such
+  split. What it gives is Table II (5.2.6.2), historical growth rates by
+  system type: 0.27-0.64 for one-shot systems (median 0.47) and 0.23-0.53 for
+  time-based ones (median 0.32). The row's 0.30 sits near the bottom of both,
+  so it stands; the note now cites Table II, and says the range's 0.10 low end
+  is a sensitivity bound below every figure the handbook gives. (The registry
+  read "no alpha band anywhere" and proposed dropping the numbers; Table II is
+  the band, by a different axis.)
+- **Starship (projected)** (rc-082, `launch_vehicles.csv`): the $90M low end
+  was cited as a 2026 SpaceX-Voyager contract. Voyager's FY2025 10-K names the
+  contract and states no price; the figure is in its final IPO prospectus (Form
+  424B4, Jun 2025), Commitments and Contingencies: one Starlab launch at $90.0M
+  as of Dec 31 2024 and Mar 31 2025, with $13.5M owed on cancellation. The note
+  and CITATIONS.md now cite the prospectus.
+- **MMH / NTO (hypergolic)** and **Hydrazine (monoprop)** (rc-083,
+  `propellants.csv`): the "DOD FY20" standard prices both rows cite can no
+  longer be found to re-check. DLA Energy's FY2025 Aerospace Standard Prices
+  (effective Oct 1 2024) are now quoted beside them: MMH $225.40/lb (~$497/kg),
+  NTO MON-3 $106.42/lb (~$235/kg), hydrazine $165.75/lb (~$365/kg). They are DoD
+  prices including DLA overhead, recorded as the government comparison; the
+  values are not re-pinned to them.
+
 ### 0.6.0 - 2026-10-06
 
 **Data contract 1.17.3 → 1.18.0: four values re-pinned to their sources.**
@@ -1555,3 +1586,9 @@ their sources hold, or say a figure's own source is not recorded.
 package release 0.6.0 above. Atlas V 551, Minotaur IV (high end) and Pegasus XL
 list prices carried to 2026 dollars by CPI-U, and Deep Space Network time
 re-derived from the DSN Services Catalog's rate base. No column moved.
+
+**`1.18.1`  four attributions corrected.** Full write-up under package release
+0.6.1 above. No value and no column moved: the reliability growth exponent now
+cites MIL-HDBK-189C's Table II, Starship's $90M cites Voyager's 424B4
+prospectus, and the two hypergolic rows quote DLA's FY2025 standard prices
+beside the FY20 basis that can no longer be checked.

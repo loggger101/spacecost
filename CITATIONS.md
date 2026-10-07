@@ -38,7 +38,7 @@ ones that carry more than one row.
 | source | what it establishes |
 |---|---|
 | SatBase 2026-02 SpaceX price update | Falcon 9 list price, and the rise used to carry Falcon Heavy's older quotes forward |
-| SpaceX / Voyager Technologies contract, 2026 | Starship dedicated-launch price (low end of its range) |
+| Voyager Technologies final prospectus (SEC Form 424B4, Jun 2025), Commitments and Contingencies note | Starship dedicated-launch price (low end of its range): one Starlab launch committed at $90.0M |
 | NASA Office of Inspector General, IG-22-003 (Nov 2021) and Oct 2023 audit | SLS launch-only cost: $2.2B vehicle + $568M ground, "at least $2.5B" |
 | NASA, Feb 2026 Artemis restructuring (SpaceNews, SatNews) | SLS Block 1B and the Exploration Upper Stage cancelled |
 | ULA RocketBuilder, and SpaceNews 2024-2026 | Atlas V pricing and sales end; Vulcan's "starting at $110M" |
@@ -95,7 +95,8 @@ so a study can state what it excluded.
 
 | source | what it establishes |
 |---|---|
-| DOD Aerospace Standard Prices, FY20 | hydrazine, MMH, N2O4 pricing |
+| DOD Aerospace Standard Prices, FY20 | hydrazine, MMH, N2O4 pricing (a list no longer findable to re-check) |
+| DLA Energy, Aerospace Standard Prices FY2025 (effective Oct 1 2024) | the government price of MMH, NTO and hydrazine, quoted beside the rows as a comparison and not used for a value |
 | SETS Space / Electric Propulsion, 2024 | xenon and argon ion pricing |
 | Mobius / Energy CG, 2024 | liquid methane commodity pricing |
 | NASA-STD-(I)-5019 class hardware | COPV burst performance factor, ~392 kJ/kg |
@@ -133,6 +134,7 @@ Lambert solve against an ephemeris; these are what you price the answer with.
 | Plane Talking (Gallagher) / Slingshot Aerospace, 2024 | launch insurance market rate, and the 2023 losses behind it |
 | Damodaran (NYU Stern), Boeing and Howmet filings | cost-of-capital benchmark |
 | NASA Mars 2020 / Perseverance autonomy programme | autonomous control development cost |
+| MIL-HDBK-189C (Jun 2011), 5.2.6 and Table II | the Duane growth model, and the historical growth rates the mining reliability exponent sits inside |
 
 The mission profile these are costed against is **uncrewed and fully
 autonomous**: no life support, no habitat, no crew operations. The autonomy
