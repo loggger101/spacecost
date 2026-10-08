@@ -13,6 +13,7 @@ import pandas as pd
 
 from ._log import say
 from .units import G0_M_S2
+from .vehicles import band_centre
 
 # ─────────────────────────────────────────────────────────────────────────────
 # PROPELLANT REFERENCE TABLE
@@ -384,10 +385,18 @@ def _blend(of_ratio: float, fuel: dict, ox: dict) -> dict:
 #              stands pending re-sourcing.  Cheapest storable oxidiser there is.
 #   GN2        Cold gas.  Nitrogen is nearly free; the COPV is the whole cost.
 #              Stored at 30 MPa, ρ ≈ 0.25 kg/L.
-#   Krypton    Bulk industrial ~$300/kg (air-separation by-product; roughly 30×
-#              cheaper than Xe and about 10× more abundant in air).  Stored
-#              supercritical at ~18 MPa, ρ ≈ 0.55 kg/L; much worse than Xe,
-#              which is why the tank term matters here.
+#   Krypton    A BAND since data contract 1.22.0 (rc-059), and the price is its
+#              geometric centre, $794/kg.  The low end is bulk: INL/RPT-23-75203
+#              (2023), Sec. 1, found Kr prices "hover around $1/L", ~$267/kg
+#              at 3.75 g/L, taken as $300.  The high end is the bottom of SETS
+#              Space's 2024
+#              flight-grade quote, "$2,100-$4,800".  The two measure different
+#              markets (an air-separation by-product, and a propellant-grade
+#              cylinder), which is why the row is a band and not either of
+#              them; it was an unsourced $300 until 1.22.0.  ~13x cheaper than
+#              Xe and about 10× more abundant in air.  Stored supercritical at
+#              ~18 MPa, ρ ≈ 0.55 kg/L; much worse than Xe, which is why the
+#              tank term matters here.
 #   Iodine     ~$60/kg technical grade.  ρ 4.93 kg/L as a SOLID at ambient
 #              pressure: the densest storable electric propellant known.
 #   Water      Spaceflight-grade deionised, ~$2/kg delivered.  The only entry
@@ -409,6 +418,12 @@ def _blend(of_ratio: float, fuel: dict, ox: dict) -> dict:
 #   Al-powder  Aluminium fuel for ALICE-class metal/water propellants, ~$3/kg.
 #   CO         Carbon monoxide, liquid at 81 K.  Makeable from carbonaceous
 #              regolith; pairs with LOX for a fully-ISRU chemical stage.
+# Krypton's price band (rc-059, data contract 1.22.0); see the component notes
+# above.  Bulk (INL/RPT-23-75203, ~$1/L) to the bottom of SETS Space's 2024
+# flight-grade quote.  The component carries the band's geometric centre.
+KRYPTON_USD_PER_KG_LOW  =   300.0
+KRYPTON_USD_PER_KG_HIGH = 2_100.0
+
 _COMPONENTS = {
     "RP-1":      {"density_kg_per_L": 0.810, "cost_usd_per_kg":      2.50, "storage_class": "storable_liquid"},
     "LH2":       {"density_kg_per_L": 0.0708,"cost_usd_per_kg":     10.00, "storage_class": "deep_cryogen"},   # base + handling
@@ -459,7 +474,7 @@ _COMPONENTS = {
     "Aerozine50":{"density_kg_per_L": 0.903, "cost_usd_per_kg":     90.00, "storage_class": "storable_liquid"},
     "HTP-98":    {"density_kg_per_L": 1.431, "cost_usd_per_kg":      5.00, "storage_class": "storable_liquid"},
     "GN2":       {"density_kg_per_L": 0.250, "cost_usd_per_kg":      1.00, "storage_class": "supercritical_gas", "pressure_mpa": 30.0},
-    "Krypton":   {"density_kg_per_L": 0.550, "cost_usd_per_kg":    300.00, "storage_class": "supercritical_gas", "pressure_mpa": 18.0},
+    "Krypton":   {"density_kg_per_L": 0.550, "cost_usd_per_kg": float(band_centre(KRYPTON_USD_PER_KG_LOW, KRYPTON_USD_PER_KG_HIGH)), "storage_class": "supercritical_gas", "pressure_mpa": 18.0},
     "Iodine":    {"density_kg_per_L": 4.930, "cost_usd_per_kg":     60.00, "storage_class": "sublimating_solid"},
     "Water":     {"density_kg_per_L": 1.000, "cost_usd_per_kg":      2.00, "storage_class": "benign_liquid"},
     "ASCENT":    {"density_kg_per_L": 1.470, "cost_usd_per_kg":    500.00, "storage_class": "storable_liquid"},
@@ -1010,8 +1025,13 @@ PROPELLANTS_REFERENCE: List[dict] = [
         "reference_year":        _REF_YEAR_PROP,
         "notes": "The most-flown electric propellant by unit count — every "
                  "Starlink v1.0 Hall thruster ran krypton, because Xe supply "
-                 "cannot feed a constellation.  ~30× cheaper than xenon at "
-                 "$300/kg, ~2/3 the Isp, and a materially worse tank: 0.55 kg/L "
+                 "cannot feed a constellation.  ~13× cheaper than xenon at "
+                 "$794/kg, the geometric centre of a band from $300/kg (bulk: "
+                 "INL/RPT-23-75203, 2023, Sec. 1, 'hover around $1/L', ~$267/kg at "
+                 "3.75 g/L) to $2,100/kg (the bottom of SETS Space's 2024 "
+                 "flight-grade quote, $2,100-$4,800); it was an unsourced $300 "
+                 "until data contract 1.22.0.  ~2/3 the Isp, and a materially "
+                 "worse tank: 0.55 kg/L "
                  "supercritical against xenon's 2.0 means the COPV masses 12.5% "
                  "of the propellant against xenon's 1.9%.  Whether it beats "
                  "xenon is exactly the kind of trade this table now lets the "
