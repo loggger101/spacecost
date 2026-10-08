@@ -97,7 +97,8 @@ so a study can state what it excluded.
 |---|---|
 | DOD Aerospace Standard Prices, FY20 | hydrazine, MMH, N2O4 pricing (a list no longer findable to re-check) |
 | DLA Energy, Aerospace Standard Prices FY2025 (effective Oct 1 2024) | the government price of MMH, NTO and hydrazine, quoted beside the rows as a comparison and not used for a value |
-| SETS Space / Electric Propulsion, 2024 | xenon and argon ion pricing |
+| SETS Space / Electric Propulsion, 2024 | xenon and argon ion pricing, and the high end of krypton's band ("$2,100-$4,800" flight grade) |
+| Idaho National Laboratory, INL/RPT-23-75203, Krypton and xenon recovery cost-benefit, 2023 | the low end of krypton's band: a market survey putting bulk Kr prices at "around $1/L" |
 | Mobius / Energy CG, 2024 | liquid methane commodity pricing |
 | NASA-STD-(I)-5019 class hardware | COPV burst performance factor, ~392 kJ/kg |
 | Shuttle External Tank, Falcon 9 second stage, Centaur III | the flight anchors the tankage model is calibrated on |

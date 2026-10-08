@@ -13,6 +13,33 @@ may read a version as proof that a number moved.
 
 ## Package releases
 
+### 0.10.0 - 2026-10-07
+
+**Data contract 1.21.0 → 1.22.0: krypton's price is a band its two sources
+bound, where it was an unsourced point.** General_Research revision candidate
+rc-059.
+
+- **Krypton  (Hall)** (`propellants.csv`): **$300 → $794/kg**. The $300 carried
+  no source, and the two that exist measure different markets. Idaho National
+  Laboratory's 2023 market survey (INL/RPT-23-75203, Sec. 1) found bulk krypton
+  hovering around **$1/L**, which at krypton's gas density at standard
+  conditions (3.75 g/L) is about $267/kg, so $300 is the bulk end. SETS Space's
+  2024 electric-propulsion propellant guide puts flight-grade krypton at
+  **$2,100-$4,800/kg**. The band runs from the bulk figure to the bottom of the
+  aerospace quote, **$300-$2,100/kg**, by owner decision, and the row carries
+  its geometric centre, $794, rounded as every band's centre in this package
+  is (`band_centre`). The price is still a component constant rather than a
+  column: no propellant row has band columns, and adding them is a schema
+  change for one row.
+
+Krypton is now about 13x cheaper than xenon ($10,000/kg) where it was about
+33x, and `ref_cost_usd_per_L` moves with it, $165 → $437. Nothing in the
+delivery module reads it, so no delivered price moves.
+
+A column-by-column comparison against 0.9.0 differs in that row (price, price
+per litre, notes), in the 21 `summary_sample.csv` rows that fly krypton, and
+in `pipeline_version`. Nothing else moved.
+
 ### 0.9.0 - 2026-10-07
 
 **Data contract 1.20.0 → 1.21.0: the lunar descent is what Apollo flew, and the
@@ -1707,3 +1734,8 @@ under package release 0.9.0 above. "LLO → lunar surface (descent)" 1,870 →
 2,050 m/s and "LEO → lunar surface" 5,920 → 6,100, from Apollo 15-17 as flown
 (NASA SP-4029); a new row, "Lunar surface → LLO (ascent)", 1,850 m/s. One row
 added (`delta_v_segments` 33 → 34); no column moved.
+
+**`1.22.0`  krypton becomes a band.** Full write-up under package release 0.10.0
+above. Krypton's price was an unsourced $300/kg; it is now the geometric centre
+of $300 (INL's ~$1/L bulk survey, 2023) and $2,100 (the bottom of SETS Space's
+2024 flight-grade quote), $794/kg. No row added and no column moved.
