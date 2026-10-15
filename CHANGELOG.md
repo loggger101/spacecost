@@ -13,6 +13,30 @@ may read a version as proof that a number moved.
 
 ## Package releases
 
+### 0.11.0 - 2026-10-15
+
+**Data contract unchanged at 1.22.0: a new destination, `gto`, and no row
+moves.** `build_catalog()` writes the same CSVs byte for byte, so
+economicspace repins and does not re-run Stage 3. Same shape as 0.3.0: new
+code, no new data.
+
+- **`DELIVERY_CHAINS["gto"]`**: a refuelling depot in a standard 28.5 deg GTO
+  (200 km perigee, apogee at GEO), where GEO-bound satellites can be topped up
+  before their apogee burn. One leg, the existing **LEO -> GTO (perigee burn)**
+  row, 2,455 m/s: the first leg of the `geo` chain, so a GTO kilogram is never
+  the dearer of the two. No plane change, because the depot sits in the plane
+  the launch puts it in.
+- **`delivered_cost_usd_per_kg("gto")` = $5,168/kg**, of which $414 is the
+  expended tug. Under the cheapest open direct GTO launch, Falcon Heavy
+  (expendable) at $6,105/kg, which a new test holds it to.
+- **`DOWNLEG_DEPARTURE_DV_M_S["gto"]` = 16 m/s, typed**: lowering perigee
+  from 200 km to an entry at ~50 km, taken at apogee. No row exists for it,
+  as none does for the LEO deorbit. Downleg cost $24,837/kg.
+
+Every other destination's delivered and downleg price is pinned unchanged by
+the tests. The older pinned-price dicts deliberately do not carry `gto`, since
+no release before this one priced it.
+
 ### 0.10.0 - 2026-10-07
 
 **Data contract 1.21.0 → 1.22.0: krypton's price is a band its two sources
