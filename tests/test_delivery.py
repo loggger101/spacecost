@@ -170,6 +170,12 @@ DELIVERED_V080 = {
 DELIVERED_V090 = dict(DELIVERED_V080, lunar_surface=48226.347276656146)
 DOWNLEG_V090 = dict(DOWNLEG_AT_MOVE, lunar_surface=44742.2736509585)
 
+# v0.11.0: the default.  A new destination, `gto`, and nothing else moves; the
+# older dicts above deliberately do not carry it, because no release before
+# this one priced it.
+DELIVERED_V0110 = dict(DELIVERED_V090, gto=5168.322210670087)
+DOWNLEG_V0110 = dict(DOWNLEG_V090, gto=24836.992875204603)
+
 
 @pytest.mark.parametrize("dest,expected", sorted(DELIVERED_V040.items()))
 def test_the_v040_anchor_still_reproduces(dest, expected):
@@ -188,10 +194,18 @@ def test_the_v080_chain_still_reproduces(dest, expected):
         expected, "pre-v0.9.0 delivered_cost_usd_per_kg(%r)" % dest)
 
 
-@pytest.mark.parametrize("dest,expected", sorted(DELIVERED_V090.items()))
-def test_delivered_cost_is_the_v090_model(dest, expected):
+@pytest.mark.parametrize("dest,expected", sorted(DELIVERED_V0110.items()))
+def test_delivered_cost_is_the_v0110_model(dest, expected):
     assert_reproduces(delivery.delivered_cost_usd_per_kg(dest), expected,
                       "delivered_cost_usd_per_kg(%r)" % dest)
+
+
+def test_every_destination_with_a_chain_is_pinned():
+    """A destination added to DELIVERY_CHAINS without a pinned price is a
+    price nobody has looked at.  This is what made v0.11.0 add `gto` above."""
+    assert set(delivery.DELIVERY_CHAINS) == set(DELIVERED_V0110)
+    assert (set(delivery.DOWNLEG_DEPARTURE_DV_M_S) | {"earth_surface"}
+            == set(DOWNLEG_V0110))
 
 
 @pytest.mark.parametrize("dest,expected", sorted(DOWNLEG_AT_MOVE.items()))
@@ -202,8 +216,8 @@ def test_downleg_cost_reproduces_the_source(dest, expected):
         expected, "pre-v0.9.0 downleg_cost_usd_per_kg(%r)" % dest)
 
 
-@pytest.mark.parametrize("dest,expected", sorted(DOWNLEG_V090.items()))
-def test_downleg_cost_is_the_v090_model(dest, expected):
+@pytest.mark.parametrize("dest,expected", sorted(DOWNLEG_V0110.items()))
+def test_downleg_cost_is_the_v0110_model(dest, expected):
     assert_reproduces(delivery.downleg_cost_usd_per_kg(dest), expected,
                       "downleg_cost_usd_per_kg(%r)" % dest)
 
@@ -272,6 +286,21 @@ def test_geo_is_not_dearer_than_buying_gto_directly():
               + (m0 - m0 / r) * delivery.TUG_PROPELLANT_USD_PER_KG)
     direct = _cheapest_open("usd_per_kg_to_gto") * m0 + leg_hw
     assert delivery.delivered_cost_usd_per_kg("geo") <= direct
+
+
+def test_gto_is_not_dearer_than_buying_gto_directly():
+    """The same bound with no leg on top: a GTO kilogram priced above the
+    cheapest open GTO launch would be worth more than the launch it avoids."""
+    assert (delivery.delivered_cost_usd_per_kg("gto")
+            <= _cheapest_open("usd_per_kg_to_gto"))
+
+
+def test_gto_is_the_first_leg_of_geo():
+    """The depot is on the way to GEO, so its chain is GEO's without the
+    apogee burn, and a GTO kilogram can never be the dearer of the two."""
+    assert delivery.DELIVERY_CHAINS["gto"] == delivery.DELIVERY_CHAINS["geo"][:1]
+    assert (delivery.delivered_cost_usd_per_kg("gto")
+            < delivery.delivered_cost_usd_per_kg("geo"))
 
 
 def test_cislunar_is_not_dearer_than_buying_escape_directly():
@@ -438,6 +467,7 @@ TYPED = {
     0.15:     "DOWNLEG_TPS_FRAC, mirrors economicspace's heat_shield_frac_of_payload",
     10000.0:  "DOWNLEG_BATCH_KG, the batch the recovery campaign is spread over",
     120.0:    "_LEO_DEORBIT_DV_M_S; a LEO deorbit burn has no row",
+    16.0:     "_GTO_DEORBIT_DV_M_S and its _DOWNLEG_DV_AT_MOVE entry; no row",
     850.0:    "_LLO_TEI_DV_M_S; TEI out of low lunar orbit has no row",
     1490.0:   "_GEO_DEORBIT_DV_M_S, a hand figure predating the 1,488 row",
     1488.0:   "_GEO_DEORBIT_ROW_AT_MOVE, the row that is asserted against",

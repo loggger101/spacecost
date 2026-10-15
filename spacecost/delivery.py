@@ -35,8 +35,8 @@ the difference so it cannot drift quietly.**
 | the LEO launch price | `LAUNCH_VEHICLES_REFERENCE`, chosen by a stated rule that is asserted at import |
 | building the stages each chain expends (v0.4.0) | `OPERATIONAL_COSTS_REFERENCE` values, and the hydrolox row's price |
 | capsule, TPS and recovery | `OPERATIONAL_COSTS_REFERENCE` rows |
-| 4 of the 6 downleg departure burns | `DELTA_V_REFERENCE`, one of them a sum |
-| a LEO deorbit burn, and TEI out of low lunar orbit | **typed: no row exists** |
+| 4 of the 7 downleg departure burns | `DELTA_V_REFERENCE`, one of them a sum |
+| a LEO deorbit burn, a GTO perigee-lowering burn, and TEI out of low lunar orbit | **typed: no row exists** |
 | the GEO deorbit burn | **typed: 1,490 against the row's 1,488** |
 | `TUG_ISP_S` | **typed: 465 s against the table's 452** |
 | four structural fractions | **typed: not quantities these tables carry** |
@@ -320,6 +320,15 @@ MARS_LANDED_MASS_FRACTION = 0.30
 DELIVERY_CHAINS: Dict[str, Optional[List[tuple]]] = {
     "earth_surface": None,                       # already at the market
     "leo": [],                                   # nothing above LEO
+    # v0.11.0.  A refuelling depot in a standard GTO: 200 km perigee, apogee at
+    # GEO, inclined 28.5 deg because that is where Canaveral puts the GEO-bound
+    # satellites it would refuel.  One leg, the perigee burn, and it is the
+    # first leg of the `geo` chain below, so a GTO kilogram is never dearer
+    # than a GEO one.  No plane change: the depot sits in the launch plane.
+    "gto": [
+        ("burn", _dv("LEO  →  GTO (perigee burn)"),
+         TUG_ISP_S, TUG_DRY_MASS_FRAC),                          # LEO -> GTO
+    ],
     # Two stages, because that is how a GEO delivery is actually flown: an
     # upper stage to GTO, then an apogee burn that circularises AND removes the
     # 28.5 deg parking inclination in one go.  Staging is worth 5.3% here
@@ -372,6 +381,7 @@ DELIVERY_CHAINS: Dict[str, Optional[List[tuple]]] = {
 _CHAIN_DV_AT_MOVE: Dict[str, Tuple[float, ...]] = {
     "earth_surface": (),
     "leo":           (),
+    "gto":           (2_455.0,),
     "geo":           (2_455.0, 1_836.0),
     "cislunar":      (3_600.0,),
     "lunar_surface": (4_050.0, 2_050.0),    # descent 1,870 until v0.9.0
@@ -406,12 +416,13 @@ DOWNLEG_TPS_USD_PER_KG     = _ops("Heat shield / TPS for Earth return")
 DOWNLEG_RECOVERY_USD       = _ops("Sample recovery operations")
 DOWNLEG_BATCH_KG           = 10_000.0   # nominal batch the recovery is spread over
 
-# 🚨  TYPED, NOT DERIVED, AND THE TABLE BELOW IS WHY.  Four of these six agree
-# with a `DELTA_V_REFERENCE` row exactly and two do not, so a uniform lookup
-# would silently move two published prices:
+# 🚨  TYPED, NOT DERIVED, AND THE TABLE BELOW IS WHY.  Four of these seven
+# agree with a `DELTA_V_REFERENCE` row exactly and three do not, so a uniform
+# lookup would silently move two published prices and fail on a third:
 #
 #   destination      value    the row                                  agrees?
 #   leo                120    (no row: a LEO deorbit burn is not tabulated)
+#   gto                 16    (no row: lowering perigee at apogee; v0.11.0)
 #   geo              1,490    "GEO -> Earth (deorbit to entry)"  1,488   NO, 2 m/s
 #   cislunar           450    "TLI -> NRHO insertion"              450   yes, symmetric
 #   lunar_surface    2,700    "Lunar surface -> LLO (ascent)" 1,850 +
@@ -436,6 +447,13 @@ _LLO_TEI_DV_M_S = 850.0
 # A LEO deorbit burn is likewise untabulated; ~120 m/s lowers perigee out of a
 # 200-km circular orbit onto an entry trajectory.
 _LEO_DEORBIT_DV_M_S = 120.0
+# v0.11.0.  ~16 m/s at GTO apogee lowers perigee from 200 km to an entry
+# trajectory at ~50 km: vis-viva at 42,164 km gives 1.5974 km/s on the
+# 200 x 35,786 km ellipse and 1.5815 on the 50 km one, 15.9 m/s apart.  Untabulated, like the
+# LEO deorbit above.  The entry that follows is at ~10.2 km/s against LEO's
+# ~7.8, and the downleg's TPS fraction does not grow with it, which it does not
+# for cislunar's ~11 km/s either.
+_GTO_DEORBIT_DV_M_S = 16.0
 # 🚨  1,490 AND THE TABLE SAYS 1,488.  A hand figure that predates the row and
 # is within 0.13% of it.  Reconciling the two is a real question and a
 # separate release, because it changes what a kilogram of platinum is worth at
@@ -446,6 +464,7 @@ _GEO_DEORBIT_ROW_AT_MOVE = 1_488.0
 
 DOWNLEG_DEPARTURE_DV_M_S: Dict[str, float] = {
     "leo":            _LEO_DEORBIT_DV_M_S,
+    "gto":            _GTO_DEORBIT_DV_M_S,
     "geo":            _GEO_DEORBIT_DV_M_S,
     # NRHO departure, symmetric with the insertion burn.
     "cislunar":       _dv("TLI  →  NRHO insertion"),
@@ -464,7 +483,7 @@ DOWNLEG_DEPARTURE_DV_M_S: Dict[str, float] = {
 # happen.  The two hand figures are here too, which is what stops them being
 # quietly edited.
 _DOWNLEG_DV_AT_MOVE: Dict[str, float] = {
-    "leo": 120.0, "geo": 1_490.0, "cislunar": 450.0,
+    "leo": 120.0, "gto": 16.0, "geo": 1_490.0, "cislunar": 450.0,
     "lunar_surface": 2_700.0, "mars_orbit": 900.0, "mars_surface": 6_200.0,
 }
 for _k, _want in _DOWNLEG_DV_AT_MOVE.items():

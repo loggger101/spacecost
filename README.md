@@ -303,9 +303,10 @@ tug and lander was charged only for being launched, never for being built.
 recurring cost, the propellant at its price, and the aeroshell an entry
 discards at the TPS rate:
 
-| destination | before (Falcon 9, no hardware) | v0.4.0 | now (v0.9.0) | of which hardware |
+| destination | before (Falcon 9, no hardware) | v0.4.0 | now (v0.11.0) | of which hardware |
 |---|---:|---:|---:|---:|
 | `leo` | 4,253 | 2,414 | 2,555 | 0 |
+| `gto` | - | - | 5,168 | 414 |
 | `geo` | 12,526 | 8,046 | 8,462 | 937 |
 | `cislunar` | 10,810 | 6,878 | 7,236 | 742 |
 | `mars_orbit` | 13,496 | 8,706 | 9,154 | 1,046 |
@@ -315,14 +316,14 @@ discards at the TPS rate:
 The `now` column has moved twice since v0.4.0: every destination above LEO
 with the anchor in v0.8.0, and the lunar surface again in v0.9.0, when its
 powered descent was re-pinned from 1,870 to the 2,050 m/s Apollo 15-17 flew
-(43,338 between the two).
+(43,338 between the two).  `gto` joined in v0.11.0: a refuelling depot in GTO, priced by the first leg of the `geo` chain alone, and never priced by a release before it, which is what its two dashes say.
 
 Orbital destinations fall by about a third, because the anchor is cheaper.
 The two surfaces rise steeply, because a lander ($200k/kg) and an aeroshell
-($50k/kg) are expensive things to throw away, and until now they were free. Two tests hold the result against
-the market: GEO must not cost more than buying GTO directly and flying only
-the last burn, and cislunar must not cost more than the cheapest direct
-escape launch. Either way round, a buyer would take the cheaper route, and a
+($50k/kg) are expensive things to throw away, and until now they were free. Three tests hold the result against
+the market: GTO must not cost more than buying GTO directly, GEO must not
+cost more than that plus flying only the last burn, and cislunar must not
+cost more than the cheapest direct escape launch. Either way round, a buyer would take the cheaper route, and a
 chain above it would overstate what a kilogram is worth.
 
 `delivered_cost_usd_per_kg(dest, 4253.0, stage_hardware=False)` reproduces
