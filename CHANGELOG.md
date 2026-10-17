@@ -13,6 +13,45 @@ may read a version as proof that a number moved.
 
 ## Package releases
 
+### 0.12.0 - 2026-10-17
+
+**Data contract 1.22.0 → 1.23.0: making hydrolox at an asteroid costs energy
+and a plant, and the tables now say how much.** A new column and a new row, and
+no existing value moves.
+
+- **`isru_processing_wh_per_kg`** (`propellants.csv`, a new column): the
+  electrical energy to turn a propellant's ISRU feed into propellant, per kg
+  MADE, on top of liberating the water. **Hydrolox 15,200 Wh/kg**, the low end
+  of a 15.2-26.3 kWh/kg band:
+
+  | term | source | per kg at O/F 6 |
+  |---|---|---:|
+  | electrolysis | DOE HFTO PEM electrolysis targets, system 55 kWh/kg H2 (2022 status) | 7.86 kWh |
+  | H2 liquefaction | W. Johnson (NASA GRC), AIAA ASCEND 2023, NTRS 20230014839: 35 kW for 0.3 kg/h through one 20 K cryocooler, up to 3x less with pre-cooling | 5.56-16.7 kWh |
+  | O2 liquefaction | same, "< 2 kW" for ~0.96 kg/h | at most 1.79 kWh |
+
+  Cross-check: Kleinhenz & Paz 2021 (NTRS 20210016820), a whole lunar
+  water-to-hydrolox plant at 21.3 kWh per kg. The four rows that use their feed
+  as it comes (resistojet, water ion, solar-thermal steam, mass driver) state
+  **0.0**. ALICE states NaN (its metal half has no source; it is gated out).
+  Every other row is NaN because nothing makes it. **A row with an ISRU feed
+  and no entry now raises**, as an electric row with no thruster figure does.
+- **ISRU propellant plant throughput** (`operational_costs.csv`, a new row):
+  **7.28 kg of propellant per year per kg of plant**, band 7.28-13.3. It is
+  Kleinhenz & Paz 2021's electrolysis and liquefaction "ridge", 2.6 t for
+  11.67 t in 225 days, excavation excluded. It is an upper bound on mass,
+  because it includes tanks. The owner chose it over a radiator-only floor.
+
+A column-by-column comparison against 0.11.0 differs only in the new column,
+the new row and `pipeline_version`; every other cell of all six tables and the
+868-row summary sample is the same text. `operational_costs` has 46 rows, and
+the README's bracketed-row count is 66.
+
+⚠️  **The summary hash's recorded platform moves** from Python 3.13 / numpy
+2.2.6 / pandas 2.3.3 to **3.14 / 2.5.2 / 3.0.5**, because 3.13 is no longer
+installed on the reference machine. The sample's values are identical as text
+on the new platform, so nothing but the hash and the stamps moved with it.
+
 ### 0.11.0 - 2026-10-15
 
 **Data contract unchanged at 1.22.0: a new destination, `gto`, and no row

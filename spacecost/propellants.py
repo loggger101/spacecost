@@ -286,6 +286,81 @@ def _apply_thruster_data(df: pd.DataFrame) -> None:
     df["thrust_scaling"]      = scaling
 
 
+# ── ISRU processing energy (data contract 1.23.0) ─────────────────────────────
+# `isru_feed_kg_per_kg` says how much water (or rock) a kilogram of propellant
+# takes.  It does not say what turning that feed INTO propellant costs, and
+# for the rows that use water as it comes, nothing does: a resistojet, a
+# water ion thruster and a steam rocket store and burn liquid water, so the
+# consumer's water-liberation energy is the whole of it.  Hydrolox is the
+# exception, and the largest single energy term in an ISRU mission: the water
+# is split and both gases are liquefied, at 20 K and 90 K.
+#
+# `isru_processing_wh_per_kg` is that energy, in Wh per kg of PROPELLANT MADE,
+# on top of liberating the water.  It is electrical, so the consumer sizes
+# its power plant on it.  Every ISRU row states a value, and a row with an
+# ISRU feed and no entry here RAISES, for the same reason a missing thruster
+# figure does: a silent zero is free propellant.  NaN marks a row whose
+# processing has no source; every one is gated out of the default search, and
+# a consumer must not fly ISRU on it.
+#
+# Hydrolox, per kg at O/F 6 (1/7 kg H2, 6/7 kg O2):
+#   electrolysis     55 kWh/kg H2, the PEM SYSTEM figure (DOE Hydrogen and
+#                    Fuel Cell Technologies Office, "Technical Targets for
+#                    Proton Exchange Membrane Electrolysis", 2022 status;
+#                    51 is the 2026 target, 46 ultimate)        7.86 kWh
+#   H2 liquefaction  35 kW for 0.3 kg/h through one 20 K cryocooler, cut by up
+#                    to 3x with a 150 K radiator and an intermediate cooler
+#                    (W. Johnson, NASA GRC, "Concepts for the Liquefaction of
+#                    Hydrogen for In-Situ Operations on the Lunar or Martian
+#                    Surface", AIAA ASCEND 2023, NTRS 20230014839, slides 4,
+#                    10 and 15): 39 to 117 kWh/kg H2             5.56 to 16.7 kWh
+#   O2 liquefaction  "< 2 kW" for the same system's ~0.96 kg/h of O2 (same
+#                    source, slide 4): at most 2.1 kWh/kg O2    at most 1.79 kWh
+#
+# The band is 15.2 to 26.3 kWh/kg; the row carries the LOW end, by owner
+# decision: the least energy the sources support, which is the convention for
+# a term that removes a free lunch rather than one that sets a level.  The
+# cross-check is a whole plant: Kleinhenz & Paz, "A Lunar Water ISRU System
+# Study for Human-Scale Propellant Production", PTMSS/SRR 2021 (NTRS
+# 20210016820), electrolyse 15 t of water and liquefy the products for an
+# MR 6 vehicle in 225 days on 46 kW, which is 21.3 kWh per kg of propellant.
+_ISRU_PROCESSING_WH_PER_KG = {
+    "hydrolox  (LH2 / LOX)":                 15_200.0,  # see above
+    "Water  (electrothermal / resistojet)":  0.0,       # burns liquid water as stored
+    "Water  (gridded ion / ECR)":            0.0,       # ionises water vapour as stored
+    "Solar thermal steam  (water)":          0.0,       # boils water as stored
+    "Mass driver  (regolith reaction mass)": 0.0,       # throws rock as dug
+    "Metal / water  (ALICE, Al + H2O)":      float("nan"),  # the metal half has no refining source; gated out
+}
+
+
+def _apply_isru_processing(df: pd.DataFrame) -> None:
+    """Attach `isru_processing_wh_per_kg`, in place.
+
+    Rows with no ISRU feed get NaN: nothing makes them, so there is nothing to
+    charge.  A row WITH a feed and no `_ISRU_PROCESSING_WH_PER_KG` entry raises
+    rather than defaulting, because zero is a claim (the feed is used as it
+    comes) and has to be made on purpose.
+    """
+    out = []
+    for _, row in df.iterrows():
+        name = str(row["name"])
+        feed = row.get("isru_feed_kg_per_kg")
+        if feed is None or pd.isna(feed):
+            if name in _ISRU_PROCESSING_WH_PER_KG:
+                raise KeyError(f"{name!r} has an ISRU processing energy but no ISRU feed")
+            out.append(float("nan"))
+            continue
+        if name not in _ISRU_PROCESSING_WH_PER_KG:
+            raise KeyError(
+                f"ISRU propellant {name!r} has no _ISRU_PROCESSING_WH_PER_KG "
+                f"entry: state what turning its feed into propellant costs, "
+                f"0.0 if it is used as it comes"
+            )
+        out.append(float(_ISRU_PROCESSING_WH_PER_KG[name]))
+    df["isru_processing_wh_per_kg"] = out
+
+
 _STORAGE_CLASS_TANK_MULT = {
     # class            × base   anchor
     "storable_liquid":   1.00,  # 0.025 kg/L → NTO at 1.45 kg/L is 1.7% of propellant mass
@@ -650,7 +725,12 @@ PROPELLANTS_REFERENCE: List[dict] = [
         # Sabatier from asteroid water plus carbonaceous CO2 is possible in
         # principle, but it needs a carbon source AND hydrogen AND a reactor,
         # and this pipeline prices neither the reactor nor the carbon.  Left
-        # unavailable rather than credited on a maybe.
+        # unavailable rather than credited on a maybe.  Measured in
+        # economicspace on 2026-10-16 (its CLAUDE.md, "Measured and
+        # declined"): from CO2 ice it needs ~5.85 kg of comet-mix ice per kg
+        # against hydrolox's 1.44 and won no mission on a cislunar sample; a
+        # route from organics won only with electric propulsion excluded and
+        # rests on an unsourced carbon-reduction step.
         "isru_feed_kg_per_kg":   None,
         "isru_feed_material":    None,
         "dv_penalty_factor":     1.0,

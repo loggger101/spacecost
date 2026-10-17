@@ -830,6 +830,32 @@ OPERATIONAL_COSTS_REFERENCE: List[dict] = [
         "reference_year":   _REF_YEAR_OPS,
     },
     {
+        "category":         "ISRU propellant plant throughput",
+        "unit":             "kg of propellant made per year per kg of plant",
+        "value":            7.28,
+        "range_low":        7.28,
+        "range_high":       13.3,
+        "notes": "Data contract 1.23.0.  Sizes the plant that electrolyses "
+                 "mined water and liquefies the products, for a propellant "
+                 "whose isru_processing_wh_per_kg is above zero (hydrolox).  "
+                 "Kleinhenz & Paz, 'A Lunar Water ISRU System Study for "
+                 "Human-Scale Propellant Production', PTMSS/SRR 2021 (NTRS "
+                 "20210016820): the 'ridge' system (electrolyser, gas dryers, "
+                 "H2 and O2 liquefaction, storage tanks) is 2.6 t for 10 t of "
+                 "O2 and 1.67 t of H2 at MR 6 in 225 days, i.e. 11.67 t / "
+                 "0.616 yr / 2.6 t = 7.28.  Its excavator and water extractor "
+                 "(the 0.49 t 'mine') are NOT in it; a consumer's rig and "
+                 "water-liberation energy already cover that half.  The value "
+                 "is an upper bound on mass, because the ridge includes the "
+                 "propellant tanks a return vehicle flies anyway; owner "
+                 "decision to take it over Johnson (AIAA ASCEND 2023)'s "
+                 "radiator-only floor of 3.9 kg/kW, which leaves out the "
+                 "electrolyser and the cryocoolers.  range_high 13.3: "
+                 "Kleinhenz & Paz, AIAA 2017-0423 (NTRS 20170005179), a whole "
+                 "Mars CH4/O2 system, 1.7 t for 29.7 t in 480 days.",
+        "reference_year":   _REF_YEAR_OPS,
+    },
+    {
         "category":         "Cost of capital (WACC)",
         "unit":             "annualised fraction",
         "value":            0.10,
