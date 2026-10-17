@@ -237,8 +237,7 @@ version, because the last of those is what identifies the numbers:
 Fill both in from the copy you used rather than from this page:
 `spacecost.__version__` is the package release and `spacecost.DATA_VERSION`
 the data contract, which every output CSV also carries in its
-`pipeline_version` column. This example named v0.2.0 / 1.15.0 for ten
-releases after both had moved, which is why it no longer names any.
+`pipeline_version` column.
 
 ## 10. Citing the upstream project
 
