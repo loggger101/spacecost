@@ -243,11 +243,9 @@ questions somebody costing a mission actually asks:
 27316.95...
 ```
 
-`tests/test_docs.py` runs that block, and every other Python block here, so
-it cannot go stale again the way it did: through v0.4.0 it still printed the
-lunar figure from before the stages were paid for. The digits stop short
-because every one of these is an `exp()`, which is not bit-identical across
-platforms.
+`tests/test_docs.py` runs that block, and every other Python block here. The
+digits stop short because every one of these is an `exp()`, which is not
+bit-identical across platforms.
 
 **Staging is modelled leg by leg, and that is the whole point.** A destination
 is a SEQUENCE of burns flown by real stages, and the mass ratios chain. Collapse
@@ -289,45 +287,40 @@ package does: each launch row's headline, and each cost row's `value`.
 stated in code and asserted at import: operational, on the open market, priced
 by the launcher itself (`published` or `contract`), lowest headline
 `usd_per_kg_to_leo`. That is **Falcon Heavy (expendable), $2,555/kg**: SpaceX's
-$150M (2017) up to the $178M NASA paid for Europa Clipper's, for 63.8 t (until
-v0.8.0 the top was $159M and the anchor $2,414/kg). `leo_anchor_candidates()`
+$150M (2017) up to the $178M NASA paid for Europa Clipper's, for 63.8 t.
+`leo_anchor_candidates()`
 returns the ranked list. New Glenn is cheaper on paper at $1,922/kg, but the
 bottom of its price range is a rival's estimate rather than a Blue Origin
 quote. Starship is cheaper still, and does not fly. If a table edit ever makes
 a different row win, import fails rather than re-pricing every destination
 quietly.
 
-**The stages a chain throws away are paid for.** Until v0.4.0 every expended
-tug and lander was charged only for being launched, never for being built.
-`delivery_hardware_usd_per_kg()` now charges each stage's dry mass at its
-recurring cost, the propellant at its price, and the aeroshell an entry
-discards at the TPS rate:
+**The stages a chain throws away are paid for.**
+`delivery_hardware_usd_per_kg()` charges each expended tug and lander's dry
+mass at its recurring cost, the propellant at its price, and the aeroshell an
+entry discards at the TPS rate:
 
-| destination | before (Falcon 9, no hardware) | v0.4.0 | now (v0.11.0) | of which hardware |
-|---|---:|---:|---:|---:|
-| `leo` | 4,253 | 2,414 | 2,555 | 0 |
-| `gto` | - | - | 5,168 | 414 |
-| `geo` | 12,526 | 8,046 | 8,462 | 937 |
-| `cislunar` | 10,810 | 6,878 | 7,236 | 742 |
-| `mars_orbit` | 13,496 | 8,706 | 9,154 | 1,046 |
-| `lunar_surface` | 21,210 | 42,635 | 48,226 | 34,737 |
-| `mars_surface` | 45,105 | 184,811 | 186,306 | 159,209 |
+| destination | $/kg delivered | of which hardware |
+|---|---:|---:|
+| `leo` | 2,555 | 0 |
+| `gto` | 5,168 | 414 |
+| `geo` | 8,462 | 937 |
+| `cislunar` | 7,236 | 742 |
+| `mars_orbit` | 9,154 | 1,046 |
+| `lunar_surface` | 48,226 | 34,737 |
+| `mars_surface` | 186,306 | 159,209 |
 
-The `now` column has moved twice since v0.4.0: every destination above LEO
-with the anchor in v0.8.0, and the lunar surface again in v0.9.0, when its
-powered descent was re-pinned from 1,870 to the 2,050 m/s Apollo 15-17 flew
-(43,338 between the two).  `gto` joined in v0.11.0: a refuelling depot in GTO, priced by the first leg of the `geo` chain alone, and never priced by a release before it, which is what its two dashes say.
-
-Orbital destinations fall by about a third, because the anchor is cheaper.
-The two surfaces rise steeply, because a lander ($200k/kg) and an aeroshell
-($50k/kg) are expensive things to throw away, and until now they were free. Three tests hold the result against
-the market: GTO must not cost more than buying GTO directly, GEO must not
-cost more than that plus flying only the last burn, and cislunar must not
-cost more than the cheapest direct escape launch. Either way round, a buyer would take the cheaper route, and a
-chain above it would overstate what a kilogram is worth.
+The two surfaces are mostly hardware, because a lander ($200k/kg) and an
+aeroshell ($50k/kg) are expensive things to throw away. `gto`, a refuelling
+depot, is priced by the first leg of the `geo` chain alone. Three tests hold
+the result against the market: GTO must not cost more than buying GTO
+directly, GEO must not cost more than that plus flying only the last burn, and
+cislunar must not cost more than the cheapest direct escape launch. Either way
+round, a buyer would take the cheaper route, and a chain above it would
+overstate what a kilogram is worth.
 
 `delivered_cost_usd_per_kg(dest, 4253.0, stage_hardware=False)` reproduces
-every pre-v0.4.0 figure bit for bit, so a result measured before this release
+every pre-v0.4.0 figure bit for bit (CHANGELOG has them), so an older result
 can be re-derived rather than guessed.
 
 ⚠️  **`None` and `[]` are different.** `earth_surface` has no chain and avoids
@@ -376,22 +369,14 @@ resolve.
 ## The rocket equation, read literally, is wrong twice
 
 Two columns in the propellant table exist only to stop you believing the
-arithmetic. Until v0.2.0 the query helpers believed it anyway, and the answer
-`spacecost propellant 6500` gave was:
-
-```
-                                 name  isp_vac_s  cost_usd_per_kg  usd_per_kg_payload_for_dv
-               Solar sail  (photonic)        inf         0.000000                   0.000000
-        Magnetic sail / electric sail        inf         0.000000                   0.000000
-             Momentum-exchange tether        inf         0.000000                   0.000000
-```
+arithmetic.
 
 **A sail carries no propellant, so its Isp is infinite, so the mass ratio is 1,
-so every Δv costs exactly $0.00.** Three of them swept the top of every ranking
-this package returned. They are not free — characteristic acceleration is
-around 0.1 mm/s², fine for a 6 kg cubesat and meaningless for a hold full of
-ore — and sizing one honestly needs a thrust-limited trajectory model that is
-not here. They are now excluded by default; `include_propellantless=True`
+so every Δv costs exactly $0.00**, and the three propellantless rows would top
+every ranking. They are not free (characteristic acceleration is around
+0.1 mm/s², fine for a 6 kg cubesat and meaningless for a hold full of ore), and
+sizing one honestly needs a thrust-limited trajectory model that is not here.
+The query helpers exclude them by default; `include_propellantless=True`
 brings them back, and the $0.00 means "the rocket equation does not apply".
 
 **An electric stage cannot fly an impulsive Δv budget.** With milli-newton
@@ -454,10 +439,8 @@ The tables feed a model whose releases are argued from bit-identity, so what is
 promised there is not "the same numbers" but the same bytes, and a tolerance
 would hide the drift the check exists to catch. The summary cannot be promised
 that by anyone: `exp()` is the platform libm and numpy picks SIMD kernels per
-architecture, and neither is required by IEEE 754 to be correctly rounded. CI
-demonstrated it on the first push, where Linux 3.9 and 3.12 agreed with each
-other and 3.14 did not, which is a numpy version choosing different kernels
-rather than an OS difference. Its byte hash is therefore recorded with the
+architecture (a numpy version alone can change them), and neither is required
+by IEEE 754 to be correctly rounded. Its byte hash is therefore recorded with the
 platform it was taken on and checked only there, and CI's `reference-platform`
 job rebuilds that platform on every run so the check actually happens.
 
@@ -500,32 +483,23 @@ pull over 50 g, and that fires on the committed tables every single run. If a
 NOTE failed `--strict`, the only way to keep CI green would be to stop running
 it.
 
-⚠️  **Before v0.2.0 none of this could be heard.** Every finding went to
-`say()`, `say()` is silent unless somebody calls `set_verbose(True)`, and
-`build_catalog` calls the validator on every build. So the default path — a
-library import, a quiet CLI build, a consumer's pipeline stage — ran every
-check and discarded the result. The bands were right; nothing was reading them.
-A check whose output is dropped is not a guardrail, it is a comment that costs
-CPU.
-
-`build_catalog` still discards them, deliberately: a build must not die because
-a speculative row sits outside a band. The gate is the CLI and CI.
+`build_catalog` runs the bands and discards the findings, deliberately: a
+build must not die because a speculative row sits outside a band. The gate is
+the CLI and CI, which is where a finding is heard.
 
 The bands also hold each table against **itself**. `usd_per_kg_to_leo` is
 `list_price_usd / payload_leo_kg` and the table carries all three, twelve
 columns apart on one very long row; `operational_costs` and `storage_systems`
-each carry a `value` with a `range_low` and `range_high` around it. Nothing
-checked either relationship until v0.2.0. All 76 launch rows and all 66
-bracketed rows are consistent today, which is exactly when to write the check
-down. Since v0.4.0 the launch $/kg is derived at import rather than typed, and
-the launch price and payload bands get the same inside-its-own-range check, so
-on the launch table these now guard the frame a caller edits after loading.
+each carry a `value` with a `range_low` and `range_high` around it. All 66
+bracketed rows are held inside their own range. The launch $/kg is derived at
+import rather than typed, and the launch price and payload bands get the same
+check, so on the launch table these guard the frame a caller edits after
+loading.
 
 And against **each other**, where they overlap. `storage_systems` is the
-taxonomy and the citations; `operational_costs` is what a consumer reads. Three
-figures were obeying that split by being typed twice in two files, value and
-range both, agreeing only because nobody had edited one yet. They are mirrored
-now, and a test flags the fourth one the moment somebody copy-pastes it.
+taxonomy and the citations; `operational_costs` is what a consumer reads. The
+figures both carry are mirrored from one file rather than typed twice, and a
+test flags a new copy-pasted one.
 
 Beside the bands, `tests/test_schema.py` holds the **structure**: that every
 row of a table carries the same keys, that keys are unique, and that the
@@ -541,10 +515,9 @@ an upstream cross-check. `spacecost build --live`, or
 `SpacecostConfig(use_yfinance=True)`, fetches them and sets `price_basis` to
 `live` on those rows.
 
-**It is off by default**, which is a deliberate change from the upstream module
-where it was on. A library that reaches for the network when you ask it for a
-launch price is a library that is not reproducible, and every committed
-reference file here is an offline build. Requires the extra: `pip install
+**It is off by default.** A library that reaches for the network when you ask
+it for a launch price is a library that is not reproducible, and every
+committed reference file here is an offline build. Requires the extra: `pip install
 "spacecost[live]"`.
 
 ## Changing a row
@@ -582,22 +555,18 @@ installs this package from a pinned tag in `requirements.txt` and
 `_MASTER_REQUIRED`. Until that tag moves it keeps building against the old
 tables, so the edit silently does not land there.
 
-Three checks over there catch a repin that went wrong, and they catch different
-halves of it. `verify_docs.py` check 7 holds those two copies of the tag to each
-other, because repinning one and not the other makes `pip install -r` and its
-Colab paste install different revisions of these tables with nothing else
-moving. `verify_stage3.py` check 6 reads pip's own `direct_url.json` and holds
-the INSTALLED revision to the pinned tag, which is also what catches a tag that
-has been moved after the fact. Its other checks then compare this package's
-output byte for byte. **None of them can tell "not yet repinned" from "never
+Checks over there catch a repin that went wrong: `verify_docs.py` holds every
+copy of the pinned tag to the others, and `verify_stage3.py` reads pip's own
+`direct_url.json` and holds the INSTALLED revision to the pinned tag (which
+also catches a tag moved after the fact), then compares this package's output
+byte for byte. **None of them can tell "not yet repinned" from "never
 released", so cutting the tag is still on you.**
 
 ⚠️  **Test the TAG, not the working tree.** The test suite imports the source
-directory, so it cannot see a packaging gap. `v0.1.0` shipped without
-`validate_tables` for exactly this reason, and a clean install of it could not
-satisfy economicspace's import. CI now builds a wheel and exercises the public
-API from outside the tree; a clean `pip install` of the new tag is still the
-last check worth doing by hand.
+directory, so it cannot see a packaging gap (`v0.1.0` shipped without
+`validate_tables`). CI builds a wheel and exercises the public API from
+outside the tree; a clean `pip install` of the new tag is still the last check
+worth doing by hand.
 
 ⚠️  **And the CONSUMER SURFACE is a test now**, `tests/test_consumer_contract.py`.
 The wheel step above walks `__all__`, which proves the names this package
@@ -607,7 +576,7 @@ package and from `__all__` in one commit, which is what happened with
 including the four names it reaches through `spacecost.delivery` and
 `spacecost.prices`, which `__all__` does not cover. CI runs it against the
 built wheel as well as the tree, so removing one fails here rather than at a
-consumer's import three steps later. A failure is not an instruction to put
+consumer's import. A failure is not an instruction to put
 the name back: it says the change is **breaking**, so it wants a major bump, a
 CHANGELOG entry, and the matching edit to the economicspace module that reads
 it in the same breath.
