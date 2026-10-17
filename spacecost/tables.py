@@ -12,7 +12,8 @@ from .config import CONFIG, SpacecostConfig as TransportConfig
 from .deltav import DELTA_V_REFERENCE
 from .environments import ENVIRONMENTS_REFERENCE
 from .operations import OPERATIONAL_COSTS_REFERENCE
-from .propellants import PROPELLANTS_REFERENCE, _apply_thruster_data
+from .propellants import (PROPELLANTS_REFERENCE, _apply_isru_processing,
+                          _apply_thruster_data)
 from .rocket import propellant_mass_for_dv
 from .storage import STORAGE_REFERENCE
 from .vehicles import LAUNCH_VEHICLES_REFERENCE
@@ -43,6 +44,7 @@ def load_propellants() -> pd.DataFrame:
     say("\n  Loading propellants reference ...")
     df = pd.DataFrame(PROPELLANTS_REFERENCE)
     _apply_thruster_data(df)
+    _apply_isru_processing(df)
     n_rep = int((df["thrust_scaling"] == "replicated").sum())
     say(f"     OK  {len(df)} propellant systems "
           f"({n_rep} thrust by replication - see _THRUSTER_SYSTEMS)")

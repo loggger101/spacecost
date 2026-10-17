@@ -103,6 +103,8 @@ so a study can state what it excluded.
 | NASA-STD-(I)-5019 class hardware | COPV burst performance factor, ~392 kJ/kg |
 | Shuttle External Tank, Falcon 9 second stage, Centaur III | the flight anchors the tankage model is calibrated on |
 | Manufacturer data sheets, per device | thruster kg/N, efficiency, thrust scaling |
+| DOE Hydrogen and Fuel Cell Technologies Office, Technical Targets for Proton Exchange Membrane Electrolysis | hydrolox ISRU electrolysis, 55 kWh/kg H2 at system level (2022 status) |
+| W. Johnson (NASA GRC), Concepts for the Liquefaction of Hydrogen for In-Situ Operations on the Lunar or Martian Surface, AIAA ASCEND 2023, NTRS 20230014839 | hydrolox ISRU liquefaction: 35 kW for 0.3 kg/h of H2 through one 20 K cryocooler, up to 3x less pre-cooled, and under 2 kW for the oxygen |
 
 Vacuum Isp values are the interplanetary-relevant figures. Sea-level Isp is
 lower and matters only to a first stage, which is already priced into the launch
@@ -133,6 +135,8 @@ Lambert solve against an ephemeris; these are what you price the answer with.
 | NASA OIG IG-23-010 | MMRTG mass, and Pu-238 production against its goal |
 | Frieman et al. 2021 (AEPS ETU-2) | Hall thruster total efficiency across the throttle range |
 | Metzger, Zacny & Morrison 2020; Zeng et al. 2007 | the excavation energy literature |
+| Kleinhenz & Paz, A Lunar Water ISRU System Study for Human-Scale Propellant Production, PTMSS/SRR 2021, NTRS 20210016820 | ISRU propellant plant throughput (2.6 t for 11.67 t of hydrolox in 225 days), and the whole-plant cross-check on the processing energy (46 kW) |
+| Kleinhenz & Paz, An ISRU Propellant Production System for a Fully Fueled Mars Ascent Vehicle, AIAA 2017-0423, NTRS 20170005179 | the high end of the plant throughput band (1.7 t for 29.7 t of CH4/O2 in 480 days) |
 | Plane Talking (Gallagher) / Slingshot Aerospace, 2024 | launch insurance market rate, and the 2023 losses behind it |
 | Damodaran (NYU Stern), Boeing and Howmet filings | cost-of-capital benchmark |
 | NASA Mars 2020 / Perseverance autonomy programme | autonomous control development cost |
