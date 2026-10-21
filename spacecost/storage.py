@@ -284,8 +284,12 @@ STORAGE_REFERENCE: List[dict] = [
         "status":          "operational",
         "trl":             9,
         "reference_year":  _REF_YEAR_STORAGE,
-        "notes": "Cells reach 250-300 Wh/kg; packaging, harness, cell balancing "
-                 "and thermal roughly halve it at the system level.  Already "
+        "notes": "Cells reach 250-300 Wh/kg (NASA ~265 Wh/kg: Ali et al., "
+                 "Frontiers in Energy Research, 2023); packaging, harness, cell "
+                 "balancing and thermal roughly halve it at the system level.  "
+                 "130 Wh/kg has no source of its own: NASA's Li-ion state of "
+                 "the art is 175 Wh/kg (Schmitz et al., IEEE Aerospace 2023, "
+                 "NTRS 20230001487, Table 3).  Already "
                  "inside the 60 W/kg 'Power system specific mass' row rather "
                  "than added to it — that row is explicitly PV + PMAD + battery "
                  "+ structure, which is why it is 60 W/kg against ROSA's ~150 "

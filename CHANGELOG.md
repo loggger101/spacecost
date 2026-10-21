@@ -13,6 +13,71 @@ may read a version as proof that a number moved.
 
 ## Package releases
 
+### 0.12.3 - 2026-10-21
+
+**Data contract 1.23.2 → 1.23.3: sixteen revision candidates make nineteen
+cost notes say what their sources hold. No value moved.** Only `notes` cells in
+`operational_costs.csv` (18) and `storage_systems.csv` (1), CITATIONS.md and the `pipeline_version`
+stamp changed. Each item names its General_Research revision candidate. Every
+figure was checked against the source's text, or against the registry's
+extracted data where the source is not hosted. Several notes now say plainly
+that a figure has no source.
+
+- **Third-party liability insurance** (rc-086): the caps are in 14 CFR
+  440.9(c) and (e), not Part 450. The note says they cap the FAA-set MPL amount
+  rather than set what every licensee buys.
+- **FAA Part 450 licensing, both rows** (rc-087): from 2026 each launch or
+  reentry owes a per-launch user fee (51 U.S.C. 50924; 91 FR 21591). It is not
+  in these per-programme figures.
+- **Launch vehicle reliability** (rc-093): Cross & Vesely 2018 give a new
+  vehicle's first-flight failure probability as 0.134, or 0.0898 with
+  heritage credit. The 0.90 low end is that heritage-credited case.
+- **Mining system first-of-kind success** (rc-094): the Curiosity drill entry
+  cites Kinnett et al. 2022; the other entries are marked uncited.
+- **Mining system mature success** (rc-095): the fleet record is ~10% of
+  almost 400 satellites with a deployment anomaly (Shapiro et al. 1995), a
+  per-satellite rate. The "~97-99%" per-deployment figure is now marked as an
+  unsourced estimate.
+- **Rig salvage fraction** (rc-096): NASA CR-3349's 5-10% (SPS) and 60-90%
+  (demonstration satellite) bracket 0.5.
+- **Beneficiation energy** (rc-097): "no published figure has been found" is
+  no longer true. DOE's 2007 bandwidth study gives 19.3 Wh/kg of ore for
+  crushing and grinding. The note says it is terrestrial and per kg of ore,
+  against this row's per kg of product.
+- **Cost of capital** (rc-098): Damodaran's tables are industry averages
+  (7.60%, 8.20%) with no startup premium, so they back the floor. The 10% now
+  cites McKeown 2024, and the high end Scottoline & Coleman's 14%+ venture
+  debt.
+- **Contingency reserve** (rc-099): "industry-standard" had no source. The
+  note now cites NASA's record (12 of 13 CADRe missions spent their reserves or
+  more; Whitley & Shinn 2012) and the NRC's 23-77% average cost growth.
+- **Energy storage usable specific energy, round-trip efficiency, and the
+  Li-ion storage row** (rc-100): the 0.80 depth of discharge and the 0.90
+  efficiency match Schmitz et al. 2023 Table 3 exactly. Its usable figure,
+  175 × 0.80 = 140 Wh/kg, is above this row's 104. **The value is not changed
+  here**: 130 Wh/kg has no source, and the notes now say so.
+- **Power system specific mass** (rc-101): the ROSA ~150 W/kg and the
+  "halving" have no registered source, and the note says so. It cites Lucy's
+  184 W/kg (Schmitz 2023), and Hoffman et al. 2000's main-belt array, ~62
+  W/kg at 1.5 AU for the array alone. (The registry read that as the system-
+  level halving; it is array-level.)
+- **Electric thruster + PPU** (rc-102): AEPS is not "similar class". Its
+  thruster head is 4.4 kg/kW, so an AEPS string is ~9 kg/kW. The NEXT-C
+  thruster mass now reads 12.7 kg, as in the PPU row, instead of 13.5. Neither
+  figure has a registered source.
+- **Power processing unit** (rc-103): 34.5 kg cites the NEXT-C PPU paper, and
+  the note says 7.4 kW is the input and 0.5-7 kW the output.
+- **Electric propulsion recurring cost** (rc-104): the $10-15M per string
+  has no published source, and the note says so. It cites the Gateway PPE's
+  $730.9M fixed price for 60 kW of power generation, with its thrusters bought
+  separately.
+- **RTG cost** (rc-105): the Space.com fuel arithmetic becomes the Mars 2020
+  MMRTG line ($66-70M, IG-17-009) and OIG's notional $223k-263k per mission
+  watt (IG-23-010 Table 2), both bracketing $500k/W. The Pu-238 price now cites
+  the NIAC report.
+- **Autonomous mining control (NRE)** (rc-106): the $2.4B programme is PEBD's
+  $2,462.6M. The $150M autonomy stack is marked unsourced.
+
 ### 0.12.2 - 2026-10-21
 
 **Data contract 1.23.1 → 1.23.2: nine more propellant notes say what their
