@@ -160,11 +160,11 @@ OPERATIONAL_COSTS_REFERENCE: List[dict] = [
                  "statement with no document behind it; the '~$7M (2026 "
                  "third-party estimate)' names no source; and Centaur III's "
                  "~$30M is an unsourced vendor-class estimate.  NASA's Centaur "
-                 "history (Bowles & Dawson / Dawson & Bowles, Taming Liquid "
-                 "Hydrogen, NASA SP-4176, 2004) gives programme costs only "
-                 "('$36 million for six vehicles' projected in 1959; $80M "
-                 "against $20M for Shuttle/Centaur in 1981-82) and no "
-                 "production cost per stage.  No institutional document prices "
+                 "history (Dawson & Bowles, Taming Liquid Hydrogen, NASA "
+                 "SP-2004-4230, 2004) gives programme costs only (the original "
+                 "contract's '$36 million for six vehicles'; an $80M "
+                 "Shuttle/Centaur appropriation against 1981 funding of $20M) "
+                 "and no production cost per stage.  No institutional document prices "
                  "either anchor.",
         "reference_year":   _REF_YEAR_OPS,
     },

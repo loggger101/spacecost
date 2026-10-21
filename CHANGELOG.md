@@ -24,7 +24,7 @@ text, and fetched the Space Insider article live.
 
 - **Expendable upper stage recurring cost** (rc-170): states each anchor's
   status. "Musk 2018" is a statement with no document, the "~$7M" names no
-  source, and Centaur III's ~$30M is unsourced. NASA's Centaur history (SP-4176)
+  source, and Centaur III's ~$30M is unsourced. NASA's Centaur history (SP-2004-4230)
   gives programme costs only, with no price per stage. The tank row, which
   derives from the same $30M, now says so.
 - **In-space processing plant throughput** (rc-178): NASA's only published
