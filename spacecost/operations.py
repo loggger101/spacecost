@@ -219,7 +219,13 @@ OPERATIONAL_COSTS_REFERENCE: List[dict] = [
         "range_high":       5_000_000,
         "notes": "FAA does not charge an application fee; cost is internal "
                  "engineering + legal + safety-case work for 14 CFR Part 450 "
-                 "compliance (FAA.gov / Congress.gov R48582).  First-of-kind "
+                 "compliance (FAA.gov / Congress.gov R48582).  From 2026 each "
+                 "licensed or permitted launch or reentry also owes a user fee "
+                 "(51 U.S.C. 50924, Pub. L. 119-21): the lesser of a "
+                 "per-pound-of-payload rate and a maximum fee, set each "
+                 "calendar year (FAA policy statement, 91 FR 21591, 22 Apr "
+                 "2026).  It is charged per launch, not per programme, and is "
+                 "not in this figure.  First-of-kind "
                  "re-entry missions (asteroid sample return) trend upper-end. "
                  "v1.4.0: this row is the LAUNCH + RE-ENTRY figure; a mission "
                  "delivering to an in-space depot never re-enters and carries "
@@ -239,7 +245,9 @@ OPERATIONAL_COSTS_REFERENCE: List[dict] = [
                  "analysis for the landing footprint, and the range/airspace "
                  "coordination that dominate the first-of-kind sample-return "
                  "figure.  Roughly half the combined licence, which is where "
-                 "routine launch-only Part 450 compliance sits.",
+                 "routine launch-only Part 450 compliance sits.  The per-launch "
+                 "user fee owed from 2026 (51 U.S.C. 50924; 91 FR 21591) is "
+                 "not in this figure.",
         "reference_year":   _REF_YEAR_OPS,
     },
     {
@@ -248,8 +256,14 @@ OPERATIONAL_COSTS_REFERENCE: List[dict] = [
         "value":            1_500_000,
         "range_low":          500_000,
         "range_high":       3_000_000,
-        "notes": "FAA-mandated Maximum Probable Loss coverage — statute caps at "
-                 "$500M third-party / $100M US-government per 14 CFR Part 450. "
+        "notes": "FAA-mandated Maximum Probable Loss coverage.  The FAA sets "
+                 "each licensee's MPL amount; the caps are ceilings on it, not "
+                 "the amount every licensee buys: the lesser of $500M or the "
+                 "world-market maximum at reasonable cost for third parties, "
+                 "and the lesser of $100M or the world-market maximum for US "
+                 "Government property (14 CFR 440.9(c) and (e), under 51 "
+                 "U.S.C. 50914).  Part 450 is the licensing part and only "
+                 "asks for the Part 440 Appendix A data the MPL analysis uses. "
                  "Premium covers ground/air harm; distinct from payload insurance.",
         "reference_year":   _REF_YEAR_OPS,
     },
@@ -292,10 +306,15 @@ OPERATIONAL_COSTS_REFERENCE: List[dict] = [
         "range_high":      150,
         "notes": "v1.4.0.  SYSTEM-level, not array-level: photovoltaic wing + "
                  "PMAD + battery + deployment structure.  ROSA / iROSA "
-                 "roll-out arrays demonstrate ~150 W/kg at the wing (NASA "
+                 "roll-out arrays are quoted at ~150 W/kg at the wing (NASA "
                  "ROSA flight demo, ISS iROSA 2021+), but batteries, "
                  "regulation and structure roughly halve that at the system "
-                 "level.  60 W/kg is "
+                 "level; neither the 150 nor the halving has a registered "
+                 "source.  What does: Lucy's arrays reach 184 W/kg at 1 AU "
+                 "(Schmitz et al. 2023), and for this mission class a NASA "
+                 "Main Belt Asteroid Tour sizes a 121 kg GaAs array for 7.5 kW "
+                 "end-of-life at 1.5 AU, ~62 W/kg at the ARRAY alone (Hoffman "
+                 "et al., NASA/TM-2000-210342).  60 W/kg is "
                  "mid-range for a deep-space PV train.  Scales as 1/r^2 with "
                  "heliocentric distance — Module 4 applies that per asteroid, "
                  "which is why main-belt targets are punished so hard once "
@@ -319,9 +338,15 @@ OPERATIONAL_COSTS_REFERENCE: List[dict] = [
         "notes": "v1.6.0.  Thruster, power-processing unit, gimbals, xenon/argon "
                  "feed system, tankage and thermal — NOT the solar array, which "
                  "is carried separately by the 'Power system specific mass' row "
-                 "and scales 1/r^2.  NASA NEXT-C: 7 kW thruster ~13.5 kg + PPU "
-                 "~34 kg ≈ 7 kg/kW.  Gateway AEPS: 12.5 kW Hall, similar class. "
-                 "8 kg/kW allows for feed system and structure.\n"
+                 "and scales 1/r^2.  NASA NEXT-C: 7 kW thruster ~12.7 kg + PPU "
+                 "34.5 kg ≈ 7 kg/kW (PPU: The NEXT-C Power Processing Unit, "
+                 "Aerojet/NASA 2020; the thruster mass has no registered "
+                 "source, and this note said 13.5 kg until 0.12.3).  Gateway "
+                 "AEPS is NOT the same class per kilowatt: its thruster head "
+                 "alone is 53 kg at 12 kW, 4.4 kg/kW (Shastry et al., "
+                 "IEPC-2024, NTRS 20240006249), so with a 4.7 kg/kW PPU an "
+                 "AEPS string is ~9 kg/kW, above this row.  8 kg/kW allows for "
+                 "feed system and structure.\n"
                  "⚠️  SUPERSEDED for Module 4 v1.12.0 and retained as the "
                  "fallback for a stale catalog.  Lumping thruster and PPU into "
                  "one per-kW figure is what let a micronewton device be sized "
@@ -338,7 +363,11 @@ OPERATIONAL_COSTS_REFERENCE: List[dict] = [
         "range_low":        3.0,
         "range_high":       8.0,
         "notes": "v1.10.0.  The PPU alone, split out of the combined row above. "
-                 "NASA NEXT-C: 34.5 kg of PPU at 7.4 kW = 4.66 kg/kW.  A PPU "
+                 "NASA NEXT-C: 34.5 kg of PPU at 7.4 kW = 4.66 kg/kW (The "
+                 "NEXT-C Power Processing Unit, Aerojet/NASA 2020).  The paper "
+                 "gives the PPU's OUTPUT as 0.5-7 kW; 7.4 kW is the input at "
+                 "full power, so this is per kW of input, as the unit says.  "
+                 "A PPU "
                  "converts bus power to the discharge and does not care what it "
                  "is feeding, so it is the half of the old 8 kg/kW that really "
                  "does scale with POWER.  The other half — the thruster head — "
@@ -363,7 +392,15 @@ OPERATIONAL_COSTS_REFERENCE: List[dict] = [
                  "Anchor: a NASA NEXT-C flight string is a 7 kW gridded-ion "
                  "thruster plus PPU at roughly 47 kg, procured in the "
                  "$10-15M-per-string class as a flight article — call it "
-                 "$1.5-2M/kW.  High-power Hall systems buy down from there: "
+                 "$1.5-2M/kW.  The per-string price has NO published source: "
+                 "no registered NASA record prices a string.  What they do "
+                 "give is element-level: Gateway's Power and Propulsion "
+                 "Element, which provides 60 kW of power generation and "
+                 "solar-electric propulsion (NASA OIG IG-21-004), at a $730.9M "
+                 "final fixed price (IG-24-003, Oct 2023), ~$12M per kW "
+                 "generated.  Its 12 kW AEPS thrusters are government-furnished "
+                 "and bought separately (IG-21-004), so that price excludes "
+                 "them.  High-power Hall systems buy down from there: "
                  "Psyche's SPT-140 strings and Gateway's 12.5 kW AEPS are "
                  "cheaper per kilowatt than NEXT-C, which is why the range "
                  "runs down to $500k/kW and why the figure should be expected "
@@ -419,9 +456,16 @@ OPERATIONAL_COSTS_REFERENCE: List[dict] = [
         "range_low":        200_000,
         "range_high":     1_000_000,
         "notes": "Pu-238 supply-constrained (NASA / DOE target 1.5 kg/yr production "
-                 "by 2026).  Historical Russian Pu-238 ~$2.5M/kg; with 6-8% RTG "
-                 "conversion efficiency a 50-W RTG costs ~$1M just in fuel "
-                 "(Space.com / NASA NIAC).  Only used past ~3 AU when PV starves.\n"
+                 "by 2026).  The $/W rests on institutional unit costs: Mars "
+                 "2020's MMRTG line was $66M at mission concept review and $70M "
+                 "at KDP-C (NASA OIG IG-17-009, Table 3), and NASA OIG's "
+                 "notional MMRTG options for Juno, Lucy and Europa Clipper "
+                 "work out to $223k-263k per mission watt (IG-23-010, Table "
+                 "2).  The fuel alone: a NASA NIAC study puts Pu-238 at "
+                 "$1.6-3.5M/kg from a new reactor at 0% return, against a $6M "
+                 "price assumed for its ROI case (Howe et al., Economical "
+                 "Production of Pu-238, NTRS 20160010587).  Only used past ~3 "
+                 "AU when PV starves.\n"
                  "v1.9.0: this row existed from v1.2.0 and NOTHING READ IT.  A "
                  "3.5 AU target flew a photovoltaic array starved by 1/r² with "
                  "no nuclear alternative anywhere in the model, which is the "
@@ -502,7 +546,14 @@ OPERATIONAL_COSTS_REFERENCE: List[dict] = [
         "notes": "v1.11.0.  130 Wh/kg at the system level (STORAGE_REFERENCE "
                  "'Li-ion battery (system level)': cells reach 250-300 Wh/kg "
                  "and packaging, harness, balancing and thermal roughly halve "
-                 "it) × 0.80 depth of discharge = 104 Wh/kg USABLE.  DoD is "
+                 "it) × 0.80 depth of discharge = 104 Wh/kg USABLE.  NASA's "
+                 "Li-ion state of the art is 175 Wh/kg at 80% depth of "
+                 "discharge and 90% charge/discharge efficiency (Schmitz et al., "
+                 "IEEE Aerospace 2023, NTRS 20230001487, Table 3), so the 0.80 "
+                 "matches and the usable figure there is 140 Wh/kg; this row's "
+                 "104 is 26% below it.  The 130 Wh/kg system figure has no source of its "
+                 "own.  Cells: ~265 Wh/kg (Ali et al., Frontiers in Energy "
+                 "Research, 2023).  DoD is "
                  "folded in here rather than carried as a fourth row because "
                  "a consumer that forgets to apply it silently oversizes the "
                  "mission by 25%, and this table's job is to hand Module 4 the "
@@ -521,7 +572,9 @@ OPERATIONAL_COSTS_REFERENCE: List[dict] = [
         "range_high":       0.95,
         "notes": "v1.11.0.  Charge and discharge losses through the cells and "
                  "the regulator.  Li-ion cells alone run 0.92-0.96 round trip; "
-                 "0.90 takes the loss through PMAD as well.  This is the term "
+                 "0.90 takes the loss through PMAD as well, and matches NASA's "
+                 "90% charge/discharge efficiency for Li-ion (Schmitz et al. "
+                 "2023, Table 3).  This is the term "
                  "that makes the array oversize worse than the naive 1/(1−f): "
                  "the energy that goes through the store has to be generated "
                  "twice over, once for the load and once for the loss.  At "
@@ -602,9 +655,14 @@ OPERATIONAL_COSTS_REFERENCE: List[dict] = [
         "range_low":        100,
         "range_high":     2_000,
         "notes": "Magnetic / electrostatic / thermal concentration to ~50% purity. "
-                 "Engineering estimate, unsourced: no published figure for "
-                 "beneficiation energy per kg of refined product has been found, "
-                 "and the value stands until one is.  (Until 1.17.1 this cited "
+                 "Engineering estimate, unsourced for asteroid material.  The "
+                 "nearest published figure is terrestrial: US metal-mining "
+                 "beneficiation, crushing and grinding, is 59,800 Btu per short "
+                 "ton = 19.3 Wh/kg of ORE, with separations 1.4 and flotation "
+                 "0.3 Wh/kg, and the whole mine 54.5 Wh/kg (DOE Mining Industry "
+                 "Energy Bandwidth Study, 2007, Exhibit 24).  This row is per "
+                 "kg of refined PRODUCT, so the comparison scales by the "
+                 "feed:product ratio.  (Until 1.17.1 this cited "
                  "'NASA Money-Mass-ematics 2023', a grades 7-8 classroom "
                  "worksheet on laser communications that never mentions "
                  "beneficiation.)  "
@@ -622,7 +680,11 @@ OPERATIONAL_COSTS_REFERENCE: List[dict] = [
                  "one-time NRE for autonomous regolith-assessment vision, "
                  "sample-collection control logic, station-keeping autonomy, "
                  "and remote-fault-recovery software.  Anchor: Mars 2020 / "
-                 "Perseverance autonomy stack ≈ $150M of $2.4B program; "
+                 "Perseverance autonomy stack ≈ $150M of a $2,462.6M "
+                 "development + launch programme (Planetary Society, Planetary "
+                 "Exploration Budget Dataset).  The $150M is unsourced: the "
+                 "dataset is mission-level and no registered source breaks out "
+                 "autonomy software.  "
                  "asteroid mining trends upper end of range due to longer "
                  "Earth-spacecraft light-time (decisions must be local) and "
                  "novel regolith-contact mechanics.  Treated as in addition "
@@ -648,8 +710,14 @@ OPERATIONAL_COSTS_REFERENCE: List[dict] = [
         "value":            0.97,
         "range_low":        0.90,
         "range_high":       0.99,
-        "notes": "v1.7.0.  Falcon 9 has flown >99% success over 300+ flights; "
-                 "a first-flight or low-cadence vehicle sits near 0.90.  0.97 "
+        "notes": "v1.7.0.  Falcon 9 has flown >99% success over 300+ flights. "
+                 "For a new vehicle, Cross & Vesely (NASA, NTRS 20180006947) "
+                 "built an assumed design from every failure on the first two "
+                 "flights of each vehicle model, 1980-2017: first-flight "
+                 "failure probability 0.134 (success 0.866), or 0.0898 "
+                 "(success 0.910) with heritage credit for three design "
+                 "elements.  The 0.90 low end is that heritage-credited case, "
+                 "not the raw new-vehicle rate.  0.97 "
                  "is a fleet-representative figure for an operational booster "
                  "on a high-value payload.  Distinct from launch insurance, "
                  "which replaces the HARDWARE on failure — it does not "
@@ -689,7 +757,13 @@ OPERATIONAL_COSTS_REFERENCE: List[dict] = [
                  "mechanism failed 2016, recovered by feed-extended drilling); "
                  "Hayabusa2 sampler and SCI impactor, both touchdowns clean; "
                  "OSIRIS-REx TAGSAM, 121.6 g against a 60 g requirement; "
-                 "Perseverance coring drill; Chang'e 5 and 6 drill + scoop.\n"
+                 "Perseverance coring drill; Chang'e 5 and 6 drill + scoop.  "
+                 "(The Curiosity entry is Kinnett, Green, Klein & Lin, JPL, "
+                 "Aerospace Mechanisms Symposium 2022: feed stall on sol 1536, "
+                 "first feed-extended sample on sol 2057.  Shapiro et al., "
+                 "Space Mechanisms Lessons Learned Study Vol. II, NASA "
+                 "TM-107047, 1995, sorts flight lessons by mechanism type.  "
+                 "The other entries are not yet cited.)\n"
                  "  PARTIAL (1): Hayabusa — the projectile never fired, but "
                  "contact dust was still collected and returned.\n"
                  "  FAILED (2): Philae's harpoon pyrotechnics; InSight's HP3 "
@@ -741,8 +815,13 @@ OPERATIONAL_COSTS_REFERENCE: List[dict] = [
         "notes": "v1.9.0.  Growth is asymptotic, not unbounded — no amount of "
                  "flight heritage makes a machine that grinds rock in vacuum "
                  "certain to work.  0.95 is where mature, high-cycle "
-                 "spacecraft MECHANISMS sit: solar-array and antenna "
-                 "deployments run ~97-99% across the fleet record, and a "
+                 "spacecraft MECHANISMS sit.  The fleet record: of almost 400 "
+                 "satellites launched successfully 1958-1983, about 10% had "
+                 "some deployment anomaly, mostly mechanical (Shapiro et al., "
+                 "Space Mechanisms Lessons Learned Study Vol. I, NASA "
+                 "TM-107046, 1995).  That is a per-satellite anomaly rate, not "
+                 "a per-deployment success rate; the ~97-99% per deployment "
+                 "once given here is an estimate with no source.  A "
                  "continuously-operating excavator is harder than a one-shot "
                  "deployment.  Without this ceiling the Duane curve would "
                  "eventually promise certainty, which no mechanism earns.",
@@ -810,8 +889,13 @@ OPERATIONAL_COSTS_REFERENCE: List[dict] = [
                  "worth something to whoever goes there next and nothing to "
                  "anyone else — an illiquid, location-locked asset with a "
                  "market of approximately one buyer.  Half of remaining book "
-                 "value is a deliberately unheroic haircut.  Set 0.0 to "
-                 "model abandonment.",
+                 "value is a deliberately unheroic haircut.  The one "
+                 "space-asset salvage estimate on record brackets it: NASA "
+                 "CR-3349 (1980) puts a solar power satellite's average salvage "
+                 "value at 5-10% of its capital cost, and a demonstration "
+                 "satellite's at 60-90% of its on-orbit cost.  Those are "
+                 "fractions of cost; this one is of remaining book value.  Set "
+                 "0.0 to model abandonment.",
         "reference_year":   _REF_YEAR_OPS,
     },
     {
@@ -862,8 +946,14 @@ OPERATIONAL_COSTS_REFERENCE: List[dict] = [
         "range_low":        0.075,             # Boeing 7.5% floor
         "range_high":       0.15,
         "notes": "Boeing 7.5% / Howmet 8.3% WACC (ValueInvesting.io 2026) as the "
-                 "industrial floor; asteroid-mining ventures carry a startup risk "
-                 "premium to ~10-15% (Damodaran NYU Stern industry tables).  "
+                 "industrial floor, matching Damodaran's NYU Stern industry "
+                 "averages (Aerospace/Defense 7.60%, Metals & Mining 8.20%, "
+                 "Jan 2026), which carry no startup premium.  The 10% is "
+                 "McKeown 2024's proposed standard discount rate for "
+                 "space-resource projects, beside hurdle rates 'in the range "
+                 "of 25%'; launch-venture debt ran 14% or more without "
+                 "government guarantees against ~7% with them (Scottoline & "
+                 "Coleman, NTRS 19990101869).  "
                  "A 7-yr mission at 10% WACC ⇒ ~1.95× capital multiplier on Day-1 spend. "
                  "Module 4 should compound this across mission_duration_yr.",
         "reference_year":   _REF_YEAR_OPS,
@@ -892,7 +982,16 @@ OPERATIONAL_COSTS_REFERENCE: List[dict] = [
         "value":            20.0,
         "range_low":        15.0,
         "range_high":       50.0,
-        "notes": "Industry-standard; first-of-kind missions carry the upper end.",
+        "notes": "NASA sets reserves as a fixed percentage of cost (Whitley & "
+                 "Shinn, The Economics of NASA Mission Cost Reserves, NTRS "
+                 "20120002314), and the record says that is not enough: of 13 "
+                 "CADRe missions, 12 spent as much as their PDR reserves or "
+                 "more.  Prior studies put average cost growth at 23-77%, "
+                 "most of it after critical design review (National Research "
+                 "Council, Controlling Cost Growth of NASA Earth and Space "
+                 "Science Missions, 2010).  20% is at or below that growth; "
+                 "first-of-kind missions carry the upper end.  No registered "
+                 "source states 20% as a standard.",
         "reference_year":   _REF_YEAR_OPS,
     },
 ]

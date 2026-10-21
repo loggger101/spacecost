@@ -157,9 +157,27 @@ Lambert solve against an ephemeris; these are what you price the answer with.
 | Kleinhenz & Paz, A Lunar Water ISRU System Study for Human-Scale Propellant Production, PTMSS/SRR 2021, NTRS 20210016820 | ISRU propellant plant throughput (2.6 t for 11.67 t of hydrolox in 225 days), and the whole-plant cross-check on the processing energy (46 kW) |
 | Kleinhenz & Paz, An ISRU Propellant Production System for a Fully Fueled Mars Ascent Vehicle, AIAA 2017-0423, NTRS 20170005179 | the high end of the plant throughput band (1.7 t for 29.7 t of CH4/O2 in 480 days) |
 | Plane Talking (Gallagher) / Slingshot Aerospace, 2024 | launch insurance market rate, and the 2023 losses behind it |
-| Damodaran (NYU Stern), Boeing and Howmet filings | cost-of-capital benchmark |
-| NASA Mars 2020 / Perseverance autonomy programme | autonomous control development cost |
+| Damodaran (NYU Stern), Cost of Capital by Industry Sector (Jan 2026); Boeing and Howmet filings | cost-of-capital floor: industry averages, with no startup premium |
+| McKeown, What is an appropriate investment hurdle rate for commercial space resource development projects?, 2024 | the 10% standard discount rate for space-resource projects, and hurdle rates near 25% |
+| Scottoline & Coleman, Effectiveness of Loan Guarantees versus Tax Incentives for Space Launch Ventures, 1999, NTRS 19990101869 | launch-venture debt at 14% or more without guarantees |
+| The Planetary Society, Planetary Exploration Budget Dataset | Perseverance development + launch cost, the scale behind the autonomy NRE (the autonomy share itself is unsourced) |
 | MIL-HDBK-189C (Jun 2011), 5.2.6 and Table II | the Duane growth model, and the historical growth rates the mining reliability exponent sits inside |
+| 14 CFR Part 440 (eCFR), 440.9(c) and (e) | the third-party and US Government property caps on required liability insurance |
+| FAA, Space Launch and Reentry Licensing and Permitting User Fees, 91 FR 21591 (22 Apr 2026) | the per-launch user fee owed from 2026 under 51 U.S.C. 50924 |
+| Cross & Vesely, Synthesizing a New Launch Vehicle Failure Probability Based on Historical Flight Data, 2018, NTRS 20180006947 | first-flight failure probability of a new launch vehicle |
+| Kinnett, Green, Klein & Lin (JPL), Remote Diagnosis and Operational Response to an In-Flight Failure of the Drill Feed Mechanism Onboard the Mars Science Laboratory Rover, Aerospace Mechanisms Symposium 2022 | the Curiosity drill entry in the mining success tally |
+| Shapiro, Murray, Howarth & Fusaro, Space Mechanisms Lessons Learned Study, Vol. I (NASA TM-107046) and Vol. II (TM-107047), 1995 | the fleet deployment-anomaly record, and flight lessons by mechanism type |
+| NASA CR-3349, Satellite Power System Salvage and Disposal Alternatives, 1980 | the space-asset salvage values that bracket the rig salvage fraction |
+| US DOE, Mining Industry Energy Bandwidth Study, 2007, Exhibit 24 | terrestrial beneficiation energy per kg of ore |
+| Whitley & Shinn, The Economics of NASA Mission Cost Reserves, 2012, NTRS 20120002314 | NASA's fixed-percentage reserves and how often they were spent |
+| National Research Council, Controlling Cost Growth of NASA Earth and Space Science Missions, 2010 | average cost growth across prior studies |
+| Schmitz et al., A Comparison of Radioisotope and Solar Array/Battery Power Systems in the Solar System, IEEE Aerospace 2023, NTRS 20230001487 | Li-ion state of the art (Table 3), and Lucy's array specific power |
+| Ali, Beltran, Lindsey & Pecht, Assessment of the calendar aging of lithium-ion batteries for a long-term space missions, Frontiers in Energy Research, 2023 | Li-ion cell specific energy |
+| Hoffman, Kerslake, Hepp, Jacobs & Ponnusamy, Thin-Film Photovoltaic Solar Array Parametric Assessment, NASA/TM-2000-210342 | array mass for a main-belt asteroid tour |
+| The NEXT-C Power Processing Unit: Lessons Learned from the Design, Build, and Test of the NEXT-C PPU for APL's DART Mission, Aerojet Rocketdyne / NASA, 2020 | NEXT-C PPU mass and output range |
+| NASA OIG IG-24-003 (Oct 2023) and IG-21-004 (Nov 2020) | Gateway PPE price and power, and its government-furnished thrusters |
+| NASA OIG IG-17-009 (Jan 2017), Table 3; IG-23-010, Table 2 | MMRTG unit cost, and notional cost per mission watt |
+| Howe et al., Economical Production of Pu-238, NASA NIAC Phase I, NTRS 20160010587 | Pu-238 price from a new reactor |
 
 The mission profile these are costed against is **uncrewed and fully
 autonomous**: no life support, no habitat, no crew operations. The autonomy
