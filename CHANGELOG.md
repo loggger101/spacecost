@@ -13,6 +13,39 @@ may read a version as proof that a number moved.
 
 ## Package releases
 
+### 0.12.1 - 2026-10-21
+
+**Data contract 1.23.0 → 1.23.1: five propellant Isp values now cite the
+documents they come from. No value moved.** Only `notes` cells in
+`propellants.csv`, CITATIONS.md and the `pipeline_version` stamp changed. Each
+item names its General_Research revision candidate. Every figure below was
+checked against the source's text (Kim 2013 against the registry's extracted
+tables, since its full text is not redistributable).
+
+- **hydrolox (LH2 / LOX)** (rc-159): "per RS-25 / RL-10 datasheets" named no
+  document. 452 s is the RS-25 table in Jue (NTRS 20020046693): vacuum Isp
+  452 s at area ratio 69:1 and O/F 6.0, an exact match. Centaur's RL10A-3-3A
+  measured 444.4 +/- 2.5 s at O/F 5.0 (Baumeister, NASA/TM-2015-218736), 1.7%
+  lower, and the note now says so. The delivery chains still fly 465 s
+  (`delivery.py`), which this release does not touch.
+- **methalox (LCH4 / LOX)** (rc-160): "SpaceX Raptor public data" becomes Kim,
+  Jung & Kim 2013 (KSPE 17(6)) Table 3, which lists the Raptor upper-stage
+  engine at 380 s and 2,940 kN. The note says it is a 2013 development figure,
+  and gives the RD-192 methane engine's 356 s from the same paper.
+- **kerolox (RP-1 / LOX)** (rc-158): "RocketCEA / Astronautix" becomes a
+  measured engine. The RD-191 runs at 337 s (Kim 2013 Table 5), so 340 s is
+  0.9% above it. The Saturn V first stage's 304 s (Thapa 2023) is the
+  family's low end.
+- **Green monoprop (ASCENT / AF-M315E)** (rc-161): the 235 s had no source. It
+  is the GPIM GR-1 thruster's predicted vacuum Isp (Spores et al., AIAA JPC
+  2014, NTRS 20140012587, Table 1). The "~50% more density-impulse" claim now
+  cites the paper's theoretical comparison: 257 s against hydrazine's 235 s
+  (+12%), and 1.47 against 1.00 g/cc (+45%).
+- **Nuclear thermal (LH2, NTP)** (rc-114): the only source given for 900 s was
+  DRACO's target, which no registered document records. The note now cites
+  Borowski, McCurdy & Packard (NASA, IEEE Aerospace 2012, NTRS 20120003776):
+  "~900 seconds (s) or more", and ~894-940 s from MCNP modelling of the core.
+
 ### 0.12.0 - 2026-10-17
 
 **Data contract 1.22.0 → 1.23.0: making hydrolox at an asteroid costs energy

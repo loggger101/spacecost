@@ -680,7 +680,11 @@ PROPELLANTS_REFERENCE: List[dict] = [
         "yfinance_proxy":        "heating_oil",   # RP-1 ≈ refined kerosene
         "reference_year":        _REF_YEAR_PROP,
         "notes": "Workhorse 1st-stage propellant (Falcon 9, Atlas V kerolox).  "
-                 "Vac Isp 340 s per RocketCEA / Astronautix.  Combined cost "
+                 "Vac Isp 340 s is 0.9% above a measured engine, Energomash's "
+                 "RD-191 at 337 s (Kim, Jung & Kim, J. Korean Soc. Propulsion "
+                 "Eng. 17(6), 2013, Table 5); the Saturn V first stage ran "
+                 "304 s (Thapa, J. Materials Physics & Chemistry 11(1), 2023), "
+                 "the family's low end.  Combined cost "
                  "weighted at 1:2.30 RP-1:LOX mix ratio.",
     },
     {
@@ -708,7 +712,11 @@ PROPELLANTS_REFERENCE: List[dict] = [
         "ref_cost_usd_per_L":    _hydrolox["ref_cost_usd_per_kg"] * _hydrolox["density_kg_per_L"],
         "yfinance_proxy":        None,            # LH2 has no spot ticker
         "reference_year":        _REF_YEAR_PROP,
-        "notes": "Highest chemical Isp.  Vac Isp 452 s per RS-25 / RL-10 datasheets. "
+        "notes": "Highest chemical Isp.  Vac Isp 452 s is the RS-25's, at area "
+                 "ratio 69:1 and O/F 6.0 (Jue, Space Shuttle Main Engine - "
+                 "Thirty Years of Innovation, NTRS 20020046693).  Centaur's "
+                 "RL10A-3-3A measured 444.4 +/- 2.5 s at O/F 5.0, 1.7% lower "
+                 "(Baumeister, NASA/TM-2015-218736). "
                  "LH2 base price $3-6/kg (NASA contracts); bulk-handling overhead "
                  "lifts effective cost to ~$10/kg.  Used on SLS, Centaur.",
     },
@@ -743,7 +751,11 @@ PROPELLANTS_REFERENCE: List[dict] = [
         "yfinance_proxy":        "natural_gas",   # CH4 tracks NG=F (Henry Hub)
         "reference_year":        _REF_YEAR_PROP,
         "notes": "Raptor (Starship) & BE-4 (Vulcan / New Glenn) engines.  "
-                 "Vac Isp 380 s per SpaceX Raptor public data.  LCH4 ~$400/tonne "
+                 "Vac Isp 380 s is SpaceX's Raptor upper-stage engine (2,940 kN) "
+                 "as tabulated in Kim, Jung & Kim, J. Korean Soc. Propulsion "
+                 "Eng. 17(6), 2013, Table 3, a 2013 development figure; "
+                 "Energomash's RD-192 methane engine is 356 s in the same "
+                 "paper.  LCH4 ~$400/tonne "
                  "open-market per Mobius Market Research 2024.  ISRU-makeable on Mars.",
     },
     {
@@ -952,9 +964,14 @@ PROPELLANTS_REFERENCE: List[dict] = [
         "reference_year":        _REF_YEAR_PROP,
         "notes": "Hydroxylammonium nitrate monoprop.  Flown on NASA's Green "
                  "Propellant Infusion Mission (2019); the Swedish LMP-103S "
-                 "equivalent flew earlier on PRISMA (2010).  Isp 235 s and "
-                 "ρ 1.47 kg/L beat hydrazine on BOTH counts — ~50% more "
-                 "density-impulse — and it is not acutely toxic, which is a "
+                 "equivalent flew earlier on PRISMA (2010).  Isp 235 s is the "
+                 "GPIM GR-1 thruster's predicted vacuum Isp (Spores et al., "
+                 "GPIM AF-M315E Propulsion System, AIAA JPC 2014, NTRS "
+                 "20140012587, Table 1), a delivered figure like the hydrazine "
+                 "row's 220 s.  The paper gives the propellants' theoretical "
+                 "Isp as 257 s against hydrazine's 235 s (+12%) and density as "
+                 "1.47 against 1.00 g/cc (+45%): ~50% more density-impulse, "
+                 "and it is not acutely toxic, which is a "
                  "ground-handling saving this model does not price.  The $500/kg "
                  "is pilot-scale production, not chemistry.",
     },
@@ -1428,8 +1445,11 @@ PROPELLANTS_REFERENCE: List[dict] = [
                  "chemistry at full chemical thrust.  NERVA reactor tests through "
                  "early 1968 demonstrated ~800 s (vacuum-corrected); ~825 s was "
                  "the NERVA engine RATING, and the XE engine tests had not yet "
-                 "run (NERVA program status reports, 1968).  DRACO targeted 900 s before being "
-                 "descoped in 2025.  TRL 5 — the reactor physics is 60 years "
+                 "run (NERVA program status reports, 1968).  The 900 s is "
+                 "Borowski, McCurdy & Packard (NASA), IEEE Aerospace 2012, NTRS "
+                 "20120003776: the NTR \"can achieve specific impulse (Isp) "
+                 "values of ~900 seconds (s) or more\", and MCNP modelling of "
+                 "the core gives ~894-940 s.  TRL 5 — the reactor physics is 60 years "
                  "proven and nothing has flown.\n"
                  "This row is the clearest case for the v1.9.0 tank model.  Bare "
                  "LH2 at 0.0708 kg/L pays 53% of its own mass in tankage and "

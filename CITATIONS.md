@@ -105,6 +105,12 @@ so a study can state what it excluded.
 | Manufacturer data sheets, per device | thruster kg/N, efficiency, thrust scaling |
 | DOE Hydrogen and Fuel Cell Technologies Office, Technical Targets for Proton Exchange Membrane Electrolysis | hydrolox ISRU electrolysis, 55 kWh/kg H2 at system level (2022 status) |
 | W. Johnson (NASA GRC), Concepts for the Liquefaction of Hydrogen for In-Situ Operations on the Lunar or Martian Surface, AIAA ASCEND 2023, NTRS 20230014839 | hydrolox ISRU liquefaction: 35 kW for 0.3 kg/h of H2 through one 20 K cryocooler, up to 3x less pre-cooled, and under 2 kW for the oxygen |
+| F. H. Jue (Boeing Rocketdyne), Space Shuttle Main Engine - Thirty Years of Innovation, NTRS 20020046693 | hydrolox Isp: the RS-25 table |
+| J. F. Baumeister (NASA GRC), RL10 Engine Ability to Transition from Atlas to Shuttle/Centaur Program, NASA/TM-2015-218736 | hydrolox: the RL10A-3-3A's measured Isp, as a comparison |
+| Kim, Jung & Kim, State of the Art in the Development of Methane/Oxygen Liquid-bipropellant Rocket Engine, J. Korean Soc. Propulsion Eng. 17(6), 2013, doi:10.6108/kspe.2013.17.6.120 | methalox Isp (Raptor, Table 3); kerolox Isp against the RD-191 (Table 5) |
+| R. Thapa, Evolution in Propellant of the Rocket Engine, J. Materials Physics and Chemistry 11(1), 2023, doi:10.12691/jmpc-11-1-2 | kerolox: the Saturn V first stage's Isp, the family's low end |
+| Spores, Masse, Kimbrel & McLean, GPIM AF-M315E Propulsion System, AIAA Joint Propulsion Conference 2014, NTRS 20140012587 | green monoprop Isp (GR-1, Table 1) and its density-impulse comparison with hydrazine |
+| Borowski, McCurdy & Packard (NASA), Nuclear Thermal Propulsion (NTP): A Proven Growth Technology for Human NEO/Mars Exploration Missions, IEEE Aerospace 2012, NTRS 20120003776 | nuclear thermal Isp |
 
 Vacuum Isp values are the interplanetary-relevant figures. Sea-level Isp is
 lower and matters only to a first stage, which is already priced into the launch
