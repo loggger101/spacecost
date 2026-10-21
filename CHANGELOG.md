@@ -13,6 +13,47 @@ may read a version as proof that a number moved.
 
 ## Package releases
 
+### 0.12.2 - 2026-10-21
+
+**Data contract 1.23.1 → 1.23.2: nine more propellant notes say what their
+sources hold. No value moved.** Only `notes` cells in `propellants.csv`,
+CITATIONS.md and the `pipeline_version` stamp changed. Each item names its
+General_Research revision candidate, and every figure was checked against the
+source's text (Schoenman 1992 against its NTRS abstract, the only text NTRS
+distributes).
+
+- **Hydrazine (monoprop)** (rc-111): the Astronautix page becomes JPL TR
+  32-1227 (1968): a catalytic-bed reactor measured 235 lbf-s/lbm (~97% of
+  theoretical) at 44:1, and 230-235 s at 50:1 was routine. 220 s is the
+  conservative end.
+- **HTP (98% peroxide)** (rc-112): 165 s had no source. It sits between the
+  ~185 s theoretical vacuum Isp and the ~140 s older empirical work observed
+  (Hitt et al. 2001).
+- **Hydrazine arcjet** (rc-113): 600 s was credited to the MR-510 with no
+  source. NASA's arcjet programme (Morren & Curran, TM-105149) put the state of
+  the art at ~530 s mission-average at 1.6 kW, set 600 s as its goal, and ran
+  300 h at 550 s. The note now calls 600 s the top of the demonstrated range.
+- **Nuclear pulse (Orion)** (rc-116): the programme began in 1957, not 1958
+  (GA-4891). GA's vehicles were designed for 4,000-6,000 s, and the note now
+  gives 10,000 s as the top of Schmidt et al.'s 3,000-10,000 s range.
+- **CO / LOX** (rc-117): ~260 s is below the ~300 s NASA gives for CO (Hepp,
+  Landis & Kubiak, TM-103728), and the note now calls it conservative. It also
+  cites Linne's subscale combustion tests at O/F 0.55.
+- **Water (electrothermal / resistojet)** (rc-118): the 150-220 s band and
+  the 190 s value had no source, and the note now says they are estimates. The
+  one flight measurement, AQUARIUS on EQUULEUS, is 91.7 and 90.3 s at ~6 mN
+  and under 14 W, less than half the row's value. **The value is not changed
+  here**: re-pinning it is a model change that touches the ISRU search, and is
+  left for a release of its own.
+- **UDMH / NTO** (rc-157): the Astronautix page becomes the measured NTO/MMH
+  engine that brackets it (Schoenman 1992: 309 s at 44:1, 321 s at 286:1). The
+  note says no measured UDMH/NTO engine is on record here.
+- **Solar thermal (LH2)** (rc-162): "700-900 s demonstrated" had no source.
+  The only measured figure is 680 s (Boddy 1980, AFRPL), and 800 s is a design
+  figure (811 s for a 2800 K absorber, Woodcock & Byers 2003).
+- **Xenon (Hall / ion)** (rc-163): 3,000 s now cites NEXT-C's 1,400-4,160 s
+  envelope, and AEPS's ~2,800 s for a Hall thruster.
+
 ### 0.12.1 - 2026-10-21
 
 **Data contract 1.23.0 → 1.23.1: five propellant Isp values now cite the
