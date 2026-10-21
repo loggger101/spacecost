@@ -435,8 +435,11 @@ def _blend(of_ratio: float, fuel: dict, ox: dict) -> dict:
 #   LOX        Astronautix / aqua-calc, bulk industrial cryogen ~$0.20/kg
 #   N2O4       DOD Aerospace Standard Prices FY20 reference
 #   MMH        DOD Aerospace Standard Prices FY20 reference
-#   Hydrazine  DOD Standard Prices FY20 ($30.5/kg) to commercial AIAA ($75.8/kg)
-#              The FY20 list can no longer be found.  DLA FY2025 (Oct 1 2024)
+#   Hydrazine  commercial ~$75.8/kg: Space Insider, "How Much Does Rocket Fuel
+#              Really Cost?" (J. Seibert, Jun 13 2023), not an AIAA paper.  The
+#              $30.5/kg once quoted beside it as a DOD FY20 standard price is,
+#              in that article, the Defense Working Capital Fund price of LH2,
+#              not hydrazine.  The FY20 list can no longer be found.  DLA FY2025 (Oct 1 2024)
 #              is quoted in the rows' notes as the government price: MMH
 #              ~$497/kg, NTO MON-3 ~$235/kg, hydrazine ~$365/kg.  Not used.
 #   Xenon      SETS Space / EFC 2024-99.999% purity ~$10,000/kg.
@@ -818,8 +821,13 @@ PROPELLANTS_REFERENCE: List[dict] = [
                  "230-235 s at 50:1 was 'realized easily' by 1968 (Price & "
                  "Evans, The Status of Monopropellant Hydrazine Technology, "
                  "JPL TR 32-1227, NTRS 19680006875).  "
-                 "Pricing: DOD FY20 standard $30.5/kg, commercial $75.8/kg "
-                 "(AIAA 2024).  Used $75/kg conservative for aerospace.  The "
+                 "Pricing: commercial up to ~$75.8/kg (Space Insider, How Much "
+                 "Does Rocket Fuel Really Cost?, J. Seibert, Jun 2023; until "
+                 "0.12.4 cited as 'AIAA 2024').  Used $75/kg conservative for "
+                 "aerospace.  The $30.5/kg once given here as hydrazine's DOD "
+                 "FY20 standard price is, in that article, the Defense Working "
+                 "Capital Fund price of LH2, and no document found attaches it "
+                 "to hydrazine.  The "
                  "FY20 list can no longer be found to re-check; DLA's FY2025 "
                  "Aerospace Standard Price for HPH and H70 hydrazine is "
                  "$165.75/lb (~$365/kg), a DoD price including DLA overhead, "

@@ -113,7 +113,13 @@ OPERATIONAL_COSTS_REFERENCE: List[dict] = [
                  "an Earth recovery campaign: no search aircraft, no ships, no "
                  "range clearance, no clean-room convoy.  Scaled from ISS "
                  "visiting-vehicle berthing ops rather than the $15M OSIRIS-REx "
-                 "UTTR recovery.  ESTIMATE — no commercial depot exists yet.",
+                 "UTTR recovery.  ESTIMATE — no commercial depot exists yet, "
+                 "and no institutional document prices berthing or handover "
+                 "on its own.  The nearest record is a ceiling: ISS cargo "
+                 "resupply missions averaged $191.3M each under CRS-1 "
+                 "(SpaceX $152.1M, Orbital ATK $262.6M), and CRS-2 was "
+                 "projected at $71,800/kg (NASA OIG IG-18-016, 2018).  Those "
+                 "are whole missions, ~100x this figure.",
         "reference_year":   _REF_YEAR_OPS,
     },
     {
@@ -149,7 +155,17 @@ OPERATIONAL_COSTS_REFERENCE: List[dict] = [
                  "chains actually fly, but built at a low rate.  Neither is the "
                  "stage the chain describes, so the value is the geometric "
                  "centre of the two, $4,840, rounded to $4,800 — the same rule "
-                 "the launch table uses for its own bands.",
+                 "the launch table uses for its own bands.\n"
+                 "Sourcing, anchor by anchor: '~$10M (Musk 2018)' is a public "
+                 "statement with no document behind it; the '~$7M (2026 "
+                 "third-party estimate)' names no source; and Centaur III's "
+                 "~$30M is an unsourced vendor-class estimate.  NASA's Centaur "
+                 "history (Dawson & Bowles, Taming Liquid Hydrogen, NASA "
+                 "SP-2004-4230, 2004) gives programme costs only (the original "
+                 "contract's '$36 million for six vehicles'; an $80M "
+                 "Shuttle/Centaur appropriation against 1981 funding of $20M) "
+                 "and no production cost per stage.  No institutional document prices "
+                 "either anchor.",
         "reference_year":   _REF_YEAR_OPS,
     },
     {
@@ -166,7 +182,9 @@ OPERATIONAL_COSTS_REFERENCE: List[dict] = [
                  "electric-propulsion stage, just smaller.\n"
                  "Derived from Centaur III, the closest flight article: ~1,880 kg "
                  "of stage structure, ~$30M for the stage against ~$20M for the "
-                 "RL10 it carries, so ~$10M of structure ≈ $5,300/kg.  Rounded "
+                 "RL10 it carries, so ~$10M of structure ≈ $5,300/kg (the ~$30M "
+                 "has no institutional source; see 'Expendable upper stage "
+                 "recurring cost').  Rounded "
                  "up to $6,000 and quoted as a LOWER BOUND, consistent with the "
                  "rest of this table: Centaur is a mature production article and "
                  "a deep-space tank holding propellant for four years needs "
@@ -392,7 +410,9 @@ OPERATIONAL_COSTS_REFERENCE: List[dict] = [
                  "Anchor: a NASA NEXT-C flight string is a 7 kW gridded-ion "
                  "thruster plus PPU at roughly 47 kg, procured in the "
                  "$10-15M-per-string class as a flight article — call it "
-                 "$1.5-2M/kW.  The per-string price has NO published source: "
+                 "$1.5-2M/kW ($10-15M over 7 kW is $1.43-2.14M/kW, so the "
+                 "$1.5M value sits at the bottom of its own class).  The "
+                 "per-string price has NO published source: "
                  "no registered NASA record prices a string.  What they do "
                  "give is element-level: Gateway's Power and Propulsion "
                  "Element, which provides 60 kW of power generation and "
@@ -402,7 +422,8 @@ OPERATIONAL_COSTS_REFERENCE: List[dict] = [
                  "and bought separately (IG-21-004), so that price excludes "
                  "them.  High-power Hall systems buy down from there: "
                  "Psyche's SPT-140 strings and Gateway's 12.5 kW AEPS are "
-                 "cheaper per kilowatt than NEXT-C, which is why the range "
+                 "cheaper per kilowatt than NEXT-C (a judgement: no registered "
+                 "source prices either per kilowatt), which is why the range "
                  "runs down to $500k/kW and why the figure should be expected "
                  "to fall if multi-hundred-kW deep-space EP is ever built.\n"
                  "SOFT: no multi-hundred-kW deep-space electric stage has "
@@ -629,7 +650,14 @@ OPERATIONAL_COSTS_REFERENCE: List[dict] = [
                  "cargo, the seal and shade keep the volatile fraction of it "
                  "from leaving.  That reading is what makes the storage row's "
                  "own 'heavier than an ore hopper' true at a value below 0.15.\n"
-                 "Charged on WATER only, which is what the citation covers. "
+                 "Charged on WATER only.  (Until 0.12.4 this said 'which is "
+                 "what the citation covers', but the row cites nothing.)  "
+                 "ENGINEERING ESTIMATE: no published source gives the "
+                 "containment mass fraction, or the stability of a passive "
+                 "sealed, shaded water hold over a multi-year cruise.  NASA's "
+                 "long-term storage work (NASA/TM-2011-215988; Plachta et al. "
+                 "2017) covers cryogenic propellant tanks with zero-boil-off "
+                 "hardware, not a passive water hold.  "
                  "Carbon and organics are refractory at these temperatures and "
                  "ride in the hopper like rock.",
         "reference_year":   _REF_YEAR_OPS,
@@ -701,7 +729,11 @@ OPERATIONAL_COSTS_REFERENCE: List[dict] = [
                  "range coverage.  Modelled on OSIRIS-REx UTTR landing (Sept 2023). "
                  "NOTE: NASA has not published a standalone recovery-ops figure; "
                  "$15M is an order-of-magnitude estimate from the broader $283M / 9 yr "
-                 "operations envelope — refine with project-specific data when available.",
+                 "operations envelope — refine with project-specific data when available.  "
+                 "No institutional document prices search-and-recovery on its "
+                 "own; the ISS cargo-resupply record (NASA OIG IG-18-016: "
+                 "$191.3M per CRS-1 mission) bounds a whole delivery, not this "
+                 "line.",
         "reference_year":   _REF_YEAR_OPS,
     },
     {
@@ -906,9 +938,18 @@ OPERATIONAL_COSTS_REFERENCE: List[dict] = [
         "range_high":       500,
         "notes": "v1.7.0.  Sizes the refinery that turns raw asteroid feedstock "
                  "into something a depot can actually build with.  Terrestrial "
-                 "smelters run 1,000x their own mass per year; 100x is a heavy "
+                 "smelters run 1,000x their own mass per year (no source is "
+                 "given for this); 100x is a heavy "
                  "derating for microgravity, no convection, no gravity-fed "
-                 "materials handling and full autonomy.  Combined with the "
+                 "materials handling and full autonomy.  NASA's only published "
+                 "designs for in-space processing hardware run far lower: "
+                 "7.28 kg per year per kg (a lunar water plant, Kleinhenz & "
+                 "Paz 2021, NTRS 20210016820) to 13.3 (a Mars propellant "
+                 "plant, Kleinhenz & Paz 2017, AIAA 2017-0423), the band of "
+                 "'ISRU propellant plant throughput'.  This row's 100 is 7.5 to "
+                 "14 times that, and its 20 floor is 1.5 times the top.  "
+                 "Nothing here shows why a mineral refinery should outrun ISRU "
+                 "hardware by that much; the value is an estimate.  Combined with the "
                  "$300k/kg recurring hardware rate this sets the capital "
                  "charge per kg refined.",
         "reference_year":   _REF_YEAR_OPS,
