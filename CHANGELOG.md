@@ -13,6 +13,47 @@ may read a version as proof that a number moved.
 
 ## Package releases
 
+### 0.12.4 - 2026-10-21
+
+**Data contract 1.23.3 → 1.23.4: six more revision candidates, and most of
+them make a note admit it has no source. No value moved.** Only `notes` cells
+in `operational_costs.csv`, `propellants.csv` and `storage_systems.csv`,
+CITATIONS.md and the `pipeline_version` stamp changed. Each item names its
+General_Research revision candidate. I checked every figure against the source
+text, and fetched the Space Insider article live.
+
+- **Expendable upper stage recurring cost** (rc-170): states each anchor's
+  status. "Musk 2018" is a statement with no document, the "~$7M" names no
+  source, and Centaur III's ~$30M is unsourced. NASA's Centaur history (SP-4176)
+  gives programme costs only, with no price per stage. The tank row, which
+  derives from the same $30M, now says so.
+- **In-space processing plant throughput** (rc-178): NASA's only published
+  in-space processing designs (Kleinhenz & Paz 2017, 2021) run at 7.28-13.3
+  kg per year per kg. This row's 100 is 7.5-14 times that, and the note now
+  says the value is an estimate. The "terrestrial smelters run 1,000x" claim is
+  marked unsourced. **The value is not changed here**: moving it changes
+  economicspace's refinery sizing and is your call.
+- **Hydrazine pricing** (rc-180): "commercial $75.8/kg (AIAA 2024)" is Space
+  Insider (J. Seibert, Jun 2023), not an AIAA paper. In that article the
+  $30.5/kg is the Defense Working Capital Fund price of **LH2**, not
+  hydrazine. Both the note and the code comment now say so. The $75/kg value
+  stands.
+- **Electric propulsion recurring cost** (rc-181): $10-15M over 7 kW is
+  $1.43-2.14M/kW, so the $1.5M value sits at the bottom of its own class. The
+  claim that Psyche and AEPS are cheaper per kilowatt is marked as a
+  judgement. (0.12.3 already said the per-string price has no source.)
+- **Depot berthing & handover operations, Sample recovery operations**
+  (rc-182): both notes say no institutional document prices these on their
+  own. They now cite the ceiling, ISS cargo resupply at $191.3M per CRS-1
+  mission (NASA OIG IG-18-016).
+- **Volatile cargo containment, both rows** (rc-184): "which is what the
+  citation covers" pointed at nothing. Both rows are now labelled engineering
+  estimates. The note also says NASA's long-term storage work covers cryogenic
+  tanks, not a passive water hold.
+
+rc-183 (the economicspace README winner table) belongs to economicspace and is
+not applied here.
+
 ### 0.12.3 - 2026-10-21
 
 **Data contract 1.23.2 → 1.23.3: sixteen revision candidates make nineteen

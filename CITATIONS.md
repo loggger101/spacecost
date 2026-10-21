@@ -97,6 +97,7 @@ so a study can state what it excluded.
 |---|---|
 | DOD Aerospace Standard Prices, FY20 | hydrazine, MMH, N2O4 pricing (a list no longer findable to re-check) |
 | DLA Energy, Aerospace Standard Prices FY2025 (effective Oct 1 2024) | the government price of MMH, NTO and hydrazine, quoted beside the rows as a comparison and not used for a value |
+| Space Insider, How Much Does Rocket Fuel Really Cost? (J. Seibert, Jun 13 2023) | hydrazine's commercial price, up to ~$75.8/kg (once cited as "AIAA 2024") |
 | SETS Space / Electric Propulsion, 2024 | xenon and argon ion pricing, and the high end of krypton's band ("$2,100-$4,800" flight grade) |
 | Idaho National Laboratory, INL/RPT-23-75203, Krypton and xenon recovery cost-benefit, 2023 | the low end of krypton's band: a market survey putting bulk Kr prices at "around $1/L" |
 | Mobius / Energy CG, 2024 | liquid methane commodity pricing |
@@ -178,6 +179,11 @@ Lambert solve against an ephemeris; these are what you price the answer with.
 | NASA OIG IG-24-003 (Oct 2023) and IG-21-004 (Nov 2020) | Gateway PPE price and power, and its government-furnished thrusters |
 | NASA OIG IG-17-009 (Jan 2017), Table 3; IG-23-010, Table 2 | MMRTG unit cost, and notional cost per mission watt |
 | Howe et al., Economical Production of Pu-238, NASA NIAC Phase I, NTRS 20160010587 | Pu-238 price from a new reactor |
+| Elon Musk, public statement, 2018 (no document) | the low anchor of the expendable upper stage cost, ~$10M for Falcon 9's second stage |
+| Dawson & Bowles, Taming Liquid Hydrogen: The Centaur Upper Stage Rocket, 1958-2002, NASA SP-4176, 2004 | Centaur programme costs, and the absence of a per-stage price behind the ~$30M high anchor |
+| Kleinhenz & Paz 2017 and 2021 (above) | the published in-space processing rates the refinery throughput row is compared against |
+| NASA OIG IG-18-016, Audit of Commercial Resupply Services to the International Space Station, 2018 | the whole-mission ceiling over depot berthing and sample recovery operations |
+| NASA/TM-2011-215988, Issues of Long-Term Cryogenic Propellant Storage in Microgravity; Plachta et al., NASA Cryocooler Technology Developments and Goals to Achieve Zero Boil-Off, 2017 | named as out of scope for volatile cargo containment, which is an engineering estimate |
 
 The mission profile these are costed against is **uncrewed and fully
 autonomous**: no life support, no habitat, no crew operations. The autonomy
