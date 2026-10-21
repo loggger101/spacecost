@@ -111,6 +111,19 @@ so a study can state what it excluded.
 | R. Thapa, Evolution in Propellant of the Rocket Engine, J. Materials Physics and Chemistry 11(1), 2023, doi:10.12691/jmpc-11-1-2 | kerolox: the Saturn V first stage's Isp, the family's low end |
 | Spores, Masse, Kimbrel & McLean, GPIM AF-M315E Propulsion System, AIAA Joint Propulsion Conference 2014, NTRS 20140012587 | green monoprop Isp (GR-1, Table 1) and its density-impulse comparison with hydrazine |
 | Borowski, McCurdy & Packard (NASA), Nuclear Thermal Propulsion (NTP): A Proven Growth Technology for Human NEO/Mars Exploration Missions, IEEE Aerospace 2012, NTRS 20120003776 | nuclear thermal Isp |
+| Price & Evans (JPL), The Status of Monopropellant Hydrazine Technology, JPL TR 32-1227, 1968, NTRS 19680006875 | hydrazine monoprop Isp: the measured catalytic-bed figure |
+| Hitt, Zakrzwski & Thomas (NASA), MEMS-based satellite micropropulsion via catalyzed hydrogen peroxide decomposition, Smart Materials and Structures 10(6), 2001, NTRS 20010102648 | HTP Isp: theoretical and empirical bounds |
+| Morren & Curran (NASA Lewis), Preliminary Performance and Life Evaluations of a 2-kW Arcjet, NASA TM-105149 / AIAA-91-2228 | hydrazine arcjet Isp: state of the art, programme goal and endurance test |
+| Schoenman (NASA Lewis), Test experience, 490 N high performance (321 sec Isp) engine, AIAA-92-3800, NTRS 19920066503 | UDMH / NTO Isp, bracketed by a measured NTO/MMH engine |
+| Asakawa, Koizumi et al. (JAXA), On-orbit Performance of the Water Resistojet Propulsion System AQUARIUS on EQUULEUS, Trans. JSASS 67(5), 2024 | water resistojet: the one flight-measured Isp |
+| Monheiser, Goodfellow, Aubuchon et al., A Summary of the NEXT-C Flight Thruster Proto-Flight Testing, NTRS 20210018563 | xenon gridded-ion Isp envelope |
+| Shastry et al., 12-kW Advanced Electric Propulsion System Hall Current Thruster Qualification and Production Status, IEPC-2024, NTRS 20240006249 | xenon Hall-thruster Isp, as a comparison |
+| Boddy (Rockwell, for AFRPL), Solar Rocket System Concept Analysis, 1980, NTRS 19800022964 | solar thermal: the measured 680 s |
+| Woodcock & Byers, Results of Evaluation of Solar Thermal Propulsion, 2003, NTRS 20030068437 | solar thermal: the 811 s design figure |
+| Hepp, Landis & Kubiak (NASA), Chemical Approaches to Carbon Dioxide Utilization for Manned Mars Missions, NASA TM-103728, 1991 | CO / LOX Isp, ~300 s |
+| Linne (NASA Lewis), Experimental Evaluation of the Ignition Process of Carbon Monoxide and Oxygen in a Rocket Engine, NASA TM-107267 / AIAA-96-2943 | CO / LOX subscale combustion at O/F 0.55 |
+| General Atomic Division of General Dynamics, Nuclear Pulse Vehicle Study, condensed summary report GA-4891, 1964 | nuclear pulse: programme dates and design Isp |
+| Schmidt, Bonometti & Morton (NASA MSFC), Nuclear Pulse Propulsion - Orion and Beyond, AIAA 2000-3856 | nuclear pulse: the external-pulse Isp range |
 
 Vacuum Isp values are the interplanetary-relevant figures. Sea-level Isp is
 lower and matters only to a first stage, which is already priced into the launch

@@ -812,7 +812,12 @@ PROPELLANTS_REFERENCE: List[dict] = [
         "yfinance_proxy":        None,
         "reference_year":        _REF_YEAR_PROP,
         "notes": "Attitude control + small Δv.  Cat-bed decomposition.  "
-                 "Vac Isp 220 s (Astronautix Hydrazine page).  "
+                 "Vac Isp 220 s is the conservative end: a catalytic-bed "
+                 "reactor measured 235 lbf-s/lbm (~97% of theoretical) at "
+                 "50-55% ammonia dissociation and area ratio 44:1, and "
+                 "230-235 s at 50:1 was 'realized easily' by 1968 (Price & "
+                 "Evans, The Status of Monopropellant Hydrazine Technology, "
+                 "JPL TR 32-1227, NTRS 19680006875).  "
                  "Pricing: DOD FY20 standard $30.5/kg, commercial $75.8/kg "
                  "(AIAA 2024).  Used $75/kg conservative for aerospace.  The "
                  "FY20 list can no longer be found to re-check; DLA's FY2025 "
@@ -844,7 +849,13 @@ PROPELLANTS_REFERENCE: List[dict] = [
         "yfinance_proxy":        None,
         "reference_year":        _REF_YEAR_PROP,
         "notes": "10× the Isp of chemical; low thrust ⇒ months of burn.  "
-                 "Used by Dawn, BepiColombo, NEXT-C.  "
+                 "Used by Dawn, BepiColombo, NEXT-C.  3,000 s is mid-envelope "
+                 "for gridded ion: NEXT-C runs at Isp 1,400-4,160 s and "
+                 "25-235 mN up to 6.85 kW (Monheiser et al., A Summary of the "
+                 "NEXT-C Flight Thruster Proto-Flight Testing, NTRS "
+                 "20210018563).  A Hall thruster runs lower: AEPS gives "
+                 "~2,800 s at 12 kW (Shastry et al., IEPC-2024, NTRS "
+                 "20240006249).  "
                  "SETS Space 2024: $5-12k/kg for 99.999% aerospace-grade Xe; "
                  "used $10k/kg (2023 EFC reference).",
     },
@@ -910,8 +921,12 @@ PROPELLANTS_REFERENCE: List[dict] = [
         "yfinance_proxy":        None,
         "reference_year":        _REF_YEAR_PROP,
         "notes": "Proton and Long March heritage; still the most-flown storable "
-                 "bipropellant by tonnage.  Vac Isp 318 s (Astronautix N2O4/UDMH) "
-                 "at 2.6 O/F.  Slightly worse than MMH/NTO and considerably more "
+                 "bipropellant by tonnage.  Vac Isp 318 s at 2.6 O/F has no "
+                 "measured UDMH/NTO engine behind it here.  It is bracketed by "
+                 "a measured NTO/MMH engine, 309 s at area ratio 44:1 and 321 s "
+                 "at 286:1 (Schoenman, AIAA-92-3800, NTRS 19920066503), and "
+                 "sits below MMH as UDMH's higher molecular weight predicts.  "
+                 "Slightly worse than MMH/NTO and considerably more "
                  "carcinogenic — present for completeness, not because it wins.",
     },
     {
@@ -1001,7 +1016,11 @@ PROPELLANTS_REFERENCE: List[dict] = [
                  "generator, Black Arrow.  Cheapest propellant in this table at "
                  "~$5/kg (an unsourced estimate pending re-sourcing: the 2024 "
                  "quote it came from is no longer published) and the lowest "
-                 "Isp of any liquid in it — the reason it "
+                 "Isp of any liquid in it.  165 s sits between the ~185 s "
+                 "theoretical vacuum Isp of 98% H2O2 and the ~140 s older "
+                 "empirical work observed at 80% efficiency (Hitt, Zakrzwski "
+                 "& Thomas, Smart Materials and Structures 10(6), 2001, NTRS "
+                 "20010102648).  The reason it "
                  "is here is the boil-off column: 0.002%/day is self-"
                  "decomposition, not evaporation, so unlike a cryogen the loss "
                  "does not accelerate with mission length.",
@@ -1190,7 +1209,12 @@ PROPELLANTS_REFERENCE: List[dict] = [
         "notes": "Steam.  Resistively or microwave heated, Isp 150-220 s.  Flown "
                  "by Tethers Unlimited's HYDROS-C (ISS deploy 2022), Momentus' "
                  "microwave electrothermal Vigoride, and Pale Blue's water "
-                 "resistojet.\n"
+                 "resistojet.  The 150-220 s band and the 190 s value are "
+                 "estimates with no source here, for higher-power designs.  "
+                 "The one flight measurement on record is far lower: AQUARIUS "
+                 "on EQUULEUS (Artemis I) measured 91.7 +/- 1.0 s and 90.3 +/- "
+                 "3.0 s at ~6 mN and under 14 W (Asakawa et al., Trans. JSASS "
+                 "67(5), 2024, Table 3).\n"
                  "The point is not the Isp, which is terrible.  It is "
                  "isru_feed_kg_per_kg = 1.0: an asteroid supplies this propellant "
                  "DIRECTLY, with no electrolysis, no cryocooler and no 1.286 "
@@ -1251,9 +1275,13 @@ PROPELLANTS_REFERENCE: List[dict] = [
                                  * _COMPONENTS["Hydrazine"]["density_kg_per_L"],
         "yfinance_proxy":        None,
         "reference_year":        _REF_YEAR_PROP,
-        "notes": "Aerojet MR-510, 600 s vac on 2 kW — flown on Lockheed A2100 "
-                 "comsats since 1993 and largely displaced by Hall thrusters "
-                 "since.  Sits in the gap between chemical and true electric: "
+        "notes": "Aerojet MR-510 class — flown on Lockheed A2100 comsats since "
+                 "1993 and largely displaced by Hall thrusters since.  600 s "
+                 "on 2 kW is the top of the demonstrated range: NASA put the "
+                 "state of the art at ~530 s mission-average at 1.6 kW on "
+                 "hydrazine, set 600 s at 2-5 kW as its programme goal, and ran "
+                 "a 2 kW thruster 300 h at 550 s on simulated hydrazine (Morren "
+                 "& Curran, NASA TM-105149 / AIAA-91-2228).  Sits in the gap between chemical and true electric: "
                  "3× hydrazine's Isp at ~100 mN, so it needs far less power per "
                  "newton than a Hall thruster and far less patience than an ion "
                  "engine.  Ammonia arcjets reach ~500 s on a cheaper propellant.",
@@ -1517,8 +1545,13 @@ PROPELLANTS_REFERENCE: List[dict] = [
         "reference_year":        _REF_YEAR_PROP,
         "notes": "Concentrate sunlight onto a hydrogen heat exchanger: NTP's Isp "
                  "without the reactor.  Ground-tested by the USAF Solar Orbit "
-                 "Transfer Vehicle programme in the 1990s (Isp 700-900 s "
-                 "demonstrated); never flown.  Suffers the same 1/r² starvation "
+                 "Transfer Vehicle programme in the 1990s; never flown.  The "
+                 "only measured Isp on record is 680 s, an AFRPL hydrogen "
+                 "thruster test (Boddy, Solar Rocket System Concept Analysis, "
+                 "Rockwell for AFRPL, 1980, NTRS 19800022964).  800 s is a design "
+                 "figure: 811 s for a 2800 K absorber (Woodcock & Byers, "
+                 "Results of Evaluation of Solar Thermal Propulsion, NTRS "
+                 "20030068437).  Suffers the same 1/r² starvation "
                  "as PV, so it is a near-Sun technology — which is the opposite "
                  "of where the main belt is.",
     },
@@ -1751,7 +1784,11 @@ PROPELLANTS_REFERENCE: List[dict] = [
         "yfinance_proxy":        None,
         "reference_year":        _REF_YEAR_PROP,
         "notes": "Carbon monoxide burnt in oxygen, both from carbonaceous "
-                 "regolith or a CO2 atmosphere.  Isp ~260 s — poor — but it is "
+                 "regolith or a CO2 atmosphere.  Isp ~260 s — poor, and below "
+                 "the ~300 s NASA gives for CO burnt directly (Hepp, Landis & "
+                 "Kubiak, NASA TM-103728, 1991), so a conservative engineering "
+                 "value; subscale CO/O2 tests reached steady combustion at the "
+                 "optimum O/F of 0.55 (Linne, NASA TM-107267, 1996) — but it is "
                  "the only chemical bipropellant makeable from a C-type asteroid "
                  "without any hydrogen at all, which matters because hydrogen is "
                  "the scarce element out there, not carbon or oxygen.  Studied "
@@ -1823,9 +1860,14 @@ PROPELLANTS_REFERENCE: List[dict] = [
         "reference_year":        _REF_YEAR_PROP,
         "notes": "Detonate shaped nuclear charges against a pusher plate. "
                  "Designed in full engineering detail by General Atomics "
-                 "1958-1965 — Dyson and Taylor's programme produced vehicle "
-                 "layouts, not sketches — and killed by the 1963 Partial Test "
-                 "Ban Treaty.  Isp 10,000 s at MEGANEWTON thrust is the only "
+                 "1957-1965 (studies began in 1957, government support in "
+                 "1958: GA-4891, Nuclear Pulse Vehicle Study, 1964) — Dyson "
+                 "and Taylor's programme produced vehicle layouts, not "
+                 "sketches — and killed by the 1963 Partial Test Ban Treaty.  "
+                 "GA's large direct-launch vehicles were designed for "
+                 "4,000-6,000 s; 10,000 s is the top of the ~3,000-10,000 s "
+                 "range for external pulse propulsion (Schmidt, Bonometti & "
+                 "Morton, AIAA 2000-3856).  Isp that high at MEGANEWTON thrust is the only "
                  "entry here that is both high-Isp and high-thrust, which is why "
                  "it keeps being revisited.  TRL 2 and permanently "
                  "unpermittable; present because 'never designed' would be false.",
