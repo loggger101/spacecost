@@ -13,6 +13,48 @@ may read a version as proof that a number moved.
 
 ## Package releases
 
+### 0.12.5 - 2026-10-21
+
+**Data contract 1.23.4 → 1.23.5: six storage and power revision candidates.
+Two notes now rest on NASA test data, and four admit their figure has no
+source. No value moved.** Only `notes` cells in `storage_systems.csv` (7),
+`propellants.csv` (1) and `operational_costs.csv` (1), CITATIONS.md and the
+`pipeline_version` stamp changed. Each item names its General_Research revision
+candidate. I checked every figure against the hosted text of its source.
+
+- **Zero-boil-off cryocooler (20 K)** (rc-089): NASA's 20 W / 20 K
+  reverse-turbo-Brayton unit measured 91.6 W/W at 14.5% of Carnot (best point
+  15.6%). The programme threshold was 80 W/W, which is this row, and the goal
+  was 60 (Nugent, Grotenrath & Johnson 2022). The MHTB's Gifford-McMahon cooler
+  needed 350 W/W at 4% of Carnot. The old "real machines run 15-25% of Carnot"
+  had no source, sat above the best tested point, and gives 56-93 W/W rather
+  than the 50-150 band. The band is now called an estimate.
+- **Cryocooler specific mass (20 K)** (rc-108): the same test gives 5.5 kg/W
+  on a flight-like projection (106.3 kg), against a goal of 4.4 and a previous
+  state of the art of 18.7. The row's worked example (~100 kg, ~1.6 kW for
+  20 W) matches the test: 19.2 W lifted on 1.76 kW.
+- **Fission surface power (Kilopower class)** (rc-088) and **Nuclear electric
+  (NEP, xenon)** (rc-115): KRUSTY was a ground test of a 5 kW(thermal)
+  prototype for a 1 kWe-class system. Two Stirling converters showed
+  electrical conversion in part, so it demonstrated the reactor, not a 1 kWe
+  power system (Poston et al. 2020). The NEP row now cites NASA's NEP
+  maturation plan (Polzin et al., NASA/TP-20260001499) for its TRL, and for the
+  24 kg/kWe threshold and 13 kg/kWe target the row would need. The Kilopower
+  note also says neither KRUSTY paper gives the ~1,500 kg flight-unit mass
+  behind the 6.7 W/kg.
+- **Regenerative fuel cell**, and the RFC sentence in **Energy storage usable
+  specific energy** (rc-109): NASA's 100 W demonstration measured 47.4% round
+  trip (Bennett, Smith & Jakupca 2020). At a dark fraction of 0.5 the array
+  oversize is 3.11× at that efficiency, against 2.11× with a battery. The
+  "~4×" saving is on storage mass only.
+- **COPV burst performance factor, Multi-layer insulation, Flywheel energy
+  storage, Regenerative fuel cell** (rc-110): the NASA reports registered
+  against these rows do not contain their figures. The COPV reports give no
+  PV/W, the boil-off tests used 18- to 75-layer blankets with no areal
+  density, the G2 flywheel is a laboratory module where weight did not matter,
+  and the RFC report gives efficiency, not Wh/kg. Each note now says its figure
+  is an estimate.
+
 ### 0.12.4 - 2026-10-21
 
 **Data contract 1.23.3 → 1.23.4: six more revision candidates, and most of
