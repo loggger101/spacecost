@@ -582,7 +582,11 @@ OPERATIONAL_COSTS_REFERENCE: List[dict] = [
                  "A regenerative fuel cell (400 Wh/kg, TRL 5) is the obvious "
                  "architecture for a multi-hour dark period and would cut this "
                  "term by ~4×; it is not taken, because nothing has flown one "
-                 "and this row is the operational choice.",
+                 "and this row is the operational choice.  The ~4× is on "
+                 "storage mass only: NASA's 100 W demonstration measured 47.4% "
+                 "round trip (NASA/TM-20205000357, Table III), so at f = 0.50 "
+                 "the array oversize rises from 2.11× to 3.11× and part of "
+                 "the saving is paid back in array.",
         "reference_year":   _REF_YEAR_OPS,
     },
     {

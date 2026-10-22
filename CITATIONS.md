@@ -125,6 +125,8 @@ so a study can state what it excluded.
 | Linne (NASA Lewis), Experimental Evaluation of the Ignition Process of Carbon Monoxide and Oxygen in a Rocket Engine, NASA TM-107267 / AIAA-96-2943 | CO / LOX subscale combustion at O/F 0.55 |
 | General Atomic Division of General Dynamics, Nuclear Pulse Vehicle Study, condensed summary report GA-4891, 1964 | nuclear pulse: programme dates and design Isp |
 | Schmidt, Bonometti & Morton (NASA MSFC), Nuclear Pulse Propulsion - Orion and Beyond, AIAA 2000-3856 | nuclear pulse: the external-pulse Isp range |
+| Polzin, Curran, Rao, Myers, Duchek, Presby et al., Technology Maturation Plan for High Power Nuclear Electric Propulsion, NASA/TP-20260001499, Table 2.1 | nuclear electric: TRL, and the power-system specific-mass KPPs (24 kg/kWe threshold, 13 target) |
+| Poston et al., KRUSTY Reactor Design, Nuclear Technology 206, 2020 (section 4) | nuclear electric: what KRUSTY demonstrated |
 
 Vacuum Isp values are the interplanetary-relevant figures. Sea-level Isp is
 lower and matters only to a first stage, which is already priced into the launch
@@ -184,6 +186,13 @@ Lambert solve against an ephemeris; these are what you price the answer with.
 | Kleinhenz & Paz 2017 and 2021 (above) | the published in-space processing rates the refinery throughput row is compared against |
 | NASA OIG IG-18-016, Audit of Commercial Resupply Services to the International Space Station, 2018 | the whole-mission ceiling over depot berthing and sample recovery operations |
 | NASA/TM-2011-215988, Issues of Long-Term Cryogenic Propellant Storage in Microgravity; Plachta et al., NASA Cryocooler Technology Developments and Goals to Achieve Zero Boil-Off, 2017 | named as out of scope for volatile cargo containment, which is an engineering estimate |
+| Nugent, Grotenrath & Johnson, 20 Watt 20 Kelvin Reverse Turbo-Brayton Cycle Cryocooler Testing and Applications, 2022, NTRS 20220009350, Tables 1 and 3 | cryocooler specific power (91.6 W/W tested, 80 threshold) and specific mass (5.5 kg/W) |
+| Hastings et al., Large-Scale Demonstration of Liquid Hydrogen Storage With Zero Boiloff for In-Space Applications, NASA/TP-2010-216453 | the Gifford-McMahon cooler's 350 W/W at 4% of Carnot |
+| Poston, Gibson, Godfroy & McClure, KRUSTY Reactor Design, Nuclear Technology 206, S13-S30, 2020; McClure et al., Kilopower Project: The KRUSTY Fission Power Experiment and Potential Missions, same issue, S1-S12 | what KRUSTY demonstrated: a 5 kW(thermal) reactor, with electrical conversion shown in part |
+| Bennett, Smith & Jakupca, Analysis of 100-W Regenerative Fuel Cell Demonstration, NASA/TM-20205000357, 2020, Table III | regenerative fuel cell round-trip efficiency, 47.4% |
+| Greene et al., COPV Stress Rupture Testing, NTRS 20100021151; Kezirian, Johnson & Phoenix, COPV: Flight Rationale for the Space Shuttle Program, NTRS 20110015972; Parker & Prosser, NASA/TM-20260002192 | named as not giving a PV/W, which leaves the COPV performance factor an estimate |
+| Plachta, Johnson & Feller, Cryogenic Boil-Off Reduction System Testing, NTRS 20150000134 | named as not giving an MLI areal density |
+| Jansen & Dever, G2 Flywheel Module Design, NASA/CR-2006-213862 | the G2 flywheel's 60,000 rpm and 525 W-hr; it gives no Wh/kg |
 
 The mission profile these are costed against is **uncrewed and fully
 autonomous**: no life support, no habitat, no crew operations. The autonomy

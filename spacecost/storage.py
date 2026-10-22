@@ -116,7 +116,12 @@ STORAGE_REFERENCE: List[dict] = [
                  "propellant: m/V = 1.5·p_operating/(PV/W).  This is why xenon "
                  "at 10 MPa pays 1.9% of its mass in tankage and krypton at "
                  "18 MPa pays 12.5% — the cheaper propellant needs the heavier "
-                 "bottle, and the trade did not exist in this model before.",
+                 "bottle, and the trade did not exist in this model before.\n"
+                 "ESTIMATE: no registered source gives a PV/W.  NASA's COPV "
+                 "reports (Greene et al., NTRS 20100021151; Kezirian, Johnson "
+                 "& Phoenix, NTRS 20110015972; Parker & Prosser, "
+                 "NASA/TM-20260002192) cover stress rupture and flight "
+                 "rationale, not a performance factor.",
     },
     {
         "name":            "Multi-layer insulation (passive)",
@@ -132,7 +137,11 @@ STORAGE_REFERENCE: List[dict] = [
                  "every boiloff_pct_per_day figure in the propellant table. "
                  "Carried inside the storage-class tank multipliers rather than "
                  "as a separate area term, because this pipeline never computes "
-                 "a tank's surface area — only its volume.",
+                 "a tank's surface area — only its volume.\n"
+                 "ESTIMATE: neither the 60 layers nor the 1.2 kg/m² has a "
+                 "source.  NASA's boil-off reduction tests (Plachta, Johnson & "
+                 "Feller, NTRS 20150000134) used 30-layer, 18-layer and "
+                 "75-layer blankets and give no areal density.",
     },
     {
         "name":            "Zero-boil-off cryocooler (20 K)",
@@ -144,10 +153,19 @@ STORAGE_REFERENCE: List[dict] = [
         "status":          "development",
         "trl":             5,
         "reference_year":  _REF_YEAR_STORAGE,
-        "notes": "Reverse-turbo-Brayton.  Carnot at 20 K against a 300 K reject "
-                 "is 14 W/W and real machines run 15-25% of Carnot, so 50-150 "
-                 "W/W.  NASA's ZBO and eCryo programmes have run 20 K coolers on "
-                 "the ground; nothing has flown on a propellant tank.\n"
+        "notes": "Reverse-turbo-Brayton.  NASA's 20 W / 20 K unit measured "
+                 "91.6 W/W at its 285 K-reject test point, 14.5% of Carnot "
+                 "(best point 15.6%), against a programme threshold of 80 W/W, "
+                 "which is this row, and a goal of 60 (Nugent, Grotenrath & "
+                 "Johnson 2022, NTRS 20220009350, Tables 1 and 3).  The "
+                 "Gifford-McMahon cooler on the MHTB zero-boil-off test needed "
+                 "350 W/W, 4% of Carnot (Hastings et al., NASA/TP-2010-216453).  "
+                 "Carnot at 20 K against a 300 K reject is 14 W/W.  Until "
+                 "0.12.5 this note said real machines run 15-25% of Carnot, "
+                 "which no source gives, above the best tested point, and "
+                 "which gives 56-93 W/W rather than the 50-150 band.  The band "
+                 "is an estimate.  NASA's ZBO and eCryo programmes have run 20 K "
+                 "coolers on the ground; nothing has flown on a propellant tank.\n"
                  "This is the row that turns boil-off from a fact into a CHOICE: "
                  "spend array mass and power, keep the hydrogen.  Module 4 does "
                  "not offer that choice yet — it applies boiloff_pct_per_day "
@@ -170,7 +188,14 @@ STORAGE_REFERENCE: List[dict] = [
                  "and ~1.6 kW of electrical power to hold it at zero boil-off, "
                  "and the array for that 1.6 kW is another ~27 kg at 1 AU and "
                  "~240 kg at 3 AU.  Which is why zero-boil-off is a near-Sun "
-                 "answer and passive tolerance is the far one.",
+                 "answer and passive tolerance is the far one.\n"
+                 "Source: NASA's 20 W / 20 K reverse-turbo-Brayton cooler is "
+                 "5.5 kg/W on its flight-like mass projection (106.3 kg, "
+                 "against 336.9 kg as tested), against a project goal of 4.4 "
+                 "and a previous state of the art of 18.7 kg/W at 1 W of lift "
+                 "(Nugent, Grotenrath & Johnson 2022, NTRS 20220009350, Table "
+                 "1).  5.0 sits between test and goal, and the worked example "
+                 "matches the test: 19.2 W lifted on 1.76 kW of input.",
     },
     {
         "name":            "Vapour-cooled shield",
@@ -314,7 +339,16 @@ STORAGE_REFERENCE: List[dict] = [
                  "battery.  For a mining rig on a rotating body it is the "
                  "obvious architecture, and it stores the one consumable the "
                  "asteroid itself supplies.  Studied by NASA for lunar night "
-                 "survival; not flown.",
+                 "survival; not flown.\n"
+                 "What the density leaves out: NASA's 100 W demonstration "
+                 "measured 47.4% round trip for the stacks alone, before "
+                 "balance-of-plant power (Bennett, Smith & Jakupca, "
+                 "NASA/TM-20205000357, Table III), against 0.90 for the "
+                 "battery.  At a dark fraction of 0.5 the array oversize "
+                 "[(1−f) + f/η]/(1−f) is 2.11× with a battery and 3.11× at "
+                 "0.474, so part of the storage mass saved is paid back in "
+                 "array.  ESTIMATE: the 400 Wh/kg has no source; that report "
+                 "gives efficiency, not Wh/kg.",
     },
     {
         "name":            "Flywheel energy storage",
@@ -330,7 +364,11 @@ STORAGE_REFERENCE: List[dict] = [
                  "a rotating-body operation needs anyway.  NASA G2 flywheel ran "
                  "on the ground at 60,000 rpm; the ISS flight unit was cancelled. "
                  "Energy density is no better than lithium, so it only wins where "
-                 "cycle count or attitude control dominates.",
+                 "cycle count or attitude control dominates.\n"
+                 "ESTIMATE: the 100 Wh/kg has no source.  The G2 report "
+                 "(Jansen & Dever, NASA/CR-2006-213862) describes a 525 W-hr, "
+                 "1 kW module built for a laboratory, where weight was not a "
+                 "significant factor, and gives no Wh/kg.",
     },
     {
         "name":            "Eclipse / night-side power fraction",
@@ -388,13 +426,21 @@ STORAGE_REFERENCE: List[dict] = [
         "status":          "development",
         "trl":             5,
         "reference_year":  _REF_YEAR_STORAGE,
-        "notes": "KRUSTY demonstrated a 1 kWe uranium-molybdenum reactor with "
-                 "Stirling conversion in 2018 — the first new US space reactor "
-                 "test in decades.  A 10 kWe flight unit is designed around "
+        "notes": "KRUSTY (2018) was a ground nuclear test of a 5 kW(thermal) "
+                 "prototype for a 1 kW(electric)-class Kilopower system, on "
+                 "HEU U-7.65Mo fuel.  Electrical conversion was shown only in "
+                 "part, by two Stirling converters with dummy heat rejection "
+                 "for the rest (Poston et al., KRUSTY Reactor Design, Nuclear "
+                 "Technology 206, 2020; McClure et al., same issue), so it "
+                 "demonstrated the reactor, not a 1 kWe power system.  It was "
+                 "the first new US space reactor test in decades.  A 10 kWe "
+                 "flight unit is designed around "
                  "~1,500 kg, so 6.7 W/kg, and unlike an RTG it scales: the "
                  "reactor mass is dominated by shielding and radiator, not by "
                  "fuel.  The only power source in this table that could run a "
-                 "hundred-kilowatt beneficiation plant at 3 AU.",
+                 "hundred-kilowatt beneficiation plant at 3 AU.  (The "
+                 "~1,500 kg flight-unit mass has no source in either KRUSTY "
+                 "paper.)",
     },
 
     # ── IN-SPACE PROPELLANT DEPOTS ───────────────────────────────────────────
