@@ -48,6 +48,7 @@ ones that carry more than one row.
 | ISRO / NSIL, and The Week Jan 2026 | LVM3, PSLV, GSLV and SSLV pricing; PSLV-C61 and C62 failures |
 | CAS Space, Apr 2026 (30,000 yuan/kg) | Kinetica-2 price, the only published Chinese per-kg rate |
 | SpaceNews, Spaceflight Now, NASASpaceFlight, 2025-2026 | Zhuque-3, Long March 10B, Tianlong-3, Pallas-1 and Soyuz-5 flight outcomes |
+| Zapata (NASA KSC), The State of Play: US Space Systems Competitiveness, FISO presentation, Jul 2017, NTRS 20170009967, p16 | Delta IV Heavy and Atlas V 551 LEO payloads (200 km / 28.5 deg); the NRO's Delta IV Heavy price ($336M in 2017 dollars, with ELC) the Delta IV Heavy row is compared against; NASA's Pegasus XL price for ICON |
 | Pielke & Byerly, Nature 2011 | Space Shuttle whole-programme cost per flight |
 | Wikipedia vehicle articles and "Comparison of orbital launch systems", Sep 2026 | payload masses by configuration and orbit, cross-checked against the manufacturer where one publishes |
 
@@ -140,7 +141,7 @@ table's $/kg-to-orbit.
 | Taylor et al. 2018, "Delta-v map of Main Belt Asteroids" | LEO to main-belt transfer |
 | Elvis et al. 2011, arXiv 1105.4152 | near-Earth object delta-v accessibility distribution, and its 6.65 km/s peak |
 | NASA DRA 5.0 (SP-2009-566), Fig 4-2 | the swing of trans-Mars injection across the synodic cycle |
-| Orloff, *Apollo by the Numbers* (NASA SP-2000-4029), lunar-orbit phase tables | trans-lunar injection, lunar orbit insertion, and the Lunar Module's powered descent and ascent as flown on Apollo 14-17 |
+| Orloff, *Apollo by the Numbers* (NASA SP-2000-4029), lunar-orbit phase tables | trans-lunar injection, lunar orbit insertion, and the Lunar Module's powered descent and ascent as flown on Apollo 14-17; trans-earth injection on Apollo 8, 10-12 and 14-17, the middle leg of the lunar surface to LEO row |
 | Lyons (JPL), Magellan / MGS aerobraking; Long et al. 2007, MRO aerobraking operations | the aerobraked return's flight record |
 | NASA NTRS and JPL design handbooks | the remaining trajectory legs |
 
@@ -158,7 +159,7 @@ Lambert solve against an ephemeris; these are what you price the answer with.
 | Frieman et al. 2021 (AEPS ETU-2) | Hall thruster total efficiency across the throttle range |
 | Metzger, Zacny & Morrison 2020; Zeng et al. 2007 | the excavation energy literature |
 | Kleinhenz & Paz, A Lunar Water ISRU System Study for Human-Scale Propellant Production, PTMSS/SRR 2021, NTRS 20210016820 | ISRU propellant plant throughput (2.6 t for 11.67 t of hydrolox in 225 days), and the whole-plant cross-check on the processing energy (46 kW) |
-| Kleinhenz & Paz, An ISRU Propellant Production System for a Fully Fueled Mars Ascent Vehicle, AIAA 2017-0423, NTRS 20170005179 | the high end of the plant throughput band (1.7 t for 29.7 t of CH4/O2 in 480 days) |
+| Kleinhenz & Paz, An ISRU Propellant Production System for a Fully Fueled Mars Ascent Vehicle (the NTRS-hosted copy of the same paper titles it An ISRU Propellant Production System to Fully Fuel a Mars Ascent Vehicle), AIAA 2017-0423 / DOI 10.2514/6.2017-0423, NTRS 20170005179 | the high end of the plant throughput band (1.7 t for 29.7 t of CH4/O2 in 480 days) |
 | Plane Talking (Gallagher) / Slingshot Aerospace, 2024 | launch insurance market rate, and the 2023 losses behind it |
 | Damodaran (NYU Stern), Cost of Capital by Industry Sector (Jan 2026); Boeing and Howmet filings | cost-of-capital floor: industry averages, with no startup premium |
 | McKeown, What is an appropriate investment hurdle rate for commercial space resource development projects?, 2024 | the 10% standard discount rate for space-resource projects, and hurdle rates near 25% |
@@ -220,7 +221,8 @@ and the light time all follow from those by formula. The formulas are in
 | source | what it establishes |
 |---|---|
 | NASA Moon Fact Sheet | lunar mass, radius and synodic day |
-| NASA Mars Fact Sheet; Willner et al. 2014 | Mars and Phobos mass, radius and rotation |
+| NASA Mars Fact Sheet | Mars mass, radius and rotation; the Phobos mass and axes the Phobos row is compared against |
+| Willner, Shi & Oberst 2014, Phobos' shape and topography models, *Planet. Space Sci.* 102:51-59 (with the GM it quotes from Andert et al. 2011) | the Phobos mean radius, volume and mass the Phobos row is compared against (neither source prints the row's own figures) |
 | Lauretta et al. 2019, *Nature* (OSIRIS-REx) | Bennu mass, radius, rotation, orbit |
 | Watanabe et al. 2019, *Science* (Hayabusa2) | Ryugu mass, radius, rotation, orbit |
 | Yeomans et al. 2000, *Science* (NEAR Shoemaker) | Eros mass and radius |

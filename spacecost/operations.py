@@ -44,9 +44,13 @@ OPERATIONAL_COSTS_REFERENCE: List[dict] = [
         "range_low":        100_000,
         "range_high":     1_000_000,
         "notes": "Burdened recurring hardware cost for deep-space-rated mining "
-                 "equipment.  Anchor: Aerospace Corp Small Mission Cost Model "
-                 "and NASA NICM bracket recurring deep-space hardware at "
-                 "$100k-$1M/kg.  Asteroid-mining rigs trend mid-range due to "
+                 "equipment.  ESTIMATE: the $100k-$1M/kg bracket has no "
+                 "registered source.  Until 0.12.6 this note anchored it to the "
+                 "Aerospace Corp Small Satellite Cost Model and NASA NICM, but "
+                 "neither could be read to check: the SSCM page refuses access "
+                 "and NICM is distributed only through NASA's ONCE portal.  NICM "
+                 "is also an instrument cost model, not one for structures or "
+                 "mechanisms.  Asteroid-mining rigs trend mid-range due to "
                  "regolith-contact mechanisms.",
         "reference_year":   _REF_YEAR_OPS,
     },
@@ -77,9 +81,11 @@ OPERATIONAL_COSTS_REFERENCE: List[dict] = [
                  "carrier: structure, latches, grapple fixture, RF beacon.  No "
                  "TPS, no parachute, no guided-entry GNC, no flotation or "
                  "beacon-for-recovery.  Priced well under the $150k/kg re-entry "
-                 "capsule rate and near the low end of the NICM/SSCM recurring "
-                 "bracket, since it is the simplest deep-space-rated structure "
-                 "in the catalog.  Heritage: Cygnus PCM, Dragon trunk, the "
+                 "capsule rate and below the $100k-$1M/kg mining-hardware "
+                 "bracket (itself an estimate, see the Mining payload row; until "
+                 "0.12.6 this note called it the NICM/SSCM bracket, which "
+                 "neither model is known to state), since it is the simplest "
+                 "deep-space-rated structure in the catalog.  Heritage: Cygnus PCM, Dragon trunk, the "
                  "passive half of the NASA Docking System.",
         "reference_year":   _REF_YEAR_OPS,
     },
@@ -732,8 +738,12 @@ OPERATIONAL_COSTS_REFERENCE: List[dict] = [
         "notes": "Search-and-recovery teams, helicopters / ships, clean-room transport, "
                  "range coverage.  Modelled on OSIRIS-REx UTTR landing (Sept 2023). "
                  "NOTE: NASA has not published a standalone recovery-ops figure; "
-                 "$15M is an order-of-magnitude estimate from the broader $283M / 9 yr "
-                 "operations envelope — refine with project-specific data when available.  "
+                 "$15M is an order-of-magnitude estimate from the broader OSIRIS-REx "
+                 "operations envelope, which obligated $210.0M over FY2017-FY2023 and "
+                 "$232.2M through FY2025 (Planetary Society Planetary Exploration "
+                 "Budget Dataset; see the Mission operations row).  Until 0.12.6 this "
+                 "note gave the envelope as $283M / 9 yr, the pre-return plan.  "
+                 "Refine with project-specific data when available.  "
                  "No institutional document prices search-and-recovery on its "
                  "own; the ISS cargo-resupply record (NASA OIG IG-18-016: "
                  "$191.3M per CRS-1 mission) bounds a whole delivery, not this "

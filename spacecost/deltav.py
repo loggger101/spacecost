@@ -51,7 +51,17 @@ DELTA_V_REFERENCE: List[dict] = [
     {"segment": "Main belt  →  Earth return",     "dv_m_per_s":  7_500, "duration_yr": 4.0,
      "notes": "Per Taylor 2018 — long cruise; favours electric propulsion."},
     {"segment": "Lunar surface  →  LEO",          "dv_m_per_s":  5_900, "duration_yr": 0.01,
-     "notes": "Apollo Lunar Module ascent + plane change — reference for lunar-relay arch."},
+     "notes": "Reference for lunar-relay arch, built from flown parts but never "
+              "flown as one: LM ascent to lunar orbit (Apollo 14, 15 and 17: "
+              "1,847-1,852 m/s, the Lunar surface → LLO row), then trans-earth "
+              "injection (the SPS burns of Apollo 8, 10-12 and 14-17: 3,042-"
+              "3,680 ft/s, i.e. 927-1,122 m/s; NASA SP-4029; Apollo 13's "
+              "free-return abort burn left out), then a propulsive capture "
+              "into LEO, which Apollo never flew (it entered directly), taken "
+              "as about the TLI magnitude (3,150 m/s, the LEO → TLI row).  "
+              "Those sum to ~5,930-6,120 m/s; 5,900 sits just below.  Until "
+              "0.12.6 this note called the row 'Apollo Lunar Module ascent + "
+              "plane change'; the LM ascent made no plane change toward LEO."},
 
     # ── Delivery ladder above LEO  (v1.4.0) ──────────────────────────────────
     # These price the "launch cost avoided" for material sold in space, and
