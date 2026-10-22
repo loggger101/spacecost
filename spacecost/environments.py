@@ -316,8 +316,17 @@ ENVIRONMENTS_REFERENCE: List[dict] = [
     _env("Phobos", "moon_surface",
          1.3814, 1.5237, 1.6660, 7.653, 0.50, 2.6827,
          "Tidally locked, 7.65-h orbit and rotation.  Mass 1.0659e16 kg, mean "
-         "radius 11.267 km (NASA Mars Fact Sheet / Willner et al. 2014).  The "
-         "derived 11.2 m/s escape velocity and a Mars-orbit position make it "
+         "radius 11.267 km.  ESTIMATE: neither figure is printed in the two "
+         "sources this note cited for them until 0.12.6.  The NASA Mars Fact "
+         "Sheet gives 10.6e15 kg and axes 13.0 x 11.4 x 9.1 km (geometric mean "
+         "11.05 km).  Willner, Shi & Oberst 2014 (Planet. Space Sci. 102) give "
+         "a mean radius of 10.993 km from their degree-45 shape model and a "
+         "volume of 5,742 km3 (11.11 km for a sphere of equal volume), and use "
+         "the radio-science GM of 0.7127e-3 km3/s2 (Andert et al. 2011), which "
+         "is 1.0678e16 kg.  The row's mass sits within 0.6% of both sources, "
+         "its radius 1.4-2.5% above them.  The "
+         "derived 11.2 m/s escape velocity (11.3-11.4 m/s on Willner's "
+         "figures) and a Mars-orbit position make it "
          "the cheapest large mass in the Mars system to work from - the "
          "argument behind every Phobos-first mission architecture.",
          mass_kg=1.0659e16, mean_radius_m=11_267.0),

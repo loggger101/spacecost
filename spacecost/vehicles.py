@@ -282,7 +282,10 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
                  "SALE: ULA stopped selling Atlas V in Aug 2021 and every "
                  "remaining vehicle is allocated, the last of them to Starliner. "
                  "Kept because its flight record is the reference that newer "
-                 "vehicles' prices are argued against.",
+                 "vehicles' prices are argued against.  LEO payload: Zapata "
+                 "2017 (NASA, 'State of Play', p16) charts 18,856 kg to 200 km "
+                 "/ 28.5 deg, 6 kg above the top of this row's 18,814-18,850 "
+                 "band, whose own source is not recorded.",
     },
     {
         "name":                          "Vulcan Centaur VC2",
@@ -1206,7 +1209,15 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "reference_year":          _REF_YEAR_LAUNCH,
         "notes": "Last flight April 2024 (NROL-70).  Hydrolox, three cores, and "
                  "the launcher that sent Parker Solar Probe to the highest "
-                 "departure energy ever flown.  Replaced by Vulcan.",
+                 "departure energy ever flown.  Replaced by Vulcan.  LEO "
+                 "payload 28,790 kg to 200 km / 28.5 deg (Zapata 2017, NASA, "
+                 "'State of Play', p16).  The $440M price has no recorded "
+                 "source.  The one registered price is the same chart's Delta "
+                 "IV Heavy for the NRO: $336M (2017 dollars) for the launch "
+                 "service plus its share of the EELV Launch Capability (ELC) "
+                 "contract, the yearly ELC amount divided evenly over DoD-only "
+                 "launches.  At the CPI-U factor used for Pegasus XL (Dec 2017 "
+                 "to Aug 2026, x1.3484) that is $453M, 3% above this row.",
     },
     {
         "name":                          "H-IIA 204",

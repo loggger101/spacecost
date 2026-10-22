@@ -13,6 +13,52 @@ may read a version as proof that a number moved.
 
 ## Package releases
 
+### 0.12.6 - 2026-10-21
+
+**Data contract 1.23.5 → 1.23.6: seven wording and citation revision
+candidates. Two notes now cite the NASA chart their figures come from, and two
+stop crediting sources that do not hold their numbers. No value moved.** Only
+`notes` cells in `launch_vehicles.csv` (2), `operational_costs.csv` (3),
+`environments.csv` (1) and `delta_v_segments.csv` (1), CITATIONS.md and the
+`pipeline_version` stamp changed. Each item names its General_Research revision
+candidate. I checked every figure against its source.
+
+- **Delta IV Heavy and Atlas V 551** (rc-119, rc-130): both LEO payloads now
+  cite Zapata 2017 (NASA, "State of Play", p16, 200 km / 28.5 deg). Delta IV
+  Heavy's 28,790 kg matches exactly. The chart's 18,856 kg for Atlas V 551
+  sits 6 kg above the row's 18,814-18,850 band. The Delta IV Heavy note now
+  says its $440M has no recorded source. It also gives the one registered
+  price, the NRO's $336M in 2017 dollars, which includes the EELV Launch
+  Capability charge. At the Pegasus row's CPI-U factor (×1.3484) that is
+  $453M, 3% above the row. The candidates named p15. The figures are on p16
+  of the PDF, the slide numbered 16.
+- **Phobos** (rc-133): the note credited 1.0659e16 kg and 11.267 km to the
+  Mars Fact Sheet and Willner et al. 2014, but neither prints them. The fact
+  sheet gives 10.6e15 kg and axes 13.0 × 11.4 × 9.1 km. Willner, Shi & Oberst
+  give a mean radius of 10.993 km and a volume of 5,742 km³. They also quote
+  the radio-science GM of 0.7127e-3 km³/s² (Andert et al. 2011), which is
+  1.0678e16 kg. The note now says so and labels the row's two values an
+  estimate. The mass is within 0.6% of both sources, the radius 1.4-2.5%
+  above them.
+- **Lunar surface → LEO** (rc-164): the note called the row "LM ascent + plane
+  change". It now builds the row from its flown parts: the LM ascent at
+  1,847-1,852 m/s, then trans-earth injection on Apollo 8, 10-12 and 14-17 at
+  927-1,122 m/s (SP-4029), then a propulsive LEO capture Apollo never flew,
+  taken at the TLI magnitude. The parts sum to ~5,930-6,120 m/s, so 5,900 sits
+  just below.
+- **Sample recovery operations** (rc-092): the note scaled its $15M from
+  "$283M / 9 yr", the pre-return plan. It now cites the OSIRIS-REx operations
+  actuals the Mission operations row took in 0.5.2: $210.0M over FY2017-FY2023
+  and $232.2M through FY2025 (Planetary Society PEBD).
+- **Mining payload and Berthing adapter recurring cost** (rc-139): the notes
+  credited the $100k-$1M/kg bracket to the Aerospace Corp SSCM and NASA NICM.
+  Neither could be read to check, and NICM models instruments, not structures.
+  The bracket is now labelled an estimate.
+- **CITATIONS.md** (rc-167): the Kleinhenz & Paz 2017 row gains its DOI. It
+  also notes that the NTRS copy titles the paper "to Fully Fuel" where the AIAA
+  record has "for a Fully Fueled". New rows for Zapata 2017 and Willner 2014.
+  The SP-4029 row now also covers trans-earth injection.
+
 ### 0.12.5 - 2026-10-21
 
 **Data contract 1.23.4 → 1.23.5: six storage and power revision candidates.
