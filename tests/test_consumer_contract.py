@@ -4,13 +4,13 @@
 WHY THIS FILE EXISTS.  This package was extracted from economicspace's Module 3
 and that project is its consumer: `modules/transportation.py` is the adapter
 that drives Stage 3, `modules/mineral_value.py` takes Stage 2's delivery chains
-from here, and two of its harnesses reach into submodules.  The
-consumer pins a TAG, so what it gets is whatever a release contains, and a name
-dropped between releases is not discovered until somebody installs the new tag
-and an import fails.
+from here, and its worked calculation and verification sheet reach into
+submodules.  The consumer pins a TAG, so what it gets is whatever a release
+contains, and a name dropped between releases is not discovered until somebody
+installs the new tag and an import fails.
 
-THAT HAS ALREADY HAPPENED ONCE.  The `v0.1.0` tag predated `validate_tables`,
-so a clean install of it could not satisfy economicspace's import at all.  The
+THAT HAS ALREADY HAPPENED ONCE.  The `v0.1.0` tag predated a name economicspace
+imported, so a clean install of it could not satisfy that import at all.  The
 guard added then was the CI step that asserts every name in `__all__` is
 importable from the built wheel, and that is a real check of PACKAGING.  It is
 not a check of this CONTRACT: delete a name from the package and from `__all__`
@@ -20,32 +20,30 @@ asks it twice: of the source tree with the rest of the suite, and of the BUILT
 WHEEL from outside the tree, which is what a consumer installing a tag gets.
 
 WHAT A FAILURE MEANS.  Not that the name must come back.  It means the change
-is BREAKING for the known consumer, so it needs a major-version bump and a note
-in CHANGELOG.md rather than a patch release -- and the economicspace module
-that reads the name has to move in the same breath.  Deleting a line here is
-how you say you have done that.
+is BREAKING for the known consumer, so it needs a minor-version bump while this
+package is 0.x and a note in CHANGELOG.md rather than a patch release -- and
+the economicspace module that reads the name has to move in the same breath.
+Deleting a line here is how you say you have done that.
 
 ⚠️  THIS LIST IS DELIBERATELY NOT DERIVED.  Reading it out of economicspace at
 test time would need that repo checked out, which CI does not have, and a check
 that skips on every run is a check that does not exist.  A hand-kept list is
 the right shape for a contract: it changes only when somebody decides it
 changes.
-
-⚠️  `validate_tables` IS NOT A SYNONYM ANYBODY CAN DROP.  economicspace builds
-its single-file `master.py` by concatenating its four modules and resolving
-name collisions with a whole-word regex over the entire file text, comments and
-string literals included.  It rewrites `validate`, so `from spacecost import
-validate as _v` becomes a request for a name this package does not export and
-the import fails.  `validate_tables` exists precisely so that a rewriting build
-has a word to keep.  See economicspace's CLAUDE.md, "Name collisions are
-handled by hand".
 """
+
+import ast
+import dataclasses
+import inspect
+import io
+import tokenize
 
 import spacecost
 
-# Every attribute economicspace reaches on its main, master v1.37.0
-# (transportation 1.17.0, mineral_value 1.10.0).  Found by grepping the
-# consumer for `spacecost.<name>`, which is the way to refresh it.
+# Every attribute economicspace reaches on its main at the v0.13.0 repin
+# (master v1.57.0, transportation 1.23.6, mineral_value 1.16.0).  Found by
+# grepping the consumer for `spacecost.<name>`, `from spacecost import` and
+# `getattr(spacecost, ...)`, which is the way to refresh it.
 #
 # ⚠️  THIS LIST IS WHAT THE CONSUMER READS, NOT WHAT IT ONCE RE-EXPORTED.  It
 # used to mirror the Stage 3 adapter, which re-exports most of `__all__`, and
@@ -61,15 +59,13 @@ CONSUMER_SURFACE = (
     "STORAGE_REFERENCE",
     "ENVIRONMENTS_REFERENCE",
 
-    # Stage 2's standard gravity.
-    "G0_M_S2",
-
-    # Loaders.  `verify_stage3.py` rebuilds the reference CSVs through them to
-    # compare the adapter's output with the package's own.
+    # Loaders.  The verification sheet cites installed rows through them, by
+    # name (`getattr(spacecost, loader)`).
     "load_launch_vehicles",
     "load_propellants",
     "load_delta_v",
     "load_operational_costs",
+    "load_storage",
 
     # The adapter's standalone preview.
     "cheapest_propellant_for",
@@ -86,11 +82,13 @@ CONSUMER_SURFACE = (
     "delivery_mass_ratio",
     "downleg_cost_usd_per_kg",
 
-    # The pipeline entry point and the collision-proof validator alias.
+    # The pipeline entry point and the validator.
     "build_catalog",
-    "validate_tables",
+    "validate",
 
-    # Config, verbosity and the stamps.
+    # Config, verbosity and the stamps.  Stage 3's CONFIG is a SpacecostConfig
+    # instance, and its dashboard help is scraped from this package's
+    # config.py; see test_every_config_field_has_help below.
     "SpacecostConfig",
     "set_verbose",
     "DATA_VERSION",
@@ -98,14 +96,20 @@ CONSUMER_SURFACE = (
 )
 
 # Names reached through a SUBMODULE rather than the top level, so `__all__`
-# does not cover them.  economicspace's worked calculation re-derives the
-# delivered price from the three rates, and `verify_stage3.py` merges live
-# fuel prices the way the adapter's build does.
+# does not cover them.  economicspace's worked calculation and verification
+# sheet re-derive the delivered price from the rates and the chain, and one of
+# these is private: a private name a consumer reaches is a contract all the
+# same, and this is where it is written down.
 SUBMODULE_SURFACE = (
+    ("config", "SpacecostConfig"),
     ("delivery", "STAGE_HARDWARE_USD_PER_KG"),
     ("delivery", "TUG_PROPELLANT_USD_PER_KG"),
     ("delivery", "ENTRY_SYSTEM_USD_PER_KG"),
-    ("prices", "merge_propellant_prices"),
+    ("delivery", "CHAIN_BURN_DV_BEFORE_V090"),
+    ("delivery", "TUG_DRY_MASS_FRAC"),
+    ("delivery", "LANDER_DRY_MASS_FRAC"),
+    ("delivery", "LEO_LAUNCH_VEHICLE"),
+    ("delivery", "_HYDROLOX"),
 )
 
 
@@ -127,9 +131,10 @@ def test_every_name_the_consumer_imports_still_exists():
     assert not missing, (
         "economicspace imports these and this package no longer exports them: "
         + ", ".join(missing)
-        + ".  That is a MAJOR version change; bump it, note it in CHANGELOG.md, "
-          "and move the economicspace module that reads it (transportation.py "
-          "for Stage 3, mineral_value.py for Stage 2) in the same breath."
+        + ".  That is a BREAKING change; bump the minor version, note it in "
+          "CHANGELOG.md, and move the economicspace module that reads it "
+          "(transportation.py for Stage 3, mineral_value.py for Stage 2) in "
+          "the same breath."
     )
 
 
@@ -150,25 +155,52 @@ def test_the_contract_is_public():
         + ", ".join(undeclared))
 
 
-def test_config_surface_is_what_the_adapter_mirrors():
-    """`SpacecostConfig`'s field NAMES are the adapter's ten dials.
+def _field_help(cls):
+    """field name -> its help text, by the rule economicspace's dashboard uses.
 
-    economicspace keeps its own `TransportConfig` because two of its defaults
-    belong to a pipeline rather than to a library: `output_dir` points into its
-    own tree, and `use_yfinance` is True there and False here, since a pipeline
-    stage is expected to fetch and a library must not.  It asserts the two
-    field sets are equal AT IMPORT and raises if they are not, so a field added
-    on either side alone fails the consumer's import rather than its run.
-
-    The count is asserted here so that adding a dial is a deliberate act on
-    both sides.  It is not a style rule: the adapter builds its call as
-    `SpacecostConfig(**{f.name: ... for f in fields(config)})`, so a field this
-    package gains and economicspace does not is one the consumer never passes.
+    The comment block directly above the field, stopping at a blank line or a
+    section banner (`# --- TITLE ---`) or rule, else a trailing comment on the
+    field's own line.  A banner is a heading, not help: a bare field directly
+    under one has none.
+    economicspace's `ui_meta.scrape_field_docs` reads this file's
+    `SpacecostConfig` that way and shows the result as each Stage 3 dial's help.
     """
-    import dataclasses
-    names = {f.name for f in dataclasses.fields(spacecost.SpacecostConfig)}
-    assert len(names) == 10, (
-        "the dial surface moved to %d fields: %s.  economicspace mirrors this "
-        "set in modules/transportation.py and asserts equality at import, so "
-        "both sides move together or the consumer stops importing."
-        % (len(names), sorted(names)))
+    src = inspect.getsource(inspect.getmodule(cls))
+    lines = src.split("\n")
+    trailing = {}
+    for tok in tokenize.generate_tokens(io.StringIO(src).readline):
+        if tok.type == tokenize.COMMENT:
+            row, col = tok.start
+            if lines[row - 1][:col].strip():
+                trailing[row] = tok.string.lstrip("#").strip()
+    node = next(n for n in ast.walk(ast.parse(src))
+                if isinstance(n, ast.ClassDef) and n.name == cls.__name__)
+    out = {}
+    for stmt in node.body:
+        if not (isinstance(stmt, ast.AnnAssign) and isinstance(stmt.target, ast.Name)):
+            continue
+        block, i = [], stmt.lineno - 2
+        while i >= 0 and lines[i].strip().startswith("#"):
+            text = lines[i].strip().lstrip("#").strip()
+            if text[:2] and set(text[:2]) <= set("-=─━═"):
+                break
+            block.append(text)
+            i -= 1
+        out[stmt.target.id] = (" ".join(b for b in reversed(block) if b)
+                               or trailing.get(stmt.lineno, ""))
+    return out
+
+
+def test_every_config_field_has_help():
+    """Every `SpacecostConfig` dial carries a comment the dashboard can show.
+
+    economicspace's Stage 3 config IS a `SpacecostConfig` instance, so its
+    dashboard help is scraped from this file, and its docs harness fails on a
+    dial with none.  A field added here without a comment would fail that
+    consumer's checks rather than this package's.
+    """
+    fields = {f.name for f in dataclasses.fields(spacecost.SpacecostConfig)}
+    helps = _field_help(spacecost.SpacecostConfig)
+    assert set(helps) == fields
+    bare = sorted(n for n, h in helps.items() if not h)
+    assert not bare, "SpacecostConfig fields with no help comment: %s" % bare

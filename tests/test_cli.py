@@ -110,9 +110,8 @@ def test_build_is_quiet_when_asked(tmp_path, capsys):
 @pytest.mark.parametrize("name", [
     n for n in spacecost.__all__
     if not n.startswith("_") and not n.isupper()
-    and n not in {"SpacecostConfig", "TransportConfig", "say", "set_verbose",
-                  "is_verbose", "validate", "build_transportation_summary",
-                  "build_transportation_catalog"}
+    and n not in {"SpacecostConfig", "say", "set_verbose",
+                  "is_verbose", "validate", "build_transportation_summary"}
 ])
 def test_public_helper_is_documented_or_reachable(name):
     """No exported helper is invisible: it is in the CLI, or in the README."""
@@ -122,8 +121,3 @@ def test_public_helper_is_documented_or_reachable(name):
     assert name in cli or name in readme, (
         name + " is exported but appears in neither the CLI nor the README")
 
-
-def test_migration_aliases_resolve():
-    """The two names that changed on the way out still import."""
-    assert spacecost.TransportConfig is spacecost.SpacecostConfig
-    assert spacecost.build_transportation_catalog is spacecost.build_catalog

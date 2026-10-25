@@ -92,9 +92,9 @@ jobs:
       # The editable install above cannot see a packaging gap: it imports the
       # tree, so anything present in the tree passes. A consumer gets a built
       # artifact from a tag, which is a different thing -- and that difference
-      # already shipped a bug once, when the v0.1.0 tag predated
-      # `validate_tables` and a clean install of it could not satisfy
-      # economicspace's import.
+      # already shipped a bug once, when the v0.1.0 tag predated a name
+      # economicspace imported and a clean install of it could not satisfy
+      # that import.
       - name: Install the built distribution and use it from outside the tree
         shell: bash
         run: |

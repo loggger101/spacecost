@@ -8,7 +8,7 @@ commit b0b18b2de301653ee23de1bd3779867ae5b617a1 (2026-09-04).
 import pandas as pd
 
 from ._log import say
-from .config import CONFIG, SpacecostConfig as TransportConfig
+from .config import CONFIG, SpacecostConfig
 from .deltav import DELTA_V_REFERENCE
 from .environments import ENVIRONMENTS_REFERENCE
 from .operations import OPERATIONAL_COSTS_REFERENCE
@@ -110,7 +110,7 @@ def build_transportation_summary(
     launch_df:      pd.DataFrame,
     propellant_df:  pd.DataFrame,
     delta_v_df:     pd.DataFrame,
-    config:         TransportConfig = CONFIG,
+    config:         SpacecostConfig = CONFIG,
 ) -> pd.DataFrame:
     """
     Cross-join (vehicle × in-space-segment × propellant) into a long-form

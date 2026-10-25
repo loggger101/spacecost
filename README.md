@@ -348,16 +348,9 @@ which is a defect that has actually shipped downstream. Test `is None`.
 | `stage_mass_ratio(dv, isp, dry_frac)` | one propulsive leg's initial mass per kg of payload; `inf` when the tank cannot close |
 | `solar_flux_w_per_m2(au)`, `solar_array_mass_factor(au)` | the 1/r² power penalty, at any distance |
 | `blackbody_temp_k(au)`, `one_way_light_time_min(range_au)` | the thermal and comms consequences of the same number |
-| `validate_tables(...)` (alias `validate`) | sanity bands over the loaded tables; returns the findings, and raises under `strict=True` |
+| `validate(...)` | sanity bands over the loaded tables; returns the findings, and raises under `strict=True` |
 | `build_catalog(config, catalog_date=None)` | everything, written to CSV |
 | `set_verbose(True)` | turn on the progress output, which is off by default |
-
-⚠️  **Prefer `validate_tables` over `validate` if your build rewrites source.**
-Both are the same function. economicspace concatenates its four stage modules
-into one file and resolves name collisions with a whole-word regex, so
-`from spacecost import validate as _v` gets rewritten there and then fails to
-import. Anything vendored, concatenated or code-generated wants the unambiguous
-name.
 
 ⚠️  The query helpers read `cost_usd_per_kg`, the **resolved** price. That column
 is produced by `merge_propellant_prices`, not by `load_propellants`, whose
@@ -468,7 +461,7 @@ what makes a comparison a comparison of tables rather than of clocks.
 
 ## The tables check themselves
 
-`validate_tables` holds every loaded table to a sanity band, and it is
+`validate` holds every loaded table to a sanity band, and it is
 reachable from the command line:
 
 ```bash
@@ -563,18 +556,17 @@ byte for byte. **None of them can tell "not yet repinned" from "never
 released", so cutting the tag is still on you.**
 
 ⚠️  **Test the TAG, not the working tree.** The test suite imports the source
-directory, so it cannot see a packaging gap (`v0.1.0` shipped without
-`validate_tables`). CI builds a wheel and exercises the public API from
+directory, so it cannot see a packaging gap (`v0.1.0` shipped without a
+name economicspace imported). CI builds a wheel and exercises the public API from
 outside the tree; a clean `pip install` of the new tag is still the last check
 worth doing by hand.
 
 ⚠️  **And the CONSUMER SURFACE is a test now**, `tests/test_consumer_contract.py`.
 The wheel step above walks `__all__`, which proves the names this package
 currently declares are packaged; it cannot see a name being deleted from the
-package and from `__all__` in one commit, which is what happened with
-`validate_tables`. That file lists what economicspace actually reads,
-including the four names it reaches through `spacecost.delivery` and
-`spacecost.prices`, which `__all__` does not cover. CI runs it against the
+package and from `__all__` in one commit. That file lists what economicspace
+actually reads, including the three names it reaches through
+`spacecost.delivery`, which `__all__` does not cover. CI runs it against the
 built wheel as well as the tree, so removing one fails here rather than at a
 consumer's import. A failure is not an instruction to put
 the name back: it says the change is **breaking**, so it wants a major bump, a
@@ -647,8 +639,7 @@ evidence that it changed nothing. What did change, and all it changed:
 - the package no longer prints on import, or creates a directory on import
 - `use_yfinance` defaults to `False`
 - output defaults to `./spacecost_data`, reading `SPACECOST_OUTPUT_DIR`
-- `build_transportation_catalog` is now `build_catalog` (the old name is kept
-  as an alias)
+- `build_transportation_catalog` is now `build_catalog`
 
 ## What it does not do
 

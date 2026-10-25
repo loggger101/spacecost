@@ -432,14 +432,3 @@ def validate(
     if strict and warnings:
         raise ValidationError(warnings)
     return f.items
-
-
-# `validate` is a name Module 2 of economicspace also defines, and that repo's
-# single-file build resolves the collision with a whole-word regex over the
-# source text.  A consumer writing `from spacecost import validate as _v` gets
-# that import rewritten and then an ImportError -- which happened, and was
-# caught by a docs check rather than by anything looking at Stage 3.
-#
-# So the function has a second, collision-proof name.  Prefer it in any code
-# that might be concatenated, vendored, or rewritten by a build step.
-validate_tables = validate

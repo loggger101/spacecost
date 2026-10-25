@@ -418,7 +418,7 @@ def test_a_custom_contingency_does_not_silently_disagree_with_the_table():
     from spacecost.prices import merge_propellant_prices
 
     def findings(fraction):
-        return spacecost.validate_tables(
+        return spacecost.validate(
             spacecost.load_launch_vehicles(),
             merge_propellant_prices(spacecost.load_propellants(),
                                     pd.DataFrame()),
@@ -657,7 +657,7 @@ def test_the_shipped_tables_produce_no_warnings():
     import pandas as pd
 
     from spacecost.prices import merge_propellant_prices
-    findings = spacecost.validate_tables(
+    findings = spacecost.validate(
         spacecost.load_launch_vehicles(),
         merge_propellant_prices(spacecost.load_propellants(), pd.DataFrame()),
         spacecost.load_delta_v(),
@@ -694,11 +694,11 @@ def test_strict_mode_raises_on_a_warning():
               spacecost.load_delta_v(),
               spacecost.load_operational_costs())
 
-    findings = spacecost.validate_tables(*frames)            # non-strict: quiet
+    findings = spacecost.validate(*frames)            # non-strict: quiet
     assert any(f["check"] == "leo_price_band" for f in findings)
 
     with pytest.raises(ValidationError) as caught:
-        spacecost.validate_tables(*frames, strict=True)
+        spacecost.validate(*frames, strict=True)
     assert caught.value.findings, "the exception carries the findings"
 
 
@@ -711,7 +711,7 @@ def test_notes_alone_never_fail_strict_mode():
     import pandas as pd
 
     from spacecost.prices import merge_propellant_prices
-    findings = spacecost.validate_tables(
+    findings = spacecost.validate(
         spacecost.load_launch_vehicles(),
         merge_propellant_prices(spacecost.load_propellants(), pd.DataFrame()),
         spacecost.load_delta_v(),
@@ -722,3 +722,64 @@ def test_notes_alone_never_fail_strict_mode():
     )
     assert any(f["level"] == "NOTE" for f in findings), \
         "no NOTE fired, so this test is no longer proving anything"
+
+
+def test_a_propellant_row_that_omits_its_flag_is_still_banded():
+    """A row with no `propellantless` key is held to the Isp band, not dropped.
+
+    `~df["propellantless"].astype(bool)` is right only while every row states
+    the flag, because pandas then infers dtype bool.  One row that omits it
+    makes the column `object` with a NaN in it, `.astype(bool)` reads NaN as
+    True, and the row is silently classed as a SAIL and dropped from the Isp
+    and price bands at once -- the newest, likeliest-wrong row.  validate.py
+    uses `.ne(True)`.  economicspace's transportation 1.12.1 fixed this, and
+    its `verify_stage3.py` check 5 held it until the check moved here.
+
+    Three assertions, and the third keeps the other two honest: the probe is
+    banded when it states the flag (so it is built right), still banded when
+    it omits it (the invariant), and the two spellings genuinely disagree on
+    it (so this can still fail).  FutureWarning is promoted to an error
+    because the rejected `.fillna(False).astype(bool)` warns exactly when it
+    fires, on a row like this.
+    """
+    import warnings
+
+    import pandas as pd
+
+    from spacecost.prices import merge_propellant_prices
+
+    probe = "__missing_flag_probe__"
+    launch = spacecost.load_launch_vehicles()
+    dv = spacecost.load_delta_v()
+    ops = spacecost.load_operational_costs()
+    prop = merge_propellant_prices(spacecost.load_propellants(), pd.DataFrame())
+
+    def with_probe(flagless):
+        # Isp 5 s is under the 40 s floor: a banded row is reported, a dropped
+        # one is silent.
+        row = {c: np.nan for c in prop.columns}
+        row.update(name=probe, type="chemical", status="concept", trl=1,
+                   isp_vac_s=5.0, cost_usd_per_kg=1.0,
+                   density_kg_per_L=1.0, tank_kg_per_L=0.05)
+        if not flagless:
+            row["propellantless"] = False
+        return pd.concat([prop, pd.DataFrame([row])], ignore_index=True)
+
+    def named(df):
+        with warnings.catch_warnings():
+            warnings.simplefilter("error", FutureWarning)
+            findings = spacecost.validate(launch, df, dv, ops)
+        return sum(any(line.startswith(probe + ":") for line in f["detail"])
+                   for f in findings)
+
+    flagless = with_probe(True)
+    assert named(prop) == 0
+    assert named(with_probe(False)) >= 1, "the probe is not built to be banded"
+    assert named(flagless) == named(with_probe(False)), \
+        "a row that omits its propellantless flag dropped out of the bands"
+    try:
+        old = bool((~flagless["propellantless"].astype(bool)).iloc[-1])
+    except Exception:                                    # noqa: BLE001
+        old = None              # raising is not the silent drop this guards
+    assert old != bool(flagless["propellantless"].ne(True).iloc[-1]), \
+        "astype(bool) and ne(True) agree on a missing flag; this tests nothing"
