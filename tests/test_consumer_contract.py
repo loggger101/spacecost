@@ -159,7 +159,9 @@ def _field_help(cls):
     """field name -> its help text, by the rule economicspace's dashboard uses.
 
     The comment block directly above the field, stopping at a blank line or a
-    rule line, else a trailing comment on the field's own line.
+    section banner (`# --- TITLE ---`) or rule, else a trailing comment on the
+    field's own line.  A banner is a heading, not help: a bare field directly
+    under one has none.
     economicspace's `ui_meta.scrape_field_docs` reads this file's
     `SpacecostConfig` that way and shows the result as each Stage 3 dial's help.
     """
@@ -180,7 +182,7 @@ def _field_help(cls):
         block, i = [], stmt.lineno - 2
         while i >= 0 and lines[i].strip().startswith("#"):
             text = lines[i].strip().lstrip("#").strip()
-            if text and set(text) <= set("-=─━═ "):
+            if text[:2] and set(text[:2]) <= set("-=─━═"):
                 break
             block.append(text)
             i -= 1
