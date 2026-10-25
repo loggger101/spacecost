@@ -95,37 +95,29 @@ from .units import (AU_LIGHT_TIME_S, BLACKBODY_TEMP_1AU_K,
                     COMMODITY_DENSITY_KG_PER_L, G0_M_S2, LITRES_PER_BBL,
                     LITRES_PER_GAL, NEWTON_G_M3_PER_KG_S2,
                     SOLAR_CONSTANT_W_PER_M2)
-from .validate import ValidationError, validate, validate_tables
+from .validate import ValidationError, validate
 from .vehicles import LAUNCH_VEHICLES_REFERENCE
 
 # The PACKAGE release. Not the data contract -- that is
 # `SpacecostConfig.pipeline_version`, which is stamped into every CSV. See
 # spacecost/config.py for why the two are deliberately separate.
-__version__ = "0.12.6"
+__version__ = "0.13.0"
 
 # The DATA contract this release ships, repeated here for convenience only.
 # config.py is the authority; this is a mirror, and a mirror can drift, so
 # tests/test_parity.py asserts the two agree.
 DATA_VERSION = CONFIG.pipeline_version
 
-# Migration aliases. The two names this package changed on the way out of
-# economicspace, kept importable so a call site moving over does not have to be
-# rewritten to be tried. `build_transportation_catalog` is aliased in build.py
-# for the same reason.
-TransportConfig = SpacecostConfig
-build_transportation_catalog = build_catalog
-
 __all__ = [
     "__version__", "DATA_VERSION",
     "CONFIG", "SpacecostConfig",
-    "TransportConfig", "build_transportation_catalog",
     "LAUNCH_VEHICLES_REFERENCE", "PROPELLANTS_REFERENCE",
     "DELTA_V_REFERENCE", "OPERATIONAL_COSTS_REFERENCE", "STORAGE_REFERENCE",
     "ENVIRONMENTS_REFERENCE",
     "load_launch_vehicles", "load_propellants", "load_delta_v",
     "load_operational_costs", "load_storage", "load_environments",
     "build_transportation_summary", "build_catalog", "validate",
-    "validate_tables", "ValidationError",
+    "ValidationError",
     "DELIVERY_CHAINS", "DOWNLEG_DEPARTURE_DV_M_S",
     "LEO_LAUNCH_USD_PER_KG", "LEO_LAUNCH_VEHICLE", "MARS_LANDED_MASS_FRACTION",
     "stage_mass_ratio", "delivery_mass_ratio",

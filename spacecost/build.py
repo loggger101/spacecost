@@ -12,7 +12,7 @@ from typing import Dict, Optional
 import pandas as pd
 
 from ._log import say
-from .config import CONFIG, SpacecostConfig as TransportConfig
+from .config import CONFIG, SpacecostConfig
 from .prices import fetch_yfinance_fuel_prices, merge_propellant_prices
 from .tables import (build_transportation_summary, load_delta_v,
                      load_environments, load_launch_vehicles,
@@ -22,7 +22,7 @@ from .validate import validate
 # MAIN PIPELINE
 # ─────────────────────────────────────────────────────────────────────────────
 def build_catalog(
-    config:       TransportConfig = CONFIG,
+    config:       SpacecostConfig = CONFIG,
     catalog_date: Optional[str]   = None,
 ) -> Dict[str, pd.DataFrame]:
     """
@@ -49,7 +49,7 @@ def build_catalog(
 
     validate() runs here and its findings are DISCARDED, deliberately: a build
     must not die because a speculative row sits outside a sanity band.  If you
-    want the findings, call `validate_tables(...)` yourself, or run `spacecost
+    want the findings, call `validate(...)` yourself, or run `spacecost
     validate --strict`, which is what CI gates on.
     """
     t0 = datetime.now()
@@ -126,7 +126,3 @@ def build_catalog(
         "summary":           summary_df,
     }
 
-
-# The name this function had as Module 3 of economicspace. Kept so a caller
-# migrating from that module does not have to change the call site.
-build_transportation_catalog = build_catalog

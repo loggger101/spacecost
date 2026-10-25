@@ -229,14 +229,14 @@ def main(argv=None) -> int:
         import pandas as pd
 
         from .prices import merge_propellant_prices
-        from .validate import ValidationError, validate_tables
+        from .validate import ValidationError, validate
         frames = (load_launch_vehicles(),
                   merge_propellant_prices(load_propellants(), pd.DataFrame()),
                   load_delta_v(), load_operational_costs(),
                   load_environments(), load_storage())
         try:
-            findings = validate_tables(*frames, config=SpacecostConfig(),
-                                       strict=args.strict)
+            findings = validate(*frames, config=SpacecostConfig(),
+                                strict=args.strict)
         except ValidationError as exc:
             for item in exc.findings:
                 print("%-5s %-18s %s" % (item["level"], item["table"],

@@ -10,7 +10,7 @@ from typing import Dict
 
 import pandas as pd
 
-from .config import CONFIG, SpacecostConfig as TransportConfig
+from .config import CONFIG, SpacecostConfig
 from .rocket import cost_per_dv_usd_per_kg, propellant_mass_for_dv
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -150,7 +150,7 @@ def mission_cost_breakdown(
     propellant:         str,
     mission_duration_yr: float,
     hardware_kg:        float = 0.0,
-    config:             TransportConfig = CONFIG,
+    config:             SpacecostConfig = CONFIG,
     apply_dv_penalty:   bool = True,
 ) -> dict:
     """

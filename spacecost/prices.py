@@ -11,7 +11,7 @@ import numpy as np
 import pandas as pd
 
 from ._log import say
-from .config import SpacecostConfig as TransportConfig
+from .config import SpacecostConfig
 from .propellants import (_COMPONENTS, PROPELLANTS_REFERENCE,
                           fuel_mass_fraction)
 from .units import (_per_bbl_to_per_kg, _per_gal_to_per_kg,
@@ -56,7 +56,7 @@ _LIVE_OXIDISER = {
 
 
 def fetch_yfinance_fuel_prices(
-    config: TransportConfig,
+    config: SpacecostConfig,
 ) -> pd.DataFrame:
     """
     Live commodity quotes for the liquid-propellant proxies.

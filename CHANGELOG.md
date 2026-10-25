@@ -13,6 +13,33 @@ may read a version as proof that a number moved.
 
 ## Package releases
 
+### 0.13.0 - 2026-10-25
+
+**Data contract unchanged at 1.23.6: three names removed, and no row moves.**
+`build_catalog()` writes the same CSVs byte for byte. Breaking for a caller of
+the removed names, so a minor bump; economicspace moves off them in the repin
+that takes this tag.
+
+- **Removed `validate_tables`**, the second name for `validate`. It existed
+  because economicspace concatenated its modules into one `master.py` and
+  rewrote the word `validate`; that build was retired at its master v1.57.0.
+  Use `validate`.
+- **Removed `TransportConfig` and `build_transportation_catalog`**, the
+  migration aliases for `SpacecostConfig` and `build_catalog`. The modules
+  that imported `SpacecostConfig as TransportConfig` use the real name.
+- **`tests/test_consumer_contract.py`** is refreshed from what economicspace
+  reads at the repin: `validate` in, `validate_tables`, `G0_M_S2` and
+  `prices.merge_propellant_prices` out, and `load_storage`, `config` and five
+  `spacecost.delivery` names in (one private, `_HYDROLOX`, which the
+  verification sheet reads). The field-COUNT test goes: economicspace drops its
+  mirrored `TransportConfig` and builds a `SpacecostConfig`, so a new field
+  reaches it with no edit. In its place, **every `SpacecostConfig` field must
+  carry a help comment**, by the rule economicspace's dashboard scrapes.
+- **`test_a_propellant_row_that_omits_its_flag_is_still_banded`**: a
+  propellant row with no `propellantless` key stays inside `validate`'s Isp
+  band. economicspace's `verify_stage3.py` check 5 held this; it lives with
+  the code now.
+
 ### 0.12.6 - 2026-10-21
 
 **Data contract 1.23.5 → 1.23.6: seven wording and citation revision
