@@ -72,8 +72,7 @@ class SpacecostConfig:
     # gives the tables live quotes would give, without the network and the
     # same on every run, and the tables' `catalog_date` is the day the quotes
     # were recorded.  "" (the default) prices every propellant at reference.
-    # Setting this and `use_yfinance` together is refused: a build is either
-    # reproducible or live, never a guess at which.
+    # Setting this and `use_yfinance` together is refused.
     quote_snapshot:      str  = ""
 
     # --- NETWORK -------------------------------------------------------------
