@@ -3,9 +3,9 @@
 
 WHY THIS FILE EXISTS.  This package was extracted from economicspace's Module 3
 and that project is its consumer: `modules/transportation.py` is the adapter
-that drives Stage 3, `modules/mineral_value.py` takes Stage 2's delivery chains
-from here, and its worked calculation and verification sheet reach into
-submodules.  The consumer pins a TAG, so what it gets is whatever a release
+that drives Stage 3, spacevalue (its Stage 2, split out) takes the delivery
+chains and the quote-snapshot code from here, and its worked calculation and
+verification sheet reach into submodules.  The consumer pins a TAG, so what it gets is whatever a release
 contains, and a name dropped between releases is not discovered until somebody
 installs the new tag and an import fails.
 
@@ -146,11 +146,11 @@ def test_every_name_the_consumer_imports_still_exists():
     missing = [n for n in CONSUMER_SURFACE
                if not hasattr(spacecost, n)]
     assert not missing, (
-        "economicspace imports these and this package no longer exports them: "
+        "a consumer imports these and this package no longer exports them: "
         + ", ".join(missing)
         + ".  That is a BREAKING change; bump the minor version, note it in "
           "CHANGELOG.md, and move the economicspace module that reads it "
-          "(transportation.py for Stage 3, mineral_value.py for Stage 2) in "
+          "(economicspace's transportation.py for Stage 3, or spacevalue) in "
           "the same breath."
     )
 
