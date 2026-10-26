@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Live commodity fuel prices (yfinance) and the merge into the reference table.
+"""Commodity fuel prices, live or recorded, and the merge into the reference table.
 
 Extracted verbatim from economicspace modules/transportation.py, pipeline_version 1.14.0,
 commit b0b18b2de301653ee23de1bd3779867ae5b617a1 (2026-09-04).
@@ -14,6 +14,8 @@ from ._log import say
 from .config import SpacecostConfig
 from .propellants import (_COMPONENTS, PROPELLANTS_REFERENCE,
                           fuel_mass_fraction)
+from .quotes import (Quote, closes_by_ticker, fetch_closes, load_snapshot,
+                     missing)
 from .units import (_per_bbl_to_per_kg, _per_gal_to_per_kg,
                     _per_mmbtu_to_per_kg_ng)
 
@@ -55,6 +57,21 @@ _LIVE_OXIDISER = {
 }
 
 
+# The tickers whose fluid prices a propellant row.  CL=F is a cross-check on
+# HO=F and prices nothing, so a snapshot may leave it out; one missing either
+# of these would leave a row the caller asked for at its reference price.
+def required_fuel_tickers() -> Dict[str, str]:
+    """Ticker -> quote unit, for every ticker some propellant's price reads."""
+    proxies = {p.get("yfinance_proxy") for p in PROPELLANTS_REFERENCE}
+    return {t: unit for t, (_label, unit, fluid) in _YFINANCE_TICKERS.items()
+            if fluid in proxies}
+
+
+# Ticker -> quote unit, for all three.  What `fetch_closes` is asked for.
+FUEL_TICKERS: Dict[str, str] = {t: unit for t, (_label, unit, _fluid)
+                                in _YFINANCE_TICKERS.items()}
+
+
 def fetch_yfinance_fuel_prices(
     config: SpacecostConfig,
 ) -> pd.DataFrame:
@@ -67,52 +84,75 @@ def fetch_yfinance_fuel_prices(
         live_price_date, live_price_source.
     """
     say("\n  yfinance  (Yahoo Finance) - live fuel commodity prices ...")
+    rows, failed = fetch_closes(FUEL_TICKERS)
+    for problem in failed:
+        say(f"     FAIL  {problem}")
+    return fuel_prices_from_quotes(closes_by_ticker(rows))
 
-    try:
-        import yfinance as yf
-    except ImportError:
-        say("     FAIL  yfinance not importable - skipped")
-        return pd.DataFrame()
 
-    # Step 1, pull commodity quotes
+def snapshot_fuel_prices(
+    config: SpacecostConfig,
+) -> pd.DataFrame:
+    """The same frame as `fetch_yfinance_fuel_prices`, from a recorded snapshot.
+
+    Reads `config.quote_snapshot` from spacecost/quotes/, and refuses one that
+    lacks a ticker some row is priced from, or quotes it in another unit: a
+    silent fall-back to the reference price is the failure snapshots exist to
+    end.
+    """
+    name = config.quote_snapshot
+    say(f"\n  Recorded fuel quotes - snapshot {name} ...")
+    rows = load_snapshot(name)
+    bad = missing(rows, required_fuel_tickers())
+    if bad:
+        raise ValueError(f"snapshot {name}: " + "; ".join(bad))
+    return fuel_prices_from_quotes(closes_by_ticker(rows))
+
+
+def fuel_prices_from_quotes(quotes: Dict[str, Quote]) -> pd.DataFrame:
+    """The live-price frame from closes, however they were obtained.
+
+    One conversion for both paths, so a build from a snapshot is the build that
+    fetching those closes live would have made.
+    """
+    # Step 1, convert each commodity close to $/kg
     commodity_usd_per_kg: Dict[str, dict] = {}
     for ticker, (label, unit, fluid_key) in _YFINANCE_TICKERS.items():
-        try:
-            hist = yf.Ticker(ticker).history(period="5d", auto_adjust=False)
-            closes = hist["Close"].dropna() if "Close" in hist else pd.Series(dtype=float)
-            if closes.empty:
-                say(f"     WARN  {label} ({ticker}) - no close data")
-                continue
+        q = quotes.get(ticker)
+        if q is None:
+            continue
+        if q.unit != unit:
+            say(f"     WARN  {label} ({ticker}) - quoted per {q.unit!r}, "
+                f"converted per {unit!r}; skipped")
+            continue
 
-            last_close = float(closes.iloc[-1])
-            last_date  = closes.index[-1].strftime("%Y-%m-%d")
+        last_close = q.close
+        last_date  = q.close_date
 
-            if unit == "gallon":
-                usd_per_kg = _per_gal_to_per_kg(last_close, fluid_key)
-            elif unit == "MMBtu":
-                usd_per_kg = _per_mmbtu_to_per_kg_ng(last_close)
-            elif unit == "barrel":
-                usd_per_kg = _per_bbl_to_per_kg(last_close, fluid_key)
-            else:
-                say(f"     WARN  {label} - unrecognised unit {unit!r}")
-                continue
+        if unit == "gallon":
+            usd_per_kg = _per_gal_to_per_kg(last_close, fluid_key)
+        elif unit == "MMBtu":
+            usd_per_kg = _per_mmbtu_to_per_kg_ng(last_close)
+        elif unit == "barrel":
+            usd_per_kg = _per_bbl_to_per_kg(last_close, fluid_key)
+        else:
+            say(f"     WARN  {label} - unrecognised unit {unit!r}")
+            continue
 
-            commodity_usd_per_kg[fluid_key] = {
-                "usd_per_kg":   usd_per_kg,
-                "ticker":       ticker,
-                "raw_quote":    last_close,
-                "raw_unit":     unit,
-                "quote_date":   last_date,
-            }
-            say(f"     OK  {label:38s} ({ticker}) = "
-                  f"{last_close:>8,.2f} USD/{unit:6s} "
-                  f"-> {usd_per_kg:>7.3f} USD/kg  [{last_date}]")
-
-        except Exception as exc:
-            say(f"     FAIL  {label} ({ticker}) - {type(exc).__name__}: {exc}")
+        commodity_usd_per_kg[fluid_key] = {
+            "usd_per_kg":   usd_per_kg,
+            "ticker":       ticker,
+            "source":       q.source,
+            "raw_quote":    last_close,
+            "raw_unit":     unit,
+            "quote_date":   last_date,
+        }
+        say(f"     OK  {label:38s} ({ticker}) = "
+              f"{last_close:>8,.2f} USD/{unit:6s} "
+              f"-> {usd_per_kg:>7.3f} USD/kg  [{last_date}]")
 
     if not commodity_usd_per_kg:
-        say("     WARN  yfinance returned no commodity quotes")
+        say("     WARN  no commodity quotes")
         return pd.DataFrame()
 
     # Step 2, map onto propellants via `yfinance_proxy`.  Bipropellants
@@ -141,7 +181,7 @@ def fetch_yfinance_fuel_prices(
             "live_cost_usd_per_kg":  live_cost,
             "live_cost_usd_per_L":   live_cost * prop["density_kg_per_L"],
             "live_price_date":       proxy["quote_date"],
-            "live_price_source":     f"yfinance:{proxy['ticker']}",
+            "live_price_source":     f"{proxy['source']}:{proxy['ticker']}",
         })
 
     if not rows:

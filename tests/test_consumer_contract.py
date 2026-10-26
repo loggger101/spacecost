@@ -40,10 +40,12 @@ import tokenize
 
 import spacecost
 
-# Every attribute economicspace reaches on its main at the v0.13.0 repin
-# (master v1.57.0, transportation 1.23.6, mineral_value 1.16.0).  Found by
-# grepping the consumer for `spacecost.<name>`, `from spacecost import` and
-# `getattr(spacecost, ...)`, which is the way to refresh it.
+# Every attribute the two consumers reach: economicspace on its main at the
+# v0.14.0 repin (master v1.59.0, transportation 1.23.6), and spacevalue v0.1.0,
+# which is economicspace's Stage 2 split out (mineral_value 1.16.0 became its
+# data contract 1.17.0).  Found by grepping both for `spacecost.<name>`,
+# `from spacecost import` and `getattr(spacecost, ...)`, which is the way to
+# refresh it.
 #
 # ⚠️  THIS LIST IS WHAT THE CONSUMER READS, NOT WHAT IT ONCE RE-EXPORTED.  It
 # used to mirror the Stage 3 adapter, which re-exports most of `__all__`, and
@@ -71,9 +73,9 @@ CONSUMER_SURFACE = (
     "cheapest_propellant_for",
 
     # The delivery chains, moved out of economicspace's Module 2 at v0.3.0.
-    # ⚠️  Module 2 imports these, not Module 3, and it is the FIRST stage to
-    # reach this package -- so a name dropped here fails a pricing stage that
-    # runs before the adapter does, and the traceback will not mention Stage 3.
+    # ⚠️  spacevalue (that Module 2, split out) imports these at import time,
+    # so a name dropped here breaks every price table, and the traceback will
+    # name spacevalue rather than this package.
     "DELIVERY_CHAINS",
     "LEO_LAUNCH_USD_PER_KG",
     "LEO_LAUNCH_VEHICLE",
@@ -90,6 +92,7 @@ CONSUMER_SURFACE = (
     # instance, and its dashboard help is scraped from this package's
     # config.py; see test_every_config_field_has_help below.
     "SpacecostConfig",
+    "say",
     "set_verbose",
     "DATA_VERSION",
     "__version__",
@@ -110,6 +113,20 @@ SUBMODULE_SURFACE = (
     ("delivery", "LANDER_DRY_MASS_FRAC"),
     ("delivery", "LEO_LAUNCH_VEHICLE"),
     ("delivery", "_HYDROLOX"),
+    # The quote snapshots (v0.14.0).  spacevalue records and reads its metal
+    # snapshots with these, from its own directory, and economicspace's Stage 3
+    # names a fuel snapshot through `SpacecostConfig.quote_snapshot`.
+    ("quotes", "Quote"),
+    ("quotes", "SUMS_FILE"),
+    ("quotes", "check_snapshots"),
+    ("quotes", "closes_by_ticker"),
+    ("quotes", "fetch_closes"),
+    ("quotes", "list_snapshots"),
+    ("quotes", "load_snapshot"),
+    ("quotes", "missing"),
+    ("quotes", "record_snapshot"),
+    ("quotes", "recorded_date"),
+    ("quotes", "write_snapshot"),
 )
 
 
@@ -204,3 +221,9 @@ def test_every_config_field_has_help():
     assert set(helps) == fields
     bare = sorted(n for n, h in helps.items() if not h)
     assert not bare, "SpacecostConfig fields with no help comment: %s" % bare
+
+
+def test_the_snapshot_field_the_consumer_sets_exists():
+    """economicspace's Stage 3 pins a fuel snapshot by this field's name."""
+    fields = {f.name for f in dataclasses.fields(spacecost.SpacecostConfig)}
+    assert "quote_snapshot" in fields

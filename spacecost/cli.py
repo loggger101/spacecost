@@ -3,6 +3,11 @@
 
     python -m spacecost build            write the seven CSVs
     python -m spacecost build --live     fetch live fuel prices first
+    python -m spacecost build --quotes fuel-2026-10-17
+                                         price fuels from a recorded snapshot
+    python -m spacecost quotes list      the recorded snapshots
+    python -m spacecost quotes check     hold each one to SHA256SUMS
+    python -m spacecost quotes record    record today's finished closes
     python -m spacecost show vehicles    print a table
     python -m spacecost propellant 6500  cheapest propellant for a given delta-v
     python -m spacecost launch leo       cheapest vehicle to a destination
@@ -10,8 +15,9 @@
     python -m spacecost validate         run the sanity bands, --strict to fail
     python -m spacecost example          a worked mission cost breakdown
 
-`build` is the only subcommand that writes anything.  Everything prints ASCII
-only -- see tests/test_quiet.py for why that is a rule and not a preference.
+`build` and `quotes record` are the only subcommands that write anything.
+Everything prints ASCII only -- see tests/test_quiet.py for why that is a rule
+and not a preference.
 """
 
 import argparse
@@ -61,6 +67,9 @@ def _build_parser() -> argparse.ArgumentParser:
                    help="fetch live commodity fuel prices first. OFF by "
                         "default: a build is deterministic and offline unless "
                         "you ask for the network")
+    b.add_argument("--quotes", default="", metavar="SNAPSHOT",
+                   help="price fuels from a recorded snapshot, e.g. "
+                        "fuel-2026-10-17 (see `spacecost quotes list`)")
     b.add_argument("--date", default=None, metavar="YYYY-MM-DD",
                    help="pin the catalog_date provenance stamp, for "
                         "comparing two builds")
@@ -96,6 +105,16 @@ def _build_parser() -> argparse.ArgumentParser:
         "validate", help="run the sanity bands over the tables")
     va.add_argument("--strict", action="store_true",
                     help="exit non-zero if any check WARNs. NOTEs never fail")
+
+    qu = sub.add_parser("quotes", help="the recorded fuel-quote snapshots")
+    qa = qu.add_subparsers(dest="action", required=True)
+    qa.add_parser("list", help="name every snapshot, oldest first")
+    qa.add_parser("check", help="hold every snapshot to SHA256SUMS; "
+                                "exit 1 on any problem")
+    qr = qa.add_parser("record", help="fetch the last finished close of each "
+                                      "fuel ticker and write a new snapshot")
+    qr.add_argument("--dir", default=None,
+                    help="where to write (default: the package's quotes/)")
 
     ex = sub.add_parser("example",
                         help="worked mission cost breakdown, end to end")
@@ -157,10 +176,34 @@ def main(argv=None) -> int:
     if args.command == "build":
         set_verbose(not args.quiet)
         cfg = SpacecostConfig(output_dir=args.output_dir or "",
-                              use_yfinance=args.live)
+                              use_yfinance=args.live,
+                              quote_snapshot=args.quotes)
         build_catalog(cfg, catalog_date=args.date)
         if args.quiet:
             print(cfg.table_dir())
+        return 0
+
+    if args.command == "quotes":
+        from . import quotes
+        from .prices import FUEL_TICKERS
+        if args.action == "list":
+            for name in quotes.list_snapshots():
+                rows = quotes.load_snapshot(name)
+                print("%-20s %s" % (name, " ".join(
+                    "%s=%r" % (q.ticker, q.close) for q in rows)))
+            return 0
+        if args.action == "check":
+            bad = quotes.check_snapshots()
+            for line in bad:
+                print("FAIL  " + line)
+            if not bad:
+                print("OK  %d snapshot(s) match %s"
+                      % (len(quotes.list_snapshots()), quotes.SUMS_FILE))
+            return 1 if bad else 0
+        set_verbose(True)
+        path = quotes.record_snapshot("fuel", FUEL_TICKERS,
+                                      args.dir or quotes.PACKAGE_DIR)
+        print("wrote " + path)
         return 0
 
     if args.command == "show":

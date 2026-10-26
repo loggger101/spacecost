@@ -64,6 +64,17 @@ jobs:
       - name: Build the catalog from the CLI
         run: python -m spacecost build -o ./ci_out
 
+      # The committed quote snapshots, each against its SHA256SUMS line, both
+      # ways.  On every leg, because a checkout that normalised a CSV's CRLF
+      # would change its bytes and fail here first.
+      - name: The quote snapshots match SHA256SUMS
+        run: python -m spacecost quotes check
+
+      # A recorded build on every platform; tests/test_quotes.py holds its
+      # three live rows to economicspace's Stage 3 tables of 2026-10-17.
+      - name: Build from the fuel seed snapshot
+        run: python -m spacecost build -o ./ci_quotes --quotes fuel-2026-10-17 -q
+
       # The sanity bands, as a GATE.  Before v1.15.0 `validate` printed through
       # `say`, which is off by default, so every check it ran was discarded on
       # every build -- including this one.  --strict fails on a WARN and never

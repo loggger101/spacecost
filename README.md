@@ -520,6 +520,41 @@ it for a launch price is a library that is not reproducible, and every
 committed reference file here is an offline build. Requires the extra: `pip install
 "spacecost[live]"`.
 
+### Recorded quotes give the live answer, every time
+
+A live build is right on the day and unrepeatable the day after. So quotes
+can be recorded once and committed, as a snapshot in `spacecost/quotes/`:
+
+```bash
+spacecost quotes record                  # last finished close of each ticker
+spacecost quotes list                    # what has been recorded
+spacecost build --quotes fuel-2026-10-17 # price from one, offline
+```
+
+A build from a snapshot goes through the same conversion as a live build, so it
+writes the tables those closes would have given live, byte for byte, on any day
+and without the network. Its `catalog_date` is the day the quotes were
+recorded, not the day you ran it. Setting `quote_snapshot` and `use_yfinance`
+together is refused.
+
+A snapshot holds the close **as Yahoo quoted it** (per gallon, per MMBtu), not a
+price per kilogram, and writes each close with `repr` so it reads back as the
+same float. It is never edited: `SHA256SUMS` records every file, and `spacecost
+quotes check` (CI runs it) fails on a changed byte, a file with no line, or a
+line with no file. A newer price is a new file. `record` keeps only finished
+sessions, because while a market is open yfinance's last bar is the latest
+trade, not a settlement, and it writes nothing unless every ticker answered.
+
+`fuel-2026-10-17` is different from the rest: nobody recorded those closes at
+the time. economicspace's Stage 3 tables of that date kept only the converted
+$/kg, and for each ticker exactly one float32 close reproduces every one of
+their live rows bit for bit. That close is what the snapshot holds, and its
+`note` column says so.
+
+The code in `spacecost.quotes` is not fuel-specific. economicspace's Stage 2
+package, [spacevalue](https://github.com/loggger101/spacevalue), records its
+metal quotes with it, in its own `quotes/` directory.
+
 ## Changing a row
 
 A number here is a number in somebody's trade study, so a change is a release,
@@ -580,9 +615,10 @@ the name back: it says the change is **breaking**, so it wants a major bump, a
 CHANGELOG entry, and the matching edit to the economicspace module that reads
 it in the same breath.
 
-The list follows economicspace's **main**, not its branches. A name the
-consumer is about to stop reading stays in the contract until that change has
-merged there.
+The list follows the consumers' **main** branches, not their other branches:
+economicspace, and since v0.14.0 spacevalue, which reads the delivery chains
+and `spacecost.quotes`. A name a consumer is about to stop reading stays in
+the contract until that change has merged there.
 
 ## Layout
 
@@ -597,7 +633,9 @@ spacecost/          the package
     config.py       the dials, and the two version numbers
     tables.py       loaders, and the vehicle x segment x propellant summary
     rocket.py       Tsiolkovsky helpers
-    prices.py       live commodity fuel prices, and the merge
+    prices.py       commodity fuel prices, live or recorded, and the merge
+    quotes.py       recorded quotes: snapshots, their checksums, recording
+    quotes/         the fuel snapshots and SHA256SUMS, shipped in the wheel
     validate.py     sanity bands, and the strict gate over them
     build.py        writes the seven CSVs
     query.py        cheapest-X helpers and a worked mission breakdown
@@ -631,7 +669,10 @@ mining profitability pipeline, and extracted at `pipeline_version` 1.14.0
 that module was annotated reference data and nothing in its schema knows what
 an asteroid is, which is the argument for splitting it out: a launch price is
 useful to anyone costing a mission. economicspace consumes this package as its
-Stage 3, and since v0.3.0 its Stage 2 takes the delivery chains from here too.
+Stage 3. Its Stage 2 has taken the delivery chains from here since v0.3.0, and
+since v0.14.0 that stage is its own package,
+[spacevalue](https://github.com/loggger101/spacevalue), which reads them and
+records its quotes with `spacecost.quotes`.
 
 The peer-reviewed and tiered-authoritative sources behind these rows are
 collected in [General_Research](https://github.com/loggger101/General_Research):
