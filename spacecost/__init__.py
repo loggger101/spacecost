@@ -57,7 +57,8 @@ profitability pipeline, at pipeline_version 1.14.0 (commit b0b18b2).  The
 tables were built there over fourteen releases; they are split out because
 nothing in their schema knows what an asteroid is, and a launch price is
 useful to anyone costing a mission.  economicspace consumes this package as
-its Stage 3, and its Stage 2 takes the delivery chains from here.
+its Stage 3.  spacevalue, which was its Stage 2, takes the delivery chains
+from here and records its metal quotes with `spacecost.quotes`.
 
 THE OUTPUT IS A CONTRACT.  `build_catalog()` writes the seven CSVs that
 repo's Stage 4 reads.  The six reference tables are byte-identical on every
