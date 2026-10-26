@@ -38,6 +38,9 @@ import tempfile
 
 import numpy as np
 import pandas as pd
+# float_precision="round_trip": the default parser is not correctly rounded.
+# samebytes comes with the test extra, which is what runs this tool in CI.
+from samebytes.frames import read_exact
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -85,8 +88,8 @@ def _sample_values_differ(fresh_path, committed_path, rtol=1e-12):
     a table, a coefficient or a formula fails it by orders of magnitude, loose
     enough that last-bit differences in `exp()` across hosts do not.
     """
-    fresh = pd.read_csv(fresh_path, float_precision="round_trip")
-    committed = pd.read_csv(committed_path, float_precision="round_trip")
+    fresh = read_exact(fresh_path)
+    committed = read_exact(committed_path)
     if (len(fresh) != len(committed)
             or list(fresh.columns) != list(committed.columns)):
         return True

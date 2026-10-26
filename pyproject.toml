@@ -38,7 +38,8 @@ dependencies = [
 [project.optional-dependencies]
 live = ["yfinance>=0.2"]
 # samebytes (no dependencies of its own) reads the committed summary back in
-# tests/test_parity.py without losing a float's last bit.
+# tests/test_parity.py and tools/refresh_reference.py without losing a float's
+# last bit.
 test = [
     "pytest>=7.0",
     "samebytes @ git+https://github.com/loggger101/samebytes@v0.1.0",
