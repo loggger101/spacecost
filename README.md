@@ -444,6 +444,13 @@ pip install -e ".[test]"
 pytest -q
 ```
 
+The test extra includes [samebytes](https://github.com/loggger101/samebytes),
+whose `read_exact` reads the committed summary back without losing a float's
+last bit. The tree lives in a synced folder, so `.githooks/` carries samebytes'
+hook that repairs git's stat cache after a checkout or merge; opt in once with
+`git config core.hooksPath .githooks`. CI's `hooks` job holds the copies to
+the samebytes release they came from.
+
 Two details of the writer are load-bearing and must not be tidied away:
 
 - **The CRLF line terminator is pinned.** `pandas.to_csv` defaults
