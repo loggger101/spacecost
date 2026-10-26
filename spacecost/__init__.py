@@ -103,9 +103,8 @@ from .vehicles import LAUNCH_VEHICLES_REFERENCE
 # spacecost/config.py for why the two are deliberately separate.
 __version__ = "0.13.0"
 
-# The DATA contract this release ships, repeated here for convenience only.
-# config.py is the authority; this is a mirror, and a mirror can drift, so
-# tests/test_parity.py asserts the two agree.
+# The DATA contract this release ships, read off config.py (the authority)
+# rather than typed, so it cannot disagree with it.
 DATA_VERSION = CONFIG.pipeline_version
 
 __all__ = [
