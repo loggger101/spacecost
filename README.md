@@ -544,16 +544,16 @@ not a commit.
    untagged change reaches nobody.
 
 ⚠️  **Then repin downstream.** [economicspace](https://github.com/loggger101/economicspace)
-installs this package from a pinned tag in `requirements.txt` and
-`_MASTER_REQUIRED`. Until that tag moves it keeps building against the old
+installs this package from a pinned tag in `requirements.txt` and `PIP_SPEC`
+(`modules/_runtime.py`). Until that tag moves it keeps building against the old
 tables, so the edit silently does not land there.
 
 Checks over there catch a repin that went wrong: `verify_docs.py` holds every
-copy of the pinned tag to the others, and `verify_stage3.py` reads pip's own
-`direct_url.json` and holds the INSTALLED revision to the pinned tag (which
-also catches a tag moved after the fact), then compares this package's output
-byte for byte. **None of them can tell "not yet repinned" from "never
-released", so cutting the tag is still on you.**
+copy of the pinned tag to the others, and `_runtime.install()` reads pip's own
+`direct_url.json` at import and refuses any spacecost not installed from the
+pinned tag (an editable checkout, a shadowing copy, another revision). **None
+of them can tell "not yet repinned" from "never released", so cutting the tag
+is still on you.**
 
 ⚠️  **Test the TAG, not the working tree.** The test suite imports the source
 directory, so it cannot see a packaging gap (`v0.1.0` shipped without a
@@ -565,8 +565,8 @@ worth doing by hand.
 The wheel step above walks `__all__`, which proves the names this package
 currently declares are packaged; it cannot see a name being deleted from the
 package and from `__all__` in one commit. That file lists what economicspace
-actually reads, including the three names it reaches through
-`spacecost.delivery`, which `__all__` does not cover. CI runs it against the
+actually reads, including the names it reaches through submodules
+(`spacecost.config`, `spacecost.delivery`), which `__all__` does not cover. CI runs it against the
 built wheel as well as the tree, so removing one fails here rather than at a
 consumer's import. A failure is not an instruction to put
 the name back: it says the change is **breaking**, so it wants a major bump, a

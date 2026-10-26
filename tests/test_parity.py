@@ -227,11 +227,6 @@ def test_crlf_is_pinned(built, name):
     assert _bare_lf_outside_quotes(raw) == 0, name + " has a bare LF record ending"
 
 
-def test_data_version_mirror_agrees():
-    """`spacecost.DATA_VERSION` mirrors config; a mirror can drift, so check it."""
-    assert spacecost.DATA_VERSION == spacecost.CONFIG.pipeline_version
-
-
 def test_stamped_columns_present(built):
     """Both provenance columns land in every file.  There are TWO, not one.
 

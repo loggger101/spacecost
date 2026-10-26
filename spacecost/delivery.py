@@ -17,9 +17,8 @@ lines were `OPERATIONAL_COSTS_REFERENCE` rows.  A manual-sync instruction over
 nine duplicated numbers.
 
 The justification died when Stage 3 became this package.  A pip-installed
-package has no position in a pipeline: economicspace's `master.py` installs it
-in its header, before any stage's code runs, so Module 2 can import it exactly
-as Module 4 does.  The reason for the second copy was concatenation order, and
+package has no position in a pipeline: economicspace installs it before any
+stage's code runs, so Module 2 can import it exactly as Module 4 does.  The reason for the second copy was concatenation order, and
 concatenation order stopped applying.
 
 Nothing here knows what an asteroid is.  "Cost of putting 1 kg of payload at
