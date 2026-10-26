@@ -20,13 +20,12 @@ prose and data, not output.
 """
 
 import ast
-import io
 import os
 import subprocess
 import sys
-import tokenize
 
 import pytest
+from samebytes import source
 
 import spacecost
 
@@ -40,14 +39,8 @@ def _python_files():
 
 
 def test_import_is_silent():
-    """A fresh interpreter importing the package prints nothing at all."""
-    proc = subprocess.run(
-        [sys.executable, "-c", "import spacecost"],
-        capture_output=True, text=True,
-        cwd=os.path.dirname(PKG_DIR),
-    )
-    assert proc.returncode == 0, proc.stderr
-    assert proc.stdout == "", "import printed: " + repr(proc.stdout[:300])
+    """A fresh interpreter importing the package prints nothing and creates nothing."""
+    assert source.quiet_import(os.path.dirname(PKG_DIR), "import spacecost") == ([], 1)
 
 
 # Two files are allowed a real `print`, for opposite reasons:
@@ -65,40 +58,22 @@ def test_no_bare_print_calls():
     This is what stops a progress line reappearing in a module somebody imports
     for one launch price.
     """
-    offenders = []
-    for path in _python_files():
-        if os.path.basename(path) in _PRINT_IS_ALLOWED:
-            continue
-        tree = ast.parse(open(path, encoding="utf-8").read())
-        for node in ast.walk(tree):
-            if (isinstance(node, ast.Call) and isinstance(node.func, ast.Name)
-                    and node.func.id == "print"):
-                offenders.append(os.path.basename(path) + ":" + str(node.lineno))
+    lib = [p for p in _python_files() if os.path.basename(p) not in _PRINT_IS_ALLOWED]
+    offenders, _ = source.calls(os.path.dirname(PKG_DIR), lib, ["print"])
     assert not offenders, "bare print() calls: " + ", ".join(offenders)
 
 
 def test_printed_strings_are_ascii():
-    """No string that can reach stdout carries a character cp1252 cannot encode.
+    """No string that can reach stdout carries a non-ASCII character.
 
     Only the arguments of `say(...)` and `print(...)` are checked.  A `notes`
-    field is data and keeps whatever it says.
+    field is data and keeps whatever it says.  ASCII rather than "encodable in
+    cp1252", which this test once accepted: cp1252 is only the first console
+    that is not UTF-8.
     """
-    offenders = []
-    for path in _python_files():
-        src = open(path, encoding="utf-8").read()
-        for node in ast.walk(ast.parse(src)):
-            if not (isinstance(node, ast.Call) and isinstance(node.func, ast.Name)
-                    and node.func.id in ("say", "print")):
-                continue
-            for sub in ast.walk(node):
-                if isinstance(sub, ast.Constant) and isinstance(sub.value, str):
-                    try:
-                        sub.value.encode("cp1252")
-                    except UnicodeEncodeError:
-                        bad = [c for c in sub.value if ord(c) > 127][:5]
-                        offenders.append(
-                            os.path.basename(path) + ":" + str(sub.lineno)
-                            + " " + repr("".join(bad)))
+    offenders, n = source.printed_non_ascii(os.path.dirname(PKG_DIR), list(_python_files()),
+                                            callers=("say", "print"))
+    assert n > 0
     assert not offenders, "non-ASCII in printed strings: " + "; ".join(offenders)
 
 
