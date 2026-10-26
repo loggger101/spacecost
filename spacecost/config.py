@@ -67,6 +67,15 @@ class SpacecostConfig:
     use_yfinance:        bool = False
     use_reference_table: bool = True   # curated launch / propellant / dv / ops
 
+    # A recorded set of fuel quotes to price from, by name: one of the files
+    # in spacecost/quotes/ without its ".csv", e.g. "fuel-2026-10-17".  It
+    # gives the tables live quotes would give, without the network and the
+    # same on every run, and the tables' `catalog_date` is the day the quotes
+    # were recorded.  "" (the default) prices every propellant at reference.
+    # Setting this and `use_yfinance` together is refused: a build is either
+    # reproducible or live, never a guess at which.
+    quote_snapshot:      str  = ""
+
     # --- NETWORK -------------------------------------------------------------
     request_timeout: int = 60   # seconds per HTTP call; a timeout is a soft failure
 

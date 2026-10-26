@@ -13,6 +13,36 @@ may read a version as proof that a number moved.
 
 ## Package releases
 
+### 0.14.0 - 2026-10-26
+
+**Data contract unchanged at 1.23.6, and no row moves.** A default build
+writes the same CSVs byte for byte. New: fuel prices can come from a recorded
+quote snapshot, so a build that uses market prices can be repeated.
+
+- **`spacecost.quotes`**: recorded quotes as committed snapshots, one CSV per
+  recording with the close as the source quoted it, and a `SHA256SUMS` file
+  that `check_snapshots` holds every snapshot to, in both directions.
+  `record_snapshot` writes only finished sessions and nothing unless every
+  ticker answered. Not fuel-specific: spacevalue, economicspace's Stage 2 split
+  out, records its metal quotes with it.
+- **`SpacecostConfig.quote_snapshot`** and `spacecost build --quotes NAME`: a
+  build priced from a snapshot is the build those closes would have made live,
+  because both paths now go through `prices.fuel_prices_from_quotes`, and its
+  `catalog_date` is the day the quotes were recorded. Setting it together with
+  `use_yfinance` is refused.
+- **`spacecost quotes list | check | record`** on the command line.
+- **Two fuel snapshots ship in the wheel.** `fuel-2026-10-17` holds the closes
+  recovered from economicspace's Stage 3 tables of that date: for HO=F and
+  NG=F exactly one float32 close reproduces every live row bit for bit. Built
+  from it, all seven tables equal v0.13.0's live build fed those closes, byte
+  for byte. `fuel-2026-10-26` is the first recorded at the time (the closes of
+  2026-10-23).
+- **The live fetch moved onto `quotes.fetch_closes`**, the one loop for every
+  consumer. Its numbers are unchanged; a ticker with no data now prints as
+  FAIL rather than WARN.
+- `tests/test_consumer_contract.py` names spacevalue as the second consumer,
+  with the `spacecost.quotes` names it reads and `say`.
+
 ### 0.13.0 - 2026-10-25
 
 **Data contract unchanged at 1.23.6: three names removed, and no row moves.**

@@ -1,0 +1,3 @@
+ticker,source,close,unit,close_date,recorded_date,note
+HO=F,yfinance,4.559800148010254,gallon,2026-09-28,2026-10-17,"recovered from economicspace's Stage 3 tables of 2026-10-17 (transportation 1.23.0), which record the converted $/kg and not the close: this is the one float32 close that reproduces every live row of those tables bit for bit"
+NG=F,yfinance,3.134999990463257,MMBtu,2026-09-28,2026-10-17,"recovered from economicspace's Stage 3 tables of 2026-10-17 (transportation 1.23.0), which record the converted $/kg and not the close: this is the one float32 close that reproduces every live row of those tables bit for bit"

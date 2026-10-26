@@ -13,7 +13,9 @@ import pandas as pd
 
 from ._log import say
 from .config import CONFIG, SpacecostConfig
-from .prices import fetch_yfinance_fuel_prices, merge_propellant_prices
+from .prices import (fetch_yfinance_fuel_prices, merge_propellant_prices,
+                     snapshot_fuel_prices)
+from .quotes import load_snapshot, recorded_date
 from .tables import (build_transportation_summary, load_delta_v,
                      load_environments, load_launch_vehicles,
                      load_operational_costs, load_propellants, load_storage)
@@ -67,10 +69,21 @@ def build_catalog(
     store_df  = load_storage()
     env_df    = load_environments()
 
-    # ── Step 2, Live commodity proxies ──────────────────────────────────────
-    live_prop = (
-        fetch_yfinance_fuel_prices(config) if config.use_yfinance else pd.DataFrame()
-    )
+    # ── Step 2, Commodity proxies, live or recorded ─────────────────────────
+    if config.use_yfinance and config.quote_snapshot:
+        raise ValueError(
+            "use_yfinance and quote_snapshot are both set: choose live quotes "
+            "or the recorded snapshot %r, not both" % config.quote_snapshot)
+    if config.use_yfinance:
+        live_prop = fetch_yfinance_fuel_prices(config)
+    elif config.quote_snapshot:
+        live_prop = snapshot_fuel_prices(config)
+        # A recorded build carries the day its quotes were recorded, so two
+        # builds from one snapshot are the same bytes whatever day they run.
+        catalog_date = catalog_date or recorded_date(
+            load_snapshot(config.quote_snapshot))
+    else:
+        live_prop = pd.DataFrame()
 
     # ── Step 3, Merge live into propellant reference ────────────────────────
     prop_df = merge_propellant_prices(prop_ref, live_prop)
