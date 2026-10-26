@@ -545,8 +545,8 @@ line with no file. A newer price is a new file. `record` keeps only finished
 sessions, because while a market is open yfinance's last bar is the latest
 trade, not a settlement, and it writes nothing unless every ticker answered.
 
-`fuel-2026-10-17` is different from the rest: nobody recorded those closes at
-the time. economicspace's Stage 3 tables of that date kept only the converted
+`fuel-2026-10-17` was made differently. Nobody recorded those closes at the
+time. economicspace's Stage 3 tables of that date kept only the converted
 $/kg, and for each ticker exactly one float32 close reproduces every one of
 their live rows bit for bit. That close is what the snapshot holds, and its
 `note` column says so.
