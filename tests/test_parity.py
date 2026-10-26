@@ -40,6 +40,8 @@ import sys
 import numpy as np
 import pandas as pd
 import pytest
+# float_precision="round_trip": the default parser is not correctly rounded.
+from samebytes.frames import read_exact
 
 import spacecost
 
@@ -133,8 +135,7 @@ def test_summary_values_are_portable(built):
     that last-bit differences in exp() do not.
     """
     table_dir, frames = built
-    want = pd.read_csv(os.path.join(REFERENCE, "summary_sample.csv"),
-                       float_precision="round_trip")
+    want = read_exact(os.path.join(REFERENCE, "summary_sample.csv"))
     stride = _summary_meta()["stride"]
     got = frames["summary"].iloc[::stride].reset_index(drop=True)
 
