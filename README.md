@@ -449,7 +449,8 @@ whose `read_exact` reads the committed summary back without losing a float's
 last bit. The tree lives in a synced folder, so `.githooks/` carries samebytes'
 hook that repairs git's stat cache after a checkout or merge; opt in once with
 `git config core.hooksPath .githooks`. CI's `hooks` job holds the copies to
-the samebytes release they came from.
+the samebytes release the test extra pins, and `tests/test_docs.py` holds every
+git pin to one ref.
 
 Two details of the writer are load-bearing and must not be tidied away:
 

@@ -182,6 +182,24 @@ def test_requirements_match_the_package_metadata():
     assert bad == [] and n > 0
 
 
+# The files a `github.com/loggger101/<repo>@<ref>` pin can sit in.  CHANGELOG
+# is left out: an old pin there is history.
+PINNED = ["pyproject.toml", "requirements.txt", "requirements-live.txt",
+          ".github/workflows/tests.yml", "README.md", "CITATIONS.md"]
+
+
+def test_git_pins_agree():
+    """Every git pin of a sibling repository names one ref.
+
+    samebytes is pinned in pyproject's test extra and in two CI steps (the
+    wheel's consumer-contract run and the hooks check).  A repin that reaches
+    one copy installs two releases, and both import cleanly: the hooks job
+    pinned v0.1.0 while the test extra pinned v0.3.0 until samebytes v0.5.0.
+    """
+    bad, n = docs.pins(HERE, PINNED, "loggger101")
+    assert bad == [] and n >= 3, "; ".join(bad)
+
+
 # ------------------------------------------------------------------ structure
 @pytest.mark.parametrize("name", DOCS)
 def test_markdown_structure(name):
