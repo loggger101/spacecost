@@ -40,10 +40,12 @@ live = ["yfinance>=0.2"]
 # samebytes (no dependencies of its own) reads the committed summary back in
 # tests/test_parity.py and tools/refresh_reference.py without losing a float's
 # last bit, and holds tests/test_docs.py and test_quiet.py to the house rules
-# the family shares (`samebytes.docs`, `samebytes.source`).
+# the family shares (`samebytes.docs`, `samebytes.source`), the config's help
+# to the rule economicspace's dashboard reads it by, and every git pin here to
+# one ref.  CI pins it twice more; tests/test_docs.py holds the three together.
 test = [
     "pytest>=7.0",
-    "samebytes @ git+https://github.com/loggger101/samebytes@v0.3.0",
+    "samebytes @ git+https://github.com/loggger101/samebytes@v0.5.0",
 ]
 
 [project.urls]

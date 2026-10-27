@@ -32,11 +32,11 @@ the right shape for a contract: it changes only when somebody decides it
 changes.
 """
 
-import ast
 import dataclasses
 import inspect
-import io
-import tokenize
+import os
+
+from samebytes import source
 
 import spacecost
 
@@ -172,42 +172,6 @@ def test_the_contract_is_public():
         + ", ".join(undeclared))
 
 
-def _field_help(cls):
-    """field name -> its help text, by the rule economicspace's dashboard uses.
-
-    The comment block directly above the field, stopping at a blank line or a
-    section banner (`# --- TITLE ---`) or rule, else a trailing comment on the
-    field's own line.  A banner is a heading, not help: a bare field directly
-    under one has none.
-    economicspace's `ui_meta.scrape_field_docs` reads this file's
-    `SpacecostConfig` that way and shows the result as each Stage 3 dial's help.
-    """
-    src = inspect.getsource(inspect.getmodule(cls))
-    lines = src.split("\n")
-    trailing = {}
-    for tok in tokenize.generate_tokens(io.StringIO(src).readline):
-        if tok.type == tokenize.COMMENT:
-            row, col = tok.start
-            if lines[row - 1][:col].strip():
-                trailing[row] = tok.string.lstrip("#").strip()
-    node = next(n for n in ast.walk(ast.parse(src))
-                if isinstance(n, ast.ClassDef) and n.name == cls.__name__)
-    out = {}
-    for stmt in node.body:
-        if not (isinstance(stmt, ast.AnnAssign) and isinstance(stmt.target, ast.Name)):
-            continue
-        block, i = [], stmt.lineno - 2
-        while i >= 0 and lines[i].strip().startswith("#"):
-            text = lines[i].strip().lstrip("#").strip()
-            if text[:2] and set(text[:2]) <= set("-=─━═"):
-                break
-            block.append(text)
-            i -= 1
-        out[stmt.target.id] = (" ".join(b for b in reversed(block) if b)
-                               or trailing.get(stmt.lineno, ""))
-    return out
-
-
 def test_every_config_field_has_help():
     """Every `SpacecostConfig` dial carries a comment the dashboard can show.
 
@@ -215,12 +179,20 @@ def test_every_config_field_has_help():
     dashboard help is scraped from this file, and its docs harness fails on a
     dial with none.  A field added here without a comment would fail that
     consumer's checks rather than this package's.
+
+    The rule is samebytes' `source.field_docs`, the one economicspace's
+    dashboard calls: the comment block directly above a field, to the first
+    blank line, banner or bare rule, plus a trailing comment on its own line.
+    This file kept a hand-written copy of it until samebytes v0.5.0, and the
+    copy had drifted (spaces for line breaks, the trailing comment dropped
+    when a block exists, a drawn table row read as a banner).  Every field
+    must be declared by `SpacecostConfig` itself, since an inherited field's
+    help would be read from another file.
     """
-    fields = {f.name for f in dataclasses.fields(spacecost.SpacecostConfig)}
-    helps = _field_help(spacecost.SpacecostConfig)
-    assert set(helps) == fields
-    bare = sorted(n for n, h in helps.items() if not h)
-    assert not bare, "SpacecostConfig fields with no help comment: %s" % bare
+    fields = [f.name for f in dataclasses.fields(spacecost.SpacecostConfig)]
+    path = inspect.getsourcefile(spacecost.SpacecostConfig)
+    bad, n = source.missing_help(os.path.dirname(path), path, "SpacecostConfig", fields=fields)
+    assert bad == [] and n == len(fields), "; ".join(bad)
 
 
 def test_the_snapshot_field_the_consumer_sets_exists():
