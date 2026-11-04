@@ -59,13 +59,16 @@ def test_the_seed_prices_the_rows_economicspace_recorded():
 
     Typed from that file, read back with full precision.  The seed was chosen
     as the one float32 close per ticker that reproduces them, so equality here
-    is exact, not approximate.
+    is exact, not approximate.  Methalox is the exception since data contract
+    1.24.0: a Henry Hub quote is now read as gross heat, so that row is the
+    table's value of methane moved by that factor, and the file said
+    0.1888190542495769.
     """
     got = snapshot_fuel_prices(SpacecostConfig(quote_snapshot=SEED))
     got = got.set_index("name")["live_cost_usd_per_kg"].to_dict()
     assert got == {
         "kerolox  (RP-1 / LOX)":               0.5713723376162302,
-        "methalox  (LCH4 / LOX)":              0.1888190542495769,
+        "methalox  (LCH4 / LOX)":              0.19239371808131428,
         "HTP / RP-1  (peroxide bipropellant)": 1.4255287141335595,
     }
 

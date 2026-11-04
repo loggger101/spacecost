@@ -40,7 +40,7 @@ ones that carry more than one row.
 | SatBase 2026-02 SpaceX price update | Falcon 9 list price, and the rise used to carry Falcon Heavy's older quotes forward |
 | Voyager Technologies final prospectus (SEC Form 424B4, Jun 2025), Commitments and Contingencies note | Starship dedicated-launch price (low end of its range): one Starlab launch committed at $90.0M |
 | NASA Office of Inspector General, IG-22-003 (Nov 2021) and Oct 2023 audit | SLS launch-only cost: $2.2B vehicle + $568M ground, "at least $2.5B" |
-| NASA, Feb 2026 Artemis restructuring (SpaceNews, SatNews) | SLS Block 1B and the Exploration Upper Stage cancelled |
+| NASA, FY 2027 Budget Estimates, pp39-40 (Apr 2026); Feb 2026 Artemis restructuring announcement (SpaceNews, SatNews) | SLS Block 1B and the Exploration Upper Stage cancelled |
 | ULA RocketBuilder, and SpaceNews 2024-2026 | Atlas V pricing and sales end; Vulcan's "starting at $110M" |
 | Blue Origin via Wikipedia and Spaceflight Now, 2025-2026 | New Glenn price range, payloads, and the NG-1 to NG-3 record; 9x4 payloads |
 | Rocket Lab Form 10-Q, FY2026 Q1 (MD&A, revenue per launch), and Spaceflight Now Aug 2026 | Electron pricing (the band is Q1 2025 and Q1 2026 actual revenue per launch); Neutron price and schedule |
@@ -99,9 +99,11 @@ so a study can state what it excluded.
 | DOD Aerospace Standard Prices, FY20 | hydrazine, MMH, N2O4 pricing (a list no longer findable to re-check) |
 | DLA Energy, Aerospace Standard Prices FY2025 (effective Oct 1 2024) | the government price of MMH, NTO and hydrazine, quoted beside the rows as a comparison and not used for a value |
 | Space Insider, How Much Does Rocket Fuel Really Cost? (J. Seibert, Jun 13 2023) | hydrazine's commercial price, up to ~$75.8/kg (once cited as "AIAA 2024") |
-| SETS Space / Electric Propulsion, 2024 | xenon and argon ion pricing, and the high end of krypton's band ("$2,100-$4,800" flight grade) |
-| Idaho National Laboratory, INL/RPT-23-75203, Krypton and xenon recovery cost-benefit, 2023 | the low end of krypton's band: a market survey putting bulk Kr prices at "around $1/L" |
-| Mobius / Energy CG, 2024 | liquid methane commodity pricing |
+| SETS Space / Electric Propulsion, 2024 | argon ion pricing, and the high end of krypton's band ("$2,100-$4,800" flight grade) |
+| Idaho National Laboratory, INL/RPT-23-75203, Krypton and xenon recovery cost-benefit, 2023 | the low end of krypton's band: a market survey putting bulk Kr prices at "around $1/L"; and the price of xenon, around $60/L in Q1 2023 |
+| World Bank Commodity Markets (Pink Sheet), natural gas US and LNG Japan, 2025 means | the two ends of the bracket liquid methane's $0.40/kg sits in |
+| Rafalskyi et al., Nature 599, 2021; USGS Mineral Commodity Summaries 2026, Iodine | iodine's flight record, and its market; the paper's US$60 is a total cost, not a price per kg |
+| CME Rulebook Chapter 220; Sabine Pipe Line tariff section 7.1; ASHRAE 2021 Fundamentals ch. 28 Table 3; NIST SP 811 Appendix B.8 | the gross-heat basis of a Henry Hub quote and the conversion to methane's USD/kg |
 | NASA-STD-(I)-5019 class hardware | COPV burst performance factor, ~392 kJ/kg |
 | Shuttle External Tank, Falcon 9 second stage, Centaur III | the flight anchors the tankage model is calibrated on |
 | Manufacturer data sheets, per device | thruster kg/N, efficiency, thrust scaling |
@@ -161,7 +163,7 @@ Lambert solve against an ephemeris; these are what you price the answer with.
 | Kleinhenz & Paz, A Lunar Water ISRU System Study for Human-Scale Propellant Production, PTMSS/SRR 2021, NTRS 20210016820 | ISRU propellant plant throughput (2.6 t for 11.67 t of hydrolox in 225 days), and the whole-plant cross-check on the processing energy (46 kW) |
 | Kleinhenz & Paz, An ISRU Propellant Production System for a Fully Fueled Mars Ascent Vehicle (the NTRS-hosted copy of the same paper titles it An ISRU Propellant Production System to Fully Fuel a Mars Ascent Vehicle), AIAA 2017-0423 / DOI 10.2514/6.2017-0423, NTRS 20170005179 | the high end of the plant throughput band (1.7 t for 29.7 t of CH4/O2 in 480 days) |
 | Plane Talking (Gallagher) / Slingshot Aerospace, 2024 | launch insurance market rate, and the 2023 losses behind it |
-| Damodaran (NYU Stern), Cost of Capital by Industry Sector (Jan 2026); Boeing and Howmet filings | cost-of-capital floor: industry averages, with no startup premium |
+| Damodaran (NYU Stern), Cost of Capital by Industry Sector (Jan 2026) | cost-of-capital floor: industry averages, with no startup premium |
 | McKeown, What is an appropriate investment hurdle rate for commercial space resource development projects?, 2024 | the 10% standard discount rate for space-resource projects, and hurdle rates near 25% |
 | Scottoline & Coleman, Effectiveness of Loan Guarantees versus Tax Incentives for Space Launch Ventures, 1999, NTRS 19990101869 | launch-venture debt at 14% or more without guarantees |
 | The Planetary Society, Planetary Exploration Budget Dataset | Perseverance development + launch cost, the scale behind the autonomy NRE (the autonomy share itself is unsourced) |
@@ -230,6 +232,7 @@ and the light time all follow from those by formula. The formulas are in
 | Russell et al. 2016, *Science* (Dawn) | Ceres mass and radius |
 | Kretlow 2020, SiMDA data set (as tabulated in Kretlow 2022, *A&A* 668:A141, Table 2) | Psyche mass |
 | Siltala & Granvik 2021 | Psyche radius, and a mass 3% below the row's as a cross-check |
+| Ferrais, Vernazza, Jorda et al., A&A 638:L15 (2020), DOI 10.1051/0004-6361/202038100 | Psyche's volume-equivalent diameter, the one Siltala & Granvik adopt |
 | JPL Small-Body Database | perihelion, semi-major axis and aphelion for every named body |
 
 **Illumination and orbits**

@@ -228,8 +228,8 @@ ENVIRONMENTS_REFERENCE: List[dict] = [
          "Wh/kg in OPERATIONAL_COSTS is 341 kg of battery to keep a 100 W load "
          "alive through one night.  This single row is the reason lunar surface "
          "power architectures reach for fission rather than for solar.  Mass "
-         "7.342e22 kg, mean radius 1,737.4 km (NASA Moon Fact Sheet).",
-         mass_kg=7.342e22, mean_radius_m=1_737_400.0),
+         "7.346e22 kg, mean radius 1,737.4 km (NASA Moon Fact Sheet).",
+         mass_kg=7.346e22, mean_radius_m=1_737_400.0),
     _env("Lunar surface (polar ridge)", "moon_surface",
          0.9833, 1.0000, 1.0167, 708.7, 0.14, 0.002_57,
          "A peak of near-eternal light on the Shackleton or de Gerlache rim: "
@@ -239,7 +239,7 @@ ENVIRONMENTS_REFERENCE: List[dict] = [
          "architecture wants the same handful of ridges - and note that the "
          "ICE is in the crater below, permanently shadowed, so the power and "
          "the water are not in the same place.",
-         mass_kg=7.342e22, mean_radius_m=1_737_400.0),
+         mass_kg=7.346e22, mean_radius_m=1_737_400.0),
 
     # ═════════════════════════════════════════════════════════════════════════
     # Near-Earth objects.  All four named ones have had a spacecraft at them,
@@ -310,9 +310,9 @@ ENVIRONMENTS_REFERENCE: List[dict] = [
          "Opportunity's array output by over 99% and ended the mission, and "
          "Mars surface flux at the panel runs 40-60% of the orbital figure "
          "even on a clear day (Appelbaum & Flood, NASA TM-102299).  Size for "
-         "the storm, not for the geometry.  Mass 6.4171e23 kg, mean radius "
+         "the storm, not for the geometry.  Mass 6.4169e23 kg, mean radius "
          "3,389.5 km (NASA Mars Fact Sheet).",
-         mass_kg=6.4171e23, mean_radius_m=3_389_500.0),
+         mass_kg=6.4169e23, mean_radius_m=3_389_500.0),
     _env("Phobos", "moon_surface",
          1.3814, 1.5237, 1.6660, 7.653, 0.50, 2.6827,
          "Tidally locked, 7.65-h orbit and rotation.  Mass 1.0659e16 kg, mean "

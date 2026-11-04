@@ -409,6 +409,9 @@ DOWNLEG_CAPSULE_DRY_FRAC   = 0.10   # capsule dry mass per kg of cargo
 # Mirrors economicspace's Module 4 config dial `heat_shield_frac_of_payload`.
 # Typed rather than read, because it is a modelling choice belonging to that
 # pipeline and there is no TPS-fraction row in these tables to derive it from.
+# One fraction for every destination, at no stated entry speed: LEO, GEO and
+# lunar returns differ by several km/s, and shield mass rises with entry speed
+# (Dec & Braun 2006).
 DOWNLEG_TPS_FRAC           = 0.15
 DOWNLEG_CAPSULE_USD_PER_KG = _ops("Return capsule recurring cost")
 DOWNLEG_TPS_USD_PER_KG     = _ops("Heat shield / TPS for Earth return")

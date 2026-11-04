@@ -176,10 +176,15 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "list_price_usd_low":        90_000_000,
         "price_basis":                   "estimate",
         "reference_year":          _REF_YEAR_LAUNCH,
-        "notes": "Source: SpaceX / Wikipedia payload figures.  SpaceX does not "
+        "notes": "Source: SpaceX payload figures; 22,800 kg LEO is also Zapata "
+                 "2017 (NASA, 'State of Play', p16).  SpaceX does not "
                  "publish an expendable price; $90-120M is the range implied by "
-                 "NASA and NSSL task orders flown expendable; the headline is "
-                 "the centre of that range.  Escape is the published Mars-transfer figure, which is "
+                 "NASA and NSSL task orders flown expendable, in nominal "
+                 "dollars; the headline is the centre of that range.  The same "
+                 "chart prices NASA LSP Class C science at $92M and DoD GPS at "
+                 "$97M in 2017 dollars, $124M and $131M at CPI-U x1.3484 (Dec "
+                 "2017 to Aug 2026), above the band's top.  "
+                 "Escape is the published Mars-transfer figure, which is "
                  "harder than C3=0 and so conservative for it.",
     },
     {
@@ -230,8 +235,11 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
                  "IG-24-001, p24; awarded 2021), a government full-service "
                  "price the band spans by decision.  Until 0.8.0 the high end "
                  "was the $150M carried forward by the 2026 Falcon 9 rise "
-                 "($159M), and the centre $154M.  The "
-                 "63.8 t LEO figure has never been flown; no Falcon Heavy "
+                 "($159M), and the centre $154M.  This row mixes nominal "
+                 "years: the 2017 low end is $202M at CPI-U x1.3484 (Dec 2017 "
+                 "to Aug 2026), above the high end.  The "
+                 "63.8 t LEO figure (Zapata 2017, NASA, 'State of Play', p16) "
+                 "has never been flown; no Falcon Heavy "
                  "payload has come close to it.  Volume, not mass, binds first "
                  "at this size: the fairing is the Falcon 9 fairing.",
     },
@@ -268,8 +276,7 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "availability":                  "sold_out",
         "core_propellant":               "kerolox",
         "first_flight_year":             2006,
-        "payload_leo_kg_low":            18_814,
-        "payload_leo_kg_high":           18_850,
+        "payload_leo_kg":                18_814,
         "payload_gto_kg":                 8_900,
         "payload_escape_kg":              6_500,
         "list_price_usd":           211_000_000,
@@ -282,10 +289,13 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
                  "SALE: ULA stopped selling Atlas V in Aug 2021 and every "
                  "remaining vehicle is allocated, the last of them to Starliner. "
                  "Kept because its flight record is the reference that newer "
-                 "vehicles' prices are argued against.  LEO payload: Zapata "
-                 "2017 (NASA, 'State of Play', p16) charts 18,856 kg to 200 km "
-                 "/ 28.5 deg, 6 kg above the top of this row's 18,814-18,850 "
-                 "band, whose own source is not recorded.",
+                 "vehicles' prices are argued against.  LEO payload: Atlas V "
+                 "Launch Services User's Guide Rev 11 (Mar 2010), Table "
+                 "2.6.5-2f, single burn to 200 km, 18,814 kg of payload system "
+                 "weight, adapter included.  Zapata 2017 (NASA, 'State of "
+                 "Play', p16) charts 18,856 kg to 200 km / 28.5 deg, 42 kg "
+                 "above it.  The 18,850 kg high end this row carried until "
+                 "0.15.0 matches no table in the guide.",
     },
     {
         "name":                          "Vulcan Centaur VC2",
@@ -304,7 +314,8 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "reference_year":          _REF_YEAR_LAUNCH,
         "notes": "Source: ULA 'starting at $110M', which is the smallest "
                  "configuration, so this row is the only one it prices "
-                 "directly.  Payloads from ULA via Wikipedia.  Escape band runs "
+                 "directly.  LEO: Vulcan User's Guide (Oct 2023), Table "
+                 "2.2.1-1, 16,300 kg to the 407 km / 51.6 deg ISS orbit.  Escape band runs "
                  "from Mars transfer (harder than C3=0) to TLI (easier).  Maiden "
                  "flight carried Peregrine, Jan 2024.",
     },
@@ -324,7 +335,8 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "list_price_usd_low":       110_000_000,
         "price_basis":                   "estimate",
         "reference_year":          _REF_YEAR_LAUNCH,
-        "notes": "Source: ULA payload figures via Wikipedia.  ULA's $110M is a "
+        "notes": "LEO: Vulcan User's Guide (Oct 2023), Table 2.2.1-1, 21,400 kg "
+                 "to the 407 km / 51.6 deg ISS orbit, on the long upper stage.  ULA's $110M is a "
                  "STARTING price and each pair of GEM 63XL boosters adds to it; "
                  "$130M is an estimate, not a quote.  Two of four Vulcan flights "
                  "to Feb 2026 had a GEM 63XL anomaly (a lost nozzle Oct 2024, a "
@@ -349,8 +361,11 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "list_price_usd_low":       110_000_000,
         "price_basis":                   "estimate",
         "reference_year":          _REF_YEAR_LAUNCH,
-        "notes": "Source: ULA payload figures via Wikipedia; the high ends are "
-                 "the RL10E-upgraded Centaur.  Until v1.16.0 this row priced VC6 "
+        "notes": "LEO band spans two orbits: 25,600 kg to the 407 km / 51.6 deg "
+                 "ISS orbit (Vulcan User's Guide, Oct 2023, Table 2.2.1-1, long "
+                 "upper stage) and 27,200 kg to 200 km / 28.7 deg (ULA technical "
+                 "summary, 2022); the GTO high end is the RL10E-upgraded "
+                 "Centaur.  Until v1.16.0 this row priced VC6 "
                  "at $110M, which is ULA's STARTING price for the smallest "
                  "config; six GEM 63XLs are not free, and $150M is an estimate. "
                  "Its old 7,200 kg 'escape' figure was the GEO payload; escape "
@@ -390,8 +405,7 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "availability":                  "open",
         "core_propellant":               "kerolox",
         "first_flight_year":             2017,
-        "payload_leo_kg_low":               300,
-        "payload_leo_kg_high":              320,
+        "payload_leo_kg":                   300,
         "payload_gto_kg":                     0,
         "payload_escape_kg":                  0,
         "list_price_usd_low":         7_100_000,    # 10-Q FY2026 Q1: Q1 2025 actual
@@ -404,7 +418,9 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
                  "customer mix and mission complexity, and gives cost per "
                  "launch as $5.4M and $5.7M.  Until 0.7.0 the row carried "
                  "$7.5M, attributed to this filing, which does not contain "
-                 "it.  Current published capacity 300 kg LEO / 200 kg SSO.  Small-sat "
+                 "it.  Payload User's Guide v8.0: up to 300 kg LEO, nominal 200 "
+                 "kg to 500 km SSO; the 320 kg high end this row carried until "
+                 "0.15.0 is not in the guide.  Small-sat "
                  "dedicated; useful for prospector probes only.  Its Photon "
                  "kick stage did send CAPSTONE (~25 kg) to the Moon, but that "
                  "is a spacecraft bus, not a launch capability, so escape is 0.",
@@ -448,6 +464,10 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "notes": "Source: Wikipedia — ~$50M (2010), carried to 2026 dollars by "
                  "CPI-U (Dec 2010 to Aug 2026, x1.5155) for the high end; it "
                  "used x1.45, an annual chain that stopped at 2024, until 0.6.0.  "
+                 "Payload low end: Wikipedia's infobox, 200 km / 28.5 deg; the "
+                 "User's Guide 2.5 (Nov 2025) gives curves in section 3.3, "
+                 "counting the separation system and adapter as payload.  The "
+                 "1,735 kg high end's source is not recorded.  "
                  "US GOVERNMENT MISSIONS ONLY: it "
                  "flies surplus Peacekeeper ICBM motors, which law restricts to "
                  "government use.  Still flying (NROL-174 Apr 2025, STP Apr "
@@ -466,7 +486,7 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "core_propellant":               "kerolox",
         "first_flight_year":             2004,
         "payload_leo_kg_low":             6_800,    # Plesetsk, 72 deg
-        "payload_leo_kg_high":            7_430,    # Baikonur, 51.6 deg
+        "payload_leo_kg_high":            7_460,    # Vostochny, 51.6 deg
         "payload_gto_kg":                np.nan,
         "payload_escape_kg":             np.nan,
         "list_price_usd_high":       35_000_000,
@@ -515,7 +535,11 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "list_price_usd":           100_000_000,
         "price_basis":                   "reported",
         "reference_year":          _REF_YEAR_LAUNCH,
-        "notes": "Source: Wikipedia (Angara family) — $100M (2021).  Five flights "
+        "notes": "Source: Khrunichev's 2019 financial report via BBC Russian, "
+                 "production cost 7.0 billion rubles against a 2024 target of "
+                 "4.0: $108M at the 2019 rate and $95M at 2021's, either side of "
+                 "this $100M.  LEO: 24.5 t (Khrunichev, via BBC; Roscosmos, 24-"
+                 "24.5 t, Scientific Russia, 2024).  Five flights "
                  "since 2014, one partial failure; first from Vostochny Apr "
                  "2024.  Replaces Proton.  Sanctions-restricted.",
     },
@@ -535,7 +559,10 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "list_price_usd":            65_000_000,
         "price_basis":                   "reported",
         "reference_year":          _REF_YEAR_LAUNCH,
-        "notes": "Source: Wikipedia (Proton-M) — $65M.  116 launches, 9 failures "
+        "notes": "Source: Wikipedia (Proton-M) — $65M.  LEO: ILS Proton Mission "
+                 "Planner's Guide Rev 7, Table 2.2-1, circular 180 km on three "
+                 "stages: 22 t at 64.8 deg, 23 t at 51.5 deg, 21 t at 72.6 deg. "
+                 "116 launches, 9 failures "
                  "and 2 partial.  Being retired: no new contracts are expected "
                  "and the last manifested flights are for 2029.  Escape is "
                  "ExoMars TGO's ~4.3 t Mars departure, a flown figure.",
@@ -564,7 +591,9 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "notes": "Price €100M (2024 est.) at $1.15/€ = $115M, an estimate "
                  "with no institutional source: Arianespace publishes no list "
                  "price (contracts are negotiated) and the ESA Ariane 6 "
-                 "overview, which this row once cited, states payloads only.  "
+                 "overview, which this row once cited, states payloads only: "
+                 "approximately 10.3 t LEO, so the 10,350 kg high end is a "
+                 "tolerance, not a source.  "
                  "Against the ~€70M this row used to assume.  "
                  "Worse $/kg than A64, which is the usual result when a vehicle "
                  "is flown below its designed lift.  Nine Ariane 6 flights to "
@@ -590,7 +619,11 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "notes": "€115M (2018 est.) at $1.15/€ = $132M as the high end, an "
                  "estimate with no institutional source (Arianespace publishes "
                  "no list price; the ESA overview states payloads only), with the $115M this row used to carry "
-                 "as the low end.  Four-booster config; first flew Feb 2026.",
+                 "as the low end.  Payload: the ESA overview's approximately "
+                 "21.6 t LEO; the 21,500 and 21,650 kg ends are a tolerance "
+                 "around it, and the VA269 launch kit (Jun 2026) gives "
+                 "approximately 22 t after the P160C booster upgrade.  "
+                 "Four-booster config; first flew Feb 2026.",
     },
     {
         "name":                          "Vega C",
@@ -600,18 +633,19 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "availability":                  "open",
         "core_propellant":               "solid",
         "first_flight_year":             2022,
-        "payload_leo_kg_low":             2_250,    # 500 km polar
-        "payload_leo_kg_high":            3_300,    # low equatorial-class figure
+        "payload_leo_kg":                 2_250,    # 500 km polar, adapter included
         "payload_gto_kg":                     0,
         "payload_escape_kg":                  0,
         "list_price_usd_high": int(round(48_000_000 * _USD_PER_EUR, -6)),
         "list_price_usd_low":        37_000_000,
         "price_basis":                   "reported",
         "reference_year":          _REF_YEAR_LAUNCH,
-        "notes": "Source: Avio / ESA via Wikipedia — €48M (2022) = $55M; the "
-                 "published payloads are 2,300 kg to 700 km SSO and 2,250 kg to "
-                 "500 km polar, and the 3,300 kg this row used to headline is "
-                 "the optimistic end.  VV22 failed Dec 2022 (Zefiro 40 nozzle); "
+        "notes": "Source: Avio / ESA via Wikipedia — €48M (2022) = $55M.  "
+                 "Payload: Vega C User's Manual Issue 0 Rev 0, Table 2.4.2.a, "
+                 "2,250 kg to 500 km polar at 88 deg, adapter included; its "
+                 "Figure 2.4.1.e reads about 2,150-2,250 kg to 700 km SSO.  The "
+                 "3,300 kg this row carried until 0.15.0 is not in the manual, "
+                 "whose SSO chart stops at 2,700 kg.  VV22 failed Dec 2022 (Zefiro 40 nozzle); "
                  "returned to flight Dec 2024.  Useful for a prospector probe, "
                  "not a mining rig.",
     },
@@ -727,9 +761,11 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
                  "~$31M commercial.  Escape is 0: Chandrayaan-1 and the Mars "
                  "Orbiter Mission were both put into elongated EARTH orbits and "
                  "raised themselves, so the 1,100 kg escape figure this row used "
-                 "to carry was not a PSLV capability.  PSLV failed in May 2025 "
-                 "(C61) and Jan 2026 (C62), both in flight control near stage "
-                 "separation.",
+                 "to carry was not a PSLV capability.  ISRO's mission pages: "
+                 "C61 (May 2025) was normal to the second stage, with an "
+                 "observation in the third, and the mission was not "
+                 "accomplished; C62 (Jan 2026) had an anomaly at the end of the "
+                 "third stage, with detailed analysis started.",
     },
     {
         "name":                          "GSLV Mk II",
@@ -746,7 +782,10 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "list_price_usd":            47_000_000,
         "price_basis":                   "reported",
         "reference_year":          _REF_YEAR_LAUNCH,
-        "notes": "Source: Wikipedia — $47M.  13 flights, 2 failures.  Solid core "
+        "notes": "Source: Wikipedia — $47M.  Payload: ISRO's vehicle page, "
+                 "whose GTO figure is this band's low end; the high end is not "
+                 "in ISRO's specification.  ISRO's manifest: 19 launches to Sep "
+                 "2026, 4 marked unsuccessful.  Solid core "
                  "with hypergolic strap-ons and an Indian cryogenic upper stage. "
                  "Flew NISAR.  Mostly Indian government payloads.",
     },
@@ -784,7 +823,9 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "list_price_usd_low":        30_000_000,
         "price_basis":                   "estimate",
         "reference_year":          _REF_YEAR_LAUNCH,
-        "notes": "Source: Wikipedia — 3.3 t to 200 km, 1.9 t to 700 km SSO; "
+        "notes": "Source: Wikipedia — 3.3 t to 200 km, 1.9 t to 700 km SSO, an "
+                 "altitude KARI never quotes: its pages give a 1.5 t class "
+                 "satellite to 600-800 km, about $24,500/kg at this price; "
                  "launch cost 'estimated around $30M', the band's low end, with "
                  "room above it for an unpriced government vehicle.  First flight failed (2021); "
                  "three successes since, the latest Nov 2025.",
@@ -864,7 +905,10 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "list_price_usd_low":        30_000_000,
         "price_basis":                   "estimate",
         "reference_year":          _REF_YEAR_LAUNCH,
-        "notes": "Source: Wikipedia payloads; price estimated against the "
+        "notes": "Source: Wikipedia's Long March 4C article for LEO and GTO, "
+                 "resting on one skyrocket.de snapshot of Apr 2008; CASC states "
+                 "only 2.8 t to 800 km sun-synchronous (2015) and 3 t to 700 km "
+                 "SSO (Apr 2026).  Price estimated against the "
                  "sister Long March 4B's $50M (2006).  ~59 launches.",
     },
     {
@@ -875,7 +919,7 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "availability":                  "restricted",
         "core_propellant":               "hydrolox",
         "first_flight_year":             2016,
-        "payload_leo_kg":                25_000,    # the 5B core-only variant
+        "payload_leo_kg":                25_000,
         "payload_gto_kg":                14_000,
         "payload_escape_kg_low":          8_200,    # Chang'e-5 TLI
         "payload_escape_kg_high":         9_400,    # rated TLI
@@ -885,9 +929,10 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "reference_year":          _REF_YEAR_LAUNCH,
         "notes": "Source: Wikipedia / China-in-Space — payload masses "
                  "authoritative; ~$160M is Wikipedia's estimate and the high "
-                 "end, against the $110M this row used to carry.  The LEO figure is "
-                 "the Long March 5B; the GTO and escape figures are the "
-                 "two-stage 5.  Chang'e-5 and Tianwen-1 heritage (Mars transfer "
+                 "end, against the $110M this row used to carry.  The State "
+                 "Council Information Office gives Long March 5 25 t to LEO or "
+                 "14 t to GTO (2018), and the 5B 22 t to LEO (2020).  "
+                 "Chang'e-5 and Tianwen-1 heritage (Mars transfer "
                  "~6 t).  17 of 18 successful.",
     },
     {
@@ -905,10 +950,12 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "list_price_usd_low":        35_000_000,
         "price_basis":                   "estimate",
         "reference_year":          _REF_YEAR_LAUNCH,
-        "notes": "Source: Wikipedia payloads (8 t LEO, 6.5 t 500 km SSO); price "
+        "notes": "Source: Wikipedia payloads (8 t LEO, 6.5 t 500 km SSO); CASC "
+                 "states only not less than 4 t to 700 km SSO.  Price "
                  "estimated.  26 for 26 to Jul 2026, but its upper stage has "
-                 "broken up in orbit after several flights, the Nov 2022 one "
-                 "into 700+ tracked pieces.",
+                 "broken up in orbit (Nov 2022 and Mar, Jul and Aug 2024), the "
+                 "Nov 2022 one into 781 catalogued pieces, 722 still on orbit "
+                 "in June 2023 (NASA ODQN 27-3, Table 1).",
     },
     {
         "name":                          "Long March 7",
@@ -925,7 +972,9 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "list_price_usd_low":        50_000_000,
         "price_basis":                   "estimate",
         "reference_year":          _REF_YEAR_LAUNCH,
-        "notes": "Source: CASC / Wikipedia payload figures; price estimated. "
+        "notes": "Source: CALT via China Daily, 13.5 t to LEO (Jul 2025) and 7 t "
+                 "to GTO (Aug 2026); Wikipedia alone gives the orbit, 200-400 km "
+                 "/ 42 deg; price estimated. "
                  "The LEO figure is the two-stage 7, which flies Tianzhou cargo "
                  "to the Chinese station; the GTO figure is the three-stage 7A "
                  "(2 failures in 18).  The 4,000 kg escape figure this row used "
@@ -939,14 +988,19 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "availability":                  "restricted",
         "core_propellant":               "kerolox",
         "first_flight_year":             2025,
-        "payload_leo_kg":                10_000,
+        "payload_leo_kg":                 7_000,
         "payload_gto_kg":                 3_500,
         "payload_escape_kg":             np.nan,
         "list_price_usd_high":       70_000_000,
         "list_price_usd_low":        40_000_000,
         "price_basis":                   "estimate",
         "reference_year":          _REF_YEAR_LAUNCH,
-        "notes": "Source: Wikipedia payloads; price estimated.  11 flights since "
+        "notes": "Source: CALT via the State Council Information Office, about "
+                 "7 t to LEO; Wikipedia's per-variant row gives the same 7,000 "
+                 "kg, to 700 km SSO.  The 10 t this row carried until 0.15.0 is "
+                 "in neither, and Wikipedia's 8,100 kg infobox figure is the "
+                 "base CZ-8.  The GTO figure has no current source.  Price "
+                 "estimated.  11 flights since "
                  "Feb 2025, all successful, mostly constellation deployment from "
                  "Hainan commercial pads.",
     },
@@ -966,7 +1020,10 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "list_price_usd_low":        50_000_000,
         "price_basis":                   "estimate",
         "reference_year":          _REF_YEAR_LAUNCH,
-        "notes": "Source: Wikipedia payloads; price estimated.  8 for 8, all "
+        "notes": "LEO: the low end is SAST's design target (Straits Times, Feb "
+                 "2024); the high end is Xinhua's 'no less than 12 tonnes' (Dec "
+                 "2024), an official floor, so the band's top understates it.  "
+                 "Price estimated.  8 for 8, all "
                  "Guowang deployments.  Reusable 12A and 12B variants first flew "
                  "Dec 2025 and Jun 2026 and are not yet listed.",
     },
@@ -1009,7 +1066,10 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "price_basis":                   "reported",
         "reference_year":          _REF_YEAR_LAUNCH,
         "notes": "Source: Wikipedia — ~$20,000/kg, i.e. $6-8M across the "
-                 "300-400 kg payload range.  Road-mobile solid.  2 failures "
+                 "300-400 kg payload range.  The operator states 300 kg LEO and "
+                 "200 kg SSO (China Daily, Oct 2021; the Gansu bureau's report "
+                 "says under 300 kg), the band's floor; its 400 kg ceiling is "
+                 "Wikipedia's alone.  Road-mobile solid.  2 failures "
                  "(2020, 2021).",
     },
     {
@@ -1062,7 +1122,9 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "list_price_usd":            39_000_000,
         "price_basis":                   "reported",
         "reference_year":          _REF_YEAR_LAUNCH,
-        "notes": "Source: Wikipedia — ~$39M; 6.5 t LEO, 4.2 t 500 km SSO.  The "
+        "notes": "Source: Wikipedia — ~$39M.  Payload: Orienspace's product "
+                 "page, 6.5 t LEO and 4.2 t 500 km SSO; Wikipedia gives the LEO "
+                 "figure at 200 km.  The "
                  "largest all-solid launcher flying; sea-launched.  4 for 4 to "
                  "Sep 2026.",
     },
@@ -1081,7 +1143,8 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "list_price_usd_low":         8_000_000,
         "price_basis":                   "estimate",
         "reference_year":          _REF_YEAR_LAUNCH,
-        "notes": "Source: Wikipedia payloads (2 t LEO, 1.5 t SSO); price "
+        "notes": "Source: CAS Space's product page and gov.cn, 2 t LEO and 1.5 "
+                 "t to 500 km SSO, as Wikipedia gives them; price "
                  "estimated.  16 launches, 1 failure (Dec 2024, third stage).",
     },
     {
@@ -1098,8 +1161,11 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "list_price_usd":            50_000_000,
         "price_basis":                   "published",
         "reference_year":          _REF_YEAR_LAUNCH,
-        "notes": "Source: CAS Space, 30,000 yuan/kg (Apr 2026), i.e. ~¥360M or "
-                 "~$50M for the full 12 t.  One flight (Mar 2026), carrying a "
+        "notes": "Source: CAS Space's Yang Haoliang in Cailianshe, 31 Mar 2026: "
+                 "a non-recoverable launch COST of 30,000 yuan/kg, i.e. ~¥360M or "
+                 "~$50M for the full 12 t, not a price; TMTPost puts common "
+                 "Chinese quotes at 50,000-100,000 yuan/kg.  12 t is to 200 km, "
+                 "and 8 t to 500 km SSO.  One flight (Mar 2026), carrying a "
                  "Qingzhou cargo-vessel prototype.  First-stage recovery is "
                  "planned from 2027; flies expendable today.",
     },
@@ -1139,7 +1205,8 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "reference_year":          _REF_YEAR_LAUNCH,
         "notes": "Source: Wikipedia payloads (6 t LEO, 4 t SSO); price "
                  "estimated.  Zhuque-2 family: 9 launches, 2 failures, the "
-                 "latest a 2E in Aug 2025 (second-stage voltage fault).  The "
+                 "latest failure a 2E in Aug 2025 (second-stage voltage fault), "
+                 "and a sixth 2E flew in Sep 2026 (China Daily, 2025 and 2026).  The "
                  "first methalox rocket to reach orbit (2023).",
     },
     {
@@ -1159,9 +1226,12 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "price_basis":                   "estimate",
         "reference_year":          _REF_YEAR_LAUNCH,
         "notes": "Source: Wikipedia — ZQ-3 lifts 8 t reusable (downrange "
-                 "landing) or 11.8 t expendable.  Until v1.16.0 this row "
-                 "carried 21 t / 18.3 t, which are the figures for the enlarged "
-                 "ZQ-3E, still in development.  Flights Dec 2025 (orbit, "
+                 "landing) or 11.8 t expendable; this row is the reusable mode, "
+                 "and at 11.8 t the same price is about $3,000/kg.  Until "
+                 "v1.16.0 it carried 21 t / 18.3 t, which Wikipedia gives to an "
+                 "enlarged ZQ-3E, though LandSpace's own release gives 21.3 t / "
+                 "18.3 t to the 76.6 m ZQ-3, and the vehicle that flew stood "
+                 "66.1 m (Global Times, Dec 2025).  Flights Dec 2025 (orbit, "
                  "landing failed) and Aug 2026 (orbit, first landing, stage "
                  "toppled afterwards).  Price estimated; LandSpace has not "
                  "published one.",
@@ -1230,10 +1300,17 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "payload_leo_kg":                15_000,
         "payload_gto_kg":                 6_000,
         "payload_escape_kg":              3_600,
-        "list_price_usd":            90_000_000,
+        "list_price_usd_high":       75_000_000,
+        "list_price_usd_low":        62_000_000,
         "price_basis":                   "reported",
         "reference_year":          _REF_YEAR_LAUNCH,
-        "notes": "H-IIA's last flight was F50, June 2025 (GOSAT-GW): 50 flights "
+        "notes": "Price: 9.3 billion yen for F4 (JAXA) at the World Bank's 2025 "
+                 "rate of 149.66 yen/$ is $62.1M, the low end, and the "
+                 "programme's ~10 billion yen is $66.8M at the same rate; the "
+                 "high end is The Space Review's 'about $75 million' (Mar 2023). "
+                 "The standard type's cost, so a floor for the 204.  Until 0.15.0 "
+                 "this row carried $90M, which reconciles only below 111 yen/$.  "
+                 "H-IIA's last flight was F50, June 2025 (GOSAT-GW): 50 flights "
                  "and one failure (F6, 2003).  Launched Hayabusa2 — the most "
                  "relevant flight heritage in this entire table to what this "
                  "pipeline models.  Succeeded by H3.",
@@ -1352,7 +1429,12 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "notes": "Last flight 1973 (Skylab).  ~$185M per vehicle in 1969-73 "
                  "dollars, carried to 2026 dollars; the low end is the "
                  "frequently-quoted 2020-dollar figure.  Excludes the "
-                 "programme's development cost, which was most of it.  Escape "
+                 "programme's development cost, which was most of it.  LEO: "
+                 "285,000 lb (129,274 kg) in the Apollo 8 press kit is the "
+                 "headline, 262,000 lb (118.8 t) in Sumrall et al. 2009 the low "
+                 "end, and the 140 t high end is an engineering tolerance that "
+                 "no NASA document states; the heaviest payload delivered was "
+                 "Skylab, about 77 t.  Escape "
                  "is TLI.  The only vehicle before SLS to send people beyond "
                  "LEO.",
     },
@@ -1421,7 +1503,8 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "list_price_usd_low":       150_000_000,
         "price_basis":                   "estimate",
         "reference_year":          _REF_YEAR_LAUNCH,
-        "notes": "Source: Blue Origin (Nov 2025) via Wikipedia — nine booster "
+        "notes": "Source: Blue Origin, blueorigin.com/new-glenn/9x4: 70 t LEO, "
+                 "14 t direct to GSO, 20 t TLI, nine booster "
                  "engines, four upper-stage engines, 8.7 m fairing.  No price "
                  "published; $150-250M is an estimate.  GTO is NaN because "
                  "only a direct-to-GSO figure (>14 t) has been given, which is "
@@ -1468,11 +1551,12 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "list_price_usd_low":        55_000_000,
         "price_basis":                   "target",
         "reference_year":          _REF_YEAR_LAUNCH,
-        "notes": "Source: Relativity via Wikipedia — 23.5 t reusable, 33.5 t "
-                 "fully expended; $55M listed.  Until v1.16.0 this row paired "
+        "notes": "Source: Relativity, relativityspace.com/terran-r: 23.5 t LEO "
+                 "and 5.5 t GTO with downrange landing, 33.5 t LEO expendable; "
+                 "$55M per Wikipedia.  Until v1.16.0 this row paired "
                  "the 33.5 t EXPENDABLE figure with a reusable price.  NET late "
-                 "2026.  GTO and escape are the older published figures and "
-                 "are not re-stated for the reusable config.",
+                 "2026.  Escape is the older published figure, not re-stated "
+                 "for the reusable config.",
     },
     {
         "name":                          "Nova",
@@ -1493,9 +1577,11 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "reference_year":          _REF_YEAR_LAUNCH,
         "notes": "Source: Stoke Space via Wikipedia — 3 t fully reusable, 7 t "
                  "expendable; the 5 t this row carried until v1.16.0 was not a "
-                 "fully-reusable figure.  Stoke publishes neither a price nor "
-                 "GTO or escape figures: the price is an estimate and GTO / "
-                 "escape are the old 1,200 / 800 kg scaled by 3/5.  The only "
+                 "fully-reusable figure.  Those are the Pathfinder demonstrator; "
+                 "Nova Block 2 is up to 15 t fully reusable, 23 t expendable and "
+                 "4 t to GTO (stokespace.com/nova-block-2).  Stoke publishes no "
+                 "price or escape figure: the price is an estimate and GTO / "
+                 "escape here are the old 1,200 / 800 kg scaled by 3/5.  The only "
                  "vehicle here besides Starship designed for FULL reuse, "
                  "including a regeneratively cooled upper-stage heat shield.",
     },
@@ -1510,14 +1596,14 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "first_flight_year":             None,
         "trl":                           5,
         "payload_leo_kg":                16_300,
-        "payload_gto_kg_low":             3_000,
-        "payload_gto_kg_high":            3_200,
+        "payload_gto_kg":                 3_200,
         "payload_escape_kg_low":          2_000,
         "payload_escape_kg_high":         2_300,    # TLI
         "list_price_usd":            80_000_000,
         "price_basis":                   "estimate",
         "reference_year":          _REF_YEAR_LAUNCH,
-        "notes": "Source: Firefly / Northrop.  Formerly MLV; renamed May 2025. "
+        "notes": "Source: Firefly, fireflyspace.com/eclipse: 16,300 kg LEO, "
+                 "3,200 kg GTO, 59 m overall.  Formerly MLV; renamed May 2025. "
                  "NET 2027, early flights expendable with reuse targeted by "
                  "the sixth.  No published price.",
     },
@@ -1538,8 +1624,11 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "price_basis":                   "estimate",
         "reference_year":          _REF_YEAR_LAUNCH,
         "notes": "Source: Space Pioneer via Wikipedia — 17 t LEO, 14 t SSO; "
-                 "price estimated.  Maiden flight Apr 2026 FAILED shortly after "
-                 "liftoff; a first stage also broke loose from its test stand "
+                 "price estimated.  Maiden flight, 3 Apr 2026, FAILED at about "
+                 "T+189 s after a nominal first stage: separation at T+182.2 s, "
+                 "second-stage ignition at T+185.9 s, then loss of control and "
+                 "commanded termination (Space Pioneer's investigation "
+                 "statement; China Daily).  A first stage also broke loose from its test stand "
                  "and flew in Jun 2024.  Reusable first stage intended.  The "
                  "GTO and escape figures this row carried had no source.",
     },
@@ -1608,7 +1697,9 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "price_basis":                   "estimate",
         "reference_year":          _REF_YEAR_LAUNCH,
         "notes": "Source: Wikipedia — 18 t uncrewed / 15.5 t crewed-profile LEO, "
-                 "5 t GTO.  Zenit's successor.  First flight Apr 2026 was a "
+                 "5 t GTO; Roscosmos says up to 17 t to the support orbit "
+                 "(Interfax, 2025), below this band's top, and gives no GTO "
+                 "figure.  Zenit's successor.  First flight Apr 2026 was a "
                  "successful SUBORBITAL test with a mass simulator; not yet "
                  "orbital.  Price estimated.",
     },
@@ -1652,7 +1743,10 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "price_basis":                   "estimate",
         "reference_year":          _REF_YEAR_LAUNCH,
         "notes": "Source: i-Space via Wikipedia — 8.5 t reusable, 13.4 t "
-                 "expendable.  Hop tests in 2023; orbital debut slipped from "
+                 "expendable; this row is the reusable mode, also the State "
+                 "Council Information Office's figure, which gives the "
+                 "expendable as 12.9 t.  At 13.4 t the same price is about "
+                 "$3,160/kg.  Hop tests in 2023; orbital debut slipped from "
                  "2025.  Price estimated.",
     },
 
@@ -1676,7 +1770,9 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "list_price_usd_low":     2_500_000_000,
         "price_basis":                   "reported",
         "reference_year":          _REF_YEAR_LAUNCH,
-        "notes": "CANCELLED Feb 2026 along with the Exploration Upper Stage; "
+        "notes": "CANCELLED along with the Exploration Upper Stage: announced "
+                 "Feb 2026, and NASA's FY 2027 budget estimates (pp39-40) "
+                 "propose no funding for Block 1B; "
                  "never flew.  Until v1.16.0 this row was marked OPERATIONAL "
                  "and priced at $4.1B, which is NASA OIG's per-Artemis-flight "
                  "figure including Orion and its service module, not a launch "

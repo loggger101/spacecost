@@ -1,13 +1,13 @@
 {
-  "sha256": "af903555563e514abd31e5395677f9cdab3c361e436e70d38a422e5482e5eb59",
+  "sha256": "04306bbe39295ce834e3b778c9e392d4a728ed6d9fca28a495bade7e8a671c3c",
   "rows": 84132,
   "stride": 97,
   "reference_platform": {
     "system": "Windows",
     "machine": "AMD64",
-    "python": "3.14",
-    "numpy": "2.5.2",
-    "pandas": "3.0.5"
+    "python": "3.13",
+    "numpy": "2.5.4",
+    "pandas": "3.1.1"
   },
   "note": "The sha256 is the byte hash ON THE REFERENCE PLATFORM ONLY. The summary's computed columns run through exp(), which is the platform libm and numpy's per-architecture SIMD kernels, and neither is required by IEEE 754 to be correctly rounded. Other platforms reproduce the VALUES to within a few ULP, not the bytes. The six reference tables carry no transcendental arithmetic and ARE byte-portable; that is checked on every CI platform."
 }

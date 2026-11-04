@@ -229,8 +229,9 @@ STORAGE_REFERENCE: List[dict] = [
         "notes": "Tankage, primary structure and cargo restraint for loose "
                  "regolith.  This is the number Module 4 carries as "
                  "`return_structure_frac_of_payload`, recorded here so the "
-                 "cargo side of storage has a citation of its own.  Real cargo "
-                 "spacecraft run 0.4:1 to 2:1 payload-to-structure; 0.15 is "
+                 "cargo side of storage has a citation of its own.  ENGINEERING "
+                 "ESTIMATE: NASA OIG IG-18-016 gives cargo capacities but no dry "
+                 "masses, so no registered source sets this ratio.  0.15 is "
                  "aggressive and assumes dense ore in a body-mounted hopper "
                  "rather than a pressurised hold.  Before v1.10.0 it was zero "
                  "and the cascade happily loaded 125 t of ore into a 500 kg can.",
@@ -471,8 +472,12 @@ STORAGE_REFERENCE: List[dict] = [
         "status":          "development",
         "trl":             4,
         "reference_year":  _REF_YEAR_STORAGE,
-        "notes": "SpaceX's own range for filling a Starship in LEO before a "
-                 "high-energy departure.  Carried on the vehicle row as "
+        "notes": "Tanker launches to fill a Starship in LEO before a high-"
+                 "energy departure.  NASA OIG IG-26-004, p11, gives more than 10 "
+                 "after a depot launch, one every 6 days, and 12 sits inside "
+                 "it; the low end is Musk's eight (Aug 2021, per Wikipedia).  "
+                 "The high end of 16 has no source, and no SpaceX publication "
+                 "states a range.  Carried on the vehicle row as "
                  "`tanker_flights_for_escape` and charged by Module 4 from "
                  "v1.9.0.  Before that, Starship's 27 t to escape — which is "
                  "larger than its GTO payload precisely BECAUSE it assumes "

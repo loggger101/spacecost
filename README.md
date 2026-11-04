@@ -392,11 +392,13 @@ Mass driver  (regolith reaction mass)      306.0         0.100000               
 ```
 
 ⚠️  **`build_transportation_summary` does neither of these things, and must not
-start.** That table is a raw cross-join, and economicspace's Stage 4 applies
-the penalty itself when it reads it — doing it in both places would charge
-1.5x twice. The query helpers have no Stage 4 behind them, so if they do not
-apply it, nothing does. The asymmetry is deliberate and `tests/test_query.py`
-asserts it from both ends.
+start.** That table is a raw cross-join and a separate public interface:
+economicspace's Stage 4 does not read it, and applies the penalty itself from
+the raw propellant row. A reader who takes the penalty from that row and
+applies it to the summary would charge 1.5x twice if the table applied it too.
+The query helpers have no Stage 4 behind them, so if they do not apply it,
+nothing does. The asymmetry is deliberate and `tests/test_query.py` asserts it
+from both ends.
 
 ⚠️  `mission_cost_breakdown` is still a **floor**. It does not charge tankage
 (`tank_kg_per_L` is in the table and nothing bills it to the launcher), does
@@ -666,7 +668,7 @@ build` rebuilds the whole thing.
 These tables were built over fourteen releases as **Module 3 of
 [economicspace](https://github.com/loggger101/economicspace)**, an asteroid
 mining profitability pipeline, and extracted at `pipeline_version` 1.14.0
-(commit `b0b18b2`; the contract is 1.23.6 as of this release). Two thirds of
+(commit `b0b18b2`; the contract is 1.24.0 as of this release). Two thirds of
 that module was annotated reference data and nothing in its schema knows what
 an asteroid is, which is the argument for splitting it out: a launch price is
 useful to anyone costing a mission. economicspace consumes this package as its

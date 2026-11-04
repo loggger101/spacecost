@@ -13,6 +13,46 @@ may read a version as proof that a number moved.
 
 ## Package releases
 
+### 0.15.0 - 2026-11-04
+
+**Data contract 1.24.0, and rows move.** Sixty-two General_Research candidates.
+The values below move what a Stage 3 build writes, and on repin what
+economicspace measures and what spacevalue's delivery chains charge. Neither is
+repinned here. Every other candidate listed is a note or a citation. The
+delivery chains do not move: rc-185 (LOX) and rc-254 (downleg recovery) would
+move them, and `tests/test_delivery.py` pins them for economicspace, so both
+wait for that conversation.
+
+- **Costs in 2026 dollars.** Spacecraft development $588.5M to $837.7M (rc-168)
+  and mission operations $31.4M to $40.8M a year (rc-169): the rows said 2026
+  and held nominal obligations. Both are CPI-U from the spending's dollar-weighted
+  centre.
+- **A Henry Hub quote is gross heat** (rc-275): 55.533 MJ/kg over 1,055.056
+  MJ/MMBtu_IT, 0.05263512 MMBtu/kg, where the 50 MJ/kg was net. A methane price
+  from a quote rises 11.07%, so a build from `fuel-2026-10-17` no longer repeats
+  economicspace's methalox row of that date. Stored quotes are unchanged.
+- **The summary lifts the propellant too** (rc-273).
+  `total_usd_per_kg_payload_to_segment_end` is now L(1+p) + cp, not L + cp, the
+  whole mass at LEO: Falcon 9 reusable, kerolox, 6,500 m/s goes from $4,258 to
+  $29,882. economicspace does not read this table (rc-274, which also corrects
+  every place that said it did).
+- **Propulsion.** MMH/NTO 336 to 321 s (rc-155), the best hot-fire on record,
+  in place of Astronautix; Aerozine-50/NTO 320 to 314.5 s (rc-156), the AJ10-137.
+- **Launch vehicles.** H-IIA 204 $90M to a $62-75M band (rc-171), from yen at
+  World Bank rates. Long March 8A 10 t to 7 t LEO (rc-209). Vega C 2,250 kg
+  (rc-192), Electron 300 kg (rc-194) and Atlas V 551 18,814 kg (rc-189) drop band
+  ends no source carries. Soyuz-2.1a's high end 7,460 kg, Vostochny (rc-199).
+  Eclipse 3,200 kg GTO (rc-223).
+- **Environments.** Moon 7.346e22 kg (rc-131), Mars 6.4169e23 kg (rc-132), the
+  fact sheets the notes cite.
+- **Notes and citations, no value:** rc-090, 103, 107, 128, 129, 135, 166, 177,
+  186, 187, 188, 190, 191, 193, 195, 196, 197, 198, 201, 203, 204, 205, 206, 207,
+  208, 210, 211, 212, 213, 214, 215, 216, 217, 218, 219, 220, 221, 222, 224, 225,
+  226, 227, 228, 230, 231, 232. Where a candidate offered a value or a note, this
+  took the note, and the choice stays open to a later release.
+- **`fuel-2026-10-17` stays as it is** (rc-200). `quotes.py` now says its HO=F
+  and NG=F closes are back-solved from economicspace's tables, not market prints.
+
 ### 0.14.0 - 2026-10-26
 
 **Data contract unchanged at 1.23.6, and no row moves.** A default build

@@ -20,6 +20,10 @@ Fetching live is still there (`use_yfinance`), for anyone who wants today's
 price and accepts that it is not reproducible.
 
 A snapshot is never edited.  A newer quote is a new file under a new name.
+That goes for `fuel-2026-10-17.csv` too: its HO=F and NG=F closes were
+back-solved from economicspace's Stage 3 tables, as their notes say, and the
+same source later printed 4.7553 and 3.0 for that session against the 4.5598
+and 3.135 recorded.  They reproduce those tables; they are not market prints.
 `check_snapshots` holds every file to its SHA256SUMS line, in both directions:
 a changed byte, a file with no line and a line with no file all fail it, and
 CI runs it.

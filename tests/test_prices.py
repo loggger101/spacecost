@@ -97,17 +97,19 @@ def test_barrel_conversion_agrees_with_the_gallon_one():
     assert per_bbl == pytest.approx(per_gal, rel=1e-12)
 
 
-def test_natural_gas_conversion_uses_the_energy_content_of_lng():
+def test_natural_gas_conversion_uses_the_gross_energy_of_methane():
     """$/MMBtu -> $/kg goes through energy, not volume.
 
-    1 kg of LNG is about 50 MJ, and 1 MMBtu is 1.055 GJ, so a kilogram is
-    0.0474 MMBtu. This is the one conversion in the module that is not a unit
-    of volume, and the one most likely to be "fixed" into a density.
+    Henry Hub quotes gross heat, so a kilogram of methane at 55.533 MJ/kg is
+    about 0.0526 MMBtu; the 50 MJ/kg net value would price it 10% low. This is
+    the one conversion in the module that is not a unit of volume, and the one
+    most likely to be "fixed" into a density.
     """
-    assert _per_mmbtu_to_per_kg_ng(4.00) == pytest.approx(4.00 * 0.04739,
-                                                          rel=1e-12)
-    # 50 MJ/kg over 1.055 GJ/MMBtu, derived independently of the constant.
-    assert 0.04739 == pytest.approx((50e6 / 1.055e9), rel=0.01)
+    assert _per_mmbtu_to_per_kg_ng(4.00) == pytest.approx(4.00 * 0.05263512,
+                                                          rel=1e-7)
+    # 55.533 MJ/kg over 1,055.056 MJ/MMBtu_IT, derived from the two sources.
+    assert _per_mmbtu_to_per_kg_ng(1.0) == pytest.approx(55.533e6 / 1.055056e9,
+                                                         rel=1e-12)
 
 
 # ------------------------------------------------------------- the fetcher
