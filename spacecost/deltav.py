@@ -25,7 +25,9 @@ DELTA_V_REFERENCE: List[dict] = [
               "'Orbital Mechanics for Engineering Students').  "
               "Already priced into LAUNCH_VEHICLES."},
     {"segment": "LEO  →  GTO",                    "dv_m_per_s":  2_440, "duration_yr": 0.001,
-     "notes": "Standard GEO transfer Δv (NASA orbital mechanics handbook)."},
+     "notes": "Two-body perigee burn from a ~250-km parking orbit (mu "
+              "398,600.4418 km^3/s^2, R_E 6,378 km).  The other Earth-orbit "
+              "rows use 200 km, which gives the 2,455 of the perigee-burn row."},
     {"segment": "LEO  →  Earth escape (C3=0)",    "dv_m_per_s":  3_200, "duration_yr": 0.003,
      "notes": "C3=0 escape from 200-km LEO; same magnitude as TLI."},
     {"segment": "LEO  →  easy NEA (low-Δv class)","dv_m_per_s":  4_500, "duration_yr": 1.0,
@@ -37,12 +39,17 @@ DELTA_V_REFERENCE: List[dict] = [
               "peak, not a median (SsODNet's ssoBFT puts the NEA median at "
               "8.88 km/s).  Matches OSIRIS-REx Bennu mission profile."},
     {"segment": "LEO  →  hard NEA",               "dv_m_per_s":  8_500, "duration_yr": 2.0,
-     "notes": "Upper-decile NEA (inclined or eccentric); approaches MBA territory."},
+     "notes": "The boundary of main-belt access: the 5th percentile of "
+              "SsODNet's main-belt Δv (ssoBFT, 8.49 km/s), and below its NEA "
+              "median of 8.88 km/s, so not an upper-decile NEA."},
     {"segment": "LEO  →  main-belt asteroid",     "dv_m_per_s": 10_500, "duration_yr": 3.5,
      "notes": "Per Taylor et al. 2018 'Δv map of Main Belt Asteroids' "
               "(Acta Astronautica 146:73) — Hohmann transfer to ~2.7 AU."},
     {"segment": "Asteroid station-keeping",       "dv_m_per_s":    200, "duration_yr": 0.5,
-     "notes": "Proximity ops, sample retrieval — OSIRIS-REx station-keeping budget."},
+     "notes": "ENGINEERING ESTIMATE: proximity ops and sample retrieval.  No "
+              "document gives this 200 m/s; OSIRIS-REx's navigation record "
+              "(Antreasian et al. 2021) shows maintenance burns far below it "
+              "and publishes no budget."},
     {"segment": "NEA  →  Earth return (propulsive)","dv_m_per_s":  5_500, "duration_yr": 1.5,
      "notes": "Symmetric to outbound; powered Earth-return with no aerobraking."},
     {"segment": "NEA  →  Earth return (aerocap)", "dv_m_per_s":  1_500, "duration_yr": 1.5,
@@ -88,7 +95,7 @@ DELTA_V_REFERENCE: List[dict] = [
     # ⚠️  The plane change is the term intuition drops.  A launch from
     # Canaveral parks at 28.5 deg and GEO is equatorial, so the apogee burn
     # buys the inclination as well as the circularisation, and it is 1,836 m/s
-    # rather than the 1,478 a coplanar circularisation would cost.
+    # rather than the 1,477 a coplanar circularisation would cost.
     {"segment": "LEO  →  GTO (perigee burn)",     "dv_m_per_s":  2_455, "duration_yr": 0.001,
      "notes": "Perigee burn from a 200-km parking orbit onto a transfer "
               "ellipse with apogee at 42,164 km: v_p(GTO) 10.239 - v_LEO "
@@ -98,7 +105,7 @@ DELTA_V_REFERENCE: List[dict] = [
      "notes": "One apogee burn doing two jobs: raise 1.597 km/s to the 3.075 "
               "km/s circular speed AND remove 28.5 deg of inclination, "
               "combined by the law of cosines rather than added.  Coplanar it "
-              "would be 1,478; the 358 m/s difference is what an equatorial "
+              "would be 1,477; the 359 m/s difference is what an equatorial "
               "launch site is worth."},
     {"segment": "LEO  →  GEO depot",              "dv_m_per_s":  4_291, "duration_yr": 0.01,
      "notes": "GTO (2,455) + apogee (1,836).  This is the Δv a kilogram "

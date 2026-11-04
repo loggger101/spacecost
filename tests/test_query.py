@@ -260,10 +260,11 @@ def test_the_totals_add_up(catalog):
 def test_the_summary_does_not_apply_the_penalty():
     """The other half of the asymmetry, asserted so it cannot drift shut.
 
-    `build_transportation_summary` is what economicspace's Stage 4 reads, and
-    Stage 4 applies `dv_penalty_factor` itself. If this table started applying
-    it too, every electric combination downstream would be charged 1.5x twice
-    -- 2.25x -- and nothing would raise.
+    `build_transportation_summary` is a public table that stays raw, and that
+    is its contract: economicspace's Stage 4 does not read it, and a reader who
+    takes `dv_penalty_factor` from the raw propellant row applies it themselves.
+    If this table started applying it too, such a reader would charge an
+    electric combination 1.5x twice -- 2.25x -- and nothing would raise.
     """
     launch = spacecost.load_launch_vehicles().head(1)
     prop = merge_propellant_prices(spacecost.load_propellants(),
@@ -279,3 +280,25 @@ def test_the_summary_does_not_apply_the_penalty():
     assert len(summary) == 1
     # The segment's OWN dv, not a penalised one.
     assert summary["segment_dv_m_per_s"].iloc[0] == float(dv["dv_m_per_s"].iloc[0])
+
+
+def test_the_summary_lifts_the_propellant_too():
+    """A kilogram of payload needs p kg of propellant at LEO, and the launcher
+    lifts both: L(1 + p) + cp.  One row, from the witness that found it."""
+    summary = spacecost.build_transportation_summary(
+        spacecost.load_launch_vehicles(),
+        merge_propellant_prices(spacecost.load_propellants(), pd.DataFrame()),
+        spacecost.load_delta_v())
+    row = summary[(summary["vehicle"] == "Falcon 9 (reusable)")
+                  & (summary["segment"] == "LEO  →  average NEA")
+                  & (summary["propellant"] == "kerolox  (RP-1 / LOX)")].iloc[0]
+    launch = row["launch_usd_per_kg_to_leo"]
+    p = row["propellant_mass_per_kg_payload"]
+    assert row["total_usd_per_kg_payload_to_segment_end"] == pytest.approx(
+        launch * (1.0 + p) + row["in_space_prop_usd_per_kg_payload"], rel=1e-12)
+    assert row["total_usd_per_kg_payload_to_segment_end"] == pytest.approx(29_882.2, abs=0.1)
+
+    # A segment with no burn lifts nothing extra.
+    idle = summary[summary["propellant_mass_per_kg_payload"] == 0.0]
+    assert (idle["total_usd_per_kg_payload_to_segment_end"]
+            == idle["launch_usd_per_kg_to_leo"]).all()

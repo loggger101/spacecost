@@ -29,11 +29,16 @@ OPERATIONAL_COSTS_REFERENCE: List[dict] = [
     {
         "category":         "Spacecraft development (NRE)",
         "unit":             "USD per program",
-        "value":            588_500_000,        # OSIRIS-REx actual
+        "value":            837_700_000,        # OSIRIS-REx actual, escalated
         "range_low":        100_000_000,
         "range_high":     2_000_000_000,
-        "notes": "Anchor: OSIRIS-REx spacecraft development = $588.5M actual "
-                 "(Planetary Society / NASA budget breakdown).  Discovery-class "
+        "notes": "Anchor: OSIRIS-REx development excluding the launch vehicle, "
+                 "$588.5M in nominal-dollar obligations over FY2011-FY2016 "
+                 "(Planetary Society PEBD: Total Cost 772.0 less Launch Vehicle "
+                 "183.5), carried to 2026 dollars by CPI-U (Dec 2014, the "
+                 "spending's dollar-weighted centre, to Sep 2026, x1.4235): "
+                 "$837.7M.  A Dec 2013 base gives ~$843M and Dec 2015 ~$832M.  "
+                 "Discovery-class "
                  "deep-space platform.  Range covers SmallSat ($100M) → flagship ($2B+).",
         "reference_year":   _REF_YEAR_OPS,
     },
@@ -208,14 +213,18 @@ OPERATIONAL_COSTS_REFERENCE: List[dict] = [
     {
         "category":         "Mission operations",
         "unit":             "USD per mission-year",
-        "value":             31_400_000,        # OSIRIS-REx $283M / 9 yr
+        "value":             40_800_000,        # OSIRIS-REx $283M / 9 yr, escalated
         "range_low":         15_000_000,
         "range_high":       100_000_000,
         "notes": "Anchor: OSIRIS-REx operations obligated $210.0M over "
                  "FY2017-FY2023, prime mission to sample return = $30.0M/yr, "
                  "and $232.2M through FY2025 = $25.8M/yr (Planetary Society "
                  "Planetary Exploration Budget Dataset); the $283M over 9 yr "
-                 "($31.4M/yr) this row was set from was the pre-return plan. "
+                 "($31.4M/yr) this row is set from was the pre-return plan, in "
+                 "nominal dollars over FY2017-FY2025, carried to 2026 dollars "
+                 "by CPI-U (Dec 2019, the spending's dollar-weighted centre, to "
+                 "Sep 2026, x1.2992): $40.8M.  A Dec 2018 base gives ~$41.5M and "
+                 "Dec 2020 ~$40.3M. "
                  "Ground team + mission control + planning. "
                  "Range covers SmallSat ($15M) → flagship ($100M+).",
         "reference_year":   _REF_YEAR_OPS,
@@ -241,9 +250,13 @@ OPERATIONAL_COSTS_REFERENCE: List[dict] = [
         "value":            2_500_000,
         "range_low":        1_000_000,
         "range_high":       5_000_000,
-        "notes": "FAA does not charge an application fee; cost is internal "
+        "notes": "ENGINEERING ESTIMATE: no document gives this amount.  Its "
+                 "floor is the FAA's 2,903 hours of paperwork per initial Part "
+                 "450 application (Federal Register 2019-09588), before any "
+                 "safety-case engineering.  FAA does not charge an application "
+                 "fee; cost is internal "
                  "engineering + legal + safety-case work for 14 CFR Part 450 "
-                 "compliance (FAA.gov / Congress.gov R48582).  From 2026 each "
+                 "compliance.  From 2026 each "
                  "licensed or permitted launch or reentry also owes a user fee "
                  "(51 U.S.C. 50924, Pub. L. 119-21): the lesser of a "
                  "per-pound-of-payload rate and a maximum fee, set each "
@@ -288,6 +301,10 @@ OPERATIONAL_COSTS_REFERENCE: List[dict] = [
                  "Government property (14 CFR 440.9(c) and (e), under 51 "
                  "U.S.C. 50914).  Part 450 is the licensing part and only "
                  "asks for the Part 440 Appendix A data the MPL analysis uses. "
+                 "The premium is about 1% of the cover bought (GAO-12-899), so "
+                 "the average required MPL of ~$99M (2012) and ~$51M (2016, "
+                 "GAO-17-366) imply ~$0.99M and ~$0.51M a launch; $1.5M is kept "
+                 "as a first-of-kind premium, and the range spans both.  "
                  "Premium covers ground/air harm; distinct from payload insurance.",
         "reference_year":   _REF_YEAR_OPS,
     },
@@ -387,10 +404,13 @@ OPERATIONAL_COSTS_REFERENCE: List[dict] = [
         "range_low":        3.0,
         "range_high":       8.0,
         "notes": "v1.10.0.  The PPU alone, split out of the combined row above. "
-                 "NASA NEXT-C: 34.5 kg of PPU at 7.4 kW = 4.66 kg/kW (The "
-                 "NEXT-C Power Processing Unit, Aerojet/NASA 2020).  The paper "
-                 "gives the PPU's OUTPUT as 0.5-7 kW; 7.4 kW is the input at "
-                 "full power, so this is per kW of input, as the unit says.  "
+                 "NASA NEXT-C (The NEXT-C Power Processing Unit, Aerojet/NASA "
+                 "2020): 34.5 kg of PPU, and 7.0 kW output at 94.8% efficiency "
+                 "implies ~7.384 kW input, so 4.67 kg/kW of input, as the unit "
+                 "says.  A derived prototype point, not the 3.7 kW / 93.9% of "
+                 "the DART flight test.  The paper's Table 2 labels 7.4 kW Max "
+                 "Output Power, while its text and Table 3 say 7.0 kW; this "
+                 "data cannot say which is right.  "
                  "A PPU "
                  "converts bus power to the discharge and does not care what it "
                  "is feeding, so it is the half of the old 8 kg/kW that really "
@@ -398,7 +418,8 @@ OPERATIONAL_COSTS_REFERENCE: List[dict] = [
                  "scales with THRUST and is per-technology, because that is "
                  "exactly where a pulsed plasma thruster and a gridded ion "
                  "engine stop being interchangeable.  Together they reproduce "
-                 "NEXT-C: 4.7 x 7.4 + 54 x 0.236 = 47.5 kg against 47.2 kg "
+                 "NEXT-C: 4.7 x 7.4 + 54 x 0.236 = 47.5 kg, at about the input "
+                 "power above, against 47.2 kg "
                  "measured (12.7 kg thruster + 34.5 kg PPU).",
         "reference_year":   _REF_YEAR_OPS,
     },
@@ -782,7 +803,10 @@ OPERATIONAL_COSTS_REFERENCE: List[dict] = [
                  "against Akatsuki's orbit-insertion loss and Hayabusa's "
                  "near-total systems failure at 4 years.  30 years puts a "
                  "5-year mission at 85% survival, which matches the broad "
-                 "deep-space record.",
+                 "deep-space record.  Constant hazard is an assumption: fits to "
+                 "spacecraft failures reject it early in life (Navard 1993; "
+                 "Jacklin 2019), where most losses fall, so it spreads them "
+                 "evenly and understates the risk of a short mission.",
         "reference_year":   _REF_YEAR_OPS,
     },
     {
@@ -998,12 +1022,11 @@ OPERATIONAL_COSTS_REFERENCE: List[dict] = [
         "category":         "Cost of capital (WACC)",
         "unit":             "annualised fraction",
         "value":            0.10,
-        "range_low":        0.075,             # Boeing 7.5% floor
+        "range_low":        0.075,             # Aerospace/Defense 7.60% less 10 bps
         "range_high":       0.15,
-        "notes": "Boeing 7.5% / Howmet 8.3% WACC (ValueInvesting.io 2026) as the "
-                 "industrial floor, matching Damodaran's NYU Stern industry "
-                 "averages (Aerospace/Defense 7.60%, Metals & Mining 8.20%, "
-                 "Jan 2026), which carry no startup premium.  The 10% is "
+        "notes": "Damodaran's NYU Stern industry averages (Aerospace/Defense "
+                 "7.60%, Metals & Mining 8.20%, Jan 2026) as the industrial "
+                 "floor; they carry no startup premium.  The 10% is "
                  "McKeown 2024's proposed standard discount rate for "
                  "space-resource projects, beside hurdle rates 'in the range "
                  "of 25%'; launch-venture debt ran 14% or more without "

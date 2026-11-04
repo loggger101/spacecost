@@ -68,7 +68,11 @@ def _per_gal_to_per_kg(usd_per_gal: float, fluid: str) -> float:
 
 def _per_mmbtu_to_per_kg_ng(usd_per_mmbtu: float) -> float:
     """
-    Henry-Hub natural gas trades in $/MMBtu (1 MMBtu = 10⁶ BTU).
-    1 kg LNG ≈ 50 MJ ≈ 0.04739 MMBtu.  So $/kg = $/MMBtu × 0.04739.
+    Henry-Hub natural gas trades in $/MMBtu (1 MMBtu = 10⁶ BTU_IT), on a gross
+    heating value: the Sabine tariff condenses the water of combustion.  So
+    the kilogram is pure methane's gross value too, 55.533 MJ/kg (ASHRAE 2021
+    Fundamentals, ch. 28 Table 3, dry at 15.6 C and 101.4 kPa), over 1,055.056
+    MJ/MMBtu_IT (NIST SP 811): about 0.05263512 MMBtu/kg.  A proxy, not a
+    universal LNG factor, and no liquefaction or handling premium is in it.
     """
-    return float(usd_per_mmbtu) * 0.047_39
+    return float(usd_per_mmbtu) * 55.533 / 1_055.056

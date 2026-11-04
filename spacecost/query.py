@@ -174,10 +174,10 @@ def mission_cost_breakdown(
 
     ⚠️  IF YOUR CALLER ALREADY APPLIES THE PENALTY, pass
     `apply_dv_penalty=False` or you will charge it twice.  economicspace's
-    Stage 4 does apply it, on the SUMMARY -- which is a different path, and
-    `build_transportation_summary` is deliberately left raw for exactly that
-    reason.  This helper has no Stage 4 behind it, so if it does not apply the
-    penalty, nothing does.
+    Stage 4 applies it itself, reading the factor off the raw propellant row;
+    it does not read `build_transportation_summary`, which is a separate public
+    table and stays raw.  This helper has no Stage 4 behind it, so if it does
+    not apply the penalty, nothing does.
 
     ⚠️  WHAT IS STILL NOT MODELLED, and it all pushes the same way (optimistic):
     tankage mass (`tank_kg_per_L` is in the table and nothing here charges it

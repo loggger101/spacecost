@@ -114,8 +114,10 @@ def build_transportation_summary(
 ) -> pd.DataFrame:
     """
     Cross-join (vehicle × in-space-segment × propellant) into a long-form
-    table of normalised costs.  This is what Module 4 reads to pick the
-    cheapest viable combination for any asteroid.
+    table of normalised costs, ideal and single-leg.  A public table for a
+    reader comparing combinations: economicspace's Stage 4 does not read it,
+    it reads the six catalogs and takes `dv_penalty_factor` off the raw
+    propellant row.
 
     Output rows:  (vehicle, segment, propellant) tuples with the columns
         launch_usd_per_kg
@@ -181,8 +183,11 @@ def build_transportation_summary(
                     "launch_usd_per_kg_to_leo":               leo_cost_per_kg,
                     "propellant_mass_per_kg_payload":         prop_per_payload,
                     "in_space_prop_usd_per_kg_payload":       in_space_cost,
+                    # The propellant has to reach LEO too: the launcher
+                    # lifts 1 + p kg for every kg of payload.  Until 0.15.0
+                    # this charged the payload's launch alone.
                     "total_usd_per_kg_payload_to_segment_end":
-                        leo_cost_per_kg + in_space_cost,
+                        leo_cost_per_kg * (1.0 + prop_per_payload) + in_space_cost,
                 })
 
     summary = pd.DataFrame(rows)

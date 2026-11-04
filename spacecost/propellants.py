@@ -317,6 +317,10 @@ def _apply_thruster_data(df: pd.DataFrame) -> None:
 #   O2 liquefaction  "< 2 kW" for the same system's ~0.96 kg/h of O2 (same
 #                    source, slide 4): at most 2.1 kWh/kg O2    at most 1.79 kWh
 #
+# The low end's electrolysis is a target-based figure (DOE HFTO system status,
+# Johnson's concept at best case).  Kornuta et al. 2019, a plant-level bound on
+# this column, sits below it: ~4.41 kWh/kg of electrolysis alone and ~7.1 with
+# the cryocooler, 2 MW at 280 kg/hr of water, from Moran's 1991 subsystem study.
 # The band is 15.2 to 26.3 kWh/kg; the row carries the LOW end, by owner
 # decision: the least energy the sources support, which is the convention for
 # a term that removes a free lunch rather than one that sets a level.  The
@@ -431,7 +435,9 @@ def _blend(of_ratio: float, fuel: dict, ox: dict) -> dict:
 #
 #   RP-1       Haltermann Solutions / SpaceInsider, typical $2-3/kg in bulk
 #   LH2        NASA contract pricing 2024-25, ~$6/kg base + handling overhead
-#   LCH4       Mobius Market Research 2024, ~$400/tonne open-market liquid
+#   LCH4       ~$400/tonne, a liquefied-product midpoint of the World Bank Pink
+#              Sheet's 2025 means: hub-gas content ~$0.19/kg, delivered liquid
+#              (Japan LNG) ~$0.63/kg.  2025 dollars.
 #   LOX        Astronautix / aqua-calc, bulk industrial cryogen ~$0.20/kg
 #   N2O4       DOD Aerospace Standard Prices FY20 reference
 #   MMH        DOD Aerospace Standard Prices FY20 reference
@@ -442,7 +448,8 @@ def _blend(of_ratio: float, fuel: dict, ox: dict) -> dict:
 #              not hydrazine.  The FY20 list can no longer be found.  DLA FY2025 (Oct 1 2024)
 #              is quoted in the rows' notes as the government price: MMH
 #              ~$497/kg, NTO MON-3 ~$235/kg, hydrazine ~$365/kg.  Not used.
-#   Xenon      SETS Space / EFC 2024-99.999% purity ~$10,000/kg.
+#   Xenon      INL/RPT-23-75203, ~$60/L in Q1 2023 = $10,243/kg at STP; the
+#              $10,000/kg kept here is Q1-2023 dollars, 2.4% under it.
 #              Density: NSTAR/Dawn supercritical storage ~2.0 g/cm³
 #              (NBP liquid Xe = 3.057 g/cm³ is unreachable in flight tanks).
 #   Argon      SETS Space 2024, bulk industrial ~$7-15/kg.
@@ -505,7 +512,7 @@ KRYPTON_USD_PER_KG_HIGH = 2_100.0
 _COMPONENTS = {
     "RP-1":      {"density_kg_per_L": 0.810, "cost_usd_per_kg":      2.50, "storage_class": "storable_liquid"},
     "LH2":       {"density_kg_per_L": 0.0708,"cost_usd_per_kg":     10.00, "storage_class": "deep_cryogen"},   # base + handling
-    "LCH4":      {"density_kg_per_L": 0.422, "cost_usd_per_kg":      0.40, "storage_class": "mild_cryogen"},   # ~$400/tonne open market
+    "LCH4":      {"density_kg_per_L": 0.422, "cost_usd_per_kg":      0.40, "storage_class": "mild_cryogen"},   # ~$400/tonne, see above
     "LOX":       {"density_kg_per_L": 1.141, "cost_usd_per_kg":      0.20, "storage_class": "mild_cryogen"},
     "N2O4":      {"density_kg_per_L": 1.450, "cost_usd_per_kg":     35.00, "storage_class": "storable_liquid"},
     "MMH":       {"density_kg_per_L": 0.870, "cost_usd_per_kg":    100.00, "storage_class": "storable_liquid"},
@@ -758,8 +765,9 @@ PROPELLANTS_REFERENCE: List[dict] = [
                  "as tabulated in Kim, Jung & Kim, J. Korean Soc. Propulsion "
                  "Eng. 17(6), 2013, Table 3, a 2013 development figure; "
                  "Energomash's RD-192 methane engine is 356 s in the same "
-                 "paper.  LCH4 ~$400/tonne "
-                 "open-market per Mobius Market Research 2024.  ISRU-makeable on Mars.",
+                 "paper.  LCH4 ~$400/tonne, 2025 dollars: a liquefied-product "
+                 "midpoint of the World Bank Pink Sheet's hub gas (~$190/tonne) "
+                 "and delivered LNG (~$630/tonne).  ISRU-makeable on Mars.",
     },
     {
         "name":                  "MMH / NTO  (hypergolic)",
@@ -775,16 +783,18 @@ PROPELLANTS_REFERENCE: List[dict] = [
         "isru_feed_material":    None,
         "dv_penalty_factor":     1.0,
         "boiloff_pct_per_day":   0.0,   # Storable at room temperature indefinitely.  Voyager still had usable hydrazine after 45 years.
-        "isp_vac_s":             336,
-        "exhaust_vel_m_per_s":   336 * G0_M_S2,
+        "isp_vac_s":             321,
+        "exhaust_vel_m_per_s":   321 * G0_M_S2,
         "density_kg_per_L":      _mmh_nto["density_kg_per_L"],
         "ref_cost_usd_per_kg":   _mmh_nto["ref_cost_usd_per_kg"],
         "ref_cost_usd_per_L":    _mmh_nto["ref_cost_usd_per_kg"] * _mmh_nto["density_kg_per_L"],
         "yfinance_proxy":        None,
         "reference_year":        _REF_YEAR_PROP,
         "notes": "Storable hypergolic — standard for deep-space manoeuvring "
-                 "(OMS, RCS, OSIRIS-REx propulsion).  Vac Isp 336 s per "
-                 "Astronautix N2O4/MMH datasheet.  Pricing from DOD FY20 "
+                 "(OMS, RCS, OSIRIS-REx propulsion).  Vac Isp 321 s, the best "
+                 "hot-fire on record, a 490 N engine at area ratio 286:1; 309 s "
+                 "at 44:1 (Schoenman 1992), and the Shuttle OMS ran 313 s (Thapa "
+                 "2023).  Pricing from DOD FY20 "
                  "standards (MMH $100/kg, NTO $35/kg), a list that can no longer "
                  "be found to re-check.  DLA's FY2025 Aerospace Standard Prices "
                  "(effective Oct 1 2024) are MMH $225.40/lb (~$497/kg) and NTO "
@@ -864,8 +874,8 @@ PROPELLANTS_REFERENCE: List[dict] = [
                  "20210018563).  A Hall thruster runs lower: AEPS gives "
                  "~2,800 s at 12 kW (Shastry et al., IEPC-2024, NTRS "
                  "20240006249).  "
-                 "SETS Space 2024: $5-12k/kg for 99.999% aerospace-grade Xe; "
-                 "used $10k/kg (2023 EFC reference).",
+                 "INL/RPT-23-75203: Xe sold at around $60/L in Q1 2023 = "
+                 "$10,243/kg at STP; used $10k/kg, Q1-2023 dollars.",
     },
     {
         "name":                  "Argon  (Hall / ion)",
@@ -951,8 +961,8 @@ PROPELLANTS_REFERENCE: List[dict] = [
         "isru_feed_material":    None,
         "dv_penalty_factor":     1.0,
         "boiloff_pct_per_day":   0.0,
-        "isp_vac_s":             320,
-        "exhaust_vel_m_per_s":   320 * G0_M_S2,
+        "isp_vac_s":             314.5,
+        "exhaust_vel_m_per_s":   314.5 * G0_M_S2,
         "density_kg_per_L":      _a50_nto["density_kg_per_L"],
         "ref_cost_usd_per_kg":   _a50_nto["ref_cost_usd_per_kg"],
         "ref_cost_usd_per_L":    _a50_nto["ref_cost_usd_per_kg"] * _a50_nto["density_kg_per_L"],
@@ -960,8 +970,9 @@ PROPELLANTS_REFERENCE: List[dict] = [
         "reference_year":        _REF_YEAR_PROP,
         "notes": "50/50 UDMH-hydrazine by mass.  Apollo Service Propulsion System "
                  "and the Titan family; the engine that had to light after eight "
-                 "days in cislunar space and always did.  Vac Isp 320 s "
-                 "(Astronautix AJ10-137).",
+                 "days in cislunar space and always did.  Vac Isp 314.5 s, "
+                 "AJ10-137 at area ratio 62.5:1 (Boyce); AEDC rated its injectors "
+                 "at 311.4-312.8 s (Cuffe & Jacobs 1970).",
     },
     {
         "name":                  "Green monoprop  (ASCENT / AF-M315E)",
@@ -1188,7 +1199,9 @@ PROPELLANTS_REFERENCE: List[dict] = [
                  "2021).  Stored as a SOLID at ambient pressure, ρ 4.93 kg/L, so "
                  "the reservoir masses 0.23% of the propellant against xenon's "
                  "1.9% — by a wide margin the best storage density ever flown "
-                 "outside mercury.  Cost $60/kg.  The catch is condensable "
+                 "outside mercury.  Cost $60/kg, an estimate: the US$60 in "
+                 "Rafalskyi et al. is a total propellant cost with no mass "
+                 "stated, not a price per kg.  The catch is condensable "
                  "exhaust plating out on cold surfaces, which is a "
                  "contamination problem this model does not price.",
     },
