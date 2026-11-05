@@ -176,13 +176,39 @@ DOWNLEG_V090 = dict(DOWNLEG_AT_MOVE, lunar_surface=44742.2736509585)
 DELIVERED_V0110 = dict(DELIVERED_V090, gto=5168.322210670087)
 DOWNLEG_V0110 = dict(DOWNLEG_V090, gto=24836.992875204603)
 
+# v0.16.0: the default.  Every chain's fuel moves with hydrolox (LOX at $0.37/kg,
+# rc-185), and the downleg's recovery stops being multiplied by the departure
+# mass ratio (rc-254).  The dicts above reproduce through the arguments named
+# in their tests.
+DELIVERED_V0160 = {
+    "cislunar":      7236.5414709491315,
+    "earth_surface": 0.0,
+    "geo":           8462.02587495172,
+    "gto":           5168.435079207367,
+    "leo":           2555.0,
+    "lunar_surface": 48226.89646100058,
+    "mars_orbit":    9154.13977497562,
+    "mars_surface":  186307.0502739471,
+}
+DOWNLEG_V0160 = {
+    "cislunar":      27161.385343944003,
+    "earth_surface": 0.0,
+    "geo":           33735.00287027558,
+    "gto":           24831.72057973766,
+    "leo":           25369.951037708917,
+    "lunar_surface": 43530.62070241556,
+    "mars_orbit":    29822.868721306837,
+    "mars_surface":  92052.22438878153,
+}
+
 
 @pytest.mark.parametrize("dest,expected", sorted(DELIVERED_V040.items()))
 def test_the_v040_anchor_still_reproduces(dest, expected):
     assert_reproduces(
         delivery.delivered_cost_usd_per_kg(
             dest, V040_LEO,
-            burn_dv=delivery.CHAIN_BURN_DV_BEFORE_V090.get(dest)),
+            burn_dv=delivery.CHAIN_BURN_DV_BEFORE_V090.get(dest),
+            tug_fuel_usd_per_kg=delivery.TUG_PROPELLANT_USD_PER_KG_BEFORE_V0160),
         expected, "delivered_cost_usd_per_kg(%r, 2414.0)" % dest)
 
 
@@ -190,12 +216,22 @@ def test_the_v040_anchor_still_reproduces(dest, expected):
 def test_the_v080_chain_still_reproduces(dest, expected):
     assert_reproduces(
         delivery.delivered_cost_usd_per_kg(
-            dest, burn_dv=delivery.CHAIN_BURN_DV_BEFORE_V090.get(dest)),
+            dest, burn_dv=delivery.CHAIN_BURN_DV_BEFORE_V090.get(dest),
+            tug_fuel_usd_per_kg=delivery.TUG_PROPELLANT_USD_PER_KG_BEFORE_V0160),
         expected, "pre-v0.9.0 delivered_cost_usd_per_kg(%r)" % dest)
 
 
 @pytest.mark.parametrize("dest,expected", sorted(DELIVERED_V0110.items()))
-def test_delivered_cost_is_the_v0110_model(dest, expected):
+def test_the_v0110_chain_still_reproduces(dest, expected):
+    assert_reproduces(
+        delivery.delivered_cost_usd_per_kg(
+            dest,
+            tug_fuel_usd_per_kg=delivery.TUG_PROPELLANT_USD_PER_KG_BEFORE_V0160),
+        expected, "pre-v0.16.0 delivered_cost_usd_per_kg(%r)" % dest)
+
+
+@pytest.mark.parametrize("dest,expected", sorted(DELIVERED_V0160.items()))
+def test_delivered_cost_is_the_v0160_model(dest, expected):
     assert_reproduces(delivery.delivered_cost_usd_per_kg(dest), expected,
                       "delivered_cost_usd_per_kg(%r)" % dest)
 
@@ -203,23 +239,47 @@ def test_delivered_cost_is_the_v0110_model(dest, expected):
 def test_every_destination_with_a_chain_is_pinned():
     """A destination added to DELIVERY_CHAINS without a pinned price is a
     price nobody has looked at.  This is what made v0.11.0 add `gto` above."""
-    assert set(delivery.DELIVERY_CHAINS) == set(DELIVERED_V0110)
+    assert set(delivery.DELIVERY_CHAINS) == set(DELIVERED_V0160)
     assert (set(delivery.DOWNLEG_DEPARTURE_DV_M_S) | {"earth_surface"}
-            == set(DOWNLEG_V0110))
+            == set(DOWNLEG_V0160))
 
 
 @pytest.mark.parametrize("dest,expected", sorted(DOWNLEG_AT_MOVE.items()))
 def test_downleg_cost_reproduces_the_source(dest, expected):
     assert_reproduces(
         delivery.downleg_cost_usd_per_kg(
-            dest, delivery.DOWNLEG_DV_BEFORE_V090.get(dest)),
+            dest, delivery.DOWNLEG_DV_BEFORE_V090.get(dest),
+            recovery_in_mass_ratio=True),
         expected, "pre-v0.9.0 downleg_cost_usd_per_kg(%r)" % dest)
 
 
 @pytest.mark.parametrize("dest,expected", sorted(DOWNLEG_V0110.items()))
-def test_downleg_cost_is_the_v0110_model(dest, expected):
+def test_the_v0110_downleg_still_reproduces(dest, expected):
+    assert_reproduces(
+        delivery.downleg_cost_usd_per_kg(dest, recovery_in_mass_ratio=True),
+        expected, "pre-v0.16.0 downleg_cost_usd_per_kg(%r)" % dest)
+
+
+@pytest.mark.parametrize("dest,expected", sorted(DOWNLEG_V0160.items()))
+def test_downleg_cost_is_the_v0160_model(dest, expected):
     assert_reproduces(delivery.downleg_cost_usd_per_kg(dest), expected,
                       "downleg_cost_usd_per_kg(%r)" % dest)
+
+
+def test_one_recovery_is_charged_once():
+    """The ground charge per kg is the same at every destination: only what is
+    flown goes through the mass ratio.  Mars surface is the widest case, where
+    the old charge read $5,842/kg against $1,500/kg."""
+    recovery = delivery.DOWNLEG_RECOVERY_USD / delivery.DOWNLEG_BATCH_KG
+    assert recovery == 1500.0
+    for dest, dv in delivery.DOWNLEG_DEPARTURE_DV_M_S.items():
+        r = math.exp(dv / (delivery.TUG_ISP_S * delivery.G0_M_S2))
+        old = delivery.downleg_cost_usd_per_kg(dest, recovery_in_mass_ratio=True)
+        # A different order of the same terms, so close rather than equal.
+        assert delivery.downleg_cost_usd_per_kg(dest) == pytest.approx(
+            old - recovery * (r - 1.0), rel=1e-12)
+    assert round(delivery.downleg_cost_usd_per_kg("mars_surface", recovery_in_mass_ratio=True)
+                 - delivery.downleg_cost_usd_per_kg("mars_surface"), 3) == 4342.079
 
 
 def test_the_launch_price_comes_off_the_vehicle_table():
@@ -483,6 +543,9 @@ TYPED = {
     # rows they were derived from now say 2,050 and 1,850.
     1870.0: "CHAIN_BURN_DV_BEFORE_V090", 2720.0: "DOWNLEG_DV_BEFORE_V090",
     6200.0: "_DOWNLEG_DV_AT_MOVE",
+    # What the hydrolox row held before LOX moved, kept so a pre-v0.16.0 chain
+    # reproduces: no table says it any more.
+    1.5999999999999999: "TUG_PROPELLANT_USD_PER_KG_BEFORE_V0160",
 }
 
 ALGEBRA = {0, 1, 0.0, 1.0}

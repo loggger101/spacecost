@@ -13,6 +13,31 @@ may read a version as proof that a number moved.
 
 ## Package releases
 
+### 0.16.0 - 2026-11-04
+
+**Data contract 1.25.0, and the delivery chains move.** Two General_Research
+candidates, the two 0.15.0 held back. `tests/test_delivery.py` pins the chains
+for economicspace, so its old figures stay pinned and reproduce through named
+arguments, and the new ones sit beside them. economicspace and spacevalue see
+none of this until they repin.
+
+- **LOX is $0.37/kg, was $0.20** (rc-185): DLA Energy's Aerospace Standard
+  Prices FY2025, $335.89 per short ton, in place of the Astronautix / aqua-calc
+  figure. Oct-2024 dollars. Kerolox $0.897 to $1.015/kg, hydrolox $1.600 to
+  $1.746, methalox $0.243 to $0.377, CO/LOX $0.710 to $0.771. The recorded fuel
+  snapshot `fuel-2026-10-17` prices kerolox at $0.690/kg, was $0.571, and
+  methalox at $0.325, was $0.192: the quote is unchanged, the LOX in the blend
+  is not. Delivered prices
+  rise by the tug's fuel: at most 0.003%, $0.87/kg at Mars surface.
+  `tug_fuel_usd_per_kg=TUG_PROPELLANT_USD_PER_KG_BEFORE_V0160` reproduces the
+  old line.
+- **A recovery is one charge per batch** (rc-254): `downleg_cost_usd_per_kg`
+  multiplied the $15M ground recovery by the departure mass ratio with the
+  capsule and TPS, so one recovered batch was charged $58.4M from Mars surface.
+  It now stays at $1,500/kg outside the ratio. Downlegs fall 0.02% (GTO) to
+  4.5% (Mars surface, $96,394 to $92,052/kg).
+  `recovery_in_mass_ratio=True` reproduces the old charge.
+
 ### 0.15.0 - 2026-11-04
 
 **Data contract 1.24.0, and rows move.** Sixty-two General_Research candidates.

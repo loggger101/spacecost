@@ -282,6 +282,9 @@ ENTRY_SYSTEM_USD_PER_KG = _ops("Heat shield / TPS for Earth return")
 # The tug's propellant, at the hydrolox row's reference price.  A couple of
 # dollars per kg delivered, and charged anyway: it is consumed.
 TUG_PROPELLANT_USD_PER_KG = _propellant_usd_per_kg(_HYDROLOX)
+# What that row held before LOX was re-anchored at data contract 1.25.0.  Passed
+# as `tug_fuel_usd_per_kg`, it reproduces every chain priced before v0.16.0.
+TUG_PROPELLANT_USD_PER_KG_BEFORE_V0160 = 1.5999999999999999
 
 # Fraction of Mars ENTRY mass that survives to be useful payload on the
 # surface.  Aeroshell, backshell, parachute and descent stage are all
@@ -587,7 +590,8 @@ def delivery_mass_ratio(destination: str, burn_dv=None) -> float:
     return mass
 
 
-def delivery_hardware_usd_per_kg(destination: str, burn_dv=None) -> float:
+def delivery_hardware_usd_per_kg(destination: str, burn_dv=None,
+                                 tug_fuel_usd_per_kg: Optional[float] = None) -> float:
     """What building the expended stages costs, per kg delivered.  (v0.4.0.)
 
     Walks the chain backwards exactly as `delivery_mass_ratio` does, and at
@@ -599,12 +603,15 @@ def delivery_hardware_usd_per_kg(destination: str, burn_dv=None) -> float:
 
     each scaled by the mass that leg carries.  0.0 at `leo` and
     `earth_surface`, where nothing is expended above LEO; `inf` where a tank
-    cannot close.  `burn_dv` as for `delivery_mass_ratio`.
+    cannot close.  `burn_dv` as for `delivery_mass_ratio`;
+    `tug_fuel_usd_per_kg` replaces the fuel price.
     """
     legs = _chain(destination, burn_dv)
     if not legs:
         return 0.0
 
+    fuel = (TUG_PROPELLANT_USD_PER_KG if tug_fuel_usd_per_kg is None
+            else float(tug_fuel_usd_per_kg))
     mass, cost = 1.0, 0.0
     for leg in reversed(legs):
         if leg[0] == "edl":
@@ -624,7 +631,7 @@ def delivery_hardware_usd_per_kg(destination: str, burn_dv=None) -> float:
             stage_dry = m0 / r - 1.0
             propellant = m0 - 1.0 - stage_dry
             cost += mass * (stage_dry * STAGE_HARDWARE_USD_PER_KG[dry]
-                            + propellant * TUG_PROPELLANT_USD_PER_KG)
+                            + propellant * fuel)
             mass *= m0
     return cost
 
@@ -634,6 +641,7 @@ def delivered_cost_usd_per_kg(
     leo_usd_per_kg: float = LEO_LAUNCH_USD_PER_KG,
     stage_hardware: bool = True,
     burn_dv=None,
+    tug_fuel_usd_per_kg: Optional[float] = None,
 ) -> float:
     """Cost of putting 1 kg of payload at `destination`, launched from Earth.
 
@@ -648,6 +656,8 @@ def delivered_cost_usd_per_kg(
     reproduces v0.4.0-v0.7.0, and adding
     `burn_dv=CHAIN_BURN_DV_BEFORE_V090["lunar_surface"]` reproduces a lunar
     price from before v0.9.0's descent re-pin.
+    `tug_fuel_usd_per_kg=TUG_PROPELLANT_USD_PER_KG_BEFORE_V0160` reproduces the
+    v0.4.0-v0.15.0 fuel line.
 
     Unknown destinations return 0.0 rather than raising, which is the
     behaviour its consumer has always had: a destination with no chain avoids
@@ -658,21 +668,26 @@ def delivered_cost_usd_per_kg(
         return float("inf")
     cost = float(leo_usd_per_kg) * mass
     if stage_hardware:
-        cost += delivery_hardware_usd_per_kg(destination, burn_dv)
+        cost += delivery_hardware_usd_per_kg(destination, burn_dv,
+                                             tug_fuel_usd_per_kg)
     return cost
 
 
 def downleg_cost_usd_per_kg(destination: str,
-                            departure_dv_m_s: Optional[float] = None) -> float:
+                            departure_dv_m_s: Optional[float] = None,
+                            recovery_in_mass_ratio: bool = False) -> float:
     """Cost of moving 1 kg from an in-space depot to the terrestrial market.
 
-    Capsule + TPS + a share of the recovery campaign, all scaled by the mass
-    ratio of the departure burn, because that propellant is extra mass that has
-    to be built and flown.
+    Capsule + TPS, scaled by the mass ratio of the departure burn because that
+    propellant is extra mass that has to be built and flown, plus a share of
+    the recovery campaign, which is not.  A recovery is a charge per batch on
+    the ground: one batch is one recovery however hard it was to send home.
 
     Returns 0.0 for `earth_surface` and for anything unrecognised; the material
     is already there.  `departure_dv_m_s` replaces the departure burn
-    (`DOWNLEG_DV_BEFORE_V090` reproduces a pre-v0.9.0 lunar downleg).
+    (`DOWNLEG_DV_BEFORE_V090` reproduces a pre-v0.9.0 lunar downleg), and
+    `recovery_in_mass_ratio=True` reproduces the pre-v0.16.0 charge, which
+    multiplied the recovery by the mass ratio as well.
     """
     key = str(destination or "").strip().lower()
     if key not in DOWNLEG_DEPARTURE_DV_M_S:
@@ -686,7 +701,9 @@ def downleg_cost_usd_per_kg(destination: str,
     dv = (DOWNLEG_DEPARTURE_DV_M_S[key] if departure_dv_m_s is None
           else float(departure_dv_m_s))
     r = math.exp(dv / (TUG_ISP_S * G0_M_S2))
-    return (hardware + recovery) * r
+    if recovery_in_mass_ratio:
+        return (hardware + recovery) * r
+    return hardware * r + recovery
 
 
 say("OK  Delivery chains loaded - %d destinations, %d with a downleg"
