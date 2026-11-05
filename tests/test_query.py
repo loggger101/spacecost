@@ -227,8 +227,8 @@ def test_isru_takes_the_return_propellant_off_the_outbound_leg(catalog):
     """`isru_return_propellant` is a real dial, not a documented one.
 
     ⚠️  AND WHAT IT SAVES IS THE LAUNCH, NOT THE PROPELLANT.  The propellant
-    line goes UP -- $50/kg on site against $0.24/kg for methalox on Earth, two
-    hundred times -- and the total still falls, because return propellant made
+    line goes UP -- $50/kg on site against $0.38/kg for methalox on Earth, over
+    a hundred times -- and the total still falls, because return propellant made
     at the destination is not dead mass on the outbound leg and so is neither
     launched nor pushed through the outbound burn.  Asserted in that direction
     on purpose: the intuitive assertion is the wrong one, and writing it down
@@ -296,7 +296,7 @@ def test_the_summary_lifts_the_propellant_too():
     p = row["propellant_mass_per_kg_payload"]
     assert row["total_usd_per_kg_payload_to_segment_end"] == pytest.approx(
         launch * (1.0 + p) + row["in_space_prop_usd_per_kg_payload"], rel=1e-12)
-    assert row["total_usd_per_kg_payload_to_segment_end"] == pytest.approx(29_882.2, abs=0.1)
+    assert row["total_usd_per_kg_payload_to_segment_end"] == pytest.approx(29_882.9, abs=0.1)
 
     # A segment with no burn lifts nothing extra.
     idle = summary[summary["propellant_mass_per_kg_payload"] == 0.0]

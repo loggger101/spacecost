@@ -438,7 +438,9 @@ def _blend(of_ratio: float, fuel: dict, ox: dict) -> dict:
 #   LCH4       ~$400/tonne, a liquefied-product midpoint of the World Bank Pink
 #              Sheet's 2025 means: hub-gas content ~$0.19/kg, delivered liquid
 #              (Japan LNG) ~$0.63/kg.  2025 dollars.
-#   LOX        Astronautix / aqua-calc, bulk industrial cryogen ~$0.20/kg
+#   LOX        DLA Energy Aerospace Standard Prices FY2025 (effective Oct 1
+#              2024): propellant oxygen $335.89 per short ton = $0.37/kg; a
+#              second NSN prints $322.28 = $0.355/kg.  Oct-2024 dollars.
 #   N2O4       DOD Aerospace Standard Prices FY20 reference
 #   MMH        DOD Aerospace Standard Prices FY20 reference
 #   Hydrazine  commercial ~$75.8/kg: Space Insider, "How Much Does Rocket Fuel
@@ -513,7 +515,7 @@ _COMPONENTS = {
     "RP-1":      {"density_kg_per_L": 0.810, "cost_usd_per_kg":      2.50, "storage_class": "storable_liquid"},
     "LH2":       {"density_kg_per_L": 0.0708,"cost_usd_per_kg":     10.00, "storage_class": "deep_cryogen"},   # base + handling
     "LCH4":      {"density_kg_per_L": 0.422, "cost_usd_per_kg":      0.40, "storage_class": "mild_cryogen"},   # ~$400/tonne, see above
-    "LOX":       {"density_kg_per_L": 1.141, "cost_usd_per_kg":      0.20, "storage_class": "mild_cryogen"},
+    "LOX":       {"density_kg_per_L": 1.141, "cost_usd_per_kg":      0.37, "storage_class": "mild_cryogen"},
     "N2O4":      {"density_kg_per_L": 1.450, "cost_usd_per_kg":     35.00, "storage_class": "storable_liquid"},
     "MMH":       {"density_kg_per_L": 0.870, "cost_usd_per_kg":    100.00, "storage_class": "storable_liquid"},
     "Hydrazine": {"density_kg_per_L": 1.010, "cost_usd_per_kg":     75.00, "storage_class": "storable_liquid"},  # DOD ref + handling

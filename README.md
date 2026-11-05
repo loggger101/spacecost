@@ -236,11 +236,11 @@ questions somebody costing a mission actually asks:
 ```python
 >>> import spacecost
 >>> spacecost.delivered_cost_usd_per_kg("lunar_surface")
-48226.34...
+48226.89...
 >>> spacecost.delivery_mass_ratio("lunar_surface")  # kg in LEO per kg landed
 5.279...
 >>> spacecost.downleg_cost_usd_per_kg("cislunar")
-27316.95...
+27161.38...
 ```
 
 `tests/test_docs.py` runs that block, and every other Python block here. The
@@ -305,10 +305,10 @@ entry discards at the TPS rate:
 | `leo` | 2,555 | 0 |
 | `gto` | 5,168 | 414 |
 | `geo` | 8,462 | 937 |
-| `cislunar` | 7,236 | 742 |
-| `mars_orbit` | 9,154 | 1,046 |
-| `lunar_surface` | 48,226 | 34,737 |
-| `mars_surface` | 186,306 | 159,209 |
+| `cislunar` | 7,237 | 742 |
+| `mars_orbit` | 9,154 | 1,047 |
+| `lunar_surface` | 48,227 | 34,738 |
+| `mars_surface` | 186,307 | 159,210 |
 
 The two surfaces are mostly hardware, because a lander ($200k/kg) and an
 aeroshell ($50k/kg) are expensive things to throw away. `gto`, a refuelling
@@ -387,7 +387,7 @@ quiet defect:
 ```
                                  name  isp_vac_s  cost_usd_per_kg  dv_penalty_factor  effective_dv_m_per_s  usd_per_kg_payload_for_dv
 Mass driver  (regolith reaction mass)      306.0         0.100000                1.0                6500.0                   0.772388
-               methalox  (LCH4 / LOX)      380.0         0.243478                1.0                6500.0                   1.149611
+               methalox  (LCH4 / LOX)      380.0         0.376522                1.0                6500.0                   1.149611
         VASIMR  (argon, variable Isp)     4000.0        10.000000                1.5                9750.0                   2.821724
 ```
 
@@ -668,7 +668,7 @@ build` rebuilds the whole thing.
 These tables were built over fourteen releases as **Module 3 of
 [economicspace](https://github.com/loggger101/economicspace)**, an asteroid
 mining profitability pipeline, and extracted at `pipeline_version` 1.14.0
-(commit `b0b18b2`; the contract is 1.24.0 as of this release). Two thirds of
+(commit `b0b18b2`; the contract is 1.25.0 as of this release). Two thirds of
 that module was annotated reference data and nothing in its schema knows what
 an asteroid is, which is the argument for splitting it out: a launch price is
 useful to anyone costing a mission. economicspace consumes this package as its
@@ -707,7 +707,7 @@ there is no non-recurring engineering, no programme overhead and no cadence
 limit, and the chain flies an efficient hydrolox tug that nobody sells as a
 product yet. They answer "what is the least a kilogram there could be worth",
 which is the right question for revenue. Real CLPS lunar delivery is roughly
-$1M/kg at ~100 kg scale, against this model's $48,226.
+$1M/kg at ~100 kg scale, against this model's $48,227.
 
 **The operational table assumes an uncrewed spacecraft.** No life support, no
 habitat, no crew operations, no return-vehicle uplift for people. The

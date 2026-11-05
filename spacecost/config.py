@@ -104,7 +104,7 @@ class SpacecostConfig:
     #
     # WHAT ISRU SAVES IS THE LAUNCH, NOT THE PROPELLANT.  This comment used to
     # say the $/kg "drops to" the processing cost, which is backwards for most
-    # of the table: $50/kg on site is two hundred times the $0.24/kg methalox
+    # of the table: $50/kg on site is over a hundred times the $0.38/kg methalox
     # costs on Earth, so the PROPELLANT line goes up.  What collapses is the
     # mass: return propellant made at the asteroid is not dead mass on the
     # outbound leg, so it is neither launched nor pushed through the outbound
@@ -125,7 +125,7 @@ class SpacecostConfig:
     # Stamped into every output CSV.  BUMP IT when a change moves any number a
     # build produces.  See this module's docstring for why it is not the same
     # thing as `spacecost.__version__`, and CHANGELOG.md for what moved when.
-    pipeline_version: str = "1.24.0"
+    pipeline_version: str = "1.25.0"
     preview_rows:     int = 15   # rows per table in the CLI preview
 
     def resolved_output_dir(self) -> str:

@@ -97,7 +97,7 @@ so a study can state what it excluded.
 | source | what it establishes |
 |---|---|
 | DOD Aerospace Standard Prices, FY20 | hydrazine, MMH, N2O4 pricing (a list no longer findable to re-check) |
-| DLA Energy, Aerospace Standard Prices FY2025 (effective Oct 1 2024) | the government price of MMH, NTO and hydrazine, quoted beside the rows as a comparison and not used for a value |
+| DLA Energy, Aerospace Standard Prices FY2025 (effective Oct 1 2024) | the LOX component ($0.37/kg, rc-185), and the government price of MMH, NTO and hydrazine, quoted beside the rows as a comparison and not used for a value |
 | Space Insider, How Much Does Rocket Fuel Really Cost? (J. Seibert, Jun 13 2023) | hydrazine's commercial price, up to ~$75.8/kg (once cited as "AIAA 2024") |
 | SETS Space / Electric Propulsion, 2024 | argon ion pricing, and the high end of krypton's band ("$2,100-$4,800" flight grade) |
 | Idaho National Laboratory, INL/RPT-23-75203, Krypton and xenon recovery cost-benefit, 2023 | the low end of krypton's band: a market survey putting bulk Kr prices at "around $1/L"; and the price of xenon, around $60/L in Q1 2023 |
