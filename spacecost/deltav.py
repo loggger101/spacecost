@@ -53,8 +53,14 @@ DELTA_V_REFERENCE: List[dict] = [
     {"segment": "NEA  →  Earth return (propulsive)","dv_m_per_s":  5_500, "duration_yr": 1.5,
      "notes": "Symmetric to outbound; powered Earth-return with no aerobraking."},
     {"segment": "NEA  →  Earth return (aerocap)", "dv_m_per_s":  1_500, "duration_yr": 1.5,
-     "notes": "Aerocapture reduces propulsive Δv by ~4 km/s (heat-shield mass "
-              "penalty captured separately under operational_costs TPS row)."},
+     "notes": "Aerocapture replaces most of the propulsive capture (heat-shield "
+              "mass penalty captured separately under operational_costs TPS "
+              "row).  The size of the saving is not sourced: NASA puts an "
+              "all-propulsive circular insertion for NEO return at ~4-5 km/s "
+              "(ISPT, Aerocapture for Discovery Missions, 2010, p. 12) and "
+              "gives no aerocapture residual, and this row's endpoint orbit is "
+              "not defined, so 1,500 m/s is a placeholder (General_Research "
+              "rc-293)."},
     {"segment": "Main belt  →  Earth return",     "dv_m_per_s":  7_500, "duration_yr": 4.0,
      "notes": "Per Taylor 2018 — long cruise; favours electric propulsion."},
     {"segment": "Lunar surface  →  LEO",          "dv_m_per_s":  5_900, "duration_yr": 0.01,
@@ -83,7 +89,12 @@ DELTA_V_REFERENCE: List[dict] = [
               "Martinez 2016 'Options for Staging Orbits in Cis-Lunar Space'). "
               "NRHO is the cheapest usefully-stable cislunar depot orbit."},
     {"segment": "LEO  →  cislunar NRHO depot",    "dv_m_per_s":  3_600, "duration_yr": 0.02,
-     "notes": "TLI + NRHO insertion.  This is the Δv that a kilogram of "
+     "notes": "TLI + NRHO insertion, an approximate cross-study benchmark: "
+              "3,140 m/s TLI from a 185 km parking orbit (NASA-CR-195527, "
+              "Table 2.1) plus 400-450 m/s TLI to NRHO (Benson, Asher & Reese "
+              "2025) sum to 3,540-3,590, from different missions, so the +/-2% "
+              "band is not verified (General_Research rc-357).  This is the "
+              "Δv that a kilogram of "
               "asteroid material delivered to NRHO AVOIDS having to be lifted "
               "through — it sets the cislunar sale price in Module 2."},
 

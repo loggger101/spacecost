@@ -130,6 +130,12 @@ so a study can state what it excluded.
 | Schmidt, Bonometti & Morton (NASA MSFC), Nuclear Pulse Propulsion - Orion and Beyond, AIAA 2000-3856 | nuclear pulse: the external-pulse Isp range |
 | Polzin, Curran, Rao, Myers, Duchek, Presby et al., Technology Maturation Plan for High Power Nuclear Electric Propulsion, NASA/TP-20260001499, Table 2.1 | nuclear electric: TRL, and the power-system specific-mass KPPs (24 kg/kWe threshold, 13 target) |
 | Poston et al., KRUSTY Reactor Design, Nuclear Technology 206, 2020 (section 4) | nuclear electric: what KRUSTY demonstrated |
+| SpaceX, Starlink Progress Report 2023, p. 48 | krypton on first-generation Starlink, argon on the second (rc-363) |
+| NASA, State-of-the-Art of Small Spacecraft Technology, ch. 4, Table 4-10 (2026) | krypton Hall devices, a comparator beside the row's generic Isp and kg/N (rc-364) |
+| Woodcock, NTRS 20000085870, 2000, p. 7 | impulsive against low-thrust Earth escape, the anchor beside the 1.5 low-thrust penalty (rc-361) |
+| NASA Glenn, RL10B-2 propulsion options, NTRS 20200002036, slide 7 | the tug's 465 s Isp (rc-358) |
+| NASA, SLS Reference Guide, 2022, p. 9 | ICPS unfueled and fueled mass, the tug dry-fraction analogue (rc-359) |
+| NASA, Apollo 10 Press Kit, p. 44 | LM-4 descent stage dry mass and propellant, the lander dry fraction (rc-360) |
 
 Vacuum Isp values are the interplanetary-relevant figures. Sea-level Isp is
 lower and matters only to a first stage, which is already priced into the launch
@@ -146,6 +152,8 @@ table's $/kg-to-orbit.
 | Orloff, *Apollo by the Numbers* (NASA SP-2000-4029), lunar-orbit phase tables | trans-lunar injection, lunar orbit insertion, and the Lunar Module's powered descent and ascent as flown on Apollo 14-17; trans-earth injection on Apollo 8, 10-12 and 14-17, the middle leg of the lunar surface to LEO row |
 | Lyons (JPL), Magellan / MGS aerobraking; Long et al. 2007, MRO aerobraking operations | the aerobraked return's flight record |
 | NASA NTRS and JPL design handbooks | the remaining trajectory legs |
+| NASA-CR-195527, Table 2.1; Benson, Asher & Reese, 2025 | TLI and TLI-to-NRHO components, a cross-study benchmark for the NRHO row (rc-357) |
+| NASA ISPT, Aerocapture for Discovery Missions, 2010, p. 12 | all-propulsive insertion for NEO return, ~4-5 km/s; why the aerocapture saving is unsourced (rc-293) |
 
 ⚠️  These are **representative means**, not a trajectory. A real transfer needs a
 Lambert solve against an ephemeris; these are what you price the answer with.
@@ -193,7 +201,20 @@ Lambert solve against an ephemeris; these are what you price the answer with.
 | Hastings et al., Large-Scale Demonstration of Liquid Hydrogen Storage With Zero Boiloff for In-Space Applications, NASA/TP-2010-216453 | the Gifford-McMahon cooler's 350 W/W at 4% of Carnot |
 | Poston, Gibson, Godfroy & McClure, KRUSTY Reactor Design, Nuclear Technology 206, S13-S30, 2020; McClure et al., Kilopower Project: The KRUSTY Fission Power Experiment and Potential Missions, same issue, S1-S12 | what KRUSTY demonstrated: a 5 kW(thermal) reactor, with electrical conversion shown in part |
 | Bennett, Smith & Jakupca, Analysis of 100-W Regenerative Fuel Cell Demonstration, NASA/TM-20205000357, 2020, Table III | regenerative fuel cell round-trip efficiency, 47.4% |
-| Greene et al., COPV Stress Rupture Testing, NTRS 20100021151; Kezirian, Johnson & Phoenix, COPV: Flight Rationale for the Space Shuttle Program, NTRS 20110015972; Parker & Prosser, NASA/TM-20260002192 | named as not giving a PV/W, which leaves the COPV performance factor an estimate |
+| Greene et al., COPV Stress Rupture Testing, NTRS 20100021151; Kezirian, Johnson & Phoenix, COPV: Flight Rationale for the Space Shuttle Program, NTRS 20110015972; Parker & Prosser, NASA/TM-20260002192 | named as not giving a PV/W |
+| NASA NTRS 20080009730, Tables 1-3 | measured COPV burst P_b V/W, 326.5-416.6 kJ/kg, a comparator for the performance factor (rc-417) |
+| FRED CPIAUCSL (BLS CPI-U) | the mission-operations Dec 2018 sensitivity (rc-295) |
+| Bennett & Baldwin, NASA/TM-2010-216906, Table 5 | five protected Li-ion packs at 124-133 Wh/kg, the analogy behind 130 Wh/kg (rc-342) |
+| Gibson, Mason & Bowman, NASA/TM-2015-218460, Table I | the 10 kWe Kilopower design estimate, 1,544 kg (rc-349) |
+| JPL D-101316, Solar Power Technologies for Future Planetary Science Missions, 2017, Table 3-3 | the ~150 W/kg roll-out array benchmark (rc-362) |
+| Surampudi et al., JPL D-24454, 2002, Sec. 2.6 | historical array-only cost per watt beside the power-system cost (rc-374) |
+| Sandvik, Rebuild Solutions, B15-1183ENG, p. 6 | major rebuild intervals by machine type, beside the rig trip limit (rc-365) |
+| Jones, ICES-2017-87, p. 4 | water tank mass per kg of water, beside volatile containment (rc-373) |
+| Mas, NBER WP 13138, 2007 | condition-priced used-equipment resale, beside the salvage fraction (rc-375) |
+| Kascak et al., NASA/TM-2001-211138, p. 1 | the ISS 35-minute eclipse in a 92-minute orbit (rc-410) |
+| Stubbs & Wang, Icarus 217, 2012, p. 275 | Vesta's surface solar visibility, beside the dark fraction (rc-413) |
+| Csank, Electric Power on the Lunar Surface, NTRS 20240013588, slide 12 | regenerative fuel cell system Wh/kg by mission case (rc-414) |
+| Carrier 1974; Graf 1993 (NASA RP-1265); Shearer et al. 2023; Nakamura et al. 2025 and 2012; Bonitz et al. 2009; Lauretta et al. 2024; NASA Release 21-117; Jia et al. 2021; Wang et al. 2024; ESA's Philae account; the InSight team's NASA Q&A | each flight outcome in the mining success tally (rc-396 to rc-407) |
 | Plachta, Johnson & Feller, Cryogenic Boil-Off Reduction System Testing, NTRS 20150000134 | named as not giving an MLI areal density |
 | Jansen & Dever, G2 Flywheel Module Design, NASA/CR-2006-213862 | the G2 flywheel's 60,000 rpm and 525 W-hr; it gives no Wh/kg |
 

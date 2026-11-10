@@ -51,6 +51,11 @@ from .vehicles import band_centre
 # impulsive Δv budget it cannot actually fly.  1.5 is a mid-range figure; it
 # does not capture the OTHER low-thrust cost, which is trip time, a spiral
 # adds months to years that this pipeline's duration model does not yet see.
+# 1.5 is a SCENARIO PROXY, applied to every leg alike.  The one numeric anchor
+# is Earth escape: ~3.2 km/s impulsive against 5-6 km/s for typical low-thrust
+# solutions, 1.56-1.88x, and ~7.5 in the infinite-low-thrust limit (Woodcock
+# 2000, NTRS 20000085870, p. 7); heliocentric legs have no matched comparison
+# here (General_Research rc-361).
 _LOW_THRUST_DV_PENALTY = 1.5
 
 _REF_YEAR_PROP = 2026
@@ -1160,9 +1165,14 @@ PROPELLANTS_REFERENCE: List[dict] = [
                                  * _COMPONENTS["Krypton"]["density_kg_per_L"],
         "yfinance_proxy":        None,
         "reference_year":        _REF_YEAR_PROP,
-        "notes": "The most-flown electric propellant by unit count — every "
-                 "Starlink v1.0 Hall thruster ran krypton, because Xe supply "
-                 "cannot feed a constellation.  ~13× cheaper than xenon at "
+        "notes": "SpaceX's first-generation Starlink satellites used krypton; "
+                 "the second generation switched to argon (Starlink Progress "
+                 "Report 2023, p. 48; General_Research rc-363).  The 2,000 s, "
+                 "0.45 efficiency and 35 kg/N are generic mission-model "
+                 "selections, not demonstrated krypton Hall performance: "
+                 "NASA's small-spacecraft survey lists Kr Hall devices at "
+                 "900-1,575 s and ~56-69 kg/N, with no efficiency (S3VI ch. 4, "
+                 "Table 4-10, 2026, manufacturer data; rc-364).  ~13× cheaper than xenon at "
                  "$794/kg, the geometric centre of a band from $300/kg (bulk: "
                  "INL/RPT-23-75203, 2023, Sec. 1, 'hover around $1/L', ~$267/kg at "
                  "3.75 g/L) to $2,100/kg (the bottom of SETS Space's 2024 "
