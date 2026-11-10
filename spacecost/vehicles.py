@@ -159,7 +159,7 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
                  "689 launches, 2 in-flight failures (CRS-7, Starlink 9-3) as of "
                  "mid-2026.  The LEO low end is the ~17.4 t Starlink stack "
                  "actually flown, to a LOW insertion orbit: a customer payload "
-                 "to a 400-500 km orbit gets less.",
+                 "to a 400-500 km orbit gets less.  Comparator: SSC's two Jul 2026 NSSL Lane 1 task orders, $1.6B for 18 Vandenberg launches, ~$88.9M each by arithmetic, and NASA's ~$100M NEO Surveyor order, both full-service awards, not the commercial list price (General_Research rc-338).",
     },
     {
         "name":                          "Falcon 9 (expendable)",
@@ -241,7 +241,7 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
                  "63.8 t LEO figure (Zapata 2017, NASA, 'State of Play', p16) "
                  "has never been flown; no Falcon Heavy "
                  "payload has come close to it.  Volume, not mass, binds first "
-                 "at this size: the fairing is the Falcon 9 fairing.",
+                 "at this size: the fairing is the Falcon 9 fairing.  Comparator: NASA's $256.6M Dragonfly Falcon Heavy award is firm-fixed-price and includes other mission-related costs, a scope above this band, not a replacement (General_Research rc-323).",
     },
     {
         "name":                          "SLS Block 1",
@@ -340,7 +340,7 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
                  "STARTING price and each pair of GEM 63XL boosters adds to it; "
                  "$130M is an estimate, not a quote.  Two of four Vulcan flights "
                  "to Feb 2026 had a GEM 63XL anomaly (a lost nozzle Oct 2024, a "
-                 "malfunction Feb 2026) that the core stage flew through.",
+                 "malfunction Feb 2026) that the core stage flew through.  Comparator: SSC's FY26 NSSL award, $428M for two ULA missions, $214M each by arithmetic, a mission-assurance bundle of unstated configuration, not a list price (General_Research rc-321).",
     },
     {
         "name":                          "Vulcan Centaur VC6",
@@ -395,7 +395,7 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
                  "the centre of the range.  Three flights: NG-1 Jan 2025 (orbit, booster "
                  "lost), NG-2 Nov 2025 (ESCAPADE, first landing), NG-3 Apr 2026 "
                  "(first booster reuse, but BlueBird 7 was left in an "
-                 "off-nominal orbit).  The 45 t LEO figure has not been flown.",
+                 "off-nominal orbit).  The 45 t LEO figure has not been flown.  Comparator: NASA's $20M ESCAPADE task order (2023), an early-flight award with its own risk and scope, not a current price (General_Research rc-328).",
     },
     {
         "name":                          "Electron",
@@ -443,7 +443,7 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "notes": "Source: Firefly, $15-17.6M.  Small-lift kerolox.  Seven flights "
                  "to Mar 2026: 3 successes, 2 partial failures, 2 failures (the "
                  "latest Apr 2025), then a clean return to flight Mar 2026. "
-                 "Listed for market completeness at the bottom end.",
+                 "Listed for market completeness at the bottom end.  Under review: Firefly's Alpha Payload User's Guide v5.2 (Jul 2025) states $19M for a dedicated launch, above this range, with no effective date (General_Research rc-322).  Firefly's FY2025 10-K counts seven launches by 31 Dec 2025 and five completed successfully, where its own mission page dates Flight 7 to 11 Mar 2026; the count above keeps its date and its partial-failure split (rc-341).",
     },
     {
         "name":                          "Minotaur IV",
@@ -695,7 +695,7 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
                  "four-booster 24L costs more and has no published price, so "
                  "$50-75M is an estimate.  First 24 flight carried HTV-X1, Oct "
                  "2025.  H3 has 2 failures in 9 flights: TF1 (Mar 2023) and F8 "
-                 "(Dec 2025, payload adapter failure, QZS-5 lost).",
+                 "(Dec 2025, payload adapter failure, QZS-5 lost).  Comparator: JAXA puts H3-24 about 60% above H3-30 (2026-06-08 briefing), ~$52.8M against the H3-30's $33M target at 2024 rates, a cost target rather than a price, inside this band (General_Research rc-379).",
     },
     {
         "name":                          "H3 (30)",
@@ -869,7 +869,7 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "list_price_usd":            30_000_000,
         "price_basis":                   "reported",
         "reference_year":          _REF_YEAR_LAUNCH,
-        "notes": "Source: Wikipedia — $30M.  ~100 launches.  LEO/SSO only.",
+        "notes": "Source: Wikipedia — $30M.  ~100 launches.  LEO/SSO only.  Comparator: customer-reported batch service fees of RMB 81.0-85.9M in 2020-2022, transaction prices with their own scope and date, not a replacement (General_Research rc-315).",
     },
     {
         "name":                          "Long March 3B/E",
@@ -888,7 +888,7 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "reference_year":          _REF_YEAR_LAUNCH,
         "notes": "Source: Wikipedia — $50-70M.  China's GTO workhorse, 112+ "
                  "successes, 96.5% success rate.  Escape is Chang'e-3's ~3.8 t "
-                 "sent to TLI, a flown figure rather than a rating.",
+                 "sent to TLI, a flown figure rather than a rating.  Comparator: disclosed rocket fees of RMB 260-290M plus RMB 115M monitoring and control per mission; whether this row is rocket-only or bundled is unresolved, so it stays (General_Research rc-316).",
     },
     {
         "name":                          "Long March 4C",
@@ -1025,7 +1025,7 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
                  "2024), an official floor, so the band's top understates it.  "
                  "Price estimated.  8 for 8, all "
                  "Guowang deployments.  Reusable 12A and 12B variants first flew "
-                 "Dec 2025 and Jun 2026 and are not yet listed.",
+                 "Dec 2025 and Jun 2026 and are not yet listed.  Comparator: Guangzhou Daily reports a quote below RMB 20,000/kg, a different price scale at 11 t, with no stated basis, so the estimate stays (General_Research rc-318).",
     },
     {
         "name":                          "Long March 10B",
@@ -1088,7 +1088,7 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "price_basis":                   "reported",
         "reference_year":          _REF_YEAR_LAUNCH,
         "notes": "Source: Wikipedia — ~$10,000/kg, i.e. ~$15M full.  Maiden "
-                 "flight failed (Jul 2020).",
+                 "flight failed (Jul 2020).  Under review: the $12.2M and $8,133/kg pair has no traced source.  Xinhua (2018) reported a quote below $10,000/kg, which it fits, and the FAA's 2017 compendium a $15M estimate; which basis the row holds is unresolved, so it stays (General_Research rc-202).",
     },
     {
         "name":                          "Ceres-1",
@@ -1126,7 +1126,7 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
                  "page, 6.5 t LEO and 4.2 t 500 km SSO; Wikipedia gives the LEO "
                  "figure at 200 km.  The "
                  "largest all-solid launcher flying; sea-launched.  4 for 4 to "
-                 "Sep 2026.",
+                 "Sep 2026.  Comparator: Orienspace's dedicated-charter quote of RMB 30,000/kg is $27.45M at 6,500 kg and the 2025-10-10 PBOC rate, 29.6% below this row; orbit, utilisation and date are not reconciled, so it stays (General_Research rc-317).",
     },
     {
         "name":                          "Kinetica-1",
@@ -1186,7 +1186,7 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "reference_year":          _REF_YEAR_LAUNCH,
         "notes": "Source: Wikipedia — 1.6 t to 500 km SSO, used as the LEO "
                  "figure because no LEO figure is published.  Sea-launched solid; "
-                 "12 for 12.  Price estimated.",
+                 "12 for 12.  Price estimated.  Comparator: Xinhua (2021) reports a $10,000/kg unit-cost target for 1.5 t to 500 km SSO, ~$15M a flight, a target rather than a selling price (General_Research rc-415).",
     },
     {
         "name":                          "Zhuque-2E",
@@ -1484,7 +1484,7 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
                  "same 35%.  CAVEAT: escape payload (27 t) > GTO only because it "
                  "assumes orbital refueling; tanker_flights_for_escape carries "
                  "the 12 flights (8-16 quoted), and 12 x ~$95M is the cost "
-                 "that caveat is about.",
+                 "that caveat is about.  Since this note: Flight 14 (2026-09-28) was SpaceX's first orbital Starship flight, reported to deliver 26 Starlink V3 satellites, and on 2026-11-07 NASA selected Starship to launch cislunar communications satellites in 2028.  Status stays development and the price a projection (General_Research rc-339).",
     },
     {
         "name":                          "New Glenn 9x4",
@@ -1532,7 +1532,7 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
                  "captive fairing, first-stage return.  First flight has slipped "
                  "from 2024 to NET Q4 2026 (a stage-1 tank failed in test Jan "
                  "2026).  Beyond-LEO capability is thin: the upper stage is "
-                 "sized for constellation work.",
+                 "sized for constellation work.  Rocket Lab's 2026-10-14 guidance moves the first launch to 2027, company guidance with no quarter given (General_Research rc-340).",
     },
     {
         "name":                          "Terran R",
@@ -1847,7 +1847,7 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
                  "altitude record for a gun still stands.  Orbital insertion "
                  "needs a kick stage, and ~30,000 g means the kick stage has to "
                  "survive it too.  Hydrogen-driven light-gas guns reach ~7 km/s "
-                 "in the laboratory.  Payload-limited to consumables forever.",
+                 "in the laboratory.  Payload-limited to consumables forever.  Under review: the 30 kg and $300,000 have no traced source.  Green Launch's roadmap says 1 lb to LEO scaling to 100-1,000 lb, and a 2026 blog targets ~$220/kg; neither is tied to this configuration (General_Research rc-409).",
     },
     {
         "name":                          "StarTram (maglev)",

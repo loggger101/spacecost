@@ -238,7 +238,12 @@ ENVIRONMENTS_REFERENCE: List[dict] = [
          "Mazarico et al. 2011).  The reason every lunar south-pole "
          "architecture wants the same handful of ridges - and note that the "
          "ICE is in the crater below, permanently shadowed, so the power and "
-         "the water are not in the same place.",
+         "the water are not in the same place.  Under review: for Site 1 on "
+         "the Shackleton-de Gerlache ridge, LOLA modelling gives 67-71% "
+         "average illumination and 13-22 day worst shadows at 1 m above the "
+         "surface, 83-89% and 4-8 days at 5 m (Barker et al. 2021, PSS 203, "
+         "Table 2): height and site matter more than one row can carry "
+         "(General_Research rc-335).",
          mass_kg=7.346e22, mean_radius_m=1_737_400.0),
 
     # ═════════════════════════════════════════════════════════════════════════
@@ -259,7 +264,10 @@ ENVIRONMENTS_REFERENCE: List[dict] = [
          "closest thing this dataset has to a validated mining site.  Mass "
          "7.329e10 kg, mean radius 244.5 m (Lauretta et al. 2019, Nature).  "
          "The derived 0.20 m/s escape velocity is the whole problem with "
-         "operating there: a tossed pebble leaves.",
+         "operating there: a tossed pebble leaves.  Under review: the OLA "
+         "shape model gives a 242.22 m mean radius (Daly et al. 2020, Sci. "
+         "Adv. 6, Table 1), 0.93% below, though its text puts OLA 41 cm "
+         "below SPC; the definition is unresolved (General_Research rc-333).",
          mass_kg=7.329e10, mean_radius_m=244.5),
     _env("162173 Ryugu", "neo",
          0.9633, 1.1896, 1.4159, 7.633, 0.50, 2.4326,

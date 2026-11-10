@@ -214,6 +214,7 @@ Lambert solve against an ephemeris; these are what you price the answer with.
 | Kascak et al., NASA/TM-2001-211138, p. 1 | the ISS 35-minute eclipse in a 92-minute orbit (rc-410) |
 | Stubbs & Wang, Icarus 217, 2012, p. 275 | Vesta's surface solar visibility, beside the dark fraction (rc-413) |
 | Csank, Electric Power on the Lunar Surface, NTRS 20240013588, slide 12 | regenerative fuel cell system Wh/kg by mission case (rc-414) |
+| Comparators named in 0.16.2's notes (General_Research rc-202 to rc-416; each note names its own) | DLA FY2026 aerospace standard prices; SSC and NASA launch task orders; Firefly, Orienspace, JAXA, Xinhua and Guangzhou Daily price statements; Epignosis Insights and Epic Aerospace propellant prices; NASA KSC MLI tests (NTRS 20110014002); NASA G2 flywheel; NASA OIG IG-24-013 and IG-26-010; NASA Glenn NEXT-C contract; JPL MOCS 2014; Gallagher Q3 2026; Leucht, Prater & Vetcha 2024; NASA LuSTR; Herberhold et al. 2026; Barker et al. 2021; Daly et al. 2020 |
 | Carrier 1974; Graf 1993 (NASA RP-1265); Shearer et al. 2023; Nakamura et al. 2025 and 2012; Bonitz et al. 2009; Lauretta et al. 2024; NASA Release 21-117; Jia et al. 2021; Wang et al. 2024; ESA's Philae account; the InSight team's NASA Q&A | each flight outcome in the mining success tally (rc-396 to rc-407) |
 | Plachta, Johnson & Feller, Cryogenic Boil-Off Reduction System Testing, NTRS 20150000134 | named as not giving an MLI areal density |
 | Jansen & Dever, G2 Flywheel Module Design, NASA/CR-2006-213862 | the G2 flywheel's 60,000 rpm and 525 W-hr; it gives no Wh/kg |

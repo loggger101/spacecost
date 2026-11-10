@@ -13,6 +13,40 @@ may read a version as proof that a number moved.
 
 ## Package releases
 
+### 0.16.2 - 2026-11-10
+
+**Data contract 1.25.1 → 1.25.2: thirty-three General_Research value reviews,
+annotated, values kept.** Only `notes` cells in 33 rows, CITATIONS.md and the
+stamps changed. Every value column is identical to 1.25.1. None of these
+candidates offers a like-for-like replacement. Each note now names the
+comparator that questions its number, and says why it is not a drop-in, or what
+is unresolved.
+
+- **Launch prices**, with transaction and contract comparators:
+  - Long March 2D, 3B/E and 12, and Gravity-1 (rc-315 to rc-318).
+  - Vulcan VC4, Alpha, Falcon Heavy, New Glenn and Falcon 9 (rc-321 to rc-323,
+    rc-328, rc-338).
+  - H3-24, Jielong-3, Kuaizhou-11 and the light-gas gun (rc-379, rc-415,
+    rc-202, rc-409).
+- **Status notes dated forward:**
+  - Starship's first orbital flight and NASA's 2028 selection (rc-339).
+  - Neutron's 2027 guidance (rc-340).
+  - Alpha's 10-K count against its dated Flight 7 (rc-341).
+- **Propellant prices** beside DLA FY2026 standards and market composites: argon,
+  xenon, HTP, MMH/NTO, GN2 and hydrazine (rc-310, rc-314, rc-319, rc-326,
+  rc-327, rc-336). Methalox's 380 s sits beside DLR's modelled Raptor 2 RVAC
+  (rc-329).
+- **Storage, operations and environments:**
+  - MLI areal mass (rc-320), flywheel Wh/kg (rc-416) and the depot tanker count
+    (rc-355).
+  - Insurance (rc-294), relay costing (rc-298), the EP string cost (rc-299) and
+    lander cost (rc-300).
+  - Rig service life (rc-347) and plant throughput (rc-383).
+  - The lunar polar ridge (rc-335) and Bennu's radius (rc-333).
+
+Eleven value candidates that do propose a replacement number are not in this
+release: rc-027, 291, 292, 297, 311, 312, 331, 332, 377, 378 and 408.
+
 ### 0.16.1 - 2026-11-10
 
 **Data contract 1.25.0 → 1.25.1: thirty-two General_Research citation and

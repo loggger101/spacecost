@@ -109,7 +109,7 @@ OPERATIONAL_COSTS_REFERENCE: List[dict] = [
                  "Heritage: Apollo LM descent stage, and the CLPS landers "
                  "(Intuitive Machines Nova-C, Astrobotic Peregrine, Blue "
                  "Moon MK1).  A Mars lander carries the TPS row on top, "
-                 "because it has to survive entry as well as land.",
+                 "because it has to survive entry as well as land.  Comparator: CLPS end-to-end task-order price over Nova-C's 677 kg dry mass is ~$120.7k/kg initially and ~$180.2k/kg after growth (NASA OIG IG-24-013), whole-service prices rather than hardware (General_Research rc-300).",
         "reference_year":   _REF_YEAR_OPS,
     },
     {
@@ -320,7 +320,7 @@ OPERATIONAL_COSTS_REFERENCE: List[dict] = [
                  "rose from ~6% (early 2023) to ~10%, the 2023 reset following "
                  "the Viasat-3 and Inmarsat 6-F2 losses (post-separation "
                  "spacecraft failures, >85% of 2023 losses). "
-                 "First-of-kind vehicles at upper end.",
+                 "First-of-kind vehicles at upper end.  Under review: underwriters' appetite for heritage vehicles rose in 2026 and may favour buyers (Gallagher, Q3 2026), but no source gives a newer premium rate (General_Research rc-294).",
         "reference_year":   _REF_YEAR_OPS,
     },
     {
@@ -329,7 +329,7 @@ OPERATIONAL_COSTS_REFERENCE: List[dict] = [
         "value":            50,
         "range_low":        10,
         "range_high":       200,
-        "notes": "Ka-band; relevant only for high-rate science / 3-D maps.",
+        "notes": "Ka-band; relevant only for high-rate science / 3-D maps.  A flat $/Mbit depends on link rate and pass assumptions it does not state: NASA costs a relay as a pro-rata DSN share of return time, one-hour minimum (JPL Mission Operations and Communications Services, 2014, Sec. 2.1.5; General_Research rc-298).",
         "reference_year":   _REF_YEAR_OPS,
     },
     {
@@ -470,7 +470,7 @@ OPERATIONAL_COSTS_REFERENCE: List[dict] = [
                  "electric stage entered the rocket equation as mass and "
                  "appeared in NO cost line at all, so a 14-tonne, 309 kW "
                  "propulsion system was free and electric propulsion won on "
-                 "hardware nobody had to buy.",
+                 "hardware nobody had to buy.  Comparator: NASA Glenn's $18.41M NEXT-C contract (2015) bought two flight thruster/PPU strings plus a prototype PPU and development, a bundle that does not divide into a recurring unit price (General_Research rc-299).",
         "reference_year":   _REF_YEAR_OPS,
     },
     {
@@ -945,7 +945,7 @@ OPERATIONAL_COSTS_REFERENCE: List[dict] = [
                  "cycling and radiation, not by propellant.  ISS-class "
                  "hardware is rated 15-30 years; a machine chewing rock is at "
                  "the low end.  Whatever life is left when the programme ends "
-                 "is credited back as terminal value.",
+                 "is credited back as terminal value.  Under review: NASA's lunar regolith systems target a 5-year life, and in a 15-day ground challenge only 2 of 8 teams held 800 kg/day throughout (Leucht, Prater & Vetcha 2024, NTRS 20240015957); the ISS-class rating's transfer to an abrasive rig is unsupported (General_Research rc-347).",
         "reference_year":   _REF_YEAR_OPS,
     },
     {
@@ -1033,7 +1033,7 @@ OPERATIONAL_COSTS_REFERENCE: List[dict] = [
                  "Nothing here shows why a mineral refinery should outrun ISRU "
                  "hardware by that much; the value is an estimate.  Combined with the "
                  "$300k/kg recurring hardware rate this sets the capital "
-                 "charge per kg refined.",
+                 "charge per kg refined.  Comparator: NASA LuSTR's lunar beneficiation brassboard targets at least 3 kg/h at under 35 kg, over 750 kg/yr per kg at continuous duty; this row's 100 and 500 imply under 1,167 and 5,833 operating hours a year at that rate, a duty this row does not state (General_Research rc-383).",
         "reference_year":   _REF_YEAR_OPS,
     },
     {

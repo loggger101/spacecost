@@ -774,7 +774,7 @@ PROPELLANTS_REFERENCE: List[dict] = [
                  "Energomash's RD-192 methane engine is 356 s in the same "
                  "paper.  LCH4 ~$400/tonne, 2025 dollars: a liquefied-product "
                  "midpoint of the World Bank Pink Sheet's hub gas (~$190/tonne) "
-                 "and delivered LNG (~$630/tonne).  ISRU-makeable on Mars.",
+                 "and delivered LNG (~$630/tonne).  ISRU-makeable on Mars.  Comparator: DLR models Raptor 2 RVAC at 368.5 s (O/F 3.4) and 365.9 s (O/F 3.6), calculated rather than measured, 3-4% below this 2013 figure (Herberhold et al. 2026, CEAS Space J. 18, Table 2; General_Research rc-329).",
     },
     {
         "name":                  "MMH / NTO  (hypergolic)",
@@ -807,7 +807,7 @@ PROPELLANTS_REFERENCE: List[dict] = [
                  "(effective Oct 1 2024) are MMH $225.40/lb (~$497/kg) and NTO "
                  "MON-3 $106.42/lb (~$235/kg): DoD prices including DLA "
                  "overhead, quoted as the government comparison and not used "
-                 "for the value.",
+                 "for the value.  Comparator: DLA's FY2026 standard prices, MMH $219.10/lb and MON-3 $95.53/lb, are $313.41/kg at this O/F, 5.3x the FY2020 fallback; a DoD standard, not a delivered commercial price (General_Research rc-326).",
     },
     {
         "name":                  "Hydrazine  (monoprop)",
@@ -849,7 +849,7 @@ PROPELLANTS_REFERENCE: List[dict] = [
                  "Aerospace Standard Price for HPH and H70 hydrazine is "
                  "$165.75/lb (~$365/kg), a DoD price including DLA overhead, "
                  "quoted as the government comparison and not used for the "
-                 "value.",
+                 "value.  DLA's FY2026 HPH/H70 standard is $121.54/lb (~$267.95/kg), 26.7% below FY2025; still a DoD comparator beside the commercial $75 (General_Research rc-336).",
     },
     {
         "name":                  "Xenon  (Hall / ion)",
@@ -882,7 +882,7 @@ PROPELLANTS_REFERENCE: List[dict] = [
                  "~2,800 s at 12 kW (Shastry et al., IEPC-2024, NTRS "
                  "20240006249).  "
                  "INL/RPT-23-75203: Xe sold at around $60/L in Q1 2023 = "
-                 "$10,243/kg at STP; used $10k/kg, Q1-2023 dollars.",
+                 "$10,243/kg at STP; used $10k/kg, Q1-2023 dollars.  Comparator: Epignosis Insights' composite fell to $2,650/kg by Aug 2026, analyst estimates rather than transactable prices, and NASA Glenn's Aug 2026 xenon buy publishes no quantity; $10,000 stays (General_Research rc-314).",
     },
     {
         "name":                  "Argon  (Hall / ion)",
@@ -918,7 +918,7 @@ PROPELLANTS_REFERENCE: List[dict] = [
                  "pays 22.9% of its own mass in COPV against krypton's 12.5% and "
                  "xenon's 1.9% — argon is the LIGHTEST noble gas, so it is the "
                  "worst of the three to bottle, and $10/kg does not buy that "
-                 "back.  The cryogenic article is a separate row below.",
+                 "back.  The cryogenic article is a separate row below.  Comparator: DLA's FY2026 technical argon, $1.14/lb (~$2.51/kg), a government standard of unreconciled purity and packaging, not a replacement (General_Research rc-310).",
     },
 
     # ═════════════════════════════════════════════════════════════════════════
@@ -1049,7 +1049,7 @@ PROPELLANTS_REFERENCE: List[dict] = [
                  "20010102648).  The reason it "
                  "is here is the boil-off column: 0.002%/day is self-"
                  "decomposition, not evaporation, so unlike a cryogen the loss "
-                 "does not accelerate with mission length.",
+                 "does not accelerate with mission length.  Comparator: Epic Aerospace lists 98% HTP at $65/kg, minimum 280 kg, plus $3,500-8,500 shipping, against this unsourced $5; bulk versus delivered basis is unresolved, so the value stays (General_Research rc-319).",
     },
     {
         "name":                  "HTP / RP-1  (peroxide bipropellant)",
@@ -1105,7 +1105,7 @@ PROPELLANTS_REFERENCE: List[dict] = [
                  "at 30 MPa the COPV masses 46% of the nitrogen it holds — the "
                  "clearest demonstration in this table of why tankage belongs in "
                  "the rocket equation.  Present as the floor of the Isp range, "
-                 "not as a candidate.",
+                 "not as a candidate.  Comparator: DLA's FY2026 technical nitrogen, $0.16/lb (~$0.35/kg), of unstated grade, pressure and packaging against a high-pressure propellant row (General_Research rc-327).",
     },
     {
         "name":                  "Solid  (APCP)",
