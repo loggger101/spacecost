@@ -13,6 +13,27 @@ may read a version as proof that a number moved.
 
 ## Package releases
 
+### 0.17.0 - 2026-11-10
+
+**Data contract 1.25.2 → 1.26.0, and three rows move.** Five General_Research
+value candidates whose evidence is the same quantity on the same basis.
+economicspace and spacevalue see none of this until they repin. The delivery
+chains and the transportation summary do not move: every value column of the
+summary sample is identical to 1.25.2.
+
+- **DSN time $2,082 → $2,095** per 34-m hour (rc-297): the Rev H $1,792 base
+  carried to Sep 2026 CPI-U, x1.1692. A 70-m hour is ~$6,286.
+- **Phobos 1.0659e16 → 1.063725e16 kg** (rc-331): Mars Express GM (Guo et al.
+  2026) over G. Gravity 0.005604 → 0.005593 m/s², escape 11.238 → 11.226 m/s.
+  The radius stays an estimate.
+- **16 Psyche 2.29e19 → 2.399e19 kg** (rc-332): Farnocchia et al. 2024 GM.
+  Gravity 0.1240 → 0.1300 m/s², escape 165.95 → 169.85 m/s.
+- **Mars surface to LMO stays 4,100 m/s** (rc-377): the note now calls it a
+  scenario carrying margin. NASA puts 3,950 m/s without reserves and 4,200 with
+  a 20% gravity-loss allowance.
+- **Water resistojet band 150-220 → 150-234 s** (rc-378): Morren 1992 measured
+  234 s in the lab. The band lives in the note; the 190 s value is unchanged.
+
 ### 0.16.2 - 2026-11-10
 
 **Data contract 1.25.1 → 1.25.2: thirty-three General_Research value reviews,

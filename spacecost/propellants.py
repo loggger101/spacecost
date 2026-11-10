@@ -1239,11 +1239,15 @@ PROPELLANTS_REFERENCE: List[dict] = [
                                  * _COMPONENTS["Water"]["density_kg_per_L"],
         "yfinance_proxy":        None,
         "reference_year":        _REF_YEAR_PROP,
-        "notes": "Steam.  Resistively or microwave heated, Isp 150-220 s.  Flown "
+        "notes": "Steam.  Resistively or microwave heated, Isp 150-234 s.  Flown "
                  "by Tethers Unlimited's HYDROS-C (ISS deploy 2022), Momentus' "
                  "microwave electrothermal Vigoride, and Pale Blue's water "
-                 "resistojet.  The 150-220 s band and the 190 s value are "
-                 "estimates with no source here, for higher-power designs.  "
+                 "resistojet.  The 190 s value is an estimate for higher-power "
+                 "designs.  The band's top is a laboratory measurement: 234 s "
+                 "from a NASA engineering-model vaporizer/resistojet at 6.86 "
+                 "MJ/kg, 1,043 W (Morren 1992, NASA TM-105877, Table II), not a "
+                 "flight figure; until data contract 1.26.0 the band stopped at "
+                 "an unsourced 220 s (General_Research rc-378).  "
                  "The one flight measurement on record is far lower: AQUARIUS "
                  "on EQUULEUS (Artemis I) measured 91.7 +/- 1.0 s and 90.3 +/- "
                  "3.0 s at ~6 mN and under 14 W (Asakawa et al., Trans. JSASS "

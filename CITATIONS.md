@@ -215,6 +215,8 @@ Lambert solve against an ephemeris; these are what you price the answer with.
 | Stubbs & Wang, Icarus 217, 2012, p. 275 | Vesta's surface solar visibility, beside the dark fraction (rc-413) |
 | Csank, Electric Power on the Lunar Surface, NTRS 20240013588, slide 12 | regenerative fuel cell system Wh/kg by mission case (rc-414) |
 | Comparators named in 0.16.2's notes (General_Research rc-202 to rc-416; each note names its own) | DLA FY2026 aerospace standard prices; SSC and NASA launch task orders; Firefly, Orienspace, JAXA, Xinhua and Guangzhou Daily price statements; Epignosis Insights and Epic Aerospace propellant prices; NASA KSC MLI tests (NTRS 20110014002); NASA G2 flywheel; NASA OIG IG-24-013 and IG-26-010; NASA Glenn NEXT-C contract; JPL MOCS 2014; Gallagher Q3 2026; Leucht, Prater & Vetcha 2024; NASA LuSTR; Herberhold et al. 2026; Barker et al. 2021; Daly et al. 2020 |
+| Lewis et al. 2020 (NASA Langley), Table 2; Palaszewski, NTRS 20210026187, Table 3 | Mars ascent delta-v bracketing the 4,100 m/s scenario (rc-377) |
+| Morren, NASA TM-105877, 1992, Table II | the 234 s water resistojet measurement, the top of the band (rc-378) |
 | Carrier 1974; Graf 1993 (NASA RP-1265); Shearer et al. 2023; Nakamura et al. 2025 and 2012; Bonitz et al. 2009; Lauretta et al. 2024; NASA Release 21-117; Jia et al. 2021; Wang et al. 2024; ESA's Philae account; the InSight team's NASA Q&A | each flight outcome in the mining success tally (rc-396 to rc-407) |
 | Plachta, Johnson & Feller, Cryogenic Boil-Off Reduction System Testing, NTRS 20150000134 | named as not giving an MLI areal density |
 | Jansen & Dever, G2 Flywheel Module Design, NASA/CR-2006-213862 | the G2 flywheel's 60,000 rpm and 525 W-hr; it gives no Wh/kg |
@@ -246,7 +248,9 @@ and the light time all follow from those by formula. The formulas are in
 |---|---|
 | NASA Moon Fact Sheet | lunar mass, radius and synodic day |
 | NASA Mars Fact Sheet | Mars mass, radius and rotation; the Phobos mass and axes the Phobos row is compared against |
-| Willner, Shi & Oberst 2014, Phobos' shape and topography models, *Planet. Space Sci.* 102:51-59 (with the GM it quotes from Andert et al. 2011) | the Phobos mean radius, volume and mass the Phobos row is compared against (neither source prints the row's own figures) |
+| Willner, Shi & Oberst 2014, Phobos' shape and topography models, *Planet. Space Sci.* 102:51-59 (with the GM it quotes from Andert et al. 2011) | the Phobos mean radius, volume and mass the Phobos row is compared against (neither prints the row's radius) |
+| Guo et al., MNRAS 548, stag578, 2026, Table 3 | Phobos GM, the mass since 1.26.0 (rc-331) |
+| Farnocchia et al., AJ 168:21, 2024, Table 2 | Psyche GM and mass since 1.26.0 (rc-332) |
 | Lauretta et al. 2019, *Nature* (OSIRIS-REx) | Bennu mass, radius, rotation, orbit |
 | Watanabe et al. 2019, *Science* (Hayabusa2) | Ryugu mass, radius, rotation, orbit |
 | Yeomans et al. 2000, *Science* (NEAR Shoemaker) | Eros mass and radius |
