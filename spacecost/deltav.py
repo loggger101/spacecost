@@ -182,9 +182,14 @@ DELTA_V_REFERENCE: List[dict] = [
               "mass is carried separately as a landed-mass fraction — see "
               "Module 2's _MARS_LANDED_MASS_FRACTION."},
     {"segment": "Mars surface  →  low Mars orbit", "dv_m_per_s": 4_100, "duration_yr": 0.001,
-     "notes": "Mars ascent including gravity and drag losses; unsourced "
-              "estimate (NASA DRA 5.0 sizes its MAV by mass and engines and "
-              "states no ascent Δv).  Relevant only to the downleg — shipping material "
+     "notes": "Mars ascent including gravity and drag losses, a scenario "
+              "value carrying margin: NASA Langley's two-stage ascent to a 100 "
+              "x 100 km, 30 deg LMO is 3,950 m/s with main burns only and no "
+              "reserves or residuals (Lewis et al. 2020, Table 2), and a 100 km "
+              "circular LMO with a 20% gravity-loss allowance is 4,200 m/s "
+              "(Palaszewski, NTRS 20210026187, Table 3); 4,100 sits between "
+              "them (General_Research rc-377).  NASA DRA 5.0 sizes its MAV by "
+              "mass and engines and states no ascent Δv.  Relevant only to the downleg — shipping material "
               "OFF Mars — and it is brutal enough that nothing mined for a "
               "Mars base is worth flying home."},
     {"segment": "Low Mars orbit  →  Earth (TEI)", "dv_m_per_s": 2_100, "duration_yr": 0.7,

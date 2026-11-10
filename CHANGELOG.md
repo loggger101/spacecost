@@ -13,6 +13,61 @@ may read a version as proof that a number moved.
 
 ## Package releases
 
+### 0.17.0 - 2026-11-10
+
+**Data contract 1.25.2 → 1.26.0, and three rows move.** Five General_Research
+value candidates whose evidence is the same quantity on the same basis.
+economicspace and spacevalue see none of this until they repin. The delivery
+chains and the transportation summary do not move: every value column of the
+summary sample is identical to 1.25.2.
+
+- **DSN time $2,082 → $2,095** per 34-m hour (rc-297): the Rev H $1,792 base
+  carried to Sep 2026 CPI-U, x1.1692. A 70-m hour is ~$6,286.
+- **Phobos 1.0659e16 → 1.063725e16 kg** (rc-331): Mars Express GM (Guo et al.
+  2026) over G. Gravity 0.005604 → 0.005593 m/s², escape 11.238 → 11.226 m/s.
+  The radius stays an estimate.
+- **16 Psyche 2.29e19 → 2.399e19 kg** (rc-332): Farnocchia et al. 2024 GM.
+  Gravity 0.1240 → 0.1300 m/s², escape 165.95 → 169.85 m/s.
+- **Mars surface to LMO stays 4,100 m/s** (rc-377): the note now calls it a
+  scenario carrying margin. NASA puts 3,950 m/s without reserves and 4,200 with
+  a 20% gravity-loss allowance.
+- **Water resistojet band 150-220 → 150-234 s** (rc-378): Morren 1992 measured
+  234 s in the lab. The band lives in the note; the 190 s value is unchanged.
+
+### 0.16.2 - 2026-11-10
+
+**Data contract 1.25.1 → 1.25.2: thirty-three General_Research value reviews,
+annotated, values kept.** Only `notes` cells in 33 rows, CITATIONS.md and the
+stamps changed. Every value column is identical to 1.25.1. None of these
+candidates offers a like-for-like replacement. Each note now names the
+comparator that questions its number, and says why it is not a drop-in, or what
+is unresolved.
+
+- **Launch prices**, with transaction and contract comparators:
+  - Long March 2D, 3B/E and 12, and Gravity-1 (rc-315 to rc-318).
+  - Vulcan VC4, Alpha, Falcon Heavy, New Glenn and Falcon 9 (rc-321 to rc-323,
+    rc-328, rc-338).
+  - H3-24, Jielong-3, Kuaizhou-11 and the light-gas gun (rc-379, rc-415,
+    rc-202, rc-409).
+- **Status notes dated forward:**
+  - Starship's first orbital flight and NASA's 2028 selection (rc-339).
+  - Neutron's 2027 guidance (rc-340).
+  - Alpha's 10-K count against its dated Flight 7 (rc-341).
+- **Propellant prices** beside DLA FY2026 standards and market composites: argon,
+  xenon, HTP, MMH/NTO, GN2 and hydrazine (rc-310, rc-314, rc-319, rc-326,
+  rc-327, rc-336). Methalox's 380 s sits beside DLR's modelled Raptor 2 RVAC
+  (rc-329).
+- **Storage, operations and environments:**
+  - MLI areal mass (rc-320), flywheel Wh/kg (rc-416) and the depot tanker count
+    (rc-355).
+  - Insurance (rc-294), relay costing (rc-298), the EP string cost (rc-299) and
+    lander cost (rc-300).
+  - Rig service life (rc-347) and plant throughput (rc-383).
+  - The lunar polar ridge (rc-335) and Bennu's radius (rc-333).
+
+Eleven value candidates that do propose a replacement number are not in this
+release: rc-027, 291, 292, 297, 311, 312, 331, 332, 377, 378 and 408.
+
 ### 0.16.1 - 2026-11-10
 
 **Data contract 1.25.0 → 1.25.1: thirty-two General_Research citation and

@@ -146,7 +146,7 @@ STORAGE_REFERENCE: List[dict] = [
                  "ESTIMATE: neither the 60 layers nor the 1.2 kg/m² has a "
                  "source.  NASA's boil-off reduction tests (Plachta, Johnson & "
                  "Feller, NTRS 20150000134) used 30-layer, 18-layer and "
-                 "75-layer blankets and give no areal density.",
+                 "75-layer blankets and give no areal density.  Comparator: NASA KSC cryogenic MLI tests measured 2.98 kg/m2 for a 60-layer blanket and 2.41 for a 40-layer one (Johnson, NTRS 20110014002, Table 3), test coupons with seams; the 1.2 estimate stays under review (General_Research rc-320).",
     },
     {
         "name":            "Zero-boil-off cryocooler (20 K)",
@@ -385,7 +385,7 @@ STORAGE_REFERENCE: List[dict] = [
                  "ESTIMATE: the 100 Wh/kg has no source.  The G2 report "
                  "(Jansen & Dever, NASA/CR-2006-213862) describes a 525 W-hr, "
                  "1 kW module built for a laboratory, where weight was not a "
-                 "significant factor, and gives no Wh/kg.",
+                 "significant factor, and gives no Wh/kg.  Comparator: NASA's G2 gives 5.3 Wh/kg usable at the module and 23.1 Wh/kg for the rotor alone, a lab demonstrator where weight did not matter; 100 and its range stay estimates without a defined mass boundary (General_Research rc-416).",
     },
     {
         "name":            "Eclipse / night-side power fraction",
@@ -498,7 +498,7 @@ STORAGE_REFERENCE: List[dict] = [
                  "v1.9.0.  Before that, Starship's 27 t to escape — which is "
                  "larger than its GTO payload precisely BECAUSE it assumes "
                  "refuelling — was priced at a single $90M launch.  The vehicle "
-                 "row had said so in prose since v1.4.0.",
+                 "row had said so in prose since v1.4.0.  A high-energy asteroid departure scenario: NASA's OIG says lunar HLS needs at least 15 tanker Starships to a LEO depot (IG-26-010, p. 11), a different architecture (General_Research rc-355).",
     },
     {
         "name":            "In-space propellant transfer loss",

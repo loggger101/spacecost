@@ -238,7 +238,12 @@ ENVIRONMENTS_REFERENCE: List[dict] = [
          "Mazarico et al. 2011).  The reason every lunar south-pole "
          "architecture wants the same handful of ridges - and note that the "
          "ICE is in the crater below, permanently shadowed, so the power and "
-         "the water are not in the same place.",
+         "the water are not in the same place.  Under review: for Site 1 on "
+         "the Shackleton-de Gerlache ridge, LOLA modelling gives 67-71% "
+         "average illumination and 13-22 day worst shadows at 1 m above the "
+         "surface, 83-89% and 4-8 days at 5 m (Barker et al. 2021, PSS 203, "
+         "Table 2): height and site matter more than one row can carry "
+         "(General_Research rc-335).",
          mass_kg=7.346e22, mean_radius_m=1_737_400.0),
 
     # ═════════════════════════════════════════════════════════════════════════
@@ -259,7 +264,10 @@ ENVIRONMENTS_REFERENCE: List[dict] = [
          "closest thing this dataset has to a validated mining site.  Mass "
          "7.329e10 kg, mean radius 244.5 m (Lauretta et al. 2019, Nature).  "
          "The derived 0.20 m/s escape velocity is the whole problem with "
-         "operating there: a tossed pebble leaves.",
+         "operating there: a tossed pebble leaves.  Under review: the OLA "
+         "shape model gives a 242.22 m mean radius (Daly et al. 2020, Sci. "
+         "Adv. 6, Table 1), 0.93% below, though its text puts OLA 41 cm "
+         "below SPC; the definition is unresolved (General_Research rc-333).",
          mass_kg=7.329e10, mean_radius_m=244.5),
     _env("162173 Ryugu", "neo",
          0.9633, 1.1896, 1.4159, 7.633, 0.50, 2.4326,
@@ -315,21 +323,25 @@ ENVIRONMENTS_REFERENCE: List[dict] = [
          mass_kg=6.4169e23, mean_radius_m=3_389_500.0),
     _env("Phobos", "moon_surface",
          1.3814, 1.5237, 1.6660, 7.653, 0.50, 2.6827,
-         "Tidally locked, 7.65-h orbit and rotation.  Mass 1.0659e16 kg, mean "
-         "radius 11.267 km.  ESTIMATE: neither figure is printed in the two "
-         "sources this note cited for them until 0.12.6.  The NASA Mars Fact "
+         "Tidally locked, 7.65-h orbit and rotation.  Mass 1.063725e16 kg, "
+         "from Mars Express's GM of (7.09962 +/- 0.00197) x 10^5 m3/s2, 3 "
+         "sigma (Guo et al. 2026, MNRAS 548, stag578, Table 3), over G = "
+         "6.67430e-11; 1.0659e16 kg, an estimate, until data contract 1.26.0 "
+         "(General_Research rc-331).  JPL's satellite table gives GM 0.0007087 "
+         "km3/s2, 1.0618e16 kg, on an older ephemeris.  Mean radius 11.267 "
+         "km, an ESTIMATE: it is not printed in the two sources this note "
+         "cited for it until 0.12.6.  The NASA Mars Fact "
          "Sheet gives 10.6e15 kg and axes 13.0 x 11.4 x 9.1 km (geometric mean "
          "11.05 km).  Willner, Shi & Oberst 2014 (Planet. Space Sci. 102) give "
          "a mean radius of 10.993 km from their degree-45 shape model and a "
          "volume of 5,742 km3 (11.11 km for a sphere of equal volume), and use "
          "the radio-science GM of 0.7127e-3 km3/s2 (Andert et al. 2011), which "
-         "is 1.0678e16 kg.  The row's mass sits within 0.6% of both sources, "
-         "its radius 1.4-2.5% above them.  The "
+         "is 1.0678e16 kg.  The row's radius sits 1.4-2.5% above them.  The "
          "derived 11.2 m/s escape velocity (11.3-11.4 m/s on Willner's "
          "figures) and a Mars-orbit position make it "
          "the cheapest large mass in the Mars system to work from - the "
          "argument behind every Phobos-first mission architecture.",
-         mass_kg=1.0659e16, mean_radius_m=11_267.0),
+         mass_kg=1.063725e16, mean_radius_m=11_267.0),
 
     # ═════════════════════════════════════════════════════════════════════════
     # Main belt.  Where the mass is, and where solar power stops being easy.
@@ -355,16 +367,19 @@ ENVIRONMENTS_REFERENCE: List[dict] = [
          mass_kg=9.3835e20, mean_radius_m=469_730.0),
     _env("16 Psyche", "main_belt",
          2.5136, 2.9230, 3.3287, 4.196, 0.50, 4.3454,
-         "The Psyche mission arrives 2029.  Mass 2.29e19 kg, the Kretlow "
-         "(2020) SiMDA value as Kretlow 2022 (A&A 668:A141) Table 2 lists it; "
-         "Siltala & Granvik 2021 give GM 1.482 ± 0.052 km3/s2, i.e. 2.22e19 "
-         "kg, 3% lower.  Mean radius ~111 km, from the 222 ± 4 km "
+         "The Psyche mission arrives 2029.  Mass (2.399 +/- 0.025)e19 kg, 1 "
+         "sigma, from GM 1.601 +/- 0.017 km3/s2 by high-precision astrometry "
+         "including Gaia FPR (Farnocchia et al. 2024, AJ 168:21, Table 2; "
+         "General_Research rc-332).  Until data contract 1.26.0 it was 2.29e19 "
+         "kg, the Kretlow (2020) SiMDA value as Kretlow 2022 (A&A 668:A141) "
+         "Table 2 lists it; Siltala & Granvik 2021 give GM 1.482 ± 0.052 "
+         "km3/s2, i.e. 2.22e19 kg.  Mean radius ~111 km, from the 222 ± 4 km "
          "volume-equivalent diameter Siltala & Granvik adopt (Ferrais et al. "
          "2020).  Present because it is the body most "
          "often named as a metal resource; ⚠️  the '$10 quintillion' framing "
          "that follows it around is a spot price multiplied by a mass, which "
          "is not a market, and nothing in this dataset supports it.",
-         mass_kg=2.29e19, mean_radius_m=111_000.0),
+         mass_kg=2.399e19, mean_radius_m=111_000.0),
     _env("Main belt, outer edge", "main_belt",
          3.0000, 3.2000, 3.5000, 8.0, 0.50, 4.5167,
          "Past the 2:1 Kirkwood gap.  10.2x the array mass per watt of 1 AU, "
