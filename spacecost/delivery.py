@@ -238,6 +238,10 @@ if _ANCHOR_WINNER != LEO_LAUNCH_VEHICLE:
 # still says what this paragraph claims it says, so the discrepancy is
 # CHECKED rather than merely written down.  If the row moves, the assertion
 # names it and this comment stops being able to go quietly stale.
+# The figure is the RL10B-2's ~465.5 s at O/F 5.88 (NASA Glenn, NTRS
+# 20200002036, slide 7), rounded: a representative upper-stage proxy, not a
+# guarantee for every tug, and deliberately not the fuel table's 452 s
+# (General_Research rc-358).
 TUG_ISP_S = 465.0
 _HYDROLOX = "hydrolox  (LH2 / LOX)"
 _ISP_AT_MOVE = 452.0
@@ -250,13 +254,18 @@ if _propellant_isp_vac_s(_HYDROLOX) != _ISP_AT_MOVE:
         % (_HYDROLOX, _propellant_isp_vac_s(_HYDROLOX), _ISP_AT_MOVE,
            TUG_ISP_S))
 
-# Dry-mass fraction 0.10 is mid-range for a cryogenic upper stage
-# (Centaur V ~0.08, DCSS ~0.11), stage dry mass / (dry + propellant).
+# Dry-mass fraction 0.10, stage dry mass / (dry + propellant), is a scenario
+# midpoint for a cryogenic upper stage.  ICPS, a modified DCSS, is 3.7 t
+# unfueled and 32.7 t fueled, 0.113 (NASA SLS Reference Guide 2022, p. 9); a
+# Centaur V figure (~0.08) once quoted here has no primary source found
+# (General_Research rc-359).
 # No table row: a stage structural fraction is not one of the six tables.
 TUG_DRY_MASS_FRAC  = 0.10
 # A LANDER is structurally much heavier than a tug for the same propellant
 # load: throttleable engines, landing legs, terminal-guidance sensors.
-# Apollo LM descent stage flew 2,134 kg dry on 8,200 kg of propellant = 0.21.
+# Apollo 10's LM-4 descent stage: 4,703 lb dry on 18,134 lb of loaded DPS
+# propellant, 0.206 (Apollo 10 Press Kit, p. 44).  0.20 is that rounded, a
+# lunar lander standing in for every powered descent (General_Research rc-360).
 LANDER_DRY_MASS_FRAC = 0.20
 
 # ─── WHAT THE EXPENDED STAGES COST TO BUILD  (v0.4.0) ────────────────────────

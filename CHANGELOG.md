@@ -13,6 +13,45 @@ may read a version as proof that a number moved.
 
 ## Package releases
 
+### 0.16.1 - 2026-11-10
+
+**Data contract 1.25.0 → 1.25.1: thirty-two General_Research citation and
+wording candidates. No value moved.** Only `notes` cells, code comments,
+CITATIONS.md and the stamps changed. The summary hash moves with the stamp
+column only, and was rebuilt on the recorded reference platform (Python 3.13,
+numpy 2.5.4, pandas 3.1.1). Each row keeps its value. The notes now cite the
+comparator and say whether the value is a scenario, an estimate or a proxy.
+
+- **Corrections:**
+  - The aerocapture row's "~4 km/s" saving is now unsourced, not asserted
+    (rc-293).
+  - Mission operations' Dec 2018 sensitivity is $41.8M, not $41.5M (rc-295).
+  - The 10 kWe Kilopower mass is a 1,544 kg design estimate, not a flight unit
+    (rc-349).
+  - The ~150 W/kg roll-out figure is JPL's class estimate, not a ROSA flight
+    demo (rc-362).
+  - Starlink's krypton claim is narrowed to "first generation" (rc-363).
+  - The unsourced Centaur V ~0.08 is gone from the tug comment (rc-359).
+  - The lander comment now uses Apollo 10's LM-4 masses, 0.206 (rc-360).
+  - The rig-trip note uses Sandvik's machine-specific rebuild intervals
+    (rc-365).
+  - The 0.58 h dark period is the ISS eclipse, not a deep-space design standard
+    (rc-410).
+- **Comparators added, values kept:**
+  - Li-ion 130 Wh/kg, in both rows (rc-342).
+  - The NRHO delta-v (rc-357).
+  - The tug's Isp (rc-358).
+  - The 1.5 low-thrust penalty (rc-361).
+  - Krypton Hall performance (rc-364).
+  - Volatile containment (rc-373).
+  - Power-system cost (rc-374).
+  - Salvage (rc-375).
+  - The dark fraction, in both rows (rc-413).
+  - The regenerative fuel cell, in both rows (rc-414).
+  - COPV PV/W (rc-417).
+- **The mining success tally is cited mission by mission** (rc-396 to rc-407).
+  The sources back the outcomes, not the 0.85.
+
 ### 0.16.0 - 2026-11-04
 
 **Data contract 1.25.0, and the delivery chains move.** Two General_Research

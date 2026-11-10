@@ -117,7 +117,12 @@ STORAGE_REFERENCE: List[dict] = [
                  "at 10 MPa pays 1.9% of its mass in tankage and krypton at "
                  "18 MPa pays 12.5% — the cheaper propellant needs the heavier "
                  "bottle, and the trade did not exist in this model before.\n"
-                 "ESTIMATE: no registered source gives a PV/W.  NASA's COPV "
+                 "Comparator: six cryogenic NASA test articles on two liner "
+                 "configurations burst at P_b·V/W of 326.5-416.6 kJ/kg (NTRS "
+                 "20080009730, Tables 1-3), bracketing this value, for small "
+                 "1.8 ft3 helium-pressurant vessels with minimum burst at 1.5x "
+                 "MOP; the range here stays an estimate for other sizes and "
+                 "materials (General_Research rc-417).  NASA's other COPV "
                  "reports (Greene et al., NTRS 20100021151; Kezirian, Johnson "
                  "& Phoenix, NTRS 20110015972; Parker & Prosser, "
                  "NASA/TM-20260002192) cover stress rupture and flight "
@@ -315,7 +320,11 @@ STORAGE_REFERENCE: List[dict] = [
         "notes": "Cells reach 250-300 Wh/kg (NASA ~265 Wh/kg: Ali et al., "
                  "Frontiers in Energy Research, 2023); packaging, harness, cell "
                  "balancing and thermal roughly halve it at the system level.  "
-                 "130 Wh/kg has no source of its own: NASA's Li-ion state of "
+                 "130 Wh/kg is an engineering analogy: five protected NASA "
+                 "Li-ion packs for the D-RATS spacesuit simulators measured "
+                 "124-133 Wh/kg, mean 129.6 (Bennett & Baldwin 2010, "
+                 "NASA/TM-2010-216906, Table 5), packs rather than spacecraft "
+                 "batteries (General_Research rc-342).  NASA's Li-ion state of "
                  "the art is 175 Wh/kg (Schmitz et al., IEEE Aerospace 2023, "
                  "NTRS 20230001487, Table 3).  Already "
                  "inside the 60 W/kg 'Power system specific mass' row rather "
@@ -334,7 +343,9 @@ STORAGE_REFERENCE: List[dict] = [
         "trl":             5,
         "reference_year":  _REF_YEAR_STORAGE,
         "notes": "Electrolyse water in the light, run it back through a fuel "
-                 "cell in the dark.  3× a battery's energy density and it gets "
+                 "cell in the dark.  Several times a battery's energy density "
+                 "(NASA's 1 kW lunar-polar case: 400 Wh/kg against Li-ion's "
+                 "160) and it gets "
                  "better the longer the dark period, because tank mass and "
                  "converter mass are separate — which is the opposite of a "
                  "battery.  For a mining rig on a rotating body it is the "
@@ -348,8 +359,13 @@ STORAGE_REFERENCE: List[dict] = [
                  "battery.  At a dark fraction of 0.5 the array oversize "
                  "[(1−f) + f/η]/(1−f) is 2.11× with a battery and 3.11× at "
                  "0.474, so part of the storage mass saved is paid back in "
-                 "array.  ESTIMATE: the 400 Wh/kg has no source; that report "
-                 "gives efficiency, not Wh/kg.",
+                 "array.  The 400 Wh/kg is one NASA design case: 1 kW for a "
+                 "120 h lunar-polar night, 300 kg (Csank, Electric Power on the "
+                 "Lunar Surface, NTRS 20240013588, slide 12).  NASA puts RFC "
+                 "systems at ~100-600 Wh/kg with power and duration, 550 for a "
+                 "350 h equatorial night and 200 for a 13 h Mars one, so the "
+                 "value and its range are mission-dependent estimates, not an "
+                 "asteroid figure (General_Research rc-414).",
     },
     {
         "name":            "Flywheel energy storage",
@@ -386,7 +402,7 @@ STORAGE_REFERENCE: List[dict] = [
                  "time — typical asteroid rotation periods run 2-20 h, so the "
                  "dark period is hours, not the 35 minutes of a LEO eclipse. "
                  "Sizing storage for it roughly DOUBLES the power system for a "
-                 "given continuous draw.\n"
+                 "given continuous draw.  Vesta comparator: the solar disk is \"typically seen about half the time in the tropics\", while annual mean visibility runs 0.363-0.566 across the body with latitude, tilt, shape and topography (Stubbs & Wang 2012, Icarus 217, p. 275).  0.50 is a scenario geometry, not a generic asteroid fraction, and no source sets the range (General_Research rc-413).\n"
                  "✅  MODELLED as of Module 4 v1.14.0, through the "
                  "'Eclipse / night-side dark fraction', 'Energy storage usable "
                  "specific energy' and 'Power-system row baseline dark period' "
@@ -435,13 +451,13 @@ STORAGE_REFERENCE: List[dict] = [
                  "Technology 206, 2020; McClure et al., same issue), so it "
                  "demonstrated the reactor, not a 1 kWe power system.  It was "
                  "the first new US space reactor test in decades.  A 10 kWe "
-                 "flight unit is designed around "
-                 "~1,500 kg, so 6.7 W/kg, and unlike an RTG it scales: the "
+                 "unit is a design estimate, not a flown one: 1,544 kg "
+                 "preliminary (Gibson, Mason & Bowman 2015, NASA/TM-2015-218460, "
+                 "Table I; General_Research rc-349), ~1,500 kg rounded, so 6.7 "
+                 "W/kg, and unlike an RTG it scales: the "
                  "reactor mass is dominated by shielding and radiator, not by "
                  "fuel.  The only power source in this table that could run a "
-                 "hundred-kilowatt beneficiation plant at 3 AU.  (The "
-                 "~1,500 kg flight-unit mass has no source in either KRUSTY "
-                 "paper.)",
+                 "hundred-kilowatt beneficiation plant at 3 AU.",
     },
 
     # ── IN-SPACE PROPELLANT DEPOTS ───────────────────────────────────────────
