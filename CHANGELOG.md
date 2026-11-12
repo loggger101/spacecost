@@ -13,6 +13,43 @@ may read a version as proof that a number moved.
 
 ## Package releases
 
+### 0.17.1 - 2026-11-12
+
+**Data contract 1.26.0 → 1.26.1: thirty-two General_Research citation
+candidates. No value moved.** Only `notes` cells in 32 rows, two code comments,
+CITATIONS.md and the stamps changed. Every value column of the six tables and
+the summary sample is identical to 1.26.0. The summary was rebuilt on the
+recorded reference platform. Each candidate asked for the source behind a
+number, or for the number to be called a scenario. None found a like-for-like
+source, so each note now says which it is and names the nearest comparator.
+
+- **Launch price bands said as scenarios**:
+  - Long March 7, 6A, 8A, 10 and 10B, Pallas-1, Kinetica-1 and Long March 9
+    (rc-474, 475, 479, 487, 488, 499, 503, 504).
+  - The proxies behind Long March 2C and 4C, Soyuz-2.1a and Nuri (rc-476,
+    505, 502, 506).
+  - Epsilon S beside NewSpace Index and FAA AST, and Ariane 5 ECA's band
+    called a vehicle cost (rc-477, 478).
+  - Ariane 62 beside ESA's €82.07M Sentinel-1D award (rc-457).
+  - StarTram beside Powell, Maise & Rather's $43/kg (rc-486).
+- **Vulcan VC6**: the $150M end has no build-up (rc-500), and the first VC6
+  is V-012, a VC6L, scheduled for 13 Nov 2026 (rc-501).
+- **Corrections**:
+  - Li / F2 / H2's 542 s is the theoretical maximum (NASA-CR-72325), not a
+    measurement; the firings reached about 509 s (NASA-CR-110530) (rc-485).
+  - Main belt → Earth return no longer cites Taylor 2018, which computes the
+    outbound leg only (rc-515).
+- **Scenario labels with comparators**:
+  - Mining success, first-of-kind and mature, spacecraft MTBF and launch
+    reliability (rc-451, 493, 494, 495).
+  - Return capsule, depot handover and mining payload costs (rc-497, 516,
+    517).
+  - Krypton Hall's 0.45 efficiency beside NASA-457M (rc-458).
+  - Hydrolox and depot boil-off beside Honour et al. and Perrin & Casler
+    (rc-490).
+  - Vapour-cooled shield and sintered cargo (rc-489, 492).
+  - The NEA propulsive return beside Cohen et al.'s NIAC budget (rc-514).
+
 ### 0.17.0 - 2026-11-10
 
 **Data contract 1.25.2 → 1.26.0, and three rows move.** Five General_Research

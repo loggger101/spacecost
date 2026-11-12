@@ -367,11 +367,11 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
                  "summary, 2022); the GTO high end is the RL10E-upgraded "
                  "Centaur.  Until v1.16.0 this row priced VC6 "
                  "at $110M, which is ULA's STARTING price for the smallest "
-                 "config; six GEM 63XLs are not free, and $150M is an estimate. "
+                 "config; six GEM 63XLs are not free, and $150M is an estimate with no build-up: the band runs from that starting price across an unpriced six-booster adder (General_Research rc-500). "
                  "Its old 7,200 kg 'escape' figure was the GEO payload; escape "
                  "now runs Mars transfer to TLI.  THIS CONFIGURATION HAS NOT "
                  "FLOWN: all four Vulcan flights to Feb 2026 were VC2S or VC4S, "
-                 "and the first VC6 is manifested for Oct 2026.  Kept "
+                 "and the first VC6, V-012 (a VC6L, with the LEO-optimised Centaur V), is scheduled for 13 Nov 2026 (ULA, 10 Nov 2026; General_Research rc-501).  Kept "
                  "'operational' as a configuration of a flying vehicle, at TRL 8.",
     },
     {
@@ -496,7 +496,7 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "notes": "Source: Wikipedia (Soyuz-2) payloads by launch site.  Price "
                  "estimated against the 2018 $35M quote for a 2.1b without an "
                  "upper stage.  Flies Progress and crewed Soyuz.  Effectively "
-                 "unavailable to Western customers under sanctions.",
+                 "unavailable to Western customers under sanctions.  The proxy is not like-for-like: TASS (2018) gives about $35M for a Soyuz-2.1 without Fregat, variant and scope unstated, in 2018 dollars; $30M-$35M is a scenario band below it (General_Research rc-502).",
     },
     {
         "name":                          "Soyuz-2.1b",
@@ -597,7 +597,7 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
                  "Against the ~€70M this row used to assume.  "
                  "Worse $/kg than A64, which is the usual result when a vehicle "
                  "is flown below its designed lift.  Nine Ariane 6 flights to "
-                 "Aug 2026, one partial failure (VA262, Jul 2024).",
+                 "Aug 2026, one partial failure (VA262, Jul 2024).  Comparator: ESA's 2025 Copernicus contract list values Arianespace's Sentinel-1D alternative launcher service, an Ariane 62, at EUR 82,070,773, near this band's low end.  The award does not itemise its scope or price year and is not a tariff, so the estimate stands (General_Research rc-457).",
     },
     {
         "name":                          "Ariane 6 (A64)",
@@ -828,7 +828,7 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
                  "satellite to 600-800 km, about $24,500/kg at this price; "
                  "launch cost 'estimated around $30M', the band's low end, with "
                  "room above it for an unpriced government vehicle.  First flight failed (2021); "
-                 "three successes since, the latest Nov 2025.",
+                 "three successes since, the latest Nov 2025.  The ~$30M is an SBS estimate of Oct 2021, not escalated, and $45M is a judgement for an unpriced government vehicle: a scenario band (General_Research rc-506).",
     },
 
     # ═════════════════════════════════════════════════════════════════════════
@@ -853,7 +853,7 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "reference_year":          _REF_YEAR_LAUNCH,
         "notes": "Source: Wikipedia payloads; price estimated against the $30M "
                  "Long March 2D.  88 launches, 1 failure, 1 partial (to Aug "
-                 "2026).",
+                 "2026).  The 2D proxy is an analogy, not a sourced price, and the 2D's own $30M is under review (rc-315); $25M-$35M is a scenario band around it (General_Research rc-476).",
     },
     {
         "name":                          "Long March 2D",
@@ -909,7 +909,7 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
                  "resting on one skyrocket.de snapshot of Apr 2008; CASC states "
                  "only 2.8 t to 800 km sun-synchronous (2015) and 3 t to 700 km "
                  "SSO (Apr 2026).  Price estimated against the "
-                 "sister Long March 4B's $50M (2006).  ~59 launches.",
+                 "sister Long March 4B's $50M (2006).  ~59 launches.  The 4B's $50M (2006) has no recorded source or inflation step, and the 4B-to-4C analogy is a judgement; $30M-$50M is a scenario band (General_Research rc-505).",
     },
     {
         "name":                          "Long March 5",
@@ -955,7 +955,7 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
                  "estimated.  26 for 26 to Jul 2026, but its upper stage has "
                  "broken up in orbit (Nov 2022 and Mar, Jul and Aug 2024), the "
                  "Nov 2022 one into 781 catalogued pieces, 722 still on orbit "
-                 "in June 2023 (NASA ODQN 27-3, Table 1).",
+                 "in June 2023 (NASA ODQN 27-3, Table 1).  SCENARIO BAND: no source or calculation gives $35M-$60M; SAST has published no list price (General_Research rc-499).",
     },
     {
         "name":                          "Long March 7",
@@ -978,7 +978,7 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
                  "The LEO figure is the two-stage 7, which flies Tianzhou cargo "
                  "to the Chinese station; the GTO figure is the three-stage 7A "
                  "(2 failures in 18).  The 4,000 kg escape figure this row used "
-                 "to carry had no source.",
+                 "to carry had no source.  SCENARIO BAND: no source or calculation gives $50M-$70M; the CALT payload figures do not bear on it (General_Research rc-474).",
     },
     {
         "name":                          "Long March 8A",
@@ -1002,7 +1002,7 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
                  "base CZ-8.  The GTO figure has no current source.  Price "
                  "estimated.  11 flights since "
                  "Feb 2025, all successful, mostly constellation deployment from "
-                 "Hainan commercial pads.",
+                 "Hainan commercial pads.  SCENARIO BAND: no source or calculation gives $40M-$70M.  The eXTP launch-service budget, RMB 245.2M (about $36M), names no variant and is a budget, not a price (General_Research rc-503).",
     },
     {
         "name":                          "Long March 12",
@@ -1047,7 +1047,7 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
                  "at 50 deg.  One flight (Jul 2026), successful, with China's "
                  "first controlled recovery of an orbital first stage.  One "
                  "flight is a thin record for 'operational'; read the TRL as "
-                 "flown, not proven.  Price estimated.",
+                 "flown, not proven.  Price estimated.  SCENARIO BAND: no source or calculation gives $40M-$70M.  Xinhua (Jul 2026) says reuse lowers cost but gives no price (General_Research rc-487).",
     },
     {
         "name":                          "Kuaizhou-1A",
@@ -1145,7 +1145,7 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "reference_year":          _REF_YEAR_LAUNCH,
         "notes": "Source: CAS Space's product page and gov.cn, 2 t LEO and 1.5 "
                  "t to 500 km SSO, as Wikipedia gives them; price "
-                 "estimated.  16 launches, 1 failure (Dec 2024, third stage).",
+                 "estimated.  16 launches, 1 failure (Dec 2024, third stage).  SCENARIO BAND: no source or calculation gives $8M-$15M; CAS Space publishes payloads, not a price (General_Research rc-504).",
     },
     {
         "name":                          "Kinetica-2",
@@ -1255,7 +1255,7 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
                  "flight, 1 Sep 2026, successful, boilerplate payload, no "
                  "recovery attempted.  Designed for first-stage reuse but has "
                  "only flown expendable, so it is listed as flown.  Price "
-                 "estimated.",
+                 "estimated.  SCENARIO BAND: no source or calculation gives $20M-$40M, an expendable flight assumed.  Galactic Energy states reuse targets, and that recovery is two thirds of cost, but no price (General_Research rc-475).",
     },
 
     # ═════════════════════════════════════════════════════════════════════════
@@ -1363,7 +1363,7 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "notes": "Last flight Jul 2023.  Usually flew two GTO satellites at "
                  "once, so its per-customer price was lower than the €150-190M "
                  "vehicle cost this band brackets.  Launched JWST (~6.2 t, near "
-                 "C3=0).",
+                 "C3=0).  The band is a vehicle cost, not a per-customer service price, and no recorded exchange rate or inflation step takes the euro figures to its dollars.  ESA's 2003 figures, a EUR 170M launch service and EUR 129M paid for ATV's launch, are for the Ariane 5 ES in 2003 conditions (General_Research rc-478).",
     },
     {
         "name":                          "Vega",
@@ -1653,7 +1653,7 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
                  "landing.  The single-core 10A tested its escape system on a "
                  "suborbital flight (Feb 2026) and the 10B is flying (own row), "
                  "so the core hardware is real; the three-core vehicle has not "
-                 "flown.",
+                 "flown.  SCENARIO BAND: no source or calculation gives $150M-$300M for a vehicle that has not flown; CASC's disclosures give payloads only (General_Research rc-488).",
     },
     {
         "name":                          "Long March 9",
@@ -1677,7 +1677,7 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
                  "LEO / 54 t TLI with a reusable 30-engine methalox first "
                  "stage, first flight planned for 2033.  TRL 3.  Price is a "
                  "guess, stated as one.  Present because it is the only "
-                 "announced vehicle in the Starship class that is not Starship.",
+                 "announced vehicle in the Starship class that is not Starship.  SCENARIO BAND: $500M-$1B has no derivation; it is a sensitivity range for a future vehicle in 2026 dollars, not a quote (General_Research rc-479).",
     },
     {
         "name":                          "Soyuz-5",
@@ -1723,7 +1723,7 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
                  "SSO.  The new second-stage motor exploded in test twice (Jul "
                  "2023, Nov 2024); JAXA reverted to the Enhanced Epsilon stage, "
                  "first flight possibly late 2026.  The high end is the "
-                 "original Epsilon's $38M, since the S has not beaten it yet.",
+                 "original Epsilon's $38M, since the S has not beaten it yet.  SCENARIO BAND: no Epsilon S price is published.  The $25M low end matches NewSpace Index's 2024 chart point, which states no year or scope; the high end is the predecessor's price (FAA AST's 2016 compendium gives $39M), not an Epsilon S price (General_Research rc-477).",
     },
     {
         "name":                          "Hyperbola-3",
@@ -1875,7 +1875,7 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
                  "above.  TRL 2: no element of the launch tube has been built. "
                  "The $/kg assumes the capital is already sunk and the traffic "
                  "exists to amortise it, which is the assumption doing all the "
-                 "work in every entry in this section.",
+                 "work in every entry in this section.  Closest study: Powell, Maise & Rather (SPESIF 2010, Table 5.4) project $43/kg for 35-ton payloads at 10 launches a day, $19.25B of construction amortised over 10 years, $0.52M of a $1.50M cost per launch.  This row's $40/kg, 40 t payload and 2026 dollars are not that study's: it is a proponent projection, not a price (General_Research rc-486).",
     },
     {
         "name":                          "Skylon / SABRE",
