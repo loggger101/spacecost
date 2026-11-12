@@ -51,6 +51,7 @@ ones that carry more than one row.
 | Zapata (NASA KSC), The State of Play: US Space Systems Competitiveness, FISO presentation, Jul 2017, NTRS 20170009967, p16 | Delta IV Heavy and Atlas V 551 LEO payloads (200 km / 28.5 deg); the NRO's Delta IV Heavy price ($336M in 2017 dollars, with ELC) the Delta IV Heavy row is compared against; NASA's Pegasus XL price for ICON |
 | Pielke & Byerly, Nature 2011 | Space Shuttle whole-programme cost per flight |
 | Wikipedia vehicle articles and "Comparison of orbital launch systems", Sep 2026 | payload masses by configuration and orbit, cross-checked against the manufacturer where one publishes |
+| Comparators named in 0.17.1's notes (General_Research rc-457 to rc-506; each note names its own) | ESA's 2025 Copernicus contract list (Sentinel-1D on Ariane 62); NewSpace Index 2024 and FAA AST's 2016 compendium (Epsilon); ESA INFO 10-2003 (Ariane 5 ES); Powell, Maise & Rather, SPESIF 2010, Table 5.4 (StarTram); Xinhua 2026 (Long March 10B); the eXTP launch-service budget (CCGP 2026); ULA's 10 Nov 2026 V-012 schedule |
 
 ### Fairing volumes (data contract 1.17.0)
 
@@ -136,6 +137,9 @@ so a study can state what it excluded.
 | NASA Glenn, RL10B-2 propulsion options, NTRS 20200002036, slide 7 | the tug's 465 s Isp (rc-358) |
 | NASA, SLS Reference Guide, 2022, p. 9 | ICPS unfueled and fueled mass, the tug dry-fraction analogue (rc-359) |
 | NASA, Apollo 10 Press Kit, p. 44 | LM-4 descent stage dry mass and propellant, the lander dry fraction (rc-360) |
+| Arbit, Clapp, Dickerson & Nagai, NASA-CR-72325, 1968; NASA-CR-110530, 1970, Sec. 3.3.4 | Li / F2 / H2: 542 s theoretical, about 509 s achieved in test (rc-485) |
+| Jacobson & Manzella, NASA/TM-2003-212700, Appendix p. 8 | NASA-457M krypton discharge efficiency, beside the 0.45 total efficiency (rc-458) |
+| Honour et al., NTRS 20110013691; Perrin & Casler, NTRS 20160012100, Table 11 | modelled depot boil-off beside the hydrolox and depot scenarios (rc-490) |
 
 Vacuum Isp values are the interplanetary-relevant figures. Sea-level Isp is
 lower and matters only to a first stage, which is already priced into the launch
@@ -146,7 +150,8 @@ table's $/kg-to-orbit.
 | source | what it establishes |
 |---|---|
 | Curtis, *Orbital Mechanics for Engineering Students* | ascent and textbook segment values |
-| Taylor et al. 2018, "Delta-v map of Main Belt Asteroids" | LEO to main-belt transfer |
+| Taylor et al. 2018, "Delta-v map of Main Belt Asteroids" | LEO to main-belt transfer, outbound only; the return row is a scenario (rc-515) |
+| Cohen et al., Robotic Asteroid Prospector, NIAC Phase I, 2013, NTRS 20190001162, Sec. 4.2.2 and Table 4.1 | a typical-NEA return budget beside the propulsive return (rc-514) |
 | Elvis et al. 2011, arXiv 1105.4152 | near-Earth object delta-v accessibility distribution, and its 6.65 km/s peak |
 | NASA DRA 5.0 (SP-2009-566), Fig 4-2 | the swing of trans-Mars injection across the synodic cycle |
 | Orloff, *Apollo by the Numbers* (NASA SP-2000-4029), lunar-orbit phase tables | trans-lunar injection, lunar orbit insertion, and the Lunar Module's powered descent and ascent as flown on Apollo 14-17; trans-earth injection on Apollo 8, 10-12 and 14-17, the middle leg of the lunar surface to LEO row |
@@ -220,6 +225,7 @@ Lambert solve against an ephemeris; these are what you price the answer with.
 | Carrier 1974; Graf 1993 (NASA RP-1265); Shearer et al. 2023; Nakamura et al. 2025 and 2012; Bonitz et al. 2009; Lauretta et al. 2024; NASA Release 21-117; Jia et al. 2021; Wang et al. 2024; ESA's Philae account; the InSight team's NASA Q&A | each flight outcome in the mining success tally (rc-396 to rc-407) |
 | Plachta, Johnson & Feller, Cryogenic Boil-Off Reduction System Testing, NTRS 20150000134 | named as not giving an MLI areal density |
 | Jansen & Dever, G2 Flywheel Module Design, NASA/CR-2006-213862 | the G2 flywheel's 60,000 rpm and 525 W-hr; it gives no Wh/kg |
+| Comparators named in 0.17.1's notes (General_Research rc-451 to rc-517; each note names its own) | Evans, Gallo & Kaminskiy, NTRS 20120013705; Schuler et al. (IPEx), NTRS 20240008162; Grile & Bettinger 2024; SpaceX's June 2026 EU prospectus, p. 58; JPL's Stardust press kit; NASA SHIIVER, NTRS 20205008233; Johnson & Stephens, NTRS 20190000305; NASA sintering work, NTRS 20230008596 and 20205010871 |
 
 The mission profile these are costed against is **uncrewed and fully
 autonomous**: no life support, no habitat, no crew operations. The autonomy

@@ -217,7 +217,7 @@ STORAGE_REFERENCE: List[dict] = [
                  "power, cheap in mass, and it only works while something is "
                  "already boiling.  Flown on ground and airborne cryogenic "
                  "systems; the 0.05%/day hydrolox figure already assumes a "
-                 "good passive stack including this.",
+                 "good passive stack including this.  SCENARIO: no test gives 0.40 [0.25, 0.60].  NASA's SHIIVER tests on a 4 m tank found under 3% less boil-off at 50% fill without dome MLI and essentially none with it (NTRS 20205008233, Table 46), and NASA's 2018 roadmap put vapour cooling at TRL 5 (NTRS 20190000305, p. 5): TRL 8 rests on ground and airborne use, not flight in this role (General_Research rc-489).",
     },
 
     # ── CARGO / ORE CONTAINMENT ──────────────────────────────────────────────
@@ -285,7 +285,7 @@ STORAGE_REFERENCE: List[dict] = [
                  "mechanisms.  Trades containment mass for processing energy at "
                  "a body where power is the binding constraint.  Studied for "
                  "lunar regolith (microwave sintering); not demonstrated on "
-                 "asteroid material.",
+                 "asteroid material.  SCENARIO: no calculation or test gives 350 [150, 800] Wh/kg.  NASA's vacuum-sintering (NTRS 20230008596) and microwave-sintering (NTRS 20205010871) work on lunar simulant reports no energy per kg (General_Research rc-492).",
     },
     {
         "name":            "Dust mitigation and seals",
@@ -476,7 +476,7 @@ STORAGE_REFERENCE: List[dict] = [
                  "so a big tank leaks proportionally less.  It can also afford "
                  "the cryocooler and the sunshade that a departure stage cannot. "
                  "Nothing has flown; SpaceX's propellant-transfer demonstration "
-                 "is the nearest thing in progress.",
+                 "is the nearest thing in progress.  SCENARIO: 0.03 [0.01, 0.10] %/day has no named basis.  Modelled comparators: under 0.05%/day for a passive, shielded, ten-layer-MLI Centaur-based LEO depot (Honour et al., NTRS 20110013691); 0.5-1.0%/month of LO2 and 2.5-5.0%/month of LH2 under 60-layer MLI, varying with orbit and tank (Perrin & Casler, NTRS 20160012100, Table 11) (General_Research rc-490).",
     },
     {
         "name":            "Depot refuelling flights to escape",

@@ -51,7 +51,13 @@ DELTA_V_REFERENCE: List[dict] = [
               "(Antreasian et al. 2021) shows maintenance burns far below it "
               "and publishes no budget."},
     {"segment": "NEA  →  Earth return (propulsive)","dv_m_per_s":  5_500, "duration_yr": 1.5,
-     "notes": "Symmetric to outbound; powered Earth-return with no aerobraking."},
+     "notes": "SCENARIO: called symmetric to the outbound leg, powered with no "
+              "aerobraking, but no trajectory gives 5,500 m/s or 1.5 years and "
+              "the endpoint orbit is not defined.  Comparator: Cohen et al.'s "
+              "NIAC asteroid prospector (2013, Sec. 4.2.2) budgets 6.0 km/s for "
+              "every post-departure burn including propulsive capture to LEO; its "
+              "Table 4.1 legs for asteroid arrival and departure and Earth arrival "
+              "sum to 5.10 km/s (General_Research rc-514)."},
     {"segment": "NEA  →  Earth return (aerocap)", "dv_m_per_s":  1_500, "duration_yr": 1.5,
      "notes": "Aerocapture replaces most of the propulsive capture (heat-shield "
               "mass penalty captured separately under operational_costs TPS "
@@ -62,7 +68,11 @@ DELTA_V_REFERENCE: List[dict] = [
               "not defined, so 1,500 m/s is a placeholder (General_Research "
               "rc-293)."},
     {"segment": "Main belt  →  Earth return",     "dv_m_per_s":  7_500, "duration_yr": 4.0,
-     "notes": "Per Taylor 2018 — long cruise; favours electric propulsion."},
+     "notes": "SCENARIO: long cruise; favours electric propulsion.  Taylor et "
+              "al. 2018 compute LEO-to-main-belt rendezvous only (outbound "
+              "transfers of 282-535 days, 96 targets under 7.5 km/s), so they "
+              "give neither this return delta-v nor the 4 years "
+              "(General_Research rc-515)."},
     {"segment": "Lunar surface  →  LEO",          "dv_m_per_s":  5_900, "duration_yr": 0.01,
      "notes": "Reference for lunar-relay arch, built from flown parts but never "
               "flown as one: LM ascent to lunar orbit (Apollo 14, 15 and 17: "

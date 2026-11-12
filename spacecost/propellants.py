@@ -721,7 +721,7 @@ PROPELLANTS_REFERENCE: List[dict] = [
         "isru_feed_kg_per_kg":   9.0 / 7.0,
         "isru_feed_material":    "water",
         "dv_penalty_factor":     1.0,
-        "boiloff_pct_per_day":   0.05,   # The worst case by far.  LH2 boils at 20 K and has the lowest heat of vaporisation of any propellant; even with multi-layer insulation and an active cryocooler, long-duration storage runs 0.03-0.1%/day.  This is why no flown mission has ever performed a deep-space arrival burn on hydrolox after a multi-year cruise -- Centaur is rated for hours of loiter, not years.
+        "boiloff_pct_per_day":   0.05,   # The worst case by far.  LH2 boils at 20 K and has the lowest heat of vaporisation of any propellant; even with multi-layer insulation and an active cryocooler, long-duration storage runs 0.03-0.1%/day, a scenario band with no single source (General_Research rc-490).  This is why no flown mission has ever performed a deep-space arrival burn on hydrolox after a multi-year cruise -- Centaur is rated for hours of loiter, not years.
         "isp_vac_s":             452,
         "exhaust_vel_m_per_s":   452 * G0_M_S2,
         "density_kg_per_L":      _hydrolox["density_kg_per_L"],
@@ -735,7 +735,7 @@ PROPELLANTS_REFERENCE: List[dict] = [
                  "RL10A-3-3A measured 444.4 +/- 2.5 s at O/F 5.0, 1.7% lower "
                  "(Baumeister, NASA/TM-2015-218736). "
                  "LH2 base price $3-6/kg (NASA contracts); bulk-handling overhead "
-                 "lifts effective cost to ~$10/kg.  Used on SLS, Centaur.",
+                 "lifts effective cost to ~$10/kg.  Used on SLS, Centaur.  Boil-off 0.05%/day and its 0.03-0.1%/day band are a scenario for a large, insulated, cryocooled tank, with no single source.  Modelled comparators: under 0.05%/day for a passive, shielded, ten-layer-MLI LEO depot (Honour et al., NTRS 20110013691); 2.5-5.0%/month of LH2 under 60-layer MLI, varying with orbit and tank (Perrin & Casler, NTRS 20160012100, Table 11) (General_Research rc-490).",
     },
     {
         "name":                  "methalox  (LCH4 / LOX)",
@@ -1182,7 +1182,7 @@ PROPELLANTS_REFERENCE: List[dict] = [
                  "supercritical against xenon's 2.0 means the COPV masses 12.5% "
                  "of the propellant against xenon's 1.9%.  Whether it beats "
                  "xenon is exactly the kind of trade this table now lets the "
-                 "search resolve rather than assume.",
+                 "search resolve rather than assume.  The 0.45 is a total (thrust-power) efficiency and a scenario value.  NASA-457M's krypton discharge efficiency, 0.50 at 2,039 s and 300 V (Jacobson & Manzella, NASA/TM-2003-212700, App. p. 8), is a 50 kW-class lab figure on a narrower boundary: it brackets the value, it does not source it (General_Research rc-458).",
     },
     {
         "name":                  "Iodine  (Hall / gridded)",
@@ -1790,8 +1790,10 @@ PROPELLANTS_REFERENCE: List[dict] = [
         "ref_cost_usd_per_L":    _lifh["ref_cost_usd_per_kg"] * _lifh["density_kg_per_L"],
         "yfinance_proxy":        None,
         "reference_year":        _REF_YEAR_PROP,
-        "notes": "542 s is the highest specific impulse ever MEASURED from a "
-                 "chemical rocket — Rocketdyne, test stand, 1960s.  It is in "
+        "notes": "542 s is this combination's calculated theoretical maximum "
+                 "(Arbit et al., NASA-CR-72325, 1968); Rocketdyne's test "
+                 "firings achieved 509 lbf-s/lbm, about 509 s (NASA-CR-110530, "
+                 "1970, Sec. 3.3.4; General_Research rc-485).  It is in "
                  "this table as the ceiling of chemistry, so that '452 s is the "
                  "best chemical Isp' is not quietly assumed.\n"
                  "It will never fly.  The exhaust is hydrogen fluoride, the "

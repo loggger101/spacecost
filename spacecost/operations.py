@@ -56,7 +56,7 @@ OPERATIONAL_COSTS_REFERENCE: List[dict] = [
                  "and NICM is distributed only through NASA's ONCE portal.  NICM "
                  "is also an instrument cost model, not one for structures or "
                  "mechanisms.  Asteroid-mining rigs trend mid-range due to "
-                 "regolith-contact mechanisms.",
+                 "regolith-contact mechanisms.  No published cost-estimating relationship or recurring unit cost matches mining hardware, so $300k/kg [$100k, $1M] is a scenario input; generic spacecraft or instrument CERs are not applied without showing they fit (General_Research rc-517).",
         "reference_year":   _REF_YEAR_OPS,
     },
     {
@@ -72,7 +72,7 @@ OPERATIONAL_COSTS_REFERENCE: List[dict] = [
                  "propulsion system, and no science payload.  Stardust and the "
                  "OSIRIS-REx SRC are the heritage.  Half the mining-rig rate; "
                  "range spans a bare capsule to one with active thermal and "
-                 "guided entry.",
+                 "guided entry.  ENGINEERING JUDGEMENT: no capsule unit cost is published.  Stardust's 46 kg capsule appears in its press kit (JPL, Quick Facts p. 6) only beside whole-spacecraft and programme costs, so $150k/kg [$50k, $400k] is a scenario, not a derived rate (General_Research rc-497).",
         "reference_year":   _REF_YEAR_OPS,
     },
     {
@@ -130,7 +130,7 @@ OPERATIONAL_COSTS_REFERENCE: List[dict] = [
                  "resupply missions averaged $191.3M each under CRS-1 "
                  "(SpaceX $152.1M, Orbital ATK $262.6M), and CRS-2 was "
                  "projected at $71,800/kg (NASA OIG IG-18-016, 2018).  Those "
-                 "are whole missions, ~100x this figure.",
+                 "are whole missions, ~100x this figure.  'Scaled from' names the analogy, not a calculation: no component-level derivation of $2M [$0.5M, $8M] exists, so it is a scenario input (General_Research rc-516).",
         "reference_year":   _REF_YEAR_OPS,
     },
     {
@@ -811,7 +811,7 @@ OPERATIONAL_COSTS_REFERENCE: List[dict] = [
                  "is a fleet-representative figure for an operational booster "
                  "on a high-value payload.  Distinct from launch insurance, "
                  "which replaces the HARDWARE on failure — it does not "
-                 "replace the revenue the mission would have earned.",
+                 "replace the revenue the mission would have earned.  0.97 has no fitted cohort or estimator, and [0.90, 0.99] is a scenario envelope from a heritage-credited first flight to a mature fleet, not a confidence interval.  SpaceX's June 2026 EU prospectus reports over 99% mission success across about 620 Falcon 9 launches (p. 58), one family's aggregate with no numerator or interval (General_Research rc-495).",
         "reference_year":   _REF_YEAR_OPS,
     },
     {
@@ -829,7 +829,7 @@ OPERATIONAL_COSTS_REFERENCE: List[dict] = [
                  "deep-space record.  Constant hazard is an assumption: fits to "
                  "spacecraft failures reject it early in life (Navard 1993; "
                  "Jacklin 2019), where most losses fall, so it spreads them "
-                 "evenly and understates the risk of a short mission.",
+                 "evenly and understates the risk of a short mission.  SCENARIO INPUT: 30 [15, 60] is not fitted to a cohort; the anchors are examples, with no failure definition, exposure or censoring.  Grile & Bettinger (2024, doi:10.1002/qre.3600) fit Kaplan-Meier and Weibull models to deep-space satellites of 1991-2020 but publish no fitted values in the abstract, so they give no comparator yet (General_Research rc-494).",
         "reference_year":   _REF_YEAR_OPS,
     },
     {
@@ -885,7 +885,7 @@ OPERATIONAL_COSTS_REFERENCE: List[dict] = [
                  "mechanism rate, and the sustained-operation risk on top of "
                  "it is carried by the spacecraft MTBF term rather than "
                  "double-counted here.  Grows with flight heritage — see "
-                 "'Mining reliability growth exponent'.",
+                 "'Mining reliability growth exponent'.  SCENARIO INPUT: the 13 categories mix whole missions with single mechanisms (Hayabusa2's two count once), none is sustained excavation or beneficiation, and they were selected, not sampled.  Neither 11/13 nor 10/13 estimates first-of-kind rig reliability; 0.85 [0.70, 0.95] stays a scenario anchored on the tally until a matched reliability model exists (General_Research rc-451).",
         "reference_year":   _REF_YEAR_OPS,
     },
     {
@@ -931,7 +931,7 @@ OPERATIONAL_COSTS_REFERENCE: List[dict] = [
                  "once given here is an estimate with no source.  A "
                  "continuously-operating excavator is harder than a one-shot "
                  "deployment.  Without this ceiling the Duane curve would "
-                 "eventually promise certainty, which no mechanism earns.",
+                 "eventually promise certainty, which no mechanism earns.  SCENARIO INPUT: no data set or elicitation gives 0.95 or its 0.85-0.99 band; the event is one campaign's rig working as designed, not one deployment.  Comparators, none a replacement: Evans, Gallo & Kaminskiy count 19 deployable-subsystem anomalies in 123 GSFC missions in a Bayesian one-shot framework (NTRS 20120013705); IPEx's wheel actuator ran 6.5M revolutions against 5.7M required before a bearing failed (Schuler et al., NTRS 20240008162), one component test (General_Research rc-493).",
         "reference_year":   _REF_YEAR_OPS,
     },
     {
