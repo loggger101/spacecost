@@ -500,7 +500,7 @@ def _blend(of_ratio: float, fuel: dict, ox: dict) -> dict:
 #   PTFE       Teflon bar stock for pulsed-plasma thrusters, ~$25/kg.
 #   EMI-BF4    Ionic liquid for electrospray, ~$2,000/kg at research volume.
 #   Indium     FEEP propellant, ~$250/kg; ρ 7.31 kg/L liquid.
-#   Mercury    Historic ion propellant (SERT-II, ATS-6).  ~$60/kg, ρ 13.53, 
+#   Mercury    Historic ion propellant (SERT-II; ATS-6 flew cesium).  ~$60/kg, ρ 13.53,
 #              still the best storage density ever flown, and banned under the
 #              2013 Minamata Convention.  Present so the record is complete.
 #   Lithium    MPD-thruster propellant, ~$80/kg, heated liquid reservoir.
@@ -516,6 +516,26 @@ def _blend(of_ratio: float, fuel: dict, ox: dict) -> dict:
 KRYPTON_USD_PER_KG_LOW  =   300.0
 KRYPTON_USD_PER_KG_HIGH = 2_100.0
 
+# Where the component DENSITIES come from, and at what condition (General_
+# Research rc-673, rc-675 to rc-678, rc-808).  Each row built on a component
+# names it in its notes.
+#   RP-1, N2O4, MMH, Hydrazine, UDMH   DoD Manual 4145.26, Appendix 2, Table
+#              AP2.T18, p. 214, all at 20.0 C: RP-1 0.81, N2O4 1.45, MMH
+#              0.87, hydrazine 1.01, UDMH 0.79 kg/L.  UDMH's 0.793 carries a
+#              third decimal the table does not give; it is kept, unsourced
+#              at that digit.
+#   LCH4       pure methane at its normal boiling point, 111.6 K: 422.5 kg/m3
+#              (IMO Resolution MSC.420(97), Annex 18, Table 3), stored as
+#              0.422.  Not an LNG mixture.
+#   HTP-98     98% H2O2 at 25 C and 1 atm, 1430.9 kg/m3 (NASA NTRS
+#              20030020732, Appendix A, sec. 6.2, Table 6.1, p. 165, which
+#              reproduces FMC Chemicals' Technical Bulletin 67), rounded.
+#   Aerozine50 the top of NASA TM-X-53859's specific-gravity range, 0.894 to
+#              0.903 (Table 1, p. 8).  The same table's liquid density, 56.1
+#              lb/ft3 at 77 F, is 0.8986 kg/L, 0.5% lower; 0.903 is kept.
+#   Iodine     solid iodine at 25 C, 4.93 g/cm3 (WHO/HEP/ECH/WSH/2020.5,
+#              Table 1.1, p. 2): the material's density, not a loose-packed
+#              reservoir's.
 _COMPONENTS = {
     "RP-1":      {"density_kg_per_L": 0.810, "cost_usd_per_kg":      2.50, "storage_class": "storable_liquid"},
     "LH2":       {"density_kg_per_L": 0.0708,"cost_usd_per_kg":     10.00, "storage_class": "deep_cryogen"},   # base + handling
@@ -702,7 +722,7 @@ PROPELLANTS_REFERENCE: List[dict] = [
                  "Eng. 17(6), 2013, Table 5); the Saturn V first stage ran "
                  "304 s (Thapa, J. Materials Physics & Chemistry 11(1), 2023), "
                  "the family's low end.  Combined cost "
-                 "weighted at 1:2.30 RP-1:LOX mix ratio.",
+                 "weighted at 1:2.30 RP-1:LOX mix ratio.  RP-1's 0.810 kg/L is DoD Manual 4145.26's 0.81 at 20 C (Appendix 2, Table AP2.T18, p. 214); the density here is the mix of that and the LOX component (General_Research rc-675).",
     },
     {
         "name":                  "hydrolox  (LH2 / LOX)",
@@ -774,7 +794,7 @@ PROPELLANTS_REFERENCE: List[dict] = [
                  "Energomash's RD-192 methane engine is 356 s in the same "
                  "paper.  LCH4 ~$400/tonne, 2025 dollars: a liquefied-product "
                  "midpoint of the World Bank Pink Sheet's hub gas (~$190/tonne) "
-                 "and delivered LNG (~$630/tonne).  ISRU-makeable on Mars.  Comparator: DLR models Raptor 2 RVAC at 368.5 s (O/F 3.4) and 365.9 s (O/F 3.6), calculated rather than measured, 3-4% below this 2013 figure (Herberhold et al. 2026, CEAS Space J. 18, Table 2; General_Research rc-329).",
+                 "and delivered LNG (~$630/tonne).  ISRU-makeable on Mars.  Comparator: DLR models Raptor 2 RVAC at 368.5 s (O/F 3.4) and 365.9 s (O/F 3.6), calculated rather than measured, 3-4% below this 2013 figure (Herberhold et al. 2026, CEAS Space J. 18, Table 2; General_Research rc-329).  LCH4's 0.422 kg/L is pure methane at its 111.6 K normal boiling point, 422.5 kg/m3 (IMO Resolution MSC.420(97), Annex 18, Table 3), not an LNG mixture (General_Research rc-673).",
     },
     {
         "name":                  "MMH / NTO  (hypergolic)",
@@ -807,7 +827,7 @@ PROPELLANTS_REFERENCE: List[dict] = [
                  "(effective Oct 1 2024) are MMH $225.40/lb (~$497/kg) and NTO "
                  "MON-3 $106.42/lb (~$235/kg): DoD prices including DLA "
                  "overhead, quoted as the government comparison and not used "
-                 "for the value.  Comparator: DLA's FY2026 standard prices, MMH $219.10/lb and MON-3 $95.53/lb, are $313.41/kg at this O/F, 5.3x the FY2020 fallback; a DoD standard, not a delivered commercial price (General_Research rc-326).",
+                 "for the value.  Comparator: DLA's FY2026 standard prices, MMH $219.10/lb and MON-3 $95.53/lb, are $313.41/kg at this O/F, 5.3x the FY2020 fallback; a DoD standard, not a delivered commercial price (General_Research rc-326).  Component densities MMH 0.870 and N2O4 1.450 kg/L are DoD Manual 4145.26's 0.87 and 1.45 at 20 C (Appendix 2, Table AP2.T18, p. 214) (General_Research rc-676).",
     },
     {
         "name":                  "Hydrazine  (monoprop)",
@@ -849,7 +869,7 @@ PROPELLANTS_REFERENCE: List[dict] = [
                  "Aerospace Standard Price for HPH and H70 hydrazine is "
                  "$165.75/lb (~$365/kg), a DoD price including DLA overhead, "
                  "quoted as the government comparison and not used for the "
-                 "value.  DLA's FY2026 HPH/H70 standard is $121.54/lb (~$267.95/kg), 26.7% below FY2025; still a DoD comparator beside the commercial $75 (General_Research rc-336).",
+                 "value.  DLA's FY2026 HPH/H70 standard is $121.54/lb (~$267.95/kg), 26.7% below FY2025; still a DoD comparator beside the commercial $75 (General_Research rc-336).  Density 1.010 kg/L is DoD Manual 4145.26's 1.01 at 20 C (Appendix 2, Table AP2.T18, p. 214) (General_Research rc-676).",
     },
     {
         "name":                  "Xenon  (Hall / ion)",
@@ -952,7 +972,8 @@ PROPELLANTS_REFERENCE: List[dict] = [
                  "at 286:1 (Schoenman, AIAA-92-3800, NTRS 19920066503), and "
                  "sits below MMH as UDMH's higher molecular weight predicts.  "
                  "Slightly worse than MMH/NTO and considerably more "
-                 "carcinogenic — present for completeness, not because it wins.",
+                 "carcinogenic — present for completeness, not because it wins.  "
+                 "Component densities: N2O4 1.450 kg/L is DoD Manual 4145.26's 1.45 at 20 C (Appendix 2, Table AP2.T18, p. 214); UDMH 0.793 kg/L sits on that table's 0.79, and its third decimal has no source (General_Research rc-676).",
     },
     {
         "name":                  "Aerozine-50 / NTO  (hypergolic)",
@@ -979,7 +1000,7 @@ PROPELLANTS_REFERENCE: List[dict] = [
                  "and the Titan family; the engine that had to light after eight "
                  "days in cislunar space and always did.  Vac Isp 314.5 s, "
                  "AJ10-137 at area ratio 62.5:1 (Boyce); AEDC rated its injectors "
-                 "at 311.4-312.8 s (Cuffe & Jacobs 1970).",
+                 "at 311.4-312.8 s (Cuffe & Jacobs 1970).  Aerozine-50's 0.903 kg/L is the top of NASA TM-X-53859's specific-gravity range, 0.894-0.903 (Table 1, p. 8); the same table's 56.1 lb/ft3 at 77 F is 0.8986 kg/L, 0.5% lower (General_Research rc-678).  N2O4 1.450 kg/L is DoD Manual 4145.26's 1.45 at 20 C (Table AP2.T18, p. 214) (rc-676).",
     },
     {
         "name":                  "Green monoprop  (ASCENT / AF-M315E)",
@@ -1005,7 +1026,7 @@ PROPELLANTS_REFERENCE: List[dict] = [
         "reference_year":        _REF_YEAR_PROP,
         "notes": "Hydroxylammonium nitrate monoprop.  Flown on NASA's Green "
                  "Propellant Infusion Mission (2019); the Swedish LMP-103S "
-                 "equivalent flew earlier on PRISMA (2010).  Isp 235 s is the "
+                 "equivalent flew earlier on PRISMA (2010), whose HPGP system was a secondary mission objective (Mulkey & Cardiff, Green Propulsion: A NASA GSFC Assessment, NTRS 20240006111, pp. 10-11; General_Research rc-756).  That is LMP-103S's flight record, and none of its performance figures are used for this row.  Isp 235 s is the "
                  "GPIM GR-1 thruster's predicted vacuum Isp (Spores et al., "
                  "GPIM AF-M315E Propulsion System, AIAA JPC 2014, NTRS "
                  "20140012587, Table 1), a delivered figure like the hydrazine "
@@ -1049,7 +1070,7 @@ PROPELLANTS_REFERENCE: List[dict] = [
                  "20010102648).  The reason it "
                  "is here is the boil-off column: 0.002%/day is self-"
                  "decomposition, not evaporation, so unlike a cryogen the loss "
-                 "does not accelerate with mission length.  Comparator: Epic Aerospace lists 98% HTP at $65/kg, minimum 280 kg, plus $3,500-8,500 shipping, against this unsourced $5; bulk versus delivered basis is unresolved, so the value stays (General_Research rc-319).",
+                 "does not accelerate with mission length.  Comparator: Epic Aerospace lists 98% HTP at $65/kg, minimum 280 kg, plus $3,500-8,500 shipping, against this unsourced $5; bulk versus delivered basis is unresolved, so the value stays (General_Research rc-319).  Density 1.431 kg/L is 98% H2O2 at 25 C and 1 atm, 1430.9 kg/m3 (NASA NTRS 20030020732, Appendix A, Table 6.1, p. 165, reproducing FMC Chemicals' Technical Bulletin 67) (General_Research rc-677).",
     },
     {
         "name":                  "HTP / RP-1  (peroxide bipropellant)",
@@ -1077,7 +1098,7 @@ PROPELLANTS_REFERENCE: List[dict] = [
                  "fully storable, and the cheapest bipropellant here, on the "
                  "HTP row's unsourced ~$5/kg.  The "
                  "combination that keeps getting rediscovered and keeps losing to "
-                 "kerolox on Isp.",
+                 "kerolox on Isp.  The density mixes two components at two reference temperatures: RP-1 0.810 kg/L, DoD Manual 4145.26's 0.81 at 20 C (Table AP2.T18, p. 214), and HTP-98 1.431 kg/L, 98% H2O2 at 25 C (NASA NTRS 20030020732, Table 6.1) (General_Research rc-675, rc-677).",
     },
     {
         "name":                  "Cold gas  (GN2)",
@@ -1208,7 +1229,8 @@ PROPELLANTS_REFERENCE: List[dict] = [
         "reference_year":        _REF_YEAR_PROP,
         "notes": "First iodine electric propulsion in orbit: ThrustMe's NPT30-I2 "
                  "on Beihangkongshi-1, Nov 2020 (Rafalskyi et al., Nature 599, "
-                 "2021).  Stored as a SOLID at ambient pressure, ρ 4.93 kg/L, so "
+                 "2021).  Isp 2,000 s is a SCENARIO: NASA/TM-2015-218829 (p. 19) gives ~2,000 s as Busek's target for a full-scale iodine Hall system at high thrust, a target for that system and not a measured Hall or gridded figure (General_Research rc-807).  "
+                 "Stored as a SOLID at ambient pressure, ρ 4.93 kg/L, solid iodine's density at 25 C (WHO/HEP/ECH/WSH/2020.5, Table 1.1, p. 2), the material and not a loose-packed reservoir (General_Research rc-808), so "
                  "the reservoir masses 0.23% of the propellant against xenon's "
                  "1.9% — by a wide margin the best storage density ever flown "
                  "outside mercury.  Cost $60/kg, an estimate: the US$60 in "
@@ -1406,11 +1428,18 @@ PROPELLANTS_REFERENCE: List[dict] = [
                                  * _COMPONENTS["PTFE"]["density_kg_per_L"],
         "yfinance_proxy":        None,
         "reference_year":        _REF_YEAR_PROP,
-        "notes": "A Teflon bar ablated by a capacitor discharge — the oldest "
-                 "electric propulsion in service (LES-6, 1968; EO-1, 2000). "
-                 "Isp ~1,000 s, solid propellant, no tank, no valves, no feed "
-                 "system at all.  Efficiency is ~10%, an order below a Hall "
-                 "thruster, which is why it never scaled past attitude control.",
+        "notes": "A Teflon bar ablated by a capacitor discharge.  LES-6 used "
+                 "one for station keeping in 1968 (Hamidian & Dahlgren, JPL TM "
+                 "33-630, NTRS 19740002615, p. 1); EO-1, launched 21 Nov 2000 "
+                 "(NASA Science, EO-1 mission page), flew a new-generation PPT "
+                 "for over 26 h and 96,000 pulses of pitch control (Zalawski et "
+                 "al., On-Orbit Testing of the EO-1 Pulsed Plasma Thruster, "
+                 "NTRS 20030025690).  Isp ~1,000 s, solid propellant, no tank, "
+                 "no valves, no feed system at all.  1,000 s is a generic point "
+                 "inside EO-1's as-flown 650-1,400 s, and the 0.08 efficiency "
+                 "is that unit's 8% (Zalawski et al., Table 1, p. 2).  It has "
+                 "flown only as attitude control; no source here says why "
+                 "(General_Research rc-759).",
     },
     {
         "name":                  "Mercury ion  (RETIRED)",
@@ -1434,7 +1463,13 @@ PROPELLANTS_REFERENCE: List[dict] = [
                                  * _COMPONENTS["Mercury"]["density_kg_per_L"],
         "yfinance_proxy":        None,
         "reference_year":        _REF_YEAR_PROP,
-        "notes": "SERT-II (1970) and ATS-6 flew mercury ion engines.  ρ 13.53 "
+        "notes": "SERT-II (1970) flew mercury bombardment ion thrusters "
+                 "(Kerslake et al., Flight and Ground Performance of the SERT "
+                 "II Thruster, NASA-TM-X-52848, NTRS 19700022477).  ATS-6's "
+                 "stationkeeping experiment flew cesium, not mercury (Worlock "
+                 "et al., ATS-6 Cesium Bombardment Engine North-South "
+                 "Stationkeeping Experiment, NTRS 19760034957) "
+                 "(General_Research rc-757).  ρ 13.53 "
                  "kg/L is still the best propellant storage density ever flown "
                  "and $60/kg is a fiftieth of xenon, so on this table's columns "
                  "alone it looks like the obvious winner.\n"
@@ -1754,11 +1789,16 @@ PROPELLANTS_REFERENCE: List[dict] = [
         "yfinance_proxy":        None,
         "reference_year":        _REF_YEAR_PROP,
         "notes": "Nano-aluminium burnt in water — Purdue/NASA ALICE flew a "
-                 "sounding rocket in 2009.  Isp 210 s is near the IDEAL value "
+                 "sounding rocket on 7 Aug 2009 (Pourpoint et al. 2012, Int. J. "
+                 "Aerospace Eng. 874076, sec. 7).  Isp 210 s is that paper's "
+                 "peak Isp calculated from ground-test data and offered as the "
+                 "estimate for the flight, not an in-flight measurement.  It is "
+                 "near the IDEAL value "
                  "(207 s sea level / 230 s vacuum at 1000 psia, 74.5% active "
                  "Al); static motor tests delivered 56 / 83 / 133 s in 1.91 / "
                  "3.81 / 7.62 cm motors, 27-64% of ideal and rising with size "
-                 "(Risha et al. 2014, J. Propulsion & Power).  BOTH components "
+                 "(Risha et al. 2014, J. Propulsion & Power, Sec. I and Table "
+                 "7) (General_Research rc-755).  BOTH components "
                  "are asteroid-derivable: metallic aluminium from silicate "
                  "reduction and water from phyllosilicates.  isru_feed is 0.5 "
                  "because half the mixture is metal, which this pipeline does "
