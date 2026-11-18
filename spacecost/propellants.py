@@ -762,7 +762,7 @@ PROPELLANTS_REFERENCE: List[dict] = [
         "type":                  "bipropellant",
         "status":                "operational",
         "trl":                   9,
-        "first_flight":          2023,   # Zhuque-2, first methalox vehicle to orbit (Jul 2023)
+        "first_flight":          2022,   # Zhuque-2 Mission F1, its first launch; F2 reached orbit in 2023
         "restartable":           True,
         "propellantless":        False,
         "storage_class":         "mild_cryogen",
@@ -794,7 +794,7 @@ PROPELLANTS_REFERENCE: List[dict] = [
                  "Energomash's RD-192 methane engine is 356 s in the same "
                  "paper.  LCH4 ~$400/tonne, 2025 dollars: a liquefied-product "
                  "midpoint of the World Bank Pink Sheet's hub gas (~$190/tonne) "
-                 "and delivered LNG (~$630/tonne).  ISRU-makeable on Mars.  Comparator: DLR models Raptor 2 RVAC at 368.5 s (O/F 3.4) and 365.9 s (O/F 3.6), calculated rather than measured, 3-4% below this 2013 figure (Herberhold et al. 2026, CEAS Space J. 18, Table 2; General_Research rc-329).  LCH4's 0.422 kg/L is pure methane at its 111.6 K normal boiling point, 422.5 kg/m3 (IMO Resolution MSC.420(97), Annex 18, Table 3), not an LNG mixture (General_Research rc-673).",
+                 "and delivered LNG (~$630/tonne).  ISRU-makeable on Mars.  Comparator: DLR models Raptor 2 RVAC at 368.5 s (O/F 3.4) and 365.9 s (O/F 3.6), calculated rather than measured, 3-4% below this 2013 figure (Herberhold et al. 2026, CEAS Space J. 18, Table 2; General_Research rc-329).  First flight is the first launch of a methalox vehicle to space, Zhuque-2 Mission F1 in 2022; Mission F2 in 2023 was the first LOX/LCH4 rocket to reach orbit (LandSpace, About Us, Milestones) (General_Research rc-760).  LCH4's 0.422 kg/L is pure methane at its 111.6 K normal boiling point, 422.5 kg/m3 (IMO Resolution MSC.420(97), Annex 18, Table 3), not an LNG mixture (General_Research rc-673).",
     },
     {
         "name":                  "MMH / NTO  (hypergolic)",
@@ -1042,7 +1042,7 @@ PROPELLANTS_REFERENCE: List[dict] = [
         "type":                  "monopropellant",
         "status":                "operational",
         "trl":                   9,
-        "first_flight":          1949,
+        "first_flight":          1951,   # de Havilland Super Sprite flight trials (first fired 1949)
         "restartable":           True,
         "propellantless":        False,
         "storage_class":         "storable_liquid",
@@ -1060,7 +1060,7 @@ PROPELLANTS_REFERENCE: List[dict] = [
         "yfinance_proxy":        None,
         "reference_year":        _REF_YEAR_PROP,
         "notes": "Silver-screen decomposition.  Centaur RCS, Soyuz turbopump gas "
-                 "generator, Black Arrow.  Cheapest propellant in this table at "
+                 "generator, Black Arrow.  First flight 1951: the de Havilland Super Sprite, a catalytic hydrogen-peroxide engine first fired in 1949, began flight trials in 1951 (Science Museum Group, object 1962-104) (General_Research rc-762).  Cheapest propellant in this table at "
                  "~$5/kg (an unsourced estimate pending re-sourcing: the 2024 "
                  "quote it came from is no longer published) and the lowest "
                  "Isp of any liquid in it.  165 s sits between the ~185 s "
@@ -1077,7 +1077,7 @@ PROPELLANTS_REFERENCE: List[dict] = [
         "type":                  "bipropellant",
         "status":                "operational",
         "trl":                   9,
-        "first_flight":          1969,   # Black Arrow R1
+        "first_flight":          1969,   # Black Arrow R0, the first trial launch
         "restartable":           True,
         "propellantless":        False,
         "storage_class":         "storable_liquid",
@@ -1094,7 +1094,7 @@ PROPELLANTS_REFERENCE: List[dict] = [
         "yfinance_proxy":        "heating_oil",
         "reference_year":        _REF_YEAR_PROP,
         "notes": "Black Arrow flew HTP/kerosene to orbit in 1971 — the only "
-                 "British orbital launch.  Isp 320 s vac at 7:1 O/F, ρ 1.30 kg/L, "
+                 "British orbital launch.  First flight is its first launch, the R0 trial of 1969; R1 flew in 1970, and R3 put Prospero in orbit in October 1971 (UK Space Agency, About Black Arrow; Wight Aviation Museum, Black Arrow History) (General_Research rc-761).  Isp 320 s vac at 7:1 O/F, ρ 1.30 kg/L, "
                  "fully storable, and the cheapest bipropellant here, on the "
                  "HTP row's unsourced ~$5/kg.  The "
                  "combination that keeps getting rediscovered and keeps losing to "
@@ -1244,7 +1244,7 @@ PROPELLANTS_REFERENCE: List[dict] = [
         "type":                  "electric",
         "status":                "operational",
         "trl":                   8,
-        "first_flight":          2022,   # HYDROS-C (Tethers Unlimited), Momentus Vigoride, Pale Blue
+        "first_flight":          2019,   # JAXA AQT-D, deployed from Kibo 2019-11-20
         "restartable":           True,
         "propellantless":        False,
         "storage_class":         "benign_liquid",
@@ -1261,10 +1261,8 @@ PROPELLANTS_REFERENCE: List[dict] = [
                                  * _COMPONENTS["Water"]["density_kg_per_L"],
         "yfinance_proxy":        None,
         "reference_year":        _REF_YEAR_PROP,
-        "notes": "Steam.  Resistively or microwave heated, Isp 150-234 s.  Flown "
-                 "by Tethers Unlimited's HYDROS-C (ISS deploy 2022), Momentus' "
-                 "microwave electrothermal Vigoride, and Pale Blue's water "
-                 "resistojet.  The 190 s value is an estimate for higher-power "
+        "notes": "Steam.  Resistively or microwave heated, Isp 150-234 s.  First "
+                 "flight 2019: JAXA's AQT-D water-resistojet demonstration, deployed from Kibo on 20 Nov 2019 (JAXA).  Later: AQUARIUS on EQUULEUS, launched on Artemis I in Nov 2022; Pale Blue's resistojet on EYE, launched 3 Jan 2023 and first fired 3 Mar 2023; Momentus' microwave electrothermal thruster, whose first orbit raise was on Vigoride-5 on 8 May 2023.  RAISE-3, carrying Pale Blue's KIR, failed to reach orbit in 2022.  Tethers Unlimited's HYDROS-C (PTD-1, 2021) electrolyses water and burns the gases, so it is not this row's technology (General_Research rc-764).  The 190 s value is an estimate for higher-power "
                  "designs.  The band's top is a laboratory measurement: 234 s "
                  "from a NASA engineering-model vaporizer/resistojet at 6.86 "
                  "MJ/kg, 1,043 W (Morren 1992, NASA TM-105877, Table II), not a "
@@ -1272,8 +1270,8 @@ PROPELLANTS_REFERENCE: List[dict] = [
                  "an unsourced 220 s (General_Research rc-378).  "
                  "The one flight measurement on record is far lower: AQUARIUS "
                  "on EQUULEUS (Artemis I) measured 91.7 +/- 1.0 s and 90.3 +/- "
-                 "3.0 s at ~6 mN and under 14 W (Asakawa et al., Trans. JSASS "
-                 "67(5), 2024, Table 3).\n"
+                 "3.0 s at ~6 mN and under 14 W (Sekine, Ataka et al., Trans. JSASS "
+                 "67(5), 274-284, 2024, Table 3, p. 282).\n"
                  "The point is not the Isp, which is terrible.  It is "
                  "isru_feed_kg_per_kg = 1.0: an asteroid supplies this propellant "
                  "DIRECTLY, with no electrolysis, no cryocooler and no 1.286 "
@@ -1317,7 +1315,7 @@ PROPELLANTS_REFERENCE: List[dict] = [
         "type":                  "electric",
         "status":                "operational",
         "trl":                   9,
-        "first_flight":          1993,   # Telstar 401 / A2100 MR-510
+        "first_flight":          1993,   # Telstar 401, first-generation arcjets; MR-510 / A2100 came later
         "restartable":           True,
         "propellantless":        False,
         "storage_class":         "storable_liquid",
@@ -1334,8 +1332,7 @@ PROPELLANTS_REFERENCE: List[dict] = [
                                  * _COMPONENTS["Hydrazine"]["density_kg_per_L"],
         "yfinance_proxy":        None,
         "reference_year":        _REF_YEAR_PROP,
-        "notes": "Aerojet MR-510 class — flown on Lockheed A2100 comsats since "
-                 "1993 and largely displaced by Hall thrusters since.  600 s "
+        "notes": "Aerojet MR-510 class.  The first hydrazine arcjets, a first-generation kW-class system, flew on Telstar 401, launched December 1993 (Curren & Byers, NASA-TM-106695, NTRS 19950004443); the MR-510 was a later upgrade flown on Lockheed A2100 spacecraft (Hoskins et al., IEPC-2013-439, p. 2), the first of which, AMC-1, launched in 1996 (Lockheed Martin, 2006) (General_Research rc-763).  Largely displaced by Hall thrusters since.  600 s "
                  "on 2 kW is the top of the demonstrated range: NASA put the "
                  "state of the art at ~530 s mission-average at 1.6 kW on "
                  "hydrazine, set 600 s at 2-5 kW as its programme goal, and ran "

@@ -13,6 +13,32 @@ may read a version as proof that a number moved.
 
 ## Package releases
 
+### 0.18.0 - 2026-11-18
+
+**Data contract 1.26.2 → 1.27.0: `first_flight` is defined, and three
+propellant rows move in that column only.** It is now the year of the first
+launch or flight of a vehicle using that propulsion, successful or not, as
+`first_flight_year` is for a launch vehicle (General_Research rc-760 to
+rc-764; the definition is the owner's). No code reads the column, so no
+cost, delivery chain or summary value moves: in every table and the summary
+sample only `first_flight` (three rows), `notes` (five rows) and the stamp
+differ from 1.26.2. The summary was rebuilt on the recorded reference
+platform (Python 3.13, numpy 2.5.4, pandas 3.1.1).
+
+- **methalox 2023 → 2022**: Zhuque-2 Mission F1, its first launch; F2 in
+  2023 was the first LOX/LCH4 rocket to orbit (LandSpace) (rc-760).
+- **HTP monoprop 1949 → 1951**: the de Havilland Super Sprite's flight
+  trials; 1949 was its first firing (Science Museum Group 1962-104)
+  (rc-762).
+- **Water resistojet 2022 → 2019**: JAXA's AQT-D, deployed from Kibo in
+  November 2019. HYDROS-C electrolyses water and is not this row's
+  technology; AQUARIUS's paper is Sekine et al., not Asakawa et al.
+  (rc-764).
+- **Kept, with the event named**: HTP / RP-1 1969 is Black Arrow's R0 trial,
+  not R1 (rc-761); the hydrazine arcjet's 1993 is Telstar 401's
+  first-generation arcjets, and the MR-510 on A2100 came later, from 1996
+  (rc-763).
+
 ### 0.17.3 - 2026-11-18
 
 **Data contract 1.26.1 → 1.26.2: fourteen General_Research citation
