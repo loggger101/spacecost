@@ -95,8 +95,13 @@ DELTA_V_REFERENCE: List[dict] = [
               "because the Moon is bound rather than at C3=0."},
     {"segment": "TLI  →  NRHO insertion",         "dv_m_per_s":    450, "duration_yr": 0.01,
      "notes": "Near-rectilinear halo orbit insertion for Gateway / Orion, "
-              "~0.4-0.45 km/s (NASA Gateway NRHO trade studies, Whitley & "
-              "Martinez 2016 'Options for Staging Orbits in Cis-Lunar Space'). "
+              "400-450 m/s from TLI to NRHO for fast Gateway access (Benson, "
+              "Asher & Reese 2025, NTRS 20250000718, slide 5); 450 is the "
+              "upper end of that range.  Whitley & Martinez 2015, 'Options "
+              "for Staging Orbits in Cis-Lunar Space' (NTRS 20150019648), "
+              "gives NRO-to-LLO access, 730 m/s (Table 3), and no TLI-to-NRHO "
+              "figure, so it is context, not the number's source "
+              "(General_Research rc-683).  "
               "NRHO is the cheapest usefully-stable cislunar depot orbit."},
     {"segment": "LEO  →  cislunar NRHO depot",    "dv_m_per_s":  3_600, "duration_yr": 0.02,
      "notes": "TLI + NRHO insertion, an approximate cross-study benchmark: "

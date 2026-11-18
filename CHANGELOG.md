@@ -13,6 +13,42 @@ may read a version as proof that a number moved.
 
 ## Package releases
 
+### 0.17.3 - 2026-11-18
+
+**Data contract 1.26.1 → 1.26.2: fourteen General_Research citation
+candidates. No value moved.** Only `notes` cells, code comments, CITATIONS.md
+and the stamps changed: every value column of the six tables and the summary
+sample is identical to 1.26.1. The summary was rebuilt on the recorded
+reference platform (Python 3.13, numpy 2.5.4, pandas 3.1.1), and its hash
+moves with the stamp column only.
+
+- **Component densities cited with their conditions** (rc-673, rc-675 to
+  rc-678, rc-808), in a comment above `_COMPONENTS` and in each row built on
+  them: RP-1, N2O4, MMH, hydrazine and UDMH from DoD Manual 4145.26 at 20 C
+  (UDMH's third decimal has no source); LCH4 as pure methane at 111.6 K
+  (IMO MSC.420(97)); HTP-98 at 25 C (NASA NTRS 20030020732); Aerozine-50 as
+  the top of TM-X-53859's specific-gravity range; iodine as the solid at
+  25 C (WHO).
+- **Iodine's 2,000 s is a scenario** on Busek's full-scale Hall target
+  (NASA/TM-2015-218829, rc-807).
+- **Corrections:**
+  - ATS-6 flew cesium, not mercury; SERT-II's mercury thrusters are cited
+    (rc-757).
+  - The PPT row drops "the oldest electric propulsion in service" and the
+    unsourced Hall comparison; its 0.08 is EO-1's flown 8% (rc-759).
+  - TLI → NRHO's 450 m/s is the top of Benson, Asher & Reese's 400-450;
+    Whitley & Martinez give no TLI-to-NRHO figure (rc-683).
+  - ALICE's 210 s is the flight estimate from ground tests, not an
+    in-flight measurement (rc-755).
+- **Sources for named examples**: PRISMA's LMP-103S (rc-756), and TAGSAM,
+  Philae, InSight's mole and Curiosity's drill beside the rig trip limit
+  (rc-698).
+- **Heating oil's 0.845 kg/L is a proxy**: HO=F is NY Harbor ULSD at 60 F,
+  and the matching 0.845 is a different IEA product (rc-670).
+
+Five flight-history candidates (rc-760 to rc-764) wait on a definition of
+the propellant table's `first_flight` and are not in this release.
+
 ### 0.17.2 - 2026-11-18
 
 **Data contract 1.26.1, unchanged: ten General_Research citation candidates,

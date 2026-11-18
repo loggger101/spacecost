@@ -149,6 +149,19 @@ so a study can state what it excluded.
 | Honour et al., NTRS 20110013691; Perrin & Casler, NTRS 20160012100, Table 11 | modelled depot boil-off beside the hydrolox and depot scenarios (rc-490) |
 | Boyce (Aerojet), chapter on the AJ10-137 in *Remembering the Giants: Apollo Rocket Propulsion Development*, NASA, 2010, NTRS 20100027319, <https://ntrs.nasa.gov/citations/20100027319>, p. 3 | Aerozine-50 / NTO: the AJ10-137's rated 314.5 s vacuum Isp at area ratio 62.5:1, the row's value (rc-754) |
 | Cuffe & Jacobs (NASA MSC), *Apollo Spacecraft Engine Specific Impulse*, D2-I17060-1, 1970, NTRS 19700026467, <https://ntrs.nasa.gov/citations/19700026467>, p. 32 | Aerozine-50 / NTO: AEDC's injector-level measurements, 312.8 s and 311.4 s on two thrust chambers with a 0.2 s allocated uncertainty; a comparison, not the row's value (rc-754) |
+| U.S. Department of Defense, DoD Manual 4145.26, *DoD Contractors' Safety Manual for Ammunition and Explosives*, Appendix 2, Table AP2.T18, p. 214, <https://www.esd.whs.mil/Portals/54/Documents/DD/issuances/dodm/414526m.pdf> | component densities at 20.0 C: RP-1 0.81, N2O4 1.45, MMH 0.87, hydrazine 1.01, UDMH 0.79 kg/L; UDMH's stored 0.793 has a third decimal the table does not give (rc-675, rc-676) |
+| IMO, Resolution MSC.420(97), *Interim Recommendations for Carriage of Liquefied Hydrogen in Bulk*, Annex 18, Table 3 (2016) | LCH4: pure methane at its 111.6 K normal boiling point, 422.5 kg/m³ (rc-673) |
+| Epstein, Joppin, Kerrebrock & Schneider, *Microfabricated Liquid Rocket Motors*, final report on NAG3-2506, NTRS 20030020732, <https://ntrs.nasa.gov/citations/20030020732>, Appendix A, Table 6.1, p. 165 | HTP-98: 98% H2O2 at 25 C and 1 atm, 1430.9 kg/m³, reproduced from FMC Chemicals' Technical Bulletin 67 (Raleigh 1969) (rc-677) |
+| Arnett, NASA TM-X-53859, 1969, NTRS 19700004114, <https://ntrs.nasa.gov/citations/19700004114>, Table 1, p. 8 | Aerozine-50: specific gravity 0.894-0.903, whose top the component takes; and 56.1 lb/ft³ at 77 F (0.8986 kg/L) (rc-678) |
+| World Health Organization, *Iodine in drinking-water*, WHO/HEP/ECH/WSH/2020.5, Table 1.1, p. 2 | iodine: solid density 4.93 g/cm³ at 25 C, the material and not a packed reservoir (rc-808) |
+| Nguyen & Steele, *An Overview of SBIR Phase 2 In-Space Propulsion and Cryogenic Fluids Management*, NASA/TM-2015-218829, NTRS 20150015569, <https://ntrs.nasa.gov/citations/20150015569>, p. 19 | iodine: Busek's ~2,000 s target for a full-scale iodine Hall system at high thrust; the row's Isp is a scenario on it (rc-807) |
+| Mulkey & Cardiff (NASA GSFC), *Green Propulsion: A NASA GSFC Assessment*, 3AF Space Propulsion 2024, NTRS 20240006111, <https://ntrs.nasa.gov/citations/20240006111>, pp. 10-11 | PRISMA (2010) and its LMP-103S HPGP system, the green monoprop row's earlier flight; no performance figure is taken from it (rc-756) |
+| Pourpoint, Wood, Pfeil, Tsohas & Son, *Feasibility Study and Demonstration of an Aluminum and Ice Solid Propellant*, Int. J. Aerospace Eng. 2012, 874076, <https://doi.org/10.1155/2012/874076>, sec. 7 | ALICE: the 7 Aug 2009 flight, and the 210 s peak Isp calculated from ground tests as the flight estimate (rc-755) |
+| Risha, Connell, Yetter, Sundaram & Yang, *Combustion of Frozen Nanoaluminum and Water Mixtures*, J. Propulsion & Power 30(1), 133-142, 2014, <https://doi.org/10.2514/1.B34783>, Sec. I and Table 7 | ALICE: the ideal 207 / 230 s and the static-motor 56 / 83 / 133 s (rc-755) |
+| Kerslake et al., *Flight and Ground Performance of the SERT II Thruster*, NASA-TM-X-52848, 1970, NTRS 19700022477, <https://ntrs.nasa.gov/citations/19700022477> | mercury ion: SERT-II's mercury bombardment thrusters, 1970 (rc-757) |
+| Worlock, James, Hunter & Bartlett, *ATS-6 Cesium Bombardment Engine North-South Stationkeeping Experiment*, IEEE Trans. AES-11, 1975, NTRS 19760034957, <https://ntrs.nasa.gov/citations/19760034957> | ATS-6 flew cesium, not mercury (rc-757) |
+| Hamidian & Dahlgren, *Testing and Evaluation of the LES-6 Pulsed Plasma Thruster*, JPL TM 33-630, 1973, NTRS 19740002615, <https://ntrs.nasa.gov/citations/19740002615>, p. 1 | PPT: LES-6's use in 1968 (rc-759) |
+| Zalawski, Benson, Smernan & Hoskins, *On-Orbit Testing of the EO-1 Pulsed Plasma Thruster*, 2002, NTRS 20030025690, Table 1, p. 2; and NASA Science, *Earth Observing-1* mission page, <https://science.nasa.gov/mission/eo-1/> | PPT: EO-1's launch (21 Nov 2000), its flown unit's 650-1,400 s and 8% efficiency, the row's 0.08 (rc-759) |
 
 Vacuum Isp values are the interplanetary-relevant figures. Sea-level Isp is
 lower and matters only to a first stage, which is already priced into the launch
@@ -167,6 +180,8 @@ table's $/kg-to-orbit.
 | Lyons (JPL), Magellan / MGS aerobraking; Long et al. 2007, MRO aerobraking operations | the aerobraked return's flight record |
 | NASA NTRS and JPL design handbooks | the remaining trajectory legs |
 | NASA-CR-195527, Table 2.1; Benson, Asher & Reese, 2025 | TLI and TLI-to-NRHO components, a cross-study benchmark for the NRHO row (rc-357) |
+| Benson, Asher & Reese, *Enhancing Fast Transfer Launch Availability to the NRHO Using a Phasing Loop Approach*, AAS GN&C 2025, NTRS 20250000718, <https://ntrs.nasa.gov/citations/20250000718>, slide 5 | TLI → NRHO insertion: 400-450 m/s, whose top the row takes (rc-683) |
+| Martinez & Whitley, *Options for Staging Orbits in Cis-Lunar Space*, IEEE Aerospace 2015, NTRS 20150019648 | NRO-to-LLO access (730 m/s, Table 3), context for the NRHO row; it gives no TLI-to-NRHO figure (rc-683) |
 | NASA ISPT, Aerocapture for Discovery Missions, 2010, p. 12 | all-propulsive insertion for NEO return, ~4-5 km/s; why the aerocapture saving is unsourced (rc-293) |
 
 ⚠️  These are **representative means**, not a trajectory. A real transfer needs a
@@ -193,7 +208,8 @@ Lambert solve against an ephemeris; these are what you price the answer with.
 | 14 CFR Part 440 (eCFR), 440.9(c) and (e) | the third-party and US Government property caps on required liability insurance |
 | FAA, Space Launch and Reentry Licensing and Permitting User Fees, 91 FR 21591 (22 Apr 2026) | the per-launch user fee owed from 2026 under 51 U.S.C. 50924 |
 | Cross & Vesely, Synthesizing a New Launch Vehicle Failure Probability Based on Historical Flight Data, 2018, NTRS 20180006947 | first-flight failure probability of a new launch vehicle |
-| Kinnett, Green, Klein & Lin (JPL), Remote Diagnosis and Operational Response to an In-Flight Failure of the Drill Feed Mechanism Onboard the Mars Science Laboratory Rover, Aerospace Mechanisms Symposium 2022 | the Curiosity drill entry in the mining success tally |
+| Kinnett, Green, Klein & Lin (JPL), Remote Diagnosis and Operational Response to an In-Flight Failure of the Drill Feed Mechanism Onboard the Mars Science Laboratory Rover, Aerospace Mechanisms Symposium 2022 | the Curiosity drill entry in the mining success tally; and, pp. 1 and 13, the feed stall at sol 1536 and the first feed-extended sample at sol 2057 beside the rig trip limit (rc-698) |
+| Berry et al., *Contact with Bennu! OSIRIS-REx TAG sample-collection performance*, NTRS 20210025295, <https://ntrs.nasa.gov/citations/20210025295>; ESA, *Philae's extraordinary comet landing relived* (2024); NASA Science, *Common Questions about InSight's "Mole"* (2020, updated 2024) | TAGSAM's single contact, Philae's unfired harpoons and HP3's want of soil friction: one-shot and failure-mode context beside the rig trip limit, not evidence for its value (rc-698) |
 | Shapiro, Murray, Howarth & Fusaro, Space Mechanisms Lessons Learned Study, Vol. I (NASA TM-107046) and Vol. II (TM-107047), 1995 | the fleet deployment-anomaly record, and flight lessons by mechanism type |
 | NASA CR-3349, Satellite Power System Salvage and Disposal Alternatives, 1980 | the space-asset salvage values that bracket the rig salvage fraction |
 | US DOE, Mining Industry Energy Bandwidth Study, 2007, Exhibit 24 | terrestrial beneficiation energy per kg of ore |
@@ -319,6 +335,13 @@ Live quotes, when `use_yfinance` is on, come from Yahoo Finance via the
 | `HO=F` | NY heating oil | RP-1 / kerosene proxy, No. 2 distillate |
 | `NG=F` | Henry Hub natural gas | methane (LCH4) proxy |
 | `CL=F` | WTI crude | upstream cross-check on `HO=F` |
+
+The per-volume quotes become $/kg through `units.COMMODITY_DENSITY_KG_PER_L`.
+`heating_oil`'s 0.845 kg/L is a proxy: HO=F is NY Harbor ULSD, Grade 62, with
+its volume set at 60 F (CME NYMEX Rulebook, Chapter 150, p. 1), while the
+matching 0.845 is IEA's French household *fuel oil domestique* (*Energy
+Prices 2022*, Documentation, p. 146), a different product at no stated
+temperature (rc-670).
 
 Yahoo Finance data is subject to Yahoo's own terms of service. Nothing fetched
 is redistributed by this project: a live price lands in a CSV you build

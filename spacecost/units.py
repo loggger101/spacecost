@@ -56,6 +56,12 @@ NEWTON_G_M3_PER_KG_S2 = 6.674_30e-11
 
 # Approximate mass densities of liquid commodities at storage conditions.
 # Used to map yfinance per-volume quotes onto per-mass propellant prices.
+# heating_oil's 0.845 is a PROXY with no matched source.  HO=F is NY Harbor
+# ULSD, Colonial Pipeline Grade 62, its volume set at 60 F (CME NYMEX
+# Rulebook, Chapter 150, p. 1).  The same 0.845 kg/L is IEA's figure for
+# French household "fuel oil domestique" (Energy Prices 2022, Documentation,
+# p. 146), a different product with no temperature stated.  Kept pending a
+# density for the contract's own product at 60 F (General_Research rc-670).
 COMMODITY_DENSITY_KG_PER_L = {
     "crude_oil":       0.870,   # WTI ~32° API
     "heating_oil":     0.845,   # No. 2 distillate; kerosene/RP-1 proxy
