@@ -14,6 +14,14 @@ commit b0b18b2de301653ee23de1bd3779867ae5b617a1 (2026-09-04).
 # USD/gallon).  Everything funnels through these helpers so output columns
 # carry the explicit `_usd_per_kg` / `_usd_per_L` suffix.
 
+# G0 is the conventional standard acceleration of gravity g_n, not a local
+# gravity: 980.665 cm/s2, 3rd CGPM (1901) Declaration 2, Proceedings p. 70.
+# The gallon is the US liquid gallon, 3.785 411 784 L exactly (NIST HB 133
+# (2026), Appendix E, p. 248).  The barrel is the petroleum barrel of 42 US
+# gallons (NIST SP 811, Appendix B.9): 42 x 3.785411784 = 158.987294928 L,
+# written out as that exact decimal rather than computed, because the float
+# product 42 * LITRES_PER_GAL lands one ulp lower (tests/test_prices.py
+# checks the two agree).
 G0_M_S2          = 9.806_65          # standard gravity, used in rocket equation
 LITRES_PER_GAL   = 3.785_411_784     # US gallon → litre
 LITRES_PER_BBL   = 158.987_294_928   # oil barrel → litre
@@ -35,7 +43,9 @@ AU_LIGHT_TIME_S = 499.004_784
 
 # Equilibrium temperature at 1 AU of a rapidly rotating black sphere, K:
 # (S/4sigma)^(1/4) with S = 1361 and the Stefan-Boltzmann constant
-# 5.670374419e-8 W/m2/K4.  STATED rather than computed, because the fourth
+# 5.670374419e-8 W/m2/K4 (CODATA 2018, NIST SP 959 p. 1: 5.670 374 419 ...,
+# its first ten significant digits).  (1361 / (4 x 5.670374419e-8))^(1/4) =
+# 278.3214 K, rounded to one decimal.  STATED rather than computed, because the fourth
 # root is a `pow` and `pow` is not required to be correctly rounded -- the one
 # place this module would have left the byte contract.  Scaled per row as
 # 278.3 / sqrt(au), and `sqrt` IS required to be correctly rounded.

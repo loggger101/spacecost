@@ -424,6 +424,14 @@ DOWNLEG_CAPSULE_DRY_FRAC   = 0.10   # capsule dry mass per kg of cargo
 # One fraction for every destination, at no stated entry speed: LEO, GEO and
 # lunar returns differ by several km/s, and shield mass rises with entry speed
 # (Dec & Braun 2006).
+# 0.15 IS A SCENARIO.  Its denominator is the cargo plus the capsule's dry
+# mass, so downleg_cost_usd_per_kg carries 0.15 x 1.10 = 0.165 kg of TPS per
+# kg of cargo delivered.  Dec & Braun (AIAA 2006-780, Table 2) give the
+# entry-speed sensitivity as thickness, not mass: total PICA 8.324 cm for an
+# 11 km/s lunar return against 10.873 cm for a 14 km/s Mars return, 31%
+# thicker.  Turning that into a mass fraction needs a shield geometry and
+# density, which no row here carries (General_Research rc-739; economicspace's
+# own dial is rc-134).
 DOWNLEG_TPS_FRAC           = 0.15
 DOWNLEG_CAPSULE_USD_PER_KG = _ops("Return capsule recurring cost")
 DOWNLEG_TPS_USD_PER_KG     = _ops("Heat shield / TPS for Earth return")

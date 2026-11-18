@@ -13,6 +13,32 @@ may read a version as proof that a number moved.
 
 ## Package releases
 
+### 0.17.2 - 2026-11-18
+
+**Data contract 1.26.1, unchanged: ten General_Research citation candidates,
+and nothing a build produces moves.** CITATIONS.md and comments in
+`units.py` and `delivery.py` only; both parse to the same AST, and
+`reference/` is up to date without regenerating. Each candidate asked for
+the full reference behind something the code already uses.
+
+- **Constants** (rc-667, rc-668, rc-669): `G0_M_S2` is the 3rd CGPM's
+  conventional g_n, not a local gravity; the gallon is NIST HB 133's exact
+  3.785 411 784 L and the barrel the 42-gallon petroleum barrel of NIST SP
+  811 B.9, written out as the exact decimal because the float product lands
+  one ulp lower; the Stefan-Boltzmann constant behind 278.3 K is CODATA 2018
+  (NIST SP 959) to ten digits.
+- **Downleg TPS** (rc-739): 0.15 is a scenario whose denominator is cargo
+  plus capsule, 0.165 kg of TPS per kg delivered; Dec & Braun 2006 give the
+  entry-speed sensitivity as thickness (PICA 31% thicker from 11 to 14 km/s),
+  which no row here can turn into mass.
+- **Full entries** for Boyce's AJ10-137 chapter and Cuffe & Jacobs 1970
+  (Aerozine-50's rated 314.5 s against AEDC's injector measurements,
+  rc-754), Navard 1993 and Jacklin 2019 (two different populations, neither
+  a deep-space MTBF, rc-753), Stackpoole et al. 2013 (PICA heritage, no
+  cost, rc-783) and Krog & Berstad's preprint (a ground terminal, rc-785).
+- **The 0.17.1 comparator groups** in §1 and §4 become one row per source
+  with title, date and link (rc-805, rc-806).
+
 ### 0.17.1 - 2026-11-12
 
 **Data contract 1.26.0 → 1.26.1: thirty-two General_Research citation
