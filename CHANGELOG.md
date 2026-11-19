@@ -13,6 +13,30 @@ may read a version as proof that a number moved.
 
 ## Package releases
 
+### 0.18.6 - 2026-11-19
+
+**Data contract 1.27.5 → 1.27.6: eighteen General_Research citation
+candidates. No value moved.** Only `notes`, comments, CITATIONS.md and the
+stamps changed.
+
+- **CITATIONS.md gains full references** for reports the notes already cited:
+  NASA OIG IG-24-001 (named; it was "Oct 2023 audit"), IG-24-015, IG-26-004
+  and IG-20-012; Oleson & McGuire's COMPASS report and Fisher et al.'s NEXT-C
+  status paper; Moran (NASA-TM-103730); Beaurain et al. (NTRS 20030066115);
+  Parcero et al.'s entry-vehicle guide; Rumerman, NASA SP-2009-4012; four
+  IEPC papers behind VASIMR and MPD; Leucht, Prater & Vetcha; ESA's ExoMars
+  factsheet; the H-IIA and H3 price sources; and ULA's Vulcan Cert-1 page
+  (rc-826, 828 to 834, 839, 840, 844 to 846).
+- **Solar sail**: NEA Scout separated from SLS but its sail deployment was
+  never confirmed; each milestone names its source (rc-837).
+- **Beamed laser-thermal**: 900 s is a scenario; the 2022 McGill study assumes
+  3,000 s and the Kare attribution had no publication behind it (rc-842).
+- **Proton-M**: the 4,300 kg escape payload is the ExoMars 2016 TGO plus
+  Schiaparelli stack, 4,332 kg including fuel (rc-838).
+- **Vulcan VC2**: the maiden-flight note cites Cert-1 (rc-843).
+- **Hydrolox ISRU comment**: Moran's figures as the report gives them; the
+  "2 MW at 280 kg/hr" pair is not in it (rc-836).
+
 ### 0.18.5 - 2026-11-19
 
 **Data contract 1.27.4 → 1.27.5: five General_Research citation candidates. No

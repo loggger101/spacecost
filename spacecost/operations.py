@@ -947,7 +947,7 @@ OPERATIONAL_COSTS_REFERENCE: List[dict] = [
                  "cycling and radiation, not by propellant.  ISS-class "
                  "hardware is rated 15-30 years; a machine chewing rock is at "
                  "the low end.  Whatever life is left when the programme ends "
-                 "is credited back as terminal value.  Under review: NASA's lunar regolith systems target a 5-year life, and in a 15-day ground challenge only 2 of 8 teams held 800 kg/day throughout (Leucht, Prater & Vetcha 2024, NTRS 20240015957); the ISS-class rating's transfer to an abrasive rig is unsupported (General_Research rc-347).",
+                 "is credited back as terminal value.  Under review: NASA's lunar regolith systems target a 5-year life, and in a 15-day ground challenge only 2 of 8 teams held 800 kg/day throughout (Leucht, Prater & Vetcha, 46th IEEE Aerospace Conference, Mar 2025; NTRS 20240015957, acquired Dec 2024; General_Research rc-846); the ISS-class rating's transfer to an abrasive rig is unsupported (General_Research rc-347).",
         "reference_year":   _REF_YEAR_OPS,
     },
     {

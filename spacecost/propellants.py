@@ -328,8 +328,11 @@ def _apply_thruster_data(df: pd.DataFrame) -> None:
 #
 # The low end's electrolysis is a target-based figure (DOE HFTO system status,
 # Johnson's concept at best case).  Kornuta et al. 2019, a plant-level bound on
-# this column, sits below it: ~4.41 kWh/kg of electrolysis alone and ~7.1 with
-# the cryocooler, 2 MW at 280 kg/hr of water, from Moran's 1991 subsystem study.
+# this column, sits below it, from Moran's 1991 subsystem study (NASA-TM-103730):
+# 4.41 kWh/kg of water for electrolysis (Table II, printed p. 16), and for the
+# Mars-scaled plant 2,790 kW at 378.2 kg/h of water (printed pp. 6 and 17),
+# about 7.4 kWh/kg all in.  The "~7.1 with the cryocooler, 2 MW at 280 kg/hr"
+# once quoted here is not in that report (General_Research rc-836).
 # The band is 15.2 to 26.3 kWh/kg; the row carries the LOW end, by owner
 # decision: the least energy the sources support, which is the convention for
 # a term that removes a free lunch rather than one that sets a level.  The
@@ -1516,10 +1519,14 @@ PROPELLANTS_REFERENCE: List[dict] = [
         "ref_cost_usd_per_L":    0.0,
         "yfinance_proxy":        None,
         "reference_year":        _REF_YEAR_PROP,
-        "notes": "IKAROS (2010) was the first sail to be propelled by sunlight; "
-                 "LightSail 2 (2019) raised its own apogee; NEA Scout (2022) "
-                 "deployed but was lost; ACS3 (2024) demonstrated composite "
-                 "booms.\n"
+        "notes": "IKAROS (2010) was the first sail to be propelled by sunlight "
+                 "(JAXA ISAS); LightSail 2 (2019) raised its own apogee by "
+                 "7.2 km (The Planetary Society); NEA Scout (2022) separated "
+                 "from SLS, but no contact was made, its sail deployment was "
+                 "never confirmed, and it was considered lost (NASA status "
+                 "update, 9 Dec 2022; NASA PDS); ACS3 (2024) demonstrated "
+                 "composite booms (NASA).  Full references in CITATIONS.md "
+                 "section 2 (General_Research rc-837).\n"
                  "Isp is infinite, which is exactly the problem: the rocket "
                  "equation says a sail moves any payload for zero propellant, "
                  "so an unguarded model reports an unbounded result.  Real sails "
@@ -2124,8 +2131,11 @@ PROPELLANTS_REFERENCE: List[dict] = [
         "yfinance_proxy":        None,
         "reference_year":        _REF_YEAR_PROP,
         "notes": "Leave the power plant at home and beam it: NTP's Isp with no "
-                 "reactor aboard.  Kare's laser-thermal work and the 2022 "
-                 "McGill/UCLA laser-thermal Mars study put Isp near 900 s.  Same "
+                 "reactor aboard.  The 900 s is a SCENARIO: the 2022 McGill "
+                 "laser-thermal Mars study (Duplay et al., Acta Astronautica "
+                 "192) assumes 3,000 s within a stated 1,000-3,000 s range, so "
+                 "it does not support 900 s, and no Kare publication is "
+                 "identified behind the figure (General_Research rc-842).  Same "
                  "amortisation problem as the tether — the expensive part is a "
                  "ground or orbital laser array shared across missions, which "
                  "this pipeline cannot represent.",
