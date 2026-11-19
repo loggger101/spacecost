@@ -472,7 +472,7 @@ OPERATIONAL_COSTS_REFERENCE: List[dict] = [
                  "electric stage entered the rocket equation as mass and "
                  "appeared in NO cost line at all, so a 14-tonne, 309 kW "
                  "propulsion system was free and electric propulsion won on "
-                 "hardware nobody had to buy.  Comparator: NASA Glenn's $18.41M NEXT-C contract (2015) bought two flight thruster/PPU strings plus a prototype PPU and development, a bundle that does not divide into a recurring unit price (General_Research rc-299).",
+                 "hardware nobody had to buy.  Comparator: NASA Glenn's $18.41M NEXT-C contract (2015) bought two flight thruster/PPU strings plus a prototype PPU and development, a bundle that does not divide into a recurring unit price, as NASA Glenn's $67M AEPS contract (2016) does not either: it bundles development, an engineering unit and an option for four flight units with no allocation.  So the $10-15M per-string anchor stays an UNSOURCED judgement after that review, and the $1.5M/kW and its band are scenarios (General_Research rc-299).",
         "reference_year":   _REF_YEAR_OPS,
     },
     {
