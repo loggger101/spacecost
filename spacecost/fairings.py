@@ -525,7 +525,14 @@ def _build() -> Dict[str, dict]:
             "source": (f"{cite}.  Estimated as that cylinder x "
                        f"{FAIRING_FILL_RATIO:.3f}, the median usable-envelope "
                        f"fill of the guide-drawn fairings (range "
-                       f"{FILL_RATIO_RANGE[0]:.2f}-{FILL_RATIO_RANGE[1]:.2f})"),
+                       f"{FILL_RATIO_RANGE[0]:.2f}-{FILL_RATIO_RANGE[1]:.2f}), "
+                       # The spread, carried as the uncertainty: one
+                       # median is not shown to transfer to this design
+                       # (General_Research rc-436).
+                       f"so {_round(FILL_RATIO_RANGE[0] * _cylinder_m3(d, l)):g}-"
+                       f"{_round(FILL_RATIO_RANGE[1] * _cylinder_m3(d, l)):g} m3 "
+                       f"across that spread; the median's transfer to "
+                       f"this design is not validated"),
         }
     for name, why in NOT_PUBLISHED.items():
         out[name] = {"volume": float("nan"), "basis": "none",

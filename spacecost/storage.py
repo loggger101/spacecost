@@ -243,7 +243,7 @@ STORAGE_REFERENCE: List[dict] = [
                  "masses, so no registered source sets this ratio.  0.15 is "
                  "aggressive and assumes dense ore in a body-mounted hopper "
                  "rather than a pressurised hold.  Before v1.10.0 it was zero "
-                 "and the cascade happily loaded 125 t of ore into a 500 kg can.",
+                 "and the cascade happily loaded 125 t of ore into a 500 kg can.  The [0.08, 0.30] band is a scenario too: across it Module 4 carries 0.22 kg more dry return mass per kg of payload, before the rocket-equation cascade.  Motiwala et al.'s 0.038-0.45 structural fractions (NASA/TM-2014-218366) are stage-level and Cygnus figures are PCM-only, so neither sets a loose-regolith hopper ratio (General_Research rc-821).",
     },
     {
         "name":            "Volatile cargo containment (water ice)",

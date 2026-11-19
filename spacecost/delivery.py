@@ -442,6 +442,10 @@ DOWNLEG_TPS_FRAC           = 0.15
 DOWNLEG_CAPSULE_USD_PER_KG = _ops("Return capsule recurring cost")
 DOWNLEG_TPS_USD_PER_KG     = _ops("Heat shield / TPS for Earth return")
 DOWNLEG_RECOVERY_USD       = _ops("Sample recovery operations")
+# 10,000 kg is a SCENARIO: the cargo mass one ground recovery is spread
+# over, with no recovery-specific basis.  At the $15M recovery point it
+# is $1,500/kg; 5,000 kg would make it $3,000 and 20,000 kg $750
+# (General_Research rc-740; the per-recovery cost is rc-718).
 DOWNLEG_BATCH_KG           = 10_000.0   # nominal batch the recovery is spread over
 
 # 🚨  TYPED, NOT DERIVED, AND THE TABLE BELOW IS WHY.  Four of these seven
@@ -471,6 +475,11 @@ DOWNLEG_BATCH_KG           = 10_000.0   # nominal batch the recovery is spread o
 # ⚠️  ~850 m/s of trans-Earth injection out of low lunar orbit.  There is no
 # row for it: the table has TEI from Mars orbit and from low Mars orbit, and
 # nothing for the Moon.  Typed, and the only hand figure in the lunar entry.
+# A SCENARIO with no stated LLO altitude or Earth endpoint.  The nearest
+# comparator, NASA-CR-186677 (NTRS 19900016723, Table 4B), gives 915 m/s
+# TEI plus 60 m/s mid-course from a 200-km lunar orbit to a 400-km Earth
+# orbit, entry being a separate phase there: 975 m/s, 125 more than this
+# (General_Research rc-741).
 _LLO_TEI_DV_M_S = 850.0
 # A LEO deorbit burn is likewise untabulated; ~120 m/s lowers perigee out of a
 # 200-km circular orbit onto an entry trajectory.

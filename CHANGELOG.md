@@ -13,6 +13,32 @@ may read a version as proof that a number moved.
 
 ## Package releases
 
+### 0.18.7 - 2026-11-19
+
+**Data contract 1.27.6 → 1.27.7: thirteen General_Research method candidates,
+answered by labelling and bracketing. No value moved.** Only `notes`,
+comments and the stamps changed.
+
+- **Bottled-gas densities** (rc-686 to rc-688): none of krypton's 0.550,
+  nitrogen's 0.250 or xenon's 2.000 kg/L matches its reference equation of
+  state at 293.15 K (CoolProp 8.0.0: 0.872, 0.302 and 1.868). Each is labelled
+  a scenario, with the temperature it would need and the tank fraction at the
+  EOS density. The values wait for review.
+- **Direct fusion drive and antimatter densities** (rc-689, rc-690): 0.100 kg/L
+  is a scenario with no defined propellant state, and the tank fraction is
+  bracketed at 0.05 and 0.20 kg/L.
+- **Space Shuttle band** (rc-578): a deliberately mixed-boundary
+  illustrative interval; $972M is its geometric midpoint, and reference_year
+  is the row's vintage.
+- **SLS bands** (rc-619): vehicle production plus ground systems per launch,
+  not a launch-service price; endpoints traced and left in report-year
+  dollars.
+- **Fairing estimates** (rc-436): each estimated volume now carries the
+  calibration spread (0.27-0.63 fill) as a range in m3.
+- **Relay $/Mbit, lander $/kg, ore restraint, recovery batch, lunar TEI**
+  (rc-298, rc-300, rc-821, rc-740, rc-741): scenarios with their basis gaps
+  stated and sensitivities given.
+
 ### 0.18.6 - 2026-11-19
 
 **Data contract 1.27.5 → 1.27.6: eighteen General_Research citation
