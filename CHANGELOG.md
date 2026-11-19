@@ -13,6 +13,34 @@ may read a version as proof that a number moved.
 
 ## Package releases
 
+### 0.18.1 - 2026-11-18
+
+**Data contract 1.27.0 → 1.27.1: seventeen General_Research citation
+candidates in launch-vehicle notes. No value moved.** Only `notes` in 16
+rows, CITATIONS.md §1 and the stamps changed; every value column of the six
+tables and the summary sample is identical to 1.27.0. Rebuilt on the
+recorded reference platform. Where a candidate questioned `price_basis` or
+`reference_year`, the note now says what the figure is and the field is left
+for a value review.
+
+- **Payloads cited to the manufacturer or agency, with their orbit**:
+  Long March 2C (CASC, rc-717), Long March 2D (FAA AST 2018, rc-719),
+  Zhuque-2E (LandSpace, rc-714), Epsilon S (a JAXA requirement, not a
+  service rating, rc-716), Minotaur IV's high end (FAA AST 2010, no orbit,
+  rc-193). Jielong-3's 1,600 kg LEO rests on Wikipedia alone; the official
+  rating is 1,500 kg to 500 km SSO (rc-715). Pallas-1's orbit ratings have
+  no primary source (rc-713).
+- **Prices said for what they are**: Proton-M's $65M is FAA AST's 2018
+  estimate (rc-724); Soyuz-2.1b's $48.5M a nominal 2018, non-variant proxy
+  (rc-620); Spectrum's €10,000/kg a 2022 target (rc-521); Falcon Heavy's
+  $100M a 2026 estimate on a 2022 anchor (rc-554); Vega C's €48M one
+  institutional contract and its band a scenario (rc-720); Minotaur IV's
+  band mixed-year (rc-617).
+- **Concepts**: the lunar mass driver built at MIT and shown at Princeton
+  (rc-790); the Earth elevator's figures unsourced (rc-791); M5 dropped
+  from the lunar elevator (rc-792); SpinLaunch's orbital design, suborbital
+  record and 2026 status separated (rc-795).
+
 ### 0.18.0 - 2026-11-18
 
 **Data contract 1.26.2 → 1.27.0: `first_flight` is defined, and three
