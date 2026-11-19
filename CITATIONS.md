@@ -75,6 +75,14 @@ ones that carry more than one row.
 | Raitt, *A Historical Look at Space Elevators*, New Space 3(4), 231-238 (2015), ref. 2 (Artsutanov, Komsomolskaya Pravda, 31 Jul 1960); Smitherman, NTRS 20040161582 (2004) | the Earth space elevator's attribution, and CNT composites as a critical technology; neither gives the row's strength or TRL figures (rc-791) |
 | Pearson, *Anchored Lunar Satellites*, J. Astronautical Sci. 27(1), 39 (1979); Eubanks & Radley, Space Policy 37 (2016), p. 98 and Table 1 | the lunar elevator's material case: available composites, Zylon and Dyneema; M5 is named by neither (rc-792) |
 | SpinLaunch, Orbital Accelerator FAQ; SpinLaunch, Flight Test 10 release (2022-10-03); Meridian Space announcement (2026-09-29) | SpinLaunch Orbital's ~5,000 mph and 200 kg design, the suborbital test record, and the company's 2026 status (rc-795) |
+| Space Pioneer, TL-3 product page; Carrier Space, Tianlong-3 and Zhuque-2E profiles ('Price on request') | no published price behind the Tianlong-3 and Zhuque-2E scenario bands (rc-543, rc-547) |
+| LandSpace, ZQ-3 product page (LEO @ 450 km: 12.5 t return-site, 18.3 t downrange, 21.3 t expendable) | beside Zhuque-3's unexplained 8 t (rc-611) |
+| Indian Express (27 Jan 2022), K. Sivan's 2019 'around Rs 30 crore'; ISRO, Rajya Sabha Unstarred Question 2164(b) (Rs 169.07 crore for development and three flights) | SSLV: the traced part of its Rs 30-35 crore (rc-553) |
+| FAA AST, *2018 Commercial Space Transportation Compendium*, Long March 5 fact sheet (price 'Undisclosed') | why Long March 5's band is a scenario (rc-592) |
+| ISRO, LVM3 vehicle page (8,000 kg to 600 km LEO) and Launchers overview (10-tonne class) | the two statements LVM3's 8,000-10,000 kg band spans; neither gives 8,940 kg (rc-612) |
+| Galactic Energy, CERES-1 product page (420 kg LEO, 300 kg SSO); IEEE Spectrum, pre-first-flight interview ($4M) | beside Ceres-1's 400 kg and $4.5M (rc-613, rc-614) |
+| Manhattan Venture Partners, report of 30 Nov 2023 ('Terran R is expected to cost $55 million') | Terran R's low end; the $70M has no source (rc-616) |
+| Next Spaceflight, Long March 8A profile; CASC (2026) and a CNSA-hosted report (2019) | Long March 8A's 3,500 kg GTO, a secondary figure with no variant-matched primary basis (rc-703) |
 
 ### Fairing volumes (data contract 1.17.0)
 

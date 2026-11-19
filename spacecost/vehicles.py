@@ -738,7 +738,7 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "price_basis":                   "reported",
         "reference_year":          _REF_YEAR_LAUNCH,
         "notes": "Source: ISRO ₹402 crore (~$42M) cost, and ~$51M NSIL commercial "
-                 "rate; payloads from the ISRO user manual via Wikipedia.  9 for "
+                 "rate; payloads from the ISRO user manual via Wikipedia.  ISRO's own pages give 8,000 kg to 600 km LEO and a '10-tonne class'; neither gives the 8,940 kg centre or says the band is one configuration, so the centre is unsourced and the band spans those two statements (General_Research rc-612).  9 for "
                  "9 to Dec 2025, including Chandrayaan-3 and two OneWeb batches. "
                  "The human-rated HLVM3 for Gaganyaan has NOT yet flown crew; "
                  "earlier versions of this row said it was human-rated.",
@@ -806,7 +806,7 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "list_price_usd_low":         3_500_000,
         "price_basis":                   "reported",
         "reference_year":          _REF_YEAR_LAUNCH,
-        "notes": "Source: ISRO, Rs 30-35 crore (~$3.5-4M) per launch.  First "
+        "notes": "Source: ISRO, Rs 30-35 crore (~$3.5-4M) per launch.  Only 'around Rs 30 crore' is traced, to former chairman K. Sivan in 2019 (Indian Express, 27 Jan 2022); the Rs 35 crore end, the conversion and the 2026 treatment have no recorded source, and ISRO's Rs 169.07 crore (Rajya Sabha) covers development and three demonstration flights, not a launch (General_Research rc-553).  First "
                  "flight (Aug 2022) failed to reach a usable orbit.  Production "
                  "and operations transferred to HAL from 2025.",
     },
@@ -931,7 +931,7 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "reference_year":          _REF_YEAR_LAUNCH,
         "notes": "Source: Wikipedia / China-in-Space — payload masses "
                  "authoritative; ~$160M is Wikipedia's estimate and the high "
-                 "end, against the $110M this row used to carry.  The State "
+                 "end, against the $110M this row used to carry.  That $110M low end has no source and no priced comparator is named; FAA AST's 2018 fact sheet gives the price as 'Undisclosed'.  The band is a SCENARIO, and whether it is a vehicle cost or a launch-service price is not stated (General_Research rc-592).  The State "
                  "Council Information Office gives Long March 5 25 t to LEO or "
                  "14 t to GTO (2018), and the 5B 22 t to LEO (2020).  "
                  "Chang'e-5 and Tianwen-1 heritage (Mars transfer "
@@ -1001,7 +1001,7 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
                  "7 t to LEO; Wikipedia's per-variant row gives the same 7,000 "
                  "kg, to 700 km SSO.  The 10 t this row carried until 0.15.0 is "
                  "in neither, and Wikipedia's 8,100 kg infobox figure is the "
-                 "base CZ-8.  The GTO figure has no current source.  Price "
+                 "base CZ-8.  The GTO figure has no current source: 3,500 kg is a secondary catalogue's (Next Spaceflight), with no variant-matched primary basis; CASC gives no CZ-8A GTO figure, and the 2.8 t a CNSA-hosted report gives is the base CZ-8's.  It is a SCENARIO proxy (General_Research rc-703).  Price "
                  "estimated.  11 flights since "
                  "Feb 2025, all successful, mostly constellation deployment from "
                  "Hainan commercial pads.  SCENARIO BAND: no source or calculation gives $40M-$70M.  The eXTP launch-service budget, RMB 245.2M (about $36M), names no variant and is a budget, not a price (General_Research rc-503).",
@@ -1106,7 +1106,7 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "list_price_usd":             4_500_000,
         "price_basis":                   "reported",
         "reference_year":          _REF_YEAR_LAUNCH,
-        "notes": "Source: Wikipedia — $4.5M; 400 kg LEO, 300 kg 500 km SSO.  23 "
+        "notes": "Source: Wikipedia — $4.5M; 400 kg LEO, 300 kg 500 km SSO.  The $4.5M has no citation in Wikipedia's infobox and no dollar year; before first flight Galactic Energy's CEO quoted a flat $4M (IEEE Spectrum) (General_Research rc-614).  Galactic Energy's product page now lists 420 kg LEO with no altitude or date, and whether the 400 kg is Ceres-1 or 1S is not recorded (General_Research rc-613).  23 "
                  "launches, 2 failures, to Jan 2026.  A sea-launched 1S variant "
                  "also flies.",
     },
@@ -1205,8 +1205,7 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "list_price_usd_low":        20_000_000,
         "price_basis":                   "estimate",
         "reference_year":          _REF_YEAR_LAUNCH,
-        "notes": "Source: LandSpace's ZQ-2E product page, 6,000 kg to 200 km LEO and 4,000 kg to 500 km SSO for the 55 m / 264 t baseline; its Y5 release (2026-05-14) gives 6 t LEO and 4 t to 500 km SSO for the stretched 55.9 m / 267 t vehicle, with no LEO altitude (General_Research rc-714).  Price "
-                 "estimated.  Zhuque-2 family: 9 launches, 2 failures, the "
+        "notes": "Source: LandSpace's ZQ-2E product page, 6,000 kg to 200 km LEO and 4,000 kg to 500 km SSO for the 55 m / 264 t baseline; its Y5 release (2026-05-14) gives 6 t LEO and 4 t to 500 km SSO for the stretched 55.9 m / 267 t vehicle, with no LEO altitude (General_Research rc-714).  Price estimated.  SCENARIO BAND: no source or calculation gives $20M-$35M; Carrier Space lists it 'Price on request' (General_Research rc-547).  Zhuque-2 family: 9 launches, 2 failures, the "
                  "latest failure a 2E in Aug 2025 (second-stage voltage fault), "
                  "and a sixth 2E flew in Sep 2026 (China Daily, 2025 and 2026).  The "
                  "first methalox rocket to reach orbit (2023).",
@@ -1235,8 +1234,7 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
                  "18.3 t to the 76.6 m ZQ-3, and the vehicle that flew stood "
                  "66.1 m (Global Times, Dec 2025).  Flights Dec 2025 (orbit, "
                  "landing failed) and Aug 2026 (orbit, first landing, stage "
-                 "toppled afterwards).  Price estimated; LandSpace has not "
-                 "published one.",
+                 "toppled afterwards).  Price estimated; LandSpace has not published one.  SCENARIO BAND: no source or calculation gives $25M-$50M (General_Research rc-548).  LandSpace's current product page gives, to 450 km LEO, 12.5 t with return-site recovery, 18.3 t downrange and 21.3 t expendable, and does not explain the 8 t, which may be an earlier configuration; the 8 t stays until a version and recovery mode are matched (General_Research rc-611).",
     },
     {
         "name":                          "Pallas-1",
@@ -1555,7 +1553,7 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "reference_year":          _REF_YEAR_LAUNCH,
         "notes": "Source: Relativity, relativityspace.com/terran-r: 23.5 t LEO "
                  "and 5.5 t GTO with downrange landing, 33.5 t LEO expendable; "
-                 "$55M per Wikipedia.  Until v1.16.0 this row paired "
+                 "$55M per Wikipedia, from Manhattan Venture Partners (30 Nov 2023: 'expected to cost $55 million').  The $70M high end and any 2026 adjustment have no source; the $62M centre is the band's geometric mean, so the band above $55M is a SCENARIO (General_Research rc-616).  Until v1.16.0 this row paired "
                  "the 33.5 t EXPENDABLE figure with a reusable price.  NET late "
                  "2026.  Escape is the older published figure, not re-stated "
                  "for the reusable config.",
@@ -1582,7 +1580,7 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
                  "fully-reusable figure.  Those are the Pathfinder demonstrator; "
                  "Nova Block 2 is up to 15 t fully reusable, 23 t expendable and "
                  "4 t to GTO (stokespace.com/nova-block-2).  Stoke publishes no "
-                 "price or escape figure: the price is an estimate and GTO / "
+                 "price or escape figure: the price is a SCENARIO, with no source or calculation behind $20M-$30M, for the 3 t Pathfinder configuration (General_Research rc-551), and GTO / "
                  "escape here are the old 1,200 / 800 kg scaled by 3/5.  The only "
                  "vehicle here besides Starship designed for FULL reuse, "
                  "including a regeneratively cooled upper-stage heat shield.",
@@ -1607,7 +1605,7 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "notes": "Source: Firefly, fireflyspace.com/eclipse: 16,300 kg LEO, "
                  "3,200 kg GTO, 59 m overall.  Formerly MLV; renamed May 2025. "
                  "NET 2027, early flights expendable with reuse targeted by "
-                 "the sixth.  No published price.",
+                 "the sixth.  No published price: $80M, with a zero-width band, is a SCENARIO with no source or calculation (General_Research rc-552).",
     },
     {
         "name":                          "Tianlong-3",
@@ -1625,8 +1623,7 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "list_price_usd_low":        25_000_000,
         "price_basis":                   "estimate",
         "reference_year":          _REF_YEAR_LAUNCH,
-        "notes": "Source: Space Pioneer via Wikipedia — 17 t LEO, 14 t SSO; "
-                 "price estimated.  Maiden flight, 3 Apr 2026, FAILED at about "
+        "notes": "Source: Space Pioneer via Wikipedia — 17 t LEO, 14 t SSO; price estimated.  SCENARIO BAND: no source or calculation gives $25M-$45M; Space Pioneer's product page gives capability and no price, and Carrier Space lists it 'Price on request' (General_Research rc-543).  Maiden flight, 3 Apr 2026, FAILED at about "
                  "T+189 s after a nominal first stage: separation at T+182.2 s, "
                  "second-stage ignition at T+185.9 s, then loss of control and "
                  "commanded termination (Space Pioneer's investigation "
@@ -1702,8 +1699,7 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
                  "5 t GTO; Roscosmos says up to 17 t to the support orbit "
                  "(Interfax, 2025), below this band's top, and gives no GTO "
                  "figure.  Zenit's successor.  First flight Apr 2026 was a "
-                 "successful SUBORBITAL test with a mass simulator; not yet "
-                 "orbital.  Price estimated.",
+                 "successful SUBORBITAL test with a mass simulator; not yet orbital.  Price estimated.  SCENARIO BAND: no source or calculation gives $40M-$60M (General_Research rc-550).",
     },
     {
         "name":                          "Epsilon S",
@@ -1748,8 +1744,7 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
                  "expendable; this row is the reusable mode, also the State "
                  "Council Information Office's figure, which gives the "
                  "expendable as 12.9 t.  At 13.4 t the same price is about "
-                 "$3,160/kg.  Hop tests in 2023; orbital debut slipped from "
-                 "2025.  Price estimated.",
+                 "$3,160/kg.  Hop tests in 2023; orbital debut slipped from 2025.  Price estimated.  SCENARIO BAND: no source or calculation gives $30M-$60M (General_Research rc-549).",
     },
 
     # ═════════════════════════════════════════════════════════════════════════
@@ -1820,8 +1815,7 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "reference_year":          _REF_YEAR_LAUNCH,
         "notes": "A vacuum centrifuge throws the vehicle and a small "
                  "rocket stage does the rest.  SpinLaunch's FAQ gives the Orbital Accelerator's release speed as approximately 5,000 mph (~2.2 km/s), a first-generation design for satellites up to 200 kg, and 10,000 G as the launch load its components endure.  What has flown is the separate Suborbital Accelerator, whose tenth flight was Flight Test 10 (2022-10-03), after its payloads were qualified at 10,000 G in a 12 m lab accelerator; no orbital system has flown.  TRL 4 is this table's own estimate for the orbital system, with no published assessment behind it.  On 2026-09-29 Meridian Space said SpinLaunch is separating into an independent company with a renewed focus on kinetic launch (General_Research rc-795).  "
-                 "The $/kg is the "
-                 "published target and assumes a cadence nobody has shown.",
+                 "The $1.25M is called a published target, but no publication or calculation is recorded, and nothing says whether it covers the kick stage, integration or a demonstrated cadence: a SCENARIO, $6,250/kg on the 200 kg design (General_Research rc-556).",
     },
     {
         "name":                          "Light-gas gun (orbital)",
@@ -1899,7 +1893,7 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
                  "was demonstrated at Mach-5 conditions in 2019 and is the only "
                  "part that was.  Reaction Engines Ltd entered administration in "
                  "October 2024 — status 'concept' here is a statement about the "
-                 "company as much as the technology.",
+                 "company as much as the technology.  The $15M is a target with no recorded source, currency conversion, dollar year or R&D boundary: a SCENARIO, $1,000/kg on 15 t (General_Research rc-557).",
     },
     {
         "name":                          "Sea Dragon",
@@ -1924,7 +1918,7 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
                  "design and found it sound.  It is here because it is the "
                  "canonical demonstration that launch cost is an engineering "
                  "CHOICE about tolerance and scale, not a physical constant — "
-                 "the entire premise the $/kg column rests on.",
+                 "the entire premise the $/kg column rests on.  Its $300M is a target with no named cost study, dollar year, flight rate or reuse case: a SCENARIO, about $545/kg on 550 t (General_Research rc-558).",
     },
     {
         "name":                          "Lunar mass driver",
@@ -1948,8 +1942,7 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "notes": "Electromagnetically launch lunar regolith to escape velocity "
                  "— 2.4 km/s, against Earth's 11.2 — with no atmosphere in the "
                  "way.  The concept is O'Neill's (The Colonization of Space, Physics Today 27(9), 32-40, 1974).  Its basic model was built at MIT and demonstrated at Princeton in May 1977 by authors of NASA SP-428's chapter, who include O'Neill and Snow (Mass Drivers III: Engineering, p. 149); the source does not say which of them built it (General_Research rc-790).  "
-                 "The $/kg is electricity and amortisation, and it is "
-                 "roughly two hundred times below the cheapest rocket here.\n"
+                 "The $/kg is meant as electricity and amortisation, but no calculation is recorded: $1M is a SCENARIO annual cost against the 100,000 kg/yr throughput below, so its $10/kg is per kilogram of annual throughput, not a launch price (General_Research rc-559).  It is roughly two hundred times below the cheapest rocket here.\n"
                  "⚠️  The payload columns are ANNUAL THROUGHPUT, not per-launch "
                  "mass, and the origin is the lunar surface.  Module 4 departs "
                  "from Earth and prices a discrete launch, so it cannot read "
@@ -1979,7 +1972,7 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "notes": "A tether from the lunar surface through Earth-Moon L1. "
                  "Unlike an Earth elevator this needs NO new material: the "
                  "Moon's shallow well and the L1 balance point put the required "
-                 "material strengths within those of available composites (Pearson 1979, J. Astronautical Sci. 27(1), abstract, p. 39); Eubanks & Radley (Space Policy 37, 2016, p. 98 and Table 1, p. 100) name Zylon (PBO) and Dyneema as available in quantity.  Neither names M5, so it is not claimed (General_Research rc-792).  "
+                 "material strengths within those of available composites (Pearson 1979, J. Astronautical Sci. 27(1), abstract, p. 39); Eubanks & Radley (Space Policy 37, 2016, p. 98 and Table 1, p. 100) name Zylon (PBO) and Dyneema as available in quantity.  Neither names M5, so it is not claimed (General_Research rc-792).  $500,000 is a SCENARIO annual cost with no calculation, against 50,000 kg/yr, so its $10/kg is per kilogram of annual throughput (General_Research rc-560).  "
                  "It is a manufacturing "
                  "and capital problem, not a materials-science one — the single "
                  "most under-appreciated entry in this table.\n"
@@ -2008,7 +2001,7 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
                  "tether wants ~50-100 GPa·cm³/g of specific strength; carbon "
                  "nanotube achieves it in single tubes millimetres long and "
                  "nothing has been spun into a macroscopic fibre within an "
-                 "order of magnitude of it.  Those figures and the TRL are this table's own statements with no source pinned: NASA's NTRS 20040161582 abstract (Smitherman 2004) names CNT composites as a critical technology and gives none of them (General_Research rc-791).  TRL 1, and unlike every other row "
+                 "order of magnitude of it.  Those figures and the TRL are this table's own statements with no source pinned: NASA's NTRS 20040161582 abstract (Smitherman 2004) names CNT composites as a critical technology and gives none of them (General_Research rc-791).  $2M is a SCENARIO annual cost with no source or calculation, against 20,000 kg/yr of throughput, so its $100/kg is per kilogram of annual throughput (General_Research rc-561).  TRL 1, and unlike every other row "
                  "here the gap is physics of materials rather than money.  "
                  "Listed so that its absence is not read as an oversight, and "
                  "so the LUNAR elevator two rows up is not tarred with it.",

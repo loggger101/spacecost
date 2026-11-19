@@ -13,6 +13,30 @@ may read a version as proof that a number moved.
 
 ## Package releases
 
+### 0.18.3 - 2026-11-18
+
+**Data contract 1.27.2 → 1.27.3: twenty-one General_Research citation
+candidates in launch-vehicle notes. No value moved.** Only `notes`,
+CITATIONS.md §1 and the stamps changed; every value column of the six tables
+and the summary sample is identical to 1.27.2. Rebuilt on the recorded
+reference platform. Each candidate asked for the source behind a price or
+payload, or for it to be called a scenario; none found a like-for-like
+source, so each note now says which it is.
+
+- **Price bands said as scenarios**: Tianlong-3, Zhuque-2E, Zhuque-3,
+  Hyperbola-3, Soyuz-5, Nova, Eclipse, Long March 5 and Terran R's upper end
+  (rc-543, 547, 548, 549, 550, 551, 552, 592, 616).
+- **Targets said as scenarios**: SpinLaunch Orbital, Skylon and Sea Dragon
+  (rc-556, 557, 558); the lunar mass driver and both elevators are annual
+  costs against annual throughput, so their $/kg is per kilogram of a year's
+  throughput, not a launch price (rc-559, 560, 561).
+- **Partly traced**: SSLV's Rs 30 crore to K. Sivan (2019), not the Rs 35
+  crore end (rc-553); Ceres-1's $4.5M against the CEO's earlier $4M, and its
+  400 kg against today's 420 kg (rc-613, 614).
+- **Payloads without a matched source**: Zhuque-3's 8 t beside LandSpace's
+  current 12.5 / 18.3 / 21.3 t (rc-611); LVM3's 8,940 kg centre (rc-612);
+  Long March 8A's 3,500 kg GTO, a scenario proxy (rc-703).
+
 ### 0.18.2 - 2026-11-18
 
 **Data contract 1.27.1 → 1.27.2: fifteen General_Research citation
