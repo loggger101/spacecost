@@ -121,15 +121,18 @@ class SpacecostConfig:
     isru_processing_usd_per_kg:    float = 50.0   # scenario, see above
 
     # --- CONTINGENCY ---------------------------------------------------------
-    # Industry-standard mission-cost contingency.  20% is typical for a
-    # well-characterised flight programme; 35-50% for first-of-kind.
+    # Mission-cost contingency, a model default.  No registered source states
+    # 20% as a standard or 35-50% as a first-of-kind band, as the "Contingency
+    # reserve" row says: Whitley & Shinn 2012 documents fixed-percentage
+    # reserves and their use, and NRC 2010 historical cost growth of 23-77%,
+    # both comparators (General_Research rc-813).
     contingency_fraction: float = 0.20
 
     # --- DATA CONTRACT VERSION -----------------------------------------------
     # Stamped into every output CSV.  BUMP IT when a change moves any number a
     # build produces.  See this module's docstring for why it is not the same
     # thing as `spacecost.__version__`, and CHANGELOG.md for what moved when.
-    pipeline_version: str = "1.27.4"
+    pipeline_version: str = "1.27.5"
     preview_rows:     int = 15   # rows per table in the CLI preview
 
     def resolved_output_dir(self) -> str:

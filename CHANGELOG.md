@@ -13,6 +13,26 @@ may read a version as proof that a number moved.
 
 ## Package releases
 
+### 0.18.5 - 2026-11-19
+
+**Data contract 1.27.4 → 1.27.5: five General_Research citation candidates. No
+value moved.** Only `notes`, comments, CITATIONS.md and the stamps changed, and
+a build now writes `build_manifest.json` beside its tables.
+
+- **Ariane 6 (A64)**: the €115M is a target in 2014 economic conditions, not a
+  2018 estimate (Assemblée nationale report no. 1438), converted without
+  escalation; the low end has no range method; the $130M transition price and
+  Euronews are comparators (rc-700).
+- **NRHO as the cheaper depot** is a model judgement: Whitley et al. 2017's
+  staging-orbit trade is for a crewed landing architecture, not a depot cost
+  ranking (rc-810).
+- **Cryocooler band**: 2.0-15.0 kg/W is a scenario, outside Nugent's 4.7-35.5
+  kg/W acceptance points at its low end (rc-812).
+- **Contingency**: the config comment no longer calls 20% industry standard or
+  35-50% the first-of-kind band; the row's comparators are named (rc-813).
+- **`build_manifest.json`** names the package release, data contract and
+  catalog date of a build, which CITATIONS asks a user to cite (rc-773).
+
 ### 0.18.4 - 2026-11-18
 
 **Data contract 1.27.3 → 1.27.4: twenty-eight General_Research citation

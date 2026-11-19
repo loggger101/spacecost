@@ -102,7 +102,14 @@ DELTA_V_REFERENCE: List[dict] = [
               "gives NRO-to-LLO access, 730 m/s (Table 3), and no TLI-to-NRHO "
               "figure, so it is context, not the number's source "
               "(General_Research rc-683).  "
-              "NRHO is the cheapest usefully-stable cislunar depot orbit."},
+              "That NRHO is the cheapest usefully-stable depot orbit is a "
+              "model judgement: Whitley et al. 2017 (GLEX-2017-3.2A.1, NTRS "
+              "20170004964, p. 2) compare staging orbits for a crewed "
+              "lunar-landing architecture, NRHO 1,500 m/s in total against "
+              "1,600 for an L2 halo and 1,800 for a DRO, with LLO's 1,000 "
+              "excluded on Orion's propellant capability.  A scoped "
+              "staging-orbit trade, not a depot cost ranking "
+              "(General_Research rc-810)."},
     {"segment": "LEO  →  cislunar NRHO depot",    "dv_m_per_s":  3_600, "duration_yr": 0.02,
      "notes": "TLI + NRHO insertion, an approximate cross-study benchmark: "
               "3,140 m/s TLI from a 185 km parking orbit (NASA-CR-195527, "
@@ -149,7 +156,9 @@ DELTA_V_REFERENCE: List[dict] = [
     {"segment": "TLI  →  low lunar orbit (LOI)", "dv_m_per_s":    900, "duration_yr": 0.01,
      "notes": "Apollo lunar-orbit insertion, 0.9 km/s (NASA SP-4029).  Larger "
               "than NRHO insertion because LLO is a much more tightly bound "
-              "orbit — which is exactly why NRHO is the cheaper depot."},
+              "orbit, which is why NRHO's insertion is the cheaper one; that "
+              "it is the cheaper depot is the model judgement the NRHO row "
+              "states (General_Research rc-810)."},
     {"segment": "NRHO  →  low lunar orbit",      "dv_m_per_s":    730, "duration_yr": 0.01,
      "notes": "Gateway-to-LLO transfer, ~0.73 km/s (Whitley & Martinez 2016). "
               "The price a cislunar depot pays to service the surface."},

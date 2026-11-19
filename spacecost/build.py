@@ -5,6 +5,7 @@ Extracted verbatim from economicspace modules/transportation.py, pipeline_versio
 commit b0b18b2de301653ee23de1bd3779867ae5b617a1 (2026-09-04).
 """
 
+import json
 import os
 from datetime import datetime
 from typing import Dict, Optional
@@ -121,6 +122,21 @@ def build_catalog(
         # existing Windows output, so pinning it changes nothing here.
         df.to_csv(path, index=False, lineterminator="\r\n")
         say(f"       {fname:32s} -> {path}  ({len(df):,} rows)")
+
+    # WHAT TO CITE, TRAVELLING WITH THE TABLES.  CITATIONS.md section 9 asks
+    # for the package release beside the data contract, and the CSVs carry
+    # only the contract: a package release can leave it unmoved
+    # (General_Research rc-773).  Values are untouched; this file only names
+    # the build.
+    from . import __version__
+    manifest = {"package_version": __version__,
+                "pipeline_version": config.pipeline_version,
+                "catalog_date": stamp,
+                "files": sorted(files)}
+    with open(os.path.join(out_dir, "build_manifest.json"), "w",
+              encoding="utf-8", newline="\n") as fh:
+        json.dump(manifest, fh, indent=2)
+        fh.write("\n")
 
     elapsed = (datetime.now() - t0).total_seconds()
     say("\n" + "=" * 75)

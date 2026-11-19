@@ -617,10 +617,17 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "list_price_usd_low":       115_000_000,
         "price_basis":                   "estimate",
         "reference_year":          _REF_YEAR_LAUNCH,
-        "notes": "€115M (2018 est.) at $1.15/€ = $132M as the high end, an "
+        "notes": "€115M at $1.15/€ = $132M as the high end, an "
                  "estimate with no institutional source (Arianespace publishes "
                  "no list price; the ESA overview states payloads only), with the $115M this row used to carry "
-                 "as the low end.  Payload: the ESA overview's approximately "
+                 "as the low end.  The €115M is a target in 2014 economic "
+                 "conditions, not a 2018 estimate (Assemblée nationale, Rapport "
+                 "d'information no. 1438, 2018, printed p. 36); it is converted "
+                 "without escalation, and the low end has no stated range "
+                 "method.  The same report records a press-reported $130M A64 "
+                 "transition price (printed p. 62), and Euronews (Jul 2024) "
+                 "repeats €115M; both are comparators (General_Research "
+                 "rc-700).  Payload: the ESA overview's approximately "
                  "21.6 t LEO; the 21,500 and 21,650 kg ends are a tolerance "
                  "around it, and the VA269 launch kit (Jun 2026) gives "
                  "approximately 22 t after the P160C booster upgrade.  "

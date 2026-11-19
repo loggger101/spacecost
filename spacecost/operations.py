@@ -1106,9 +1106,10 @@ OPERATIONAL_COSTS_REFERENCE: List[dict] = [
         # other way round depending on import order.
         #
         # The two are genuinely different things and the fix is to stop
-        # pretending otherwise.  THIS is the cited industry-standard figure,
-        # the same kind of reference datum as every other row in this table,
-        # and it belongs to the 15-50% band beside it.  `contingency_fraction`
+        # pretending otherwise.  THIS is the reference figure, a scenario with
+        # no registered standard behind it (its notes give the comparators;
+        # General_Research rc-813), the same kind of datum as every other row
+        # in this table, and it belongs to the 15-50% band beside it.  `contingency_fraction`
         # is a DIAL on one mission's arithmetic.  They agree at the default and
         # `validate` says so when a caller's config makes them disagree.
         "value":            20.0,
