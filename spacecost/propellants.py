@@ -533,6 +533,13 @@ KRYPTON_USD_PER_KG_HIGH = 2_100.0
 #   Aerozine50 the top of NASA TM-X-53859's specific-gravity range, 0.894 to
 #              0.903 (Table 1, p. 8).  The same table's liquid density, 56.1
 #              lb/ft3 at 77 F, is 0.8986 kg/L, 0.5% lower; 0.903 is kept.
+#   LH2        hydrogen at its 20.3 K normal boiling point, 70.8 kg/m3 (IMO
+#              MSC.420(97), Annex 18, Table 3).
+#   LOX, ArgonLIQ  at sea-level pressure, 101.325 kPa: oxygen 1141 g/L at
+#              90.2 K and argon 1395 g/L at 87.3 K (NIST S 7101.52 Ver. 3,
+#              Appendix B, Table 1, p. 17).  Each row built on LH2 or LOX
+#              takes these normal-boiling-point densities; no row models a
+#              subcooled or pressurised state (General_Research rc-674).
 #   Iodine     solid iodine at 25 C, 4.93 g/cm3 (WHO/HEP/ECH/WSH/2020.5,
 #              Table 1.1, p. 2): the material's density, not a loose-packed
 #              reservoir's.
@@ -755,7 +762,7 @@ PROPELLANTS_REFERENCE: List[dict] = [
                  "RL10A-3-3A measured 444.4 +/- 2.5 s at O/F 5.0, 1.7% lower "
                  "(Baumeister, NASA/TM-2015-218736). "
                  "LH2 base price $3-6/kg (NASA contracts); bulk-handling overhead "
-                 "lifts effective cost to ~$10/kg.  Used on SLS, Centaur.  Boil-off 0.05%/day and its 0.03-0.1%/day band are a scenario for a large, insulated, cryocooled tank, with no single source.  Modelled comparators: under 0.05%/day for a passive, shielded, ten-layer-MLI LEO depot (Honour et al., NTRS 20110013691); 2.5-5.0%/month of LH2 under 60-layer MLI, varying with orbit and tank (Perrin & Casler, NTRS 20160012100, Table 11) (General_Research rc-490).",
+                 "lifts effective cost to ~$10/kg.  Used on SLS, Centaur.  Boil-off 0.05%/day and its 0.03-0.1%/day band are a scenario for a large, insulated, cryocooled tank, with no single source.  Modelled comparators: under 0.05%/day for a passive, shielded, ten-layer-MLI LEO depot (Honour et al., NTRS 20110013691); 2.5-5.0%/month of LH2 under 60-layer MLI, varying with orbit and tank (Perrin & Casler, NTRS 20160012100, Table 11) (General_Research rc-490).  Component densities are normal-boiling-point figures: LH2 70.8 kg/m3 at 20.3 K (IMO MSC.420(97), Annex 18, Table 3) and LOX 1141 g/L at 90.2 K (NIST S 7101.52 Ver. 3, Appendix B, Table 1) (General_Research rc-674).",
     },
     {
         "name":                  "methalox  (LCH4 / LOX)",
@@ -794,7 +801,7 @@ PROPELLANTS_REFERENCE: List[dict] = [
                  "Energomash's RD-192 methane engine is 356 s in the same "
                  "paper.  LCH4 ~$400/tonne, 2025 dollars: a liquefied-product "
                  "midpoint of the World Bank Pink Sheet's hub gas (~$190/tonne) "
-                 "and delivered LNG (~$630/tonne).  ISRU-makeable on Mars.  Comparator: DLR models Raptor 2 RVAC at 368.5 s (O/F 3.4) and 365.9 s (O/F 3.6), calculated rather than measured, 3-4% below this 2013 figure (Herberhold et al. 2026, CEAS Space J. 18, Table 2; General_Research rc-329).  First flight is the first launch of a methalox vehicle to space, Zhuque-2 Mission F1 in 2022; Mission F2 in 2023 was the first LOX/LCH4 rocket to reach orbit (LandSpace, About Us, Milestones) (General_Research rc-760).  LCH4's 0.422 kg/L is pure methane at its 111.6 K normal boiling point, 422.5 kg/m3 (IMO Resolution MSC.420(97), Annex 18, Table 3), not an LNG mixture (General_Research rc-673).",
+                 "and delivered LNG (~$630/tonne).  ISRU-makeable on Mars, as far as a Mars-analog bench test shows: CO2 captured from a simulated atmosphere and methanated with hydrogen from electrolysed regolith water, 31.7 g CH4/hr and 2.22 kg of CH4/O2 per 14-hour day (Muscatello et al., NASA NTRS 20130009664, abstract, p. 1).  Nothing has made it on Mars or in a flight system (General_Research rc-663).  Comparator: DLR models Raptor 2 RVAC at 368.5 s (O/F 3.4) and 365.9 s (O/F 3.6), calculated rather than measured, 3-4% below this 2013 figure (Herberhold et al. 2026, CEAS Space J. 18, Table 2; General_Research rc-329).  First flight is the first launch of a methalox vehicle, Zhuque-2 Mission F1 in 2022; Mission F2 in 2023 was the first LOX/LCH4 rocket to reach orbit (LandSpace, About Us, Milestones) (General_Research rc-760).  LCH4's 0.422 kg/L is pure methane at its 111.6 K normal boiling point, 422.5 kg/m3 (IMO Resolution MSC.420(97), Annex 18, Table 3), not an LNG mixture (General_Research rc-673).",
     },
     {
         "name":                  "MMH / NTO  (hypergolic)",
@@ -1877,7 +1884,7 @@ PROPELLANTS_REFERENCE: List[dict] = [
                  "the only chemical bipropellant makeable from a C-type asteroid "
                  "without any hydrogen at all, which matters because hydrogen is "
                  "the scarce element out there, not carbon or oxygen.  Studied "
-                 "extensively for Mars (Zubrin); never built.\n"
+                 "extensively for Mars (Zubrin); never built.  The asteroid half is theory: Ganguly & Saxena (Space Manufacturing 7, NTRS 19910015908, abstract, p. 97) compute ~135 g of volatiles per kg of a fixed-composition C2 chondrite at 1 bar and 400-800 C, CO among them, an equilibrium calculation with no recovery process, oxygen route or energy, and a C2 chondrite does not map one-to-one onto the C taxonomic class (General_Research rc-662).\n"
                  "The ISRU columns are deliberately null — see the comment "
                  "above them.  This is the row where 'obviously ISRU' and "
                  "'this model can price it' come apart.",

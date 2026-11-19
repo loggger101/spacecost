@@ -171,7 +171,10 @@ so a study can state what it excluded.
 | Boyce (Aerojet), chapter on the AJ10-137 in *Remembering the Giants: Apollo Rocket Propulsion Development*, NASA, 2010, NTRS 20100027319, <https://ntrs.nasa.gov/citations/20100027319>, p. 3 | Aerozine-50 / NTO: the AJ10-137's rated 314.5 s vacuum Isp at area ratio 62.5:1, the row's value (rc-754) |
 | Cuffe & Jacobs (NASA MSC), *Apollo Spacecraft Engine Specific Impulse*, D2-I17060-1, 1970, NTRS 19700026467, <https://ntrs.nasa.gov/citations/19700026467>, p. 32 | Aerozine-50 / NTO: AEDC's injector-level measurements, 312.8 s and 311.4 s on two thrust chambers with a 0.2 s allocated uncertainty; a comparison, not the row's value (rc-754) |
 | U.S. Department of Defense, DoD Manual 4145.26, *DoD Contractors' Safety Manual for Ammunition and Explosives*, Appendix 2, Table AP2.T18, p. 214, <https://www.esd.whs.mil/Portals/54/Documents/DD/issuances/dodm/414526m.pdf> | component densities at 20.0 C: RP-1 0.81, N2O4 1.45, MMH 0.87, hydrazine 1.01, UDMH 0.79 kg/L; UDMH's stored 0.793 has a third decimal the table does not give (rc-675, rc-676) |
-| IMO, Resolution MSC.420(97), *Interim Recommendations for Carriage of Liquefied Hydrogen in Bulk*, Annex 18, Table 3 (2016) | LCH4: pure methane at its 111.6 K normal boiling point, 422.5 kg/m³ (rc-673) |
+| IMO, Resolution MSC.420(97), *Interim Recommendations for Carriage of Liquefied Hydrogen in Bulk*, Annex 18, Table 3 (2016) | LCH4: pure methane at its 111.6 K normal boiling point, 422.5 kg/m³; LH2 at 20.3 K, 70.8 kg/m³ (rc-673, rc-674) |
+| NIST, *Cryogen Safety* (NIST S 7101.52 Ver. 3), Appendix B, Table 1, p. 17 | LOX 1141 g/L at 90.2 K and liquid argon 1395 g/L at 87.3 K, at 101.325 kPa (rc-674) |
+| Muscatello et al., NASA NTRS 20130009664 (SPACE 2013 abstract) | methalox: a Mars-analog bench demonstration, 31.7 g CH4/hr and 2.22 kg CH4/O2 per 14-hour day; nothing made on Mars (rc-663) |
+| Ganguly & Saxena, *Space Manufacturing 7*, NTRS 19910015908, p. 97 | CO / LOX: an equilibrium estimate of ~135 g volatiles per kg of C2 chondrite, CO among them, with no recovery process (rc-662) |
 | Epstein, Joppin, Kerrebrock & Schneider, *Microfabricated Liquid Rocket Motors*, final report on NAG3-2506, NTRS 20030020732, <https://ntrs.nasa.gov/citations/20030020732>, Appendix A, Table 6.1, p. 165 | HTP-98: 98% H2O2 at 25 C and 1 atm, 1430.9 kg/m³, reproduced from FMC Chemicals' Technical Bulletin 67 (Raleigh 1969) (rc-677) |
 | Arnett, NASA TM-X-53859, 1969, NTRS 19700004114, <https://ntrs.nasa.gov/citations/19700004114>, Table 1, p. 8 | Aerozine-50: specific gravity 0.894-0.903, whose top the component takes; and 56.1 lb/ft³ at 77 F (0.8986 kg/L) (rc-678) |
 | World Health Organization, *Iodine in drinking-water*, WHO/HEP/ECH/WSH/2020.5, Table 1.1, p. 2 | iodine: solid density 4.93 g/cm³ at 25 C, the material and not a packed reservoir (rc-808) |
@@ -344,6 +347,13 @@ and the light time all follow from those by formula. The formulas are in
 | NASA DRA 5.0 | the Mars 1-sol staging orbit |
 | Appelbaum & Flood, NASA TM-102299 | Mars surface insolation, and the dust caveat on that row |
 | Warner, Harris & Pravec, *Asteroid Lightcurve Database* | the 6-10 h rotation the generic asteroid rows use as a population median |
+| McGuire, McCarty & Burke, *Power and Propulsion Element (PPE) Spacecraft Reference Trajectory Document*, NASA/TM-2020-220481, sec. 3.1, p. 5 | Gateway's 9:2 L2 Southern NRHO, 6.56 days, lunar eclipses under 90 minutes: the NRHO row's 0.01 as one eclipse per orbit (rc-747) |
+| NASA, Webb FAQ; ESA, Gaia operations | Sun-Earth L2: eclipse-free halo and Lissajous orbits, the row's 0 for both Earth and Moon shadows (rc-746) |
+| NASA NSSDCA, Moon Fact Sheet (1,737.4 km mean radius) | low lunar orbit: the zero-beta cylindrical-shadow check, 0.3945 (rc-744) |
+| Rucker, *Mars Surface Power Generation Challenges and Considerations*, NASA NTRS 20230015763, p. 2; NASA Mars Fact Sheet | Mars surface: ~50% illumination for a typical mid-latitude mission, and the 24.6597 h sol (rc-751) |
+| NASA Mars Fact Sheet, Satellites of Mars | Phobos: 0.31891 d sidereal orbit and rotation; its 0.50 is a surface-night scenario without Mars eclipses (rc-752) |
+| NASA NSSDCA, *Magellan: Mission Plan*; McNutt et al., *MESSENGER at Mercury: Early orbital operations*, Acta Astronautica (2012), pp. 2-3 | Venus and Mercury orbits: Magellan's 3 h 15 min and MESSENGER's 12 h orbits as comparators; both eclipse fractions are scenarios (rc-742) |
+| Stubbs & Wang, Icarus 217 (2012), sec. 5.1, p. 275 | the small bodies' shared 0.50, an equatorial no-tilt scenario beside Vesta's 0.363-0.566 (rc-745) |
 
 ⚠️  Five rows are GENERIC — typical low-Δv NEA, the three main-belt zones, and
 the Trojan swarm. Their distances are a class rather than a body and their

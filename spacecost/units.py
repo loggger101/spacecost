@@ -63,7 +63,12 @@ NEWTON_G_M3_PER_KG_S2 = 6.674_30e-11
 # p. 146), a different product with no temperature stated.  Kept pending a
 # density for the contract's own product at 60 F (General_Research rc-670).
 COMMODITY_DENSITY_KG_PER_L = {
-    "crude_oil":       0.870,   # WTI ~32° API
+    # crude_oil: 0.870 kg/L has no recorded source or temperature, and the
+    # "~32 API" it was labelled with is heavier than what CL=F delivers: WTI of
+    # 37-42 API (CME NYMEX Light Sweet Crude Oil FAQ, quality specifications).
+    # It only converts the CL=F cross-check, which prices nothing
+    # (General_Research rc-671).
+    "crude_oil":       0.870,   # WTI; see above
     "heating_oil":     0.845,   # No. 2 distillate; kerosene/RP-1 proxy
     "rbob_gasoline":   0.740,
     "natural_gas":     0.422,   # methane LIQUID at boiling point (LNG/LCH4)
