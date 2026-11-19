@@ -13,6 +13,34 @@ may read a version as proof that a number moved.
 
 ## Package releases
 
+### 0.18.2 - 2026-11-18
+
+**Data contract 1.27.1 → 1.27.2: fifteen General_Research citation
+candidates, environments and propellants. No value moved.** Only `notes` in
+14 rows, comments, CITATIONS.md and the stamps changed; every value column
+of the six tables and the summary sample is identical to 1.27.1. Rebuilt on
+the recorded reference platform.
+
+- **Eclipse fractions said for what they are** (rc-742 to rc-747, rc-751,
+  rc-752): NRHO's 0.01 is one sub-90-minute lunar eclipse per 6.56-day
+  orbit (NASA/TM-2020-220481); low lunar orbit's 0.40 the zero-beta case,
+  0.3945; Sun-Earth L2's 0 excludes Earth and Moon shadows; Mars surface's
+  0.50 a mid-latitude mission's (Rucker 2024); Phobos's a surface night
+  without Mars eclipses; the Mars 1-sol, Venus and Mercury fractions are
+  scenarios, the last two beside Magellan's and MESSENGER's orbits; and the
+  0.50 shared by eleven small bodies is an equatorial, no-tilt scenario
+  beside Vesta's 0.363-0.566.
+- **Distance bands** (rc-748 to rc-750): the low-dv NEA, main-belt and
+  Trojan bands are this table's scenario bins, not population summaries.
+- **Propellants**: LH2, LOX and liquid argon densities cited at their
+  normal boiling points (IMO MSC.420(97); NIST S 7101.52) (rc-674);
+  methalox's "ISRU-makeable on Mars" scoped to a Mars-analog bench test
+  (Muscatello et al. 2013) (rc-663); CO / LOX's asteroid route to Ganguly &
+  Saxena's equilibrium estimate (rc-662); crude oil's 0.870 kg/L flagged
+  as unsourced, and its "~32 API" against CL=F's 37-42 API (rc-671).
+- **Wording**: the methalox note no longer says Zhuque-2 F1 was a launch "to
+  space"; no source here establishes that.
+
 ### 0.18.1 - 2026-11-18
 
 **Data contract 1.27.0 → 1.27.1: seventeen General_Research citation

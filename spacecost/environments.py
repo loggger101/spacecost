@@ -207,17 +207,17 @@ ENVIRONMENTS_REFERENCE: List[dict] = [
          "spacecraft never enters Earth's umbra, which is why JWST and Gaia "
          "are there: continuous sun, continuous cold-side view, no thermal "
          "cycling at all.  Eclipse fraction is 0 by construction of the orbit, "
-         "not by luck."),
+         "not by luck.  The 0 excludes both Earth and Moon shadows, for a generic eclipse-free halo or Lissajous orbit rather than one mission's: JWST's design avoids Earth and Moon eclipses for its whole mission (NASA Webb FAQ), and Gaia's Lissajous orbit is not affected by Earth eclipses (ESA Gaia operations) (General_Research rc-746)."),
     _env("Cislunar NRHO (Gateway)", "cislunar",
          0.9833, 1.0000, 1.0167, 157.4, 0.01, 0.002_57,
          "6.56-day near-rectilinear halo orbit (Whitley & Martinez 2016).  The "
          "orbit is selected for near-continuous illumination; eclipses are "
-         "rare and under 90 minutes.  Cheap to hold, cheap to power - the same "
+         "rare and under 90 minutes.  The reference is Gateway's 9:2 L2 Southern NRHO, 6.56 days on average, whose lunar eclipses 'last less than 90 minutes' and whose 15-year trajectory avoids Earth eclipses but for two partial events in years 14 and 15 (McGuire, McCarty & Burke, NASA/TM-2020-220481, sec. 3.1, p. 5).  0.01 is one sub-90-minute lunar eclipse per orbit, rounded (90 min / 6.56 d = 0.0095), not a duty average over the 15 years, and leaves those two Earth eclipses out (General_Research rc-747).  Cheap to hold, cheap to power - the same "
          "two properties that make it the cislunar depot orbit in "
          "DELTA_V_REFERENCE."),
     _env("Low lunar orbit (100 km)", "cislunar",
          0.9833, 1.0000, 1.0167, 1.965, 0.40, 0.002_57,
-         "118-min period, ~40% of it behind the Moon.  Worse than LEO for both "
+         "118-min period, ~40% of it behind the Moon.  0.40 is the zero-beta-angle case for a circular 100 km orbit with a cylindrical shadow, asin(1737.4 / 1837.4) / pi = 0.3945 on the NASA Moon Fact Sheet's 1,737.4 km mean radius; at higher beta angles it falls, so this is a worst-case scenario, not an average (General_Research rc-744).  Worse than LEO for both "
          "dark period and duty cycle, and unlike LEO there is no atmosphere "
          "below to drag a dead spacecraft down: LLO orbits are also unstable "
          "against lunar mascons and need station-keeping."),
@@ -246,6 +246,15 @@ ENVIRONMENTS_REFERENCE: List[dict] = [
          "(General_Research rc-335).",
          mass_kg=7.346e22, mean_radius_m=1_737_400.0),
 
+    # THE 0.50 ON EVERY SMALL BODY (the low-dv NEA, Bennu, Ryugu, Eros, Didymos,
+    # the three main-belt bins, Ceres, Psyche and the Trojans) is a SCENARIO:
+    # cycle_period_hr is the rotation period standing in for a surface solar
+    # day, and half of it dark is an equatorial site on a body with no axial
+    # tilt, averaged over a rotation.  Latitude, obliquity, shape and
+    # topography move it: on Vesta the Sun is "typically seen about half the
+    # time in the tropics", and annual mean visibility runs 0.363-0.566 across
+    # the body (Stubbs & Wang 2012, Icarus 217, sec. 5.1, p. 275), one body
+    # and not a population (General_Research rc-745).
     # ═════════════════════════════════════════════════════════════════════════
     # Near-Earth objects.  All four named ones have had a spacecraft at them,
     # so their masses and radii are measured rather than inferred.
@@ -256,7 +265,7 @@ ENVIRONMENTS_REFERENCE: List[dict] = [
          "Earth-like orbit, low eccentricity, low inclination (Elvis et al. "
          "2011, arXiv:1105.4152).  Generic row - distance is the class, not a "
          "body, and the flux band between perihelion and aphelion is a factor "
-         "of 2.25."),
+         "of 2.25.  The 1.0-1.5 AU band and 1.2 AU mean are this table's scenario class bounds for an Earth-like orbit, not a population summary: Elvis et al.'s six lowest-delta-v examples have semi-major axes of 1.027-1.093 AU (Table 1) (General_Research rc-750)."),
     _env("101955 Bennu", "neo",
          0.8969, 1.1264, 1.3559, 4.296, 0.50, 2.3726,
          "OSIRIS-REx target, sampled 2020, 121.6 g returned to Utah in 2023 - "
@@ -309,21 +318,21 @@ ENVIRONMENTS_REFERENCE: List[dict] = [
          "vehicle in, and the destination DELTA_V_REFERENCE prices at 4,500 "
          "m/s from LEO.  Most of the period is spent near apoapsis in "
          "sunlight, so the eclipse fraction is small and orientation-dependent; "
-         "0.05 is representative rather than fixed."),
+         "0.05 is representative rather than fixed: a SCENARIO with no orbit-plane, season or averaging basis.  DRA 5.0 (SP-2009-566, printed p. 22) gives only the orbit's dimensions (General_Research rc-743)."),
     _env("Mars surface (mid-latitude)", "planet_surface",
          1.3814, 1.5237, 1.6660, 24.66, 0.50, 2.6827,
-         "The sol is 24.66 h, so the night is a manageable 12 - the one "
+         "The sol is 24.66 h, NASA's mean solar day of 24.6597 h (Mars Fact Sheet), so the night is a manageable 12 - the one "
          "planetary surface in this table where solar power is routine.  "
          "⚠️  What this row does NOT carry is dust: a global storm cut "
          "Opportunity's array output by over 99% and ended the mission, and "
          "Mars surface flux at the panel runs 40-60% of the orbital figure "
          "even on a clear day (Appelbaum & Flood, NASA TM-102299).  Size for "
          "the storm, not for the geometry.  Mass 6.4169e23 kg, mean radius "
-         "3,389.5 km (NASA Mars Fact Sheet).",
+         "3,389.5 km (NASA Mars Fact Sheet).  The 0.50 is a typical mid-latitude mission's, about 50% of a ~25 h cycle under illumination (Rucker, Mars Surface Power Generation Challenges and Considerations, NASA NTRS 20230015763, p. 2), and the 12.33 h dark period follows from it: a mid-latitude scenario, not a value for every latitude and season (General_Research rc-751).",
          mass_kg=6.4169e23, mean_radius_m=3_389_500.0),
     _env("Phobos", "moon_surface",
          1.3814, 1.5237, 1.6660, 7.653, 0.50, 2.6827,
-         "Tidally locked, 7.65-h orbit and rotation.  Mass 1.063725e16 kg, "
+         "Tidally locked, 7.65-h orbit and rotation: the NASA Mars Fact Sheet gives sidereal orbital and rotation periods of 0.31891 d each, 7.6538 h.  The 0.50 is a surface-night scenario; eclipses by Mars are not counted, and no site or orientation average is modelled (General_Research rc-752).  Mass 1.063725e16 kg, "
          "from Mars Express's GM of (7.09962 +/- 0.00197) x 10^5 m3/s2, 3 "
          "sigma (Guo et al. 2026, MNRAS 548, stag578, Table 3), over G = "
          "6.67430e-11; 1.0659e16 kg, an estimate, until data contract 1.26.0 "
@@ -349,7 +358,7 @@ ENVIRONMENTS_REFERENCE: List[dict] = [
     _env("Main belt, inner edge", "main_belt",
          2.0600, 2.2000, 2.5000, 8.0, 0.50, 3.5167,
          "The 3:1 Kirkwood gap at 2.5 AU is the outer bound of the inner belt. "
-         "Array mass per watt is already 4.8x the 1 AU figure here."),
+         "Array mass per watt is already 4.8x the 1 AU figure here.  The three main-belt bands are this table's scenario bins, edged at the 3:1 and 2:1 Kirkwood gaps and the 2.7 AU DELTA_V_REFERENCE point, not population quantiles (General_Research rc-749)."),
     _env("Main belt, mean", "main_belt",
          2.2000, 2.7000, 3.2000, 8.0, 0.50, 4.2167,
          "The 10,500 m/s destination in DELTA_V_REFERENCE, quoted at 2.7 AU. "
@@ -391,7 +400,7 @@ ENVIRONMENTS_REFERENCE: List[dict] = [
          "Lucy is touring them through 2033.  27x the array mass per watt of 1 "
          "AU, a 54-minute one-way light time, and 122 K.  Included as the "
          "boundary case: this is where 1/r² stops being a penalty you pay and "
-         "becomes an architecture you change."),
+         "becomes an architecture you change.  5.2044 AU is a Jupiter semi-major-axis figure used as the swarm's distance, and 4.9-5.5 AU are scenario bounds, not a catalog query of Trojan perihelia and aphelia; neither has a recorded source (General_Research rc-748)."),
 
     # ═════════════════════════════════════════════════════════════════════════
     # Inside 1 AU.  The factor runs the OTHER way here.
@@ -401,14 +410,14 @@ ENVIRONMENTS_REFERENCE: List[dict] = [
          "1.9x the flux of Earth orbit, so 0.52x the array mass per watt - the "
          "reason a solar-electric spacecraft gains, not loses, on an inner "
          "gravity-assist leg.  ⚠️  The array is smaller and the RADIATOR is "
-         "bigger; this table gives the first and not the second."),
+         "bigger; this table gives the first and not the second.  The 3.30 h cycle is close to Magellan's initial near-polar orbit of 3 h 15 min (NASA NSSDCA, Magellan Mission Plan) and the 0.40 is an unsourced scenario: no orbiter's season-by-season geometry is modelled, and the row is a planetary orbit, not the heliocentric leg the note above describes (General_Research rc-742)."),
     _env("Mercury orbit", "planet_orbit",
          0.3075, 0.3871, 0.4667, 12.0, 0.15, 1.4834,
          "6.7x Earth's flux and a 0.15x array factor, which MESSENGER and "
          "BepiColombo both answer by pointing the arrays AWAY from the Sun: "
          "past about 3 solar constants the limit is cell temperature, not "
          "cell area, and this column stops describing the design.  The end of "
-         "the range where 1/r² is the whole story."),
+         "the range where 1/r² is the whole story.  The 12.0 h cycle is MESSENGER's nominal 12-h orbit (McNutt et al. 2012, Acta Astronautica, p. 2); its 88-day year held one long and one short eclipse season (p. 3), so the 0.15 is a scenario average with no derivation (General_Research rc-742)."),
 ]
 
 say("OK  Environment reference loaded - %d destinations"
