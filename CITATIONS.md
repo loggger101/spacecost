@@ -127,7 +127,12 @@ so a study can state what it excluded.
 | Hitt, Zakrzwski & Thomas (NASA), MEMS-based satellite micropropulsion via catalyzed hydrogen peroxide decomposition, Smart Materials and Structures 10(6), 2001, NTRS 20010102648 | HTP Isp: theoretical and empirical bounds |
 | Morren & Curran (NASA Lewis), Preliminary Performance and Life Evaluations of a 2-kW Arcjet, NASA TM-105149 / AIAA-91-2228 | hydrazine arcjet Isp: state of the art, programme goal and endurance test |
 | Schoenman (NASA Lewis), Test experience, 490 N high performance (321 sec Isp) engine, AIAA-92-3800, NTRS 19920066503 | UDMH / NTO Isp, bracketed by a measured NTO/MMH engine |
-| Asakawa, Koizumi et al. (JAXA), On-orbit Performance of the Water Resistojet Propulsion System AQUARIUS on EQUULEUS, Trans. JSASS 67(5), 2024 | water resistojet: the one flight-measured Isp |
+| Sekine, Ataka, Moriai et al. (University of Tokyo / JAXA), *On-orbit Performance Evaluation of AQUARIUS: a Water Resistojet Propulsion System*, Trans. JSASS 67(5), 274-284, 2024, Table 3, p. 282 (cited as Asakawa, Koizumi et al. until 0.18.0) | water resistojet: the one flight-measured Isp (rc-764) |
+| JAXA, AQT-D deployment from Kibo (3 Dec 2019); JAXA Launch Records (Artemis I, EQUULEUS); JAXA, RAISE-3 / KIR mission page; Pale Blue, EYE in-orbit release (13 Mar 2023); Momentus, Vigoride-5 orbit-raise release (8 May 2023); NASA, Pathfinder Technology Demonstrator page (PTD-1, HYDROS-C) | water resistojet flight history: AQT-D in 2019 is the first launch; HYDROS-C electrolyses water and is not a resistojet (rc-764) |
+| LandSpace, About Us, Milestones | methalox: Zhuque-2 Mission F1, its first launch, in 2022, and F2, the first LOX/LCH4 rocket to orbit, in 2023 (rc-760) |
+| UK Space Agency, *50 years since Black Arrow launched the UK into space* (4 Mar 2020); Wight Aviation Museum, *Black Arrow History* | HTP / RP-1: Black Arrow R0 (1969, first launch), R1 (1970) and R3 (1971, Prospero to orbit) (rc-761) |
+| Science Museum Group, *De Havilland Super Sprite Rocket Engine*, object 1962-104 | HTP monoprop: first fired 1949, flight trials from 1951, the row's first flight (rc-762) |
+| Curren & Byers, *NASA Hydrazine Arcjets*, NASA-TM-106695 / AIAA 94-2463, NTRS 19950004443; Hoskins et al., *30 Years of Electric Propulsion Flight Experience at Aerojet Rocketdyne*, IEPC-2013-439, p. 2; Lockheed Martin, A2100 fleet release (17 Jul 2006) | hydrazine arcjet: first-generation arcjets on Telstar 401 (Dec 1993); the MR-510 a later upgrade on A2100, first launched 1996 (rc-763) |
 | Monheiser, Goodfellow, Aubuchon et al., A Summary of the NEXT-C Flight Thruster Proto-Flight Testing, NTRS 20210018563 | xenon gridded-ion Isp envelope |
 | Shastry et al., 12-kW Advanced Electric Propulsion System Hall Current Thruster Qualification and Production Status, IEPC-2024, NTRS 20240006249 | xenon Hall-thruster Isp, as a comparison |
 | Boddy (Rockwell, for AFRPL), Solar Rocket System Concept Analysis, 1980, NTRS 19800022964 | solar thermal: the measured 680 s |
@@ -162,6 +167,10 @@ so a study can state what it excluded.
 | Worlock, James, Hunter & Bartlett, *ATS-6 Cesium Bombardment Engine North-South Stationkeeping Experiment*, IEEE Trans. AES-11, 1975, NTRS 19760034957, <https://ntrs.nasa.gov/citations/19760034957> | ATS-6 flew cesium, not mercury (rc-757) |
 | Hamidian & Dahlgren, *Testing and Evaluation of the LES-6 Pulsed Plasma Thruster*, JPL TM 33-630, 1973, NTRS 19740002615, <https://ntrs.nasa.gov/citations/19740002615>, p. 1 | PPT: LES-6's use in 1968 (rc-759) |
 | Zalawski, Benson, Smernan & Hoskins, *On-Orbit Testing of the EO-1 Pulsed Plasma Thruster*, 2002, NTRS 20030025690, Table 1, p. 2; and NASA Science, *Earth Observing-1* mission page, <https://science.nasa.gov/mission/eo-1/> | PPT: EO-1's launch (21 Nov 2000), its flown unit's 650-1,400 s and 8% efficiency, the row's 0.08 (rc-759) |
+
+`first_flight` is the year of the first launch or flight of a vehicle using
+that propulsion, successful or not, as `first_flight_year` is for a launch
+vehicle (since 0.18.0; rc-760 to rc-764).
 
 Vacuum Isp values are the interplanetary-relevant figures. Sea-level Isp is
 lower and matters only to a first stage, which is already priced into the launch
