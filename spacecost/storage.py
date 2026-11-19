@@ -100,7 +100,7 @@ STORAGE_REFERENCE: List[dict] = [
                  "articles: Shuttle ET 0.0129 kg/L (big dumb tank, cheap per "
                  "litre), Falcon 9 stage 2 ~0.033, Centaur III ~0.035 (the last "
                  "two include thrust structure and avionics mounts).  Derivation "
-                 "and the ∝V-vs-∝V^⅔ caveat are at _TANK_BASE_KG_PER_L.",
+                 "and the ∝V-vs-∝V^⅔ caveat are at _TANK_BASE_KG_PER_L.  SCENARIO base: 0.025 kg/L is a judgement between three articles whose numerators are inert or structural mass (thrust structure and avionics mounts included for the upper stages), not tank shells.  Only the Shuttle anchor is sourced: the SLWT's 26,535 kg inert weight over its 553,963 + 1,515,461 L LOX and LH2 tanks is 0.01282 kg/L (NASA SP-2009-4012, Table 2-86), 0.6% below the 0.0129 used.  The Falcon 9 and Centaur III figures have no recorded source (General_Research rc-585).",
     },
     {
         "name":            "COPV burst performance factor",
@@ -176,7 +176,7 @@ STORAGE_REFERENCE: List[dict] = [
                  "not offer that choice yet — it applies boiloff_pct_per_day "
                  "passively — so hydrolox is charged the full 0.05%/day with no "
                  "option to buy it down.  That is conservative for hydrolox and "
-                 "it is a known gap, not a modelling decision.",
+                 "it is a known gap, not a modelling decision.  80 W/W is the RTB cryocooler programme threshold near 20 W of lift at 20 K (Nugent, Grotenrath & Johnson, NTRS 20220009350, Table 1), tested at 91.6 W/W with 19.21 W lift and 285 K rejection (Table 3).  The 50 and 150 W/W ends have no source, and specific power climbs at lower lift (156.9 W/W at 7.02 W, 247.2 W/W at 2.99 W), so the band is a scenario for a ~20 W design point (General_Research rc-701).",
     },
     {
         "name":            "Cryocooler specific mass (20 K)",
@@ -518,7 +518,7 @@ STORAGE_REFERENCE: List[dict] = [
                  "space-rated pump hardware nobody has flown.  Cryogenic transfer in microgravity "
                  "has been done at small scale (Robotic Refueling Mission, "
                  "storables) and never at stage scale.  Not modelled by Module 4 "
-                 "— tanker flights are charged, transfer losses are not.",
+                 "— tanker flights are charged, transfer losses are not.  The 3% midpoint and 8% upper end are engineering SCENARIOS with no stage-scale space-transfer source; the ground export-terminal study bounds only the low end (General_Research rc-680).",
     },
     {
         "name":            "ISRU propellant depot (asteroid water)",
@@ -536,7 +536,7 @@ STORAGE_REFERENCE: List[dict] = [
                  "where it prices the ISRU return propellant a mission makes for "
                  "ITSELF.  Selling propellant to a third party is a different "
                  "market with a different depth, and Module 2 does not price it "
-                 "— the in-space demand ceilings cover materials, not fuel.",
+                 "— the in-space demand ceilings cover materials, not fuel.  The $50/kg [20, 200] is a legacy flat fee with no source or derivation.  spacecost.query charges it on return propellant made on site, so it is a self-production processing cost, not a depot sale price; economicspace has not used it since calc 1.32.0, which charges energy and a plant instead (General_Research rc-435).",
     },
 ]
 

@@ -668,7 +668,7 @@ build` rebuilds the whole thing.
 These tables were built over fourteen releases as **Module 3 of
 [economicspace](https://github.com/loggger101/economicspace)**, an asteroid
 mining profitability pipeline, and extracted at `pipeline_version` 1.14.0
-(commit `b0b18b2`; the contract is 1.27.3 as of this release). Two thirds of
+(commit `b0b18b2`; the contract is 1.27.4 as of this release). Two thirds of
 that module was annotated reference data and nothing in its schema knows what
 an asteroid is, which is the argument for splitting it out: a launch price is
 useful to anyone costing a mission. economicspace consumes this package as its
@@ -719,6 +719,7 @@ operational one is not, and costing a crewed mission with it will read low.
 
 MIT, see `LICENSE`. Every source behind every row is listed in
 `CITATIONS.md`, and the row's own `notes` field is the authority for its number.
-None of the sources feeding these tables imposes a condition of use; the three
-that do so upstream in economicspace are all catalog sources, and none of them
-is here.
+None of the sources feeding these tables' values imposes a condition of use. Of
+the three that do upstream in economicspace, only ssoBFT appears here, as a
+comparator in two NEA delta-v notes; reusing those notes means citing Berthier et
+al. (2023), as `CITATIONS.md` says.

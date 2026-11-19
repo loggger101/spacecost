@@ -417,6 +417,12 @@ for _dest, _expected in _CHAIN_DV_AT_MOVE.items():
 # its Earth price MINUS whatever it costs to fly it the rest of the way down.
 # Coming down is far cheaper than going up: you need a heat shield, not a
 # launch vehicle, which is why these are a fraction of the figures above.
+# 0.10 IS A SCENARIO with no sizing basis: no cargo form, density, geometry or
+# included systems is stated, and it excludes the TPS, priced separately.  A
+# small sample-return capsule is not a substitute: NASA's Planetary Mission
+# Entry Vehicles Quick Reference Guide v4.0 (NTRS 20220010761) gives Hayabusa
+# an 18 kg vehicle, a 1.04 kg payload and a 43% TPS mass fraction, another
+# mission and payload scope (General_Research rc-598).
 DOWNLEG_CAPSULE_DRY_FRAC   = 0.10   # capsule dry mass per kg of cargo
 # Mirrors economicspace's Module 4 config dial `heat_shield_frac_of_payload`.
 # Typed rather than read, because it is a modelling choice belonging to that

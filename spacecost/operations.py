@@ -143,7 +143,7 @@ OPERATIONAL_COSTS_REFERENCE: List[dict] = [
                  "Required for the aerocapture-return Δv segment.  NOTE: NASA / "
                  "SpaceX have not published a per-kg PICA-X cost; figure is an "
                  "engineering estimate.  Stardust / OSIRIS-REx capsule heritage "
-                 "(see NTRS 20140005558 for material data).",
+                 "(see NTRS 20140005558 for material data).  Whether a $/kg form suits TPS is itself a modelling choice: NASA's Discovery 2014 AO Q&A (T-21, updated 6 Feb 2015) calls a generic cost per kg not ideal and gives HEEET shield estimates by size, $3M, $6M and $11M at 1, 2 and 3 m diameter.  HEEET is not PICA-X or AVCOAT and no shield mass is given, so it is scale context, not a replacement (General_Research rc-422).",
         "reference_year":   _REF_YEAR_OPS,
     },
     {
@@ -176,7 +176,7 @@ OPERATIONAL_COSTS_REFERENCE: List[dict] = [
                  "contract's '$36 million for six vehicles'; an $80M "
                  "Shuttle/Centaur appropriation against 1981 funding of $20M) "
                  "and no production cost per stage.  No institutional document prices "
-                 "either anchor.",
+                 "either anchor.  SCENARIO: the Falcon 9 ~$10M build and ~$7M third-party low anchors and the Centaur III ~$30M high anchor have no source or calculation here, so $4,800/kg and its band are scenarios, and a whole-stage rate, not a tank cost.  Comparators only: NASA OIG's $29M second-ICPS hardware purchase (IG-20-012, p. 23) and GAO's $52.0M Titan IV Centaur unit cost (GAO/NSIAD-90-113, Table 3.1) are other whole stages, not Centaur III prices (General_Research rc-421).",
         "reference_year":   _REF_YEAR_OPS,
     },
     {
@@ -207,7 +207,7 @@ OPERATIONAL_COSTS_REFERENCE: List[dict] = [
                  "simplest article in the mission: no mechanisms, no docking "
                  "interface, no re-entry.  Do not read its small effect as a "
                  "reason to drop it; the point of the line is that every "
-                 "kilogram in the mass cascade has one.",
+                 "kilogram in the mass cascade has one.  ESTIMATE: it subtracts an assumed RL10 cost from the unsourced ~$30M Centaur III stage, so the tank-only allocation has no source; the ICPS and Titan IV Centaur figures are whole-stage comparators and apportion no tank cost (General_Research rc-421).",
         "reference_year":   _REF_YEAR_OPS,
     },
     {
@@ -791,7 +791,7 @@ OPERATIONAL_COSTS_REFERENCE: List[dict] = [
                  "No institutional document prices search-and-recovery on its "
                  "own; the ISS cargo-resupply record (NASA OIG IG-18-016: "
                  "$191.3M per CRS-1 mission) bounds a whole delivery, not this "
-                 "line.",
+                 "line.  SCENARIO: $15M [$5M, $30M] is not derived from a recovery-specific cost.  OSIRIS-REx's operations totals ($210.0M FY2017-FY2023, $232.2M through FY2025; Planetary Society PEBD) and NASA OIG IG-18-016's CRS delivery average are whole-mission or whole-delivery bounds, and allocate nothing to recovery (General_Research rc-718).",
         "reference_year":   _REF_YEAR_OPS,
     },
     {

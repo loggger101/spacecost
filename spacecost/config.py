@@ -114,7 +114,11 @@ class SpacecostConfig:
     # Anyone reading the old sentence would have expected the propellant line
     # to fall and gone looking for a bug when it did not.
     isru_return_propellant:        bool  = False
-    isru_processing_usd_per_kg:    float = 50.0   # rough lit estimate
+    # A legacy flat fee with no source or derivation, charged by query.py on
+    # return propellant made on site: a self-production cost, not a depot
+    # sale price.  economicspace dropped it at calc 1.32.0 for energy and
+    # plant costs (General_Research rc-435).
+    isru_processing_usd_per_kg:    float = 50.0   # scenario, see above
 
     # --- CONTINGENCY ---------------------------------------------------------
     # Industry-standard mission-cost contingency.  20% is typical for a
@@ -125,7 +129,7 @@ class SpacecostConfig:
     # Stamped into every output CSV.  BUMP IT when a change moves any number a
     # build produces.  See this module's docstring for why it is not the same
     # thing as `spacecost.__version__`, and CHANGELOG.md for what moved when.
-    pipeline_version: str = "1.27.3"
+    pipeline_version: str = "1.27.4"
     preview_rows:     int = 15   # rows per table in the CLI preview
 
     def resolved_output_dir(self) -> str:
