@@ -59,6 +59,22 @@ ones that carry more than one row.
 | Xinhua, *China Focus: China achieves first-ever controlled rocket recovery in Long March-10B maiden flight* (10 Jul 2026), <https://english.news.cn/20260710/b4a934ab25284ea799ea3548b392c735/c.html> | Long March 10B reuse context |
 | China Government Procurement Network, sole-source procurement notice for the eXTP launch vehicle, CAS National Space Science Center (8 Jun 2026), <https://www.ccgp.gov.cn/eadylynotice/202606/t20260608_26709230.htm> | the eXTP launch-service budget |
 | United Launch Alliance, *Vulcan Leo 1: Delivering 40 satellites to space* (10 Nov 2026 schedule snapshot), <https://blog.ulalaunch.com/blog/vulcan-leo-1-delivering-40-satellites-to-space> | V-012, the first VC6 (a VC6L), beside Vulcan VC6 |
+| FAA AST, *2010 U.S. Commercial Space Transportation Developments and Concepts*, p. 24 and endnote 53, p. 100 | Minotaur IV's 1,735 kg to LEO, the high end, from Orbital's fact sheet with no orbit given (rc-193) |
+| Spaceflight Now (18 Nov 2010); NASA OIG IG-11-012, p. 12 and Table 4; FAA AST Minotaur IV fact sheet (2016) | Minotaur IV's $50M (2010), ~$50M (2012) and $63M average (2012-2020), and $46M: why its band is a mixed-year scenario (rc-617) |
+| NASA X-Hab 2025 report, NTRS 20250005924, Table 19, p. 109 | Falcon Heavy's $97M (2022) from SpaceX's website, and an unexplained $107.9M 2025-adjusted figure (rc-554) |
+| European Commission, EIC Horizon Prize ISAERO factsheet (2022), p. 201 | Spectrum's ~€10,000/kg target, a 2022 target (rc-521) |
+| FAA AST, *2018 Commercial Space Transportation Compendium*, Proton M and Long March 2D fact sheets; GAO-17-609, Table 4, p. 30 and p. 21 | Proton-M's $65M estimated price; Long March 2D's 3,500 kg to 200 km LEO (rc-724, rc-719) |
+| CNSA, Long March 2D page (2017-08-01); CGWIC, LM-2D technical data | the 4,000 kg unstated-orbit and 1,300 kg 645 km SSO ratings beside Long March 2D (rc-719) |
+| CASC, Long March 2C page (2015-09-15); CASC, Jielong-3 release (2026-04-11); Xinhua (2021) | Long March 2C's 3,850 kg LEO; Jielong-3's official 1,500 kg to 500 km SSO (rc-717, rc-715) |
+| ESA, 2022 Copernicus contract awards, p. 1; European Spaceflight on Sentinel-1C | Vega C's €48.62M Sentinel-1C launch-service contract, an institutional contract (rc-720) |
+| LandSpace, ZQ-2E product page; LandSpace, Y5 flight release (2026-05-14) | Zhuque-2E's 6,000 kg to 200 km LEO and 4,000 kg to 500 km SSO (rc-714) |
+| Galactic Energy, Pallas-1 maiden-flight release (2026-09-02) and product page | Pallas-1's general 5-7 t LEO and 7 t with Eros, beside the row's unsourced orbit ratings (rc-713) |
+| JAXA, Epsilon S development status briefing (2023-07-07), p. 5; IHI Aerospace, Epsilon launch-service page | Epsilon S's 1,400 kg requirement and 1,200+ kg service lower bound to 500 km / 31.1 deg (rc-716) |
+| TASS / Glavkosmos (2018) | Soyuz-2.1's $48.5M with Fregat, nominal 2018 and not variant-specific (rc-620) |
+| O'Neill, *The Colonization of Space*, Physics Today 27(9), 32-40 (1974), <https://doi.org/10.1063/1.3128863>; NASA SP-428, *Space Resources and Space Settlements*, Mass Drivers III: Engineering, p. 149 | the lunar mass driver: the concept, and the 1977 model built at MIT and shown at Princeton (rc-790) |
+| Raitt, *A Historical Look at Space Elevators*, New Space 3(4), 231-238 (2015), ref. 2 (Artsutanov, Komsomolskaya Pravda, 31 Jul 1960); Smitherman, NTRS 20040161582 (2004) | the Earth space elevator's attribution, and CNT composites as a critical technology; neither gives the row's strength or TRL figures (rc-791) |
+| Pearson, *Anchored Lunar Satellites*, J. Astronautical Sci. 27(1), 39 (1979); Eubanks & Radley, Space Policy 37 (2016), p. 98 and Table 1 | the lunar elevator's material case: available composites, Zylon and Dyneema; M5 is named by neither (rc-792) |
+| SpinLaunch, Orbital Accelerator FAQ; SpinLaunch, Flight Test 10 release (2022-10-03); Meridian Space announcement (2026-09-29) | SpinLaunch Orbital's ~5,000 mph and 200 kg design, the suborbital test record, and the company's 2026 status (rc-795) |
 
 ### Fairing volumes (data contract 1.17.0)
 
