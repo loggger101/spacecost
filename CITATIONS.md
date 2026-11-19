@@ -422,7 +422,8 @@ version, because the last of those is what identifies the numbers:
 Fill both in from the copy you used rather than from this page:
 `spacecost.__version__` is the package release and `spacecost.DATA_VERSION`
 the data contract, which every output CSV also carries in its
-`pipeline_version` column.
+`pipeline_version` column. A build also writes `build_manifest.json` beside
+the tables, naming both with the catalog date.
 
 ## 10. Citing the upstream project
 

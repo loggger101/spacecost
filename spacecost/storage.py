@@ -200,7 +200,11 @@ STORAGE_REFERENCE: List[dict] = [
                  "and a previous state of the art of 18.7 kg/W at 1 W of lift "
                  "(Nugent, Grotenrath & Johnson 2022, NTRS 20220009350, Table "
                  "1).  5.0 sits between test and goal, and the worked example "
-                 "matches the test: 19.2 W lifted on 1.76 kW of input.",
+                 "matches the test: 19.2 W lifted on 1.76 kW of input.  The "
+                 "2.0-15.0 kg/W band is a scenario: the same report's "
+                 "flight-like acceptance points run 4.7 to 35.5 kg/W (Table "
+                 "3), which neither reach 2.0 nor define the band "
+                 "(General_Research rc-812).",
     },
     {
         "name":            "Vapour-cooled shield",

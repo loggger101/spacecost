@@ -67,11 +67,22 @@ def test_worked_example(capsys):
 
 def test_build_writes_the_seven_files(tmp_path, capsys):
     assert main(["build", "-q", "-o", str(tmp_path)]) == 0
-    written = sorted(os.listdir(os.path.join(str(tmp_path), "transportation")))
-    assert written == sorted([
+    out_dir = os.path.join(str(tmp_path), "transportation")
+    tables = sorted([
         "delta_v_segments.csv", "environments.csv", "launch_vehicles.csv",
         "operational_costs.csv", "propellants.csv", "storage_systems.csv",
         "transportation_summary.csv"])
+    assert sorted(os.listdir(out_dir)) == sorted(tables
+                                                 + ["build_manifest.json"])
+    # The manifest names what CITATIONS.md section 9 asks a user to cite.
+    import json
+    import spacecost
+    with open(os.path.join(out_dir, "build_manifest.json"),
+              encoding="utf-8") as fh:
+        manifest = json.load(fh)
+    assert manifest["package_version"] == spacecost.__version__
+    assert manifest["pipeline_version"] == spacecost.DATA_VERSION
+    assert manifest["files"] == tables
 
 
 def test_environment_reports_a_distance(capsys):
