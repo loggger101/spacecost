@@ -317,7 +317,9 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
                  "directly.  LEO: Vulcan User's Guide (Oct 2023), Table "
                  "2.2.1-1, 16,300 kg to the 407 km / 51.6 deg ISS orbit.  Escape band runs "
                  "from Mars transfer (harder than C3=0) to TLI (easier).  Maiden "
-                 "flight carried Peregrine, Jan 2024.",
+                 "flight carried Peregrine, Jan 2024: Cert-1, 8 Jan 2024, with "
+                 "Peregrine Mission One (ULA, Vulcan Cert-1 mission page; "
+                 "General_Research rc-843).",
     },
     {
         "name":                          "Vulcan Centaur VC4",
@@ -556,7 +558,7 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "payload_leo_kg_high":           23_000,
         "payload_gto_kg_low":             6_300,    # GTO-1500
         "payload_gto_kg_high":            6_920,    # GTO-1800
-        "payload_escape_kg":              4_300,    # ExoMars TGO 2016, to Mars
+        "payload_escape_kg":              4_300,    # ExoMars 2016 stack (TGO + Schiaparelli), to Mars
         "list_price_usd":            65_000_000,
         "price_basis":                   "reported",
         "reference_year":          _REF_YEAR_LAUNCH,
@@ -566,7 +568,11 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
                  "116 launches, 9 failures "
                  "and 2 partial.  Being retired: no new contracts are expected "
                  "and the last manifested flights are for 2029.  Escape is "
-                 "ExoMars TGO's ~4.3 t Mars departure, a flown figure.",
+                 "the ExoMars 2016 Mars departure, a flown figure: the TGO "
+                 "plus Schiaparelli stack, 4,332 kg including fuel on "
+                 "Proton-M/Breeze-M (ESA ExoMars Factsheet, 17 Oct 2016), "
+                 "rounded to 4,300 kg; not the orbiter alone "
+                 "(General_Research rc-838).",
     },
 
     # ═════════════════════════════════════════════════════════════════════════
