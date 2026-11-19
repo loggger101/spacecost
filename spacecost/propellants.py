@@ -593,6 +593,19 @@ _COMPONENTS = {
 # gives 0.3135 kg/L at 293.15 K / 18 MPa, 4.5% above 0.30.  The value is kept
 # here; moving it is a value change and goes to review (General_Research
 # rc-679).
+#
+# The other three bottled gases state a pressure and no temperature, and
+# none matches its reference equation of state at room temperature (CoolProp
+# 8.0.0, 293.15 K): krypton 0.8724 kg/L at 18 MPa (Lemmon & Span 2006),
+# 59% above the stored 0.550, which holds only near 370 K; nitrogen 0.3024
+# kg/L at 30 MPa (Span et al. 2000), 21% above 0.250, which holds near 350 K;
+# xenon 1.868 kg/L at 10 MPa (Lemmon & Span 2006), 6.6% below 2.000, which
+# holds near 284 K.  So each is a SCENARIO, and the tank fractions below
+# inherit it: at the EOS densities krypton pays 7.9% rather than 12.5%,
+# nitrogen 38.0% rather than 45.9%, xenon 2.0% rather than 1.9%.  The
+# molar-mass argument below survives; its krypton figure does not.  The
+# values are kept; moving them is a value change and goes to review
+# (General_Research rc-686, rc-687, rc-688).
     #
     # Note the result barely moves with pressure, and that is the physics
     # rather than a coincidence: COPV mass goes as 1.5·p/(PV/W) and stored
@@ -925,7 +938,7 @@ PROPELLANTS_REFERENCE: List[dict] = [
                  "~2,800 s at 12 kW (Shastry et al., IEPC-2024, NTRS "
                  "20240006249).  "
                  "INL/RPT-23-75203: Xe sold at around $60/L in Q1 2023 = "
-                 "$10,243/kg at STP; used $10k/kg, Q1-2023 dollars.  Comparator: Epignosis Insights' composite fell to $2,650/kg by Aug 2026, analyst estimates rather than transactable prices, and NASA Glenn's Aug 2026 xenon buy publishes no quantity; $10,000 stays (General_Research rc-314).  The 54 kg/N is NEXT PM1's 12.7 kg (13.5 kg with harnesses) over 236 mN (NASA/TM-2011-216973, pp. 37-38), a predecessor proxy: NEXT-C is about 14 kg at 235 mN (NTRS 20205005689, pp. 4-5), ~60 kg/N, and neither figure states a system-mass boundary (General_Research rc-656).",
+                 "$10,243/kg at STP; used $10k/kg, Q1-2023 dollars.  Comparator: Epignosis Insights' composite fell to $2,650/kg by Aug 2026, analyst estimates rather than transactable prices, and NASA Glenn's Aug 2026 xenon buy publishes no quantity; $10,000 stays (General_Research rc-314).  The 54 kg/N is NEXT PM1's 12.7 kg (13.5 kg with harnesses) over 236 mN (NASA/TM-2011-216973, pp. 37-38), a predecessor proxy: NEXT-C is about 14 kg at 235 mN (NTRS 20205005689, pp. 4-5), ~60 kg/N, and neither figure states a system-mass boundary (General_Research rc-656).  Reference equation of state (CoolProp 8.0.0) at 293.15 K: 1.868 kg/L at 10 MPa (Lemmon & Span 2006), 6.6% below the stored 2.000, so the stored figure is a SCENARIO with no stated temperature, matching that equation only near 284 K; at the EOS density the COPV would be 0.0205 kg per kg of propellant instead of 0.0191 (General_Research rc-688).",
     },
     {
         "name":                  "Argon  (Hall / ion)",
@@ -1149,7 +1162,7 @@ PROPELLANTS_REFERENCE: List[dict] = [
                  "at 30 MPa the COPV masses 46% of the nitrogen it holds — the "
                  "clearest demonstration in this table of why tankage belongs in "
                  "the rocket equation.  Present as the floor of the Isp range, "
-                 "not as a candidate.  Comparator: DLA's FY2026 technical nitrogen, $0.16/lb (~$0.35/kg), of unstated grade, pressure and packaging against a high-pressure propellant row (General_Research rc-327).",
+                 "not as a candidate.  Comparator: DLA's FY2026 technical nitrogen, $0.16/lb (~$0.35/kg), of unstated grade, pressure and packaging against a high-pressure propellant row (General_Research rc-327).  Reference equation of state (CoolProp 8.0.0) at 293.15 K: 0.302 kg/L at 30 MPa (Span et al. 2000), 21% above the stored 0.250, so the stored figure is a SCENARIO with no stated temperature, matching that equation only near 350 K; at the EOS density the COPV would be 0.380 kg per kg of propellant instead of 0.459 (General_Research rc-687).",
     },
     {
         "name":                  "Solid  (APCP)",
@@ -1226,7 +1239,7 @@ PROPELLANTS_REFERENCE: List[dict] = [
                  "supercritical against xenon's 2.0 means the COPV masses 12.5% "
                  "of the propellant against xenon's 1.9%.  Whether it beats "
                  "xenon is exactly the kind of trade this table now lets the "
-                 "search resolve rather than assume.  The 0.45 is a total (thrust-power) efficiency and a scenario value.  NASA-457M's krypton discharge efficiency, 0.50 at 2,039 s and 300 V (Jacobson & Manzella, NASA/TM-2003-212700, App. p. 8), is a 50 kW-class lab figure on a narrower boundary: it brackets the value, it does not source it (General_Research rc-458).",
+                 "search resolve rather than assume.  The 0.45 is a total (thrust-power) efficiency and a scenario value.  NASA-457M's krypton discharge efficiency, 0.50 at 2,039 s and 300 V (Jacobson & Manzella, NASA/TM-2003-212700, App. p. 8), is a 50 kW-class lab figure on a narrower boundary: it brackets the value, it does not source it (General_Research rc-458).  Reference equation of state (CoolProp 8.0.0) at 293.15 K: 0.872 kg/L at 18 MPa (Lemmon & Span 2006), 59% above the stored 0.550, so the stored figure is a SCENARIO with no stated temperature, matching that equation only near 370 K; at the EOS density the COPV would be 0.079 kg per kg of propellant instead of 0.125 (General_Research rc-686).",
     },
     {
         "name":                  "Iodine  (Hall / gridded)",
@@ -2010,7 +2023,7 @@ PROPELLANTS_REFERENCE: List[dict] = [
                  "configuration, aneutronic D-He3, studied under NASA NIAC. "
                  "Isp 10,000+ s at ~5 N/MW.  TRL 2: the confinement scheme is "
                  "under experimental test and net-positive fusion of any kind "
-                 "has not been demonstrated in a flight-relevant device.",
+                 "has not been demonstrated in a flight-relevant device.  Density 0.100 kg/L is a SCENARIO: no D-He3 blend, temperature or pressure is stated for it, and the 10 MPa COPV is the generic supercritical-gas model.  The tank fraction goes as its inverse, 0.383 kg/kg here, 0.765 at 0.05 kg/L and 0.191 at 0.20 (General_Research rc-689).",
     },
     {
         "name":                  "Antimatter-catalysed",
@@ -2045,7 +2058,7 @@ PROPELLANTS_REFERENCE: List[dict] = [
                  "no mission plan.  CERN's antiproton production, scaled, prices "
                  "antihydrogen near $10^15/kg, and world annual production is "
                  "measured in nanograms.  TRL 1.  It is here to close the table "
-                 "at the physical ceiling.",
+                 "at the physical ceiling.  Density 0.100 kg/L is a SCENARIO for an undefined propellant: it is not said whether it is the antimatter trigger, the microfission charge or a combined load, and no storage medium is defined.  The tank fraction goes as its inverse, 0.383 kg/kg here, 0.765 at 0.05 kg/L and 0.191 at 0.20 (General_Research rc-690).",
     },
     {
         "name":                  "Magnetic sail / electric sail",

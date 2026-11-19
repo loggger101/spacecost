@@ -109,7 +109,7 @@ OPERATIONAL_COSTS_REFERENCE: List[dict] = [
                  "Heritage: Apollo LM descent stage, and the CLPS landers "
                  "(Intuitive Machines Nova-C, Astrobotic Peregrine, Blue "
                  "Moon MK1).  A Mars lander carries the TPS row on top, "
-                 "because it has to survive entry as well as land.  Comparator: CLPS end-to-end task-order price over Nova-C's 677 kg dry mass is ~$120.7k/kg initially and ~$180.2k/kg after growth (NASA OIG IG-24-013), whole-service prices rather than hardware (General_Research rc-300).",
+                 "because it has to survive entry as well as land.  Comparator: CLPS end-to-end task-order price over Nova-C's 677 kg dry mass is ~$120.7k/kg initially and ~$180.2k/kg after growth (NASA OIG IG-24-013), whole-service prices rather than hardware (General_Research rc-300).  The $200,000/kg [100,000, 500,000] is a hardware-only SCENARIO; the CLPS ratios also carry integration, launch and operations, so they neither set nor bound it, and it is not adjusted on them (General_Research rc-300).",
         "reference_year":   _REF_YEAR_OPS,
     },
     {
@@ -331,7 +331,7 @@ OPERATIONAL_COSTS_REFERENCE: List[dict] = [
         "value":            50,
         "range_low":        10,
         "range_high":       200,
-        "notes": "Ka-band; relevant only for high-rate science / 3-D maps.  A flat $/Mbit depends on link rate and pass assumptions it does not state: NASA costs a relay as a pro-rata DSN share of return time, one-hour minimum (JPL Mission Operations and Communications Services, 2014, Sec. 2.1.5; General_Research rc-298).",
+        "notes": "Ka-band; relevant only for high-rate science / 3-D maps.  A flat $/Mbit depends on link rate and pass assumptions it does not state: NASA costs a relay as a pro-rata DSN share of return time, one-hour minimum (JPL Mission Operations and Communications Services, 2014, Sec. 2.1.5; General_Research rc-298).  SCENARIO: the $50/Mbit and its [10, 200] band state no link rate, pass pattern or relay versus direct-downlink split, so they are not a rate from either basis (General_Research rc-298).",
         "reference_year":   _REF_YEAR_OPS,
     },
     {

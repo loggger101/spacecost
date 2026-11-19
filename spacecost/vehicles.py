@@ -266,7 +266,7 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
                  "2026 NASA cancelled Block 1B and the Exploration Upper Stage "
                  "and standardised on this configuration.  It has only ever flown "
                  "Orion; the fairing volume is the cargo configuration NASA "
-                 "documents for it, which has not flown.",
+                 "documents for it, which has not flown.  Boundary: SLS vehicle production plus ground systems per launch, a government cost, not a launch-service price.  The high end is about IG-22-003's $2.2B + $568M (Fig. 7); the low end is IG-24-001's 'at least $2.5B', whose Table 1 sums $2,489.7M per Block 1B launch without SE&I; $2.65B is their midpoint.  Report-year dollars, not converted to 2026: reference_year is the row's vintage (General_Research rc-619).",
     },
     {
         "name":                          "Atlas V 551",
@@ -1420,7 +1420,7 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
                  "high end; the marginal cost of one more flight, ~$450M, is "
                  "the low end.  Mixed dollar years on purpose: the band is "
                  "what a reader might have been quoted.  Two orbiters lost in "
-                 "135 flights.  Escape is Galileo on an IUS upper stage.",
+                 "135 flights.  Escape is Galileo on an IUS upper stage.  The band is a deliberately mixed-boundary illustrative interval, not a price: a marginal cost at the low end, a whole-programme cost per flight escalated at the high end, and $972M their geometric midpoint (the root of 450 x 2,100).  reference_year 2026 is the row's vintage, not a dollar year shared by both ends, and the CPI series and dates behind the ~x1.44 are not recorded (General_Research rc-578).",
     },
     {
         "name":                          "Saturn V",
@@ -1788,7 +1788,7 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
                  "figure including Orion and its service module, not a launch "
                  "price.  Now carries the same launch-only band as Block 1, a "
                  "floor for a vehicle that would have cost more.  Its 41 t GTO "
-                 "figure had been scaled from TLI, not published, and is gone.",
+                 "figure had been scaled from TLI, not published, and is gone.  The shared band keeps Block 1's boundary and dollar years (General_Research rc-619).",
     },
 
     # ═════════════════════════════════════════════════════════════════════════
