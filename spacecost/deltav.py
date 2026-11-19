@@ -23,7 +23,7 @@ DELTA_V_REFERENCE: List[dict] = [
     {"segment": "surface  →  LEO ascent",         "dv_m_per_s":  9_400, "duration_yr": 0.001,
      "notes": "Textbook value including gravity + drag losses (Curtis "
               "'Orbital Mechanics for Engineering Students').  "
-              "Already priced into LAUNCH_VEHICLES."},
+              "Already priced into LAUNCH_VEHICLES.  No Curtis edition, page or target orbit is recorded for the 9,400 m/s, so it is a SCENARIO round figure; NASA NTRS 20030066115 (Beaurain et al. 2003) supports only the ~9 km/s scale with gravity and drag, 4.4% below (General_Research rc-766)."},
     {"segment": "LEO  →  GTO",                    "dv_m_per_s":  2_440, "duration_yr": 0.001,
      "notes": "Two-body perigee burn from a ~250-km parking orbit (mu "
               "398,600.4418 km^3/s^2, R_E 6,378 km).  The other Earth-orbit "
@@ -66,7 +66,7 @@ DELTA_V_REFERENCE: List[dict] = [
               "(ISPT, Aerocapture for Discovery Missions, 2010, p. 12) and "
               "gives no aerocapture residual, and this row's endpoint orbit is "
               "not defined, so 1,500 m/s is a placeholder (General_Research "
-              "rc-293)."},
+              "rc-293).  So the 1,500 m/s is a SCENARIO placeholder with no inbound v-infinity, interface or target orbit: Dutta et al.'s 1-2 km/s is a fully propulsive insertion comparator, and ISPT's 4-5 km/s an all-propulsive class marker (General_Research rc-694)."},
     {"segment": "Main belt  →  Earth return",     "dv_m_per_s":  7_500, "duration_yr": 4.0,
      "notes": "SCENARIO: long cruise; favours electric propulsion.  Taylor et "
               "al. 2018 compute LEO-to-main-belt rendezvous only (outbound "
@@ -132,7 +132,7 @@ DELTA_V_REFERENCE: List[dict] = [
               "km/s circular speed AND remove 28.5 deg of inclination, "
               "combined by the law of cosines rather than added.  Coplanar it "
               "would be 1,477; the 359 m/s difference is what an equatorial "
-              "launch site is worth."},
+              "launch site is worth.  The 28.5 deg is a named reference scenario, a launch from Cape Canaveral's latitude into a 28.5 deg LEO (the SLS tables' typical LEO), not a trajectory-specific transfer plane; the Cape latitude and that LEO are comparators for it (General_Research rc-604)."},
     {"segment": "LEO  →  GEO depot",              "dv_m_per_s":  4_291, "duration_yr": 0.01,
      "notes": "GTO (2,455) + apogee (1,836).  This is the Δv a kilogram "
               "delivered to a GEO servicing depot AVOIDS being lifted "
@@ -271,7 +271,7 @@ DELTA_V_REFERENCE: List[dict] = [
               "is worth MORE per kg — the two effects compound.  Computed by "
               "Module 4's _cislunar_capture_dv_km_s; excludes the "
               "asteroid-departure burn.  The advantage widens as arrival "
-              "energy falls: 5.6x at v_inf=1 km/s, 2.7x at 5 km/s."},
+              "energy falls: 5.6x at v_inf=1 km/s, 2.7x at 5 km/s.  The 1.6-year duration is a SCENARIO with no trajectory, start or end event recorded.  The KISS Asteroid Retrieval Feasibility Study (2012, p. 27 and Table 4, p. 28) gives its 40 kW SEP retrieval of 2008 HU4 a 6.0-year transfer to the Earth-Moon system and 10.2 years in all, a low-thrust vehicle towing a 250-1,300 t asteroid, so a scope comparator only (General_Research rc-544)."},
     {"segment": "NEA  →  LEO delivery (aerobraked)", "dv_m_per_s": 100, "duration_yr": 2.0,
      "notes": "Aerocapture into a high ellipse, then multi-pass aerobraking to "
               "circularise; drag does the work, so the propulsive cost is only "

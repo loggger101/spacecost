@@ -25,9 +25,13 @@ fields are this project's own work, released under MIT.
 ⚠️  The upstream project this was extracted from, `economicspace`, does carry
 three sources that require citation as a condition of use: IMCCE SsODNet /
 ssoBFT, NEOWISE Diameters and Albedos V2.0, and the SDSS-based Asteroid Taxonomy
-V1.1. **All three are asteroid catalog sources and none of them feeds any table
-here.** If you are vendoring from that project rather than this one, read its
-`CITATIONS.md` instead.
+V1.1. **None of the three feeds a value here, but ssoBFT is quoted:** the
+average- and hard-NEA delta-v rows compare themselves with its NEA median (8.88
+km/s) and main-belt fifth percentile (8.49 km/s). IMCCE asks that any use of
+ssoBFT cite Berthier et al. (2023), A&A 671, A151, so a reuse of those two
+rows' notes carries that citation (section 3; General_Research rc-767). If you
+are vendoring from that project rather than this one, read its `CITATIONS.md`
+instead.
 
 ## 1. Launch vehicles
 
@@ -211,6 +215,7 @@ table's $/kg-to-orbit.
 | Taylor et al. 2018, "Delta-v map of Main Belt Asteroids" | LEO to main-belt transfer, outbound only; the return row is a scenario (rc-515) |
 | Cohen et al., Robotic Asteroid Prospector, NIAC Phase I, 2013, NTRS 20190001162, Sec. 4.2.2 and Table 4.1 | a typical-NEA return budget beside the propulsive return (rc-514) |
 | Elvis et al. 2011, arXiv 1105.4152 | near-Earth object delta-v accessibility distribution, and its 6.65 km/s peak |
+| Berthier, Carry, Mahlke & Normand, *SsODNet: Solar system Open Database Network*, A&A 671, A151 (2023), <https://doi.org/10.1051/0004-6361/202244878> | the ssoBFT NEA median (8.88 km/s) and main-belt fifth percentile (8.49 km/s) the average- and hard-NEA rows are compared against; IMCCE asks that any use of ssoBFT cite this paper (rc-767) |
 | NASA DRA 5.0 (SP-2009-566), Fig 4-2 | the swing of trans-Mars injection across the synodic cycle |
 | Orloff, *Apollo by the Numbers* (NASA SP-2000-4029), lunar-orbit phase tables | trans-lunar injection, lunar orbit insertion, and the Lunar Module's powered descent and ascent as flown on Apollo 14-17; trans-earth injection on Apollo 8, 10-12 and 14-17, the middle leg of the lunar surface to LEO row |
 | Lyons (JPL), Magellan / MGS aerobraking; Long et al. 2007, MRO aerobraking operations | the aerobraked return's flight record |

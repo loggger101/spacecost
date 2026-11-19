@@ -107,6 +107,10 @@ _REF_YEAR_PROP = 2026
 #     Falcon 9 stage 2    ~3,500 kg struct / 105,900 L = 0.033  kg/L
 #     Centaur III         ~1,880 kg struct /  54,000 L = 0.035  kg/L
 #
+# Only the ET figure is sourced: NASA SP-2009-4012, Table 2-86 (SLWT inert
+# 26,535 kg; LOX 553,963 L + LH2 1,515,461 L gives 0.01282, 0.6% below).  The
+# Falcon 9 and Centaur III figures have no recorded source, and every
+# numerator is inert or structural mass, not a tank shell (rc-585).
 # 0.025 kg/L sits between the ET (which is a big dumb tank, so cheap per litre)
 # and the two upper stages (which carry avionics and thrust structure in the
 # figures above).  Class multipliers are then anchored one article each; see
@@ -224,8 +228,8 @@ _LAR_BOILOFF_PCT_PER_DAY = 0.024
 # for a reason, and record the reason.
 _THRUSTER_SYSTEMS = {
     # name fragment           kg/N     η     scaling        anchor
-    "Xenon  (Hall / ion)":      (54.0, 0.70, "continuous"),  # NEXT-C 12.7 kg / 236 mN, 70% total
-    "Krypton  (Hall)":          (35.0, 0.45, "continuous"),  # SPT-140 body, Kr ~85% of Xe thrust and ~10 pts less efficient
+    "Xenon  (Hall / ion)":      (54.0, 0.70, "continuous"),  # NEXT PM1 12.7 kg / 236 mN, a predecessor proxy for NEXT-C (rc-656); 70% total
+    "Krypton  (Hall)":          (35.0, 0.45, "continuous"),  # SPT-140 body; Kr ~85% of Xe thrust and ~10 pts less efficient are ASSUMPTIONS, the modified SPT-140PM paper a comparator only (rc-658)
     "Argon  (Hall / ion)":      (40.0, 0.40, "continuous"),  # same body again; Ar lower still
     "Argon  (Hall / ion, cryogenic)": (40.0, 0.40, "continuous"),
     "Iodine  (Hall / gridded)": (60.0, 0.45, "continuous"),  # see the iodine caveat above
@@ -234,7 +238,7 @@ _THRUSTER_SYSTEMS = {
     "Hydrazine arcjet":         ( 6.0, 0.35, "continuous"),  # MR-509 1.5 kg / 258 mN
     "Mercury ion  (RETIRED)":   (54.0, 0.65, "continuous"),  # gridded-ion class
     "Nuclear electric  (NEP, xenon)": (54.0, 0.70, "continuous"),
-    "VASIMR  (argon, variable Isp)":  (53.0, 0.50, "continuous"),  # VX-200 ~300 kg / 5.7 N
+    "VASIMR  (argon, variable Isp)":  (53.0, 0.50, "continuous"),  # ~300 kg / 5.7 N, no recorded source or mass boundary (rc-661)
     "MPD  (lithium magnetoplasmadynamic)": (40.0, 0.40, "continuous"),
     # ── Concepts.  UNANCHORED, and they are here so the guard below cannot be
     # satisfied by silence.  Both are gated out of the default search by
@@ -370,6 +374,9 @@ def _apply_isru_processing(df: pd.DataFrame) -> None:
     df["isru_processing_wh_per_kg"] = out
 
 
+# Every multiplier below is an engineering SCENARIO: each is anchored on one
+# article or one density conversion, named in its comment, with no source
+# record or mass/volume boundary of its own (General_Research rc-586).
 _STORAGE_CLASS_TANK_MULT = {
     # class            × base   anchor
     "storable_liquid":   1.00,  # 0.025 kg/L → NTO at 1.45 kg/L is 1.7% of propellant mass
@@ -577,6 +584,12 @@ _COMPONENTS = {
     # pressure as the krypton row) gives Z = 0.919 and ρ = 0.321 kg/L; a
     # generalised-compressibility reading at Tr = 1.945, Pr = 3.70 gives
     # Z ≈ 0.99 and ρ = 0.298.  0.30 is the round figure between them.
+# Neither estimate's inputs are recorded.  The reference equation of state,
+# Tegeler, Span & Wagner (J. Phys. Chem. Ref. Data 28, 779, 1999; density good
+# to +/-0.03% up to 30 MPa over 235-520 K), as CoolProp 8.0.0 implements it,
+# gives 0.3135 kg/L at 293.15 K / 18 MPa, 4.5% above 0.30.  The value is kept
+# here; moving it is a value change and goes to review (General_Research
+# rc-679).
     #
     # Note the result barely moves with pressure, and that is the physics
     # rather than a coincidence: COPV mass goes as 1.5·p/(PV/W) and stored
@@ -595,7 +608,7 @@ _COMPONENTS = {
     "GN2":       {"density_kg_per_L": 0.250, "cost_usd_per_kg":      1.00, "storage_class": "supercritical_gas", "pressure_mpa": 30.0},
     "Krypton":   {"density_kg_per_L": 0.550, "cost_usd_per_kg": float(band_centre(KRYPTON_USD_PER_KG_LOW, KRYPTON_USD_PER_KG_HIGH)), "storage_class": "supercritical_gas", "pressure_mpa": 18.0},
     "Iodine":    {"density_kg_per_L": 4.930, "cost_usd_per_kg":     60.00, "storage_class": "sublimating_solid"},
-    "Water":     {"density_kg_per_L": 1.000, "cost_usd_per_kg":      2.00, "storage_class": "benign_liquid"},
+    "Water":     {"density_kg_per_L": 1.000, "cost_usd_per_kg":      2.00, "storage_class": "benign_liquid"},  # $2/kg a scenario (rc-577)
     "ASCENT":    {"density_kg_per_L": 1.470, "cost_usd_per_kg":    500.00, "storage_class": "storable_liquid"},
     "APCP":      {"density_kg_per_L": 1.800, "cost_usd_per_kg":     15.00, "storage_class": "solid_motor"},
     "PTFE":      {"density_kg_per_L": 2.200, "cost_usd_per_kg":     25.00, "storage_class": "sublimating_solid"},
@@ -762,7 +775,7 @@ PROPELLANTS_REFERENCE: List[dict] = [
                  "RL10A-3-3A measured 444.4 +/- 2.5 s at O/F 5.0, 1.7% lower "
                  "(Baumeister, NASA/TM-2015-218736). "
                  "LH2 base price $3-6/kg (NASA contracts); bulk-handling overhead "
-                 "lifts effective cost to ~$10/kg.  Used on SLS, Centaur.  Boil-off 0.05%/day and its 0.03-0.1%/day band are a scenario for a large, insulated, cryocooled tank, with no single source.  Modelled comparators: under 0.05%/day for a passive, shielded, ten-layer-MLI LEO depot (Honour et al., NTRS 20110013691); 2.5-5.0%/month of LH2 under 60-layer MLI, varying with orbit and tank (Perrin & Casler, NTRS 20160012100, Table 11) (General_Research rc-490).  Component densities are normal-boiling-point figures: LH2 70.8 kg/m3 at 20.3 K (IMO MSC.420(97), Annex 18, Table 3) and LOX 1141 g/L at 90.2 K (NIST S 7101.52 Ver. 3, Appendix B, Table 1) (General_Research rc-674).",
+                 "lifts effective cost to ~$10/kg.  Used on SLS, Centaur.  Boil-off 0.05%/day and its 0.03-0.1%/day band are a scenario for a large, insulated, cryocooled tank, with no single source.  Modelled comparators: under 0.05%/day for a passive, shielded, ten-layer-MLI LEO depot (Honour et al., NTRS 20110013691); 2.5-5.0%/month of LH2 under 60-layer MLI, varying with orbit and tank (Perrin & Casler, NTRS 20160012100, Table 11) (General_Research rc-490).  Component densities are normal-boiling-point figures: LH2 70.8 kg/m3 at 20.3 K (IMO MSC.420(97), Annex 18, Table 3) and LOX 1141 g/L at 90.2 K (NIST S 7101.52 Ver. 3, Appendix B, Table 1) (General_Research rc-674).  No contract is named behind the LH2 base and the handling overhead is not itemised, so the $10/kg component is a SCENARIO.  Comparators: Space Insider's ~$6.1/kg, a 2023 US defense moving average, and DLA's FY2025 standard of $10.69/lb (~$23.57/kg), a DoD price (General_Research rc-576).",
     },
     {
         "name":                  "methalox  (LCH4 / LOX)",
@@ -909,7 +922,7 @@ PROPELLANTS_REFERENCE: List[dict] = [
                  "~2,800 s at 12 kW (Shastry et al., IEPC-2024, NTRS "
                  "20240006249).  "
                  "INL/RPT-23-75203: Xe sold at around $60/L in Q1 2023 = "
-                 "$10,243/kg at STP; used $10k/kg, Q1-2023 dollars.  Comparator: Epignosis Insights' composite fell to $2,650/kg by Aug 2026, analyst estimates rather than transactable prices, and NASA Glenn's Aug 2026 xenon buy publishes no quantity; $10,000 stays (General_Research rc-314).",
+                 "$10,243/kg at STP; used $10k/kg, Q1-2023 dollars.  Comparator: Epignosis Insights' composite fell to $2,650/kg by Aug 2026, analyst estimates rather than transactable prices, and NASA Glenn's Aug 2026 xenon buy publishes no quantity; $10,000 stays (General_Research rc-314).  The 54 kg/N is NEXT PM1's 12.7 kg (13.5 kg with harnesses) over 236 mN (NASA/TM-2011-216973, pp. 37-38), a predecessor proxy: NEXT-C is about 14 kg at 235 mN (NTRS 20205005689, pp. 4-5), ~60 kg/N, and neither figure states a system-mass boundary (General_Research rc-656).",
     },
     {
         "name":                  "Argon  (Hall / ion)",
@@ -945,7 +958,7 @@ PROPELLANTS_REFERENCE: List[dict] = [
                  "pays 22.9% of its own mass in COPV against krypton's 12.5% and "
                  "xenon's 1.9% — argon is the LIGHTEST noble gas, so it is the "
                  "worst of the three to bottle, and $10/kg does not buy that "
-                 "back.  The cryogenic article is a separate row below.  Comparator: DLA's FY2026 technical argon, $1.14/lb (~$2.51/kg), a government standard of unreconciled purity and packaging, not a replacement (General_Research rc-310).",
+                 "back.  The cryogenic article is a separate row below.  Comparator: DLA's FY2026 technical argon, $1.14/lb (~$2.51/kg), a government standard of unreconciled purity and packaging, not a replacement (General_Research rc-310).  Its 1,500 s, 0.40 and 40 kg/N are generic mission-model SCENARIOS: SpaceX gives only relative figures (2.4x the thrust and 1.5x the Isp of the first generation, Progress Report 2023, p. 48), and NASA S3VI names argon with no values (General_Research rc-657).",
     },
 
     # ═════════════════════════════════════════════════════════════════════════
@@ -1105,7 +1118,7 @@ PROPELLANTS_REFERENCE: List[dict] = [
                  "fully storable, and the cheapest bipropellant here, on the "
                  "HTP row's unsourced ~$5/kg.  The "
                  "combination that keeps getting rediscovered and keeps losing to "
-                 "kerolox on Isp.  The density mixes two components at two reference temperatures: RP-1 0.810 kg/L, DoD Manual 4145.26's 0.81 at 20 C (Table AP2.T18, p. 214), and HTP-98 1.431 kg/L, 98% H2O2 at 25 C (NASA NTRS 20030020732, Table 6.1) (General_Research rc-675, rc-677).",
+                 "kerolox on Isp.  The density mixes two components at two reference temperatures: RP-1 0.810 kg/L, DoD Manual 4145.26's 0.81 at 20 C (Table AP2.T18, p. 214), and HTP-98 1.431 kg/L, 98% H2O2 at 25 C (NASA NTRS 20030020732, Table 6.1) (General_Research rc-675, rc-677).  Isp 320 s at 7:1 is a representative engineering value, not Black Arrow's.  Krishnan (AIAA Joint Propulsion Conference 2010, Table 3) gives the RD-161P H2O2 (~97%) / RP-1 development engine 3,128 N s/kg (~319 s) at O/F 5.9 and the flown Gamma-2 (~83% H2O2, O/F 8.23) 2,599 N s/kg (~265 s); his theoretical 98% frozen Isp is ~333 s (Table 2) (General_Research rc-525).",
     },
     {
         "name":                  "Cold gas  (GN2)",
@@ -1286,7 +1299,7 @@ PROPELLANTS_REFERENCE: List[dict] = [
                  "of propellant and a liquefaction plant; steam needs 1.00 and a "
                  "hotplate.  Whether 190 s bought that cheaply beats 452 s bought "
                  "expensively is a real question and the search now gets to "
-                 "answer it per asteroid.",
+                 "answer it per asteroid.  The $2/kg water is a SCENARIO with no stated grade, purity, quantity or delivery point, and the same input feeds the water ion row and ALICE's water (General_Research rc-577).  The 10 kg/N, 0.75 total efficiency and continuous scaling are model assumptions with no matched device; Mirtich (NASA TM-83489, p. 4) gives a historical power-dependent resistojet mass that includes the PPU and thermal rejection, a comparator only (General_Research rc-660).",
     },
     {
         "name":                  "Water  (gridded ion / ECR)",
@@ -1311,9 +1324,7 @@ PROPELLANTS_REFERENCE: List[dict] = [
         "yfinance_proxy":        None,
         "reference_year":        _REF_YEAR_PROP,
         "notes": "Ionise the steam instead of just heating it: Isp 800-1,000 s on "
-                 "the same tank of water.  Pale Blue flew a water ion thruster in "
-                 "2023; ESA and JAXA both have ECR water thrusters in "
-                 "qualification.  Same ISRU story as the resistojet at ~5× the "
+                 "the same tank of water.  Pale Blue's 2023 flight on EYE was a water resistojet; its first successful in-orbit water ion operation is in its 2025 release.  The ESA and JAXA ECR systems this note once named are not identified, and their maturity is not recorded.  The 900 s, 0.35 and 80 kg/N are mission-model SCENARIOS: Nakagawa et al. (Acta Astronautica 157, 2019) measure at most 665 +/- 59 s, neutraliser neglected, on a miniature CubeSat ECR thruster (General_Research rc-659).  Same ISRU story as the resistojet at ~5× the "
                  "Isp, for a much larger power plant — which this pipeline sizes "
                  "and charges, so the trade is honest.",
     },
@@ -1703,7 +1714,7 @@ PROPELLANTS_REFERENCE: List[dict] = [
                  "Cryogenic argon feed, because a 100 kW-class stage moves "
                  "propellant by the tonne and no COPV is a sensible way to carry "
                  "tonnes of a gas this light.  v1.10.0: it therefore pays "
-                 "cryogenic boil-off, which it was exempt from before.",
+                 "cryogenic boil-off, which it was exempt from before.  The 4,000 s and 0.50 are a mission-model SCENARIO: VX-200's measured argon point at 200 kW is 4,900 +/- 300 s, 72 +/- 9% and 5.8 +/- 0.4 N (Squire et al., IEPC-2011-154, p. 1).  The ~300 kg behind 53 kg/N has no recorded source or mass boundary, against a full-system mass study (Squire et al., IEPC-2013-149).  VX-200SS's endurance record is 88 continuous hours at 80 kW (Chang Diaz et al., IEPC-2022-525, pp. 1 and 9), a different benchmark from VX-200's performance (General_Research rc-661).",
     },
     {
         "name":                  "Argon  (Hall / ion, cryogenic)",
@@ -1767,8 +1778,7 @@ PROPELLANTS_REFERENCE: List[dict] = [
         "reference_year":        _REF_YEAR_PROP,
         "notes": "Lithium Lorentz Force Accelerator — the highest thrust density "
                  "of any electric thruster, and the only class that could plausibly "
-                 "move hundreds of tonnes.  Ground-tested at Princeton and by "
-                 "RIAME (Moscow) at 100+ kW; needs megawatts to be interesting, "
+                 "move hundreds of tonnes.  Polk et al. (IEPC-2024-841, pp. 2 and 6) summarise Princeton's facility capability up to 100 kWe and MAI results at 150 kW (44% at 3,724 s) and 200 kW (50% at 4,240 s); they name no RIAME test.  The 4,000 s, 0.40 and 40 kg/N are SCENARIOS, the last with no like-for-like source (General_Research rc-774).  It needs megawatts to be interesting, "
                  "which is why it is bracketed with NEP rather than with PV.",
     },
     {
@@ -2121,6 +2131,25 @@ PROPELLANTS_REFERENCE: List[dict] = [
                  "this pipeline cannot represent.",
     },
 ]
+
+
+# THE TWO DIALS EVERY ROW INHERITS, SAID ON THE ROW (General_Research rc-361,
+# rc-586).  The economicspace verification worksheet reads a row's `notes` to
+# trace each of its inputs, so a factor the comments above explain but the
+# row does not name is a factor the worksheet cannot back.
+for _row in PROPELLANTS_REFERENCE:
+    if _row["dv_penalty_factor"] == _LOW_THRUST_DV_PENALTY:
+        _row["notes"] += ("  dv_penalty_factor 1.5 is a SCENARIO PROXY applied to "
+                          "every leg: the one anchor is Earth escape, ~3.2 km/s "
+                          "impulsive against 5-6 km/s low-thrust, 1.56-1.88x "
+                          "(Woodcock 2000, NTRS 20000085870, p. 7) (General_Research "
+                          "rc-361).")
+    _mult = _STORAGE_CLASS_TANK_MULT.get(_row["storage_class"])
+    if _mult:
+        _row["notes"] += ("  tank_kg_per_L is the %s multiplier, %.2f, on the "
+                          "0.025 kg/L base: both are engineering scenarios, "
+                          "each anchored on one article (General_Research rc-585, "
+                          "rc-586)." % (_row["storage_class"], _mult))
 
 say(f"OK  Propellant reference loaded - {len(PROPELLANTS_REFERENCE)} fuel systems "
       f"({sum(1 for p in PROPELLANTS_REFERENCE if p['status'] == 'operational')} operational, "

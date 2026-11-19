@@ -13,6 +13,43 @@ may read a version as proof that a number moved.
 
 ## Package releases
 
+### 0.18.4 - 2026-11-18
+
+**Data contract 1.27.3 → 1.27.4: twenty-eight General_Research citation
+candidates. No value moved.** Only `notes` (51 rows), comments, CITATIONS.md,
+README.md and the stamps changed; every value column of the six tables and the
+summary sample is identical to 1.27.3. Rebuilt on the recorded reference
+platform.
+
+- **Every row now says the two dials it inherits**: a row with
+  `dv_penalty_factor` 1.5 calls it a scenario proxy beside Woodcock's
+  Earth-escape anchor (rc-361), and a row with a tank-class multiplier names it
+  and calls base and multiplier scenarios (rc-585, rc-586). Only the Shuttle ET
+  anchor of the 0.025 kg/L base is sourced (NASA SP-2009-4012).
+- **Scenario labels with comparators**: the upper-stage and tank costs
+  (rc-421), the TPS $/kg form (rc-422), sample recovery (rc-718), transfer loss
+  (rc-680), the 20 K cryocooler band (rc-701), the ISRU flat fee (rc-435), the
+  downleg capsule fraction (rc-598), the NEA → NRHO duration (rc-544), the
+  aerocaptured NEA return (rc-694), GTO → GEO's 28.5 deg (rc-604, spacecost
+  half), the 9,400 m/s ascent (rc-766), LH2 and water prices (rc-576, rc-577),
+  and the HTP / RP-1 320 s (rc-525).
+- **Electric thrusters**: xenon's 54 kg/N is NEXT PM1's, a predecessor proxy
+  (rc-656); krypton's ratios to xenon are assumptions (rc-658); argon Hall,
+  water ion, water resistojet, VASIMR and MPD performance are mission-model
+  scenarios beside their measured comparators (rc-657, rc-659, rc-660, rc-661,
+  rc-774).
+- **Corrections**: Pale Blue's 2023 flight was a resistojet and its water ion
+  first flew in 2025 (rc-659); VX-200SS's endurance record is 88 hours, not 100
+  (rc-661); no RIAME MPD test is sourced (rc-774); Ryugu's returned water is
+  structural OH, cited to Yokoyama et al. 2023 (rc-545); Didymos's mass and
+  radius are estimates (rc-596); ssoBFT is quoted in two NEA notes, so the
+  licence statements now say so and CITATIONS lists Berthier et al. 2023
+  (rc-767).
+- **A value finding, not applied**: supercritical argon at 293.15 K / 18 MPa is
+  0.3135 kg/L on the Tegeler, Span & Wagner equation of state (CoolProp 8.0.0),
+  4.5% above the stored 0.300; the comment records it, and the value goes to
+  review (rc-679).
+
 ### 0.18.3 - 2026-11-18
 
 **Data contract 1.27.2 → 1.27.3: twenty-one General_Research citation

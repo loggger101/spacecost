@@ -282,9 +282,13 @@ ENVIRONMENTS_REFERENCE: List[dict] = [
          0.9633, 1.1896, 1.4159, 7.633, 0.50, 2.4326,
          "Hayabusa2 target, sampled 2019, 5.4 g returned 2020.  Mass 4.50e11 "
          "kg, mean radius 448 m (Watanabe et al. 2019, Science).  A rubble "
-         "pile like Bennu, and the two returned samples agreeing on hydrated "
-         "carbonaceous composition is the empirical basis for asteroid water "
-         "as a resource rather than an assumption.",
+         "pile like Bennu.  Its returned samples resemble Ivuna-type (CI) "
+         "carbonaceous chondrites and hold about 6.8 wt% water, nearly all of it "
+         "structural OH in hydrated minerals, not free or extractable water "
+         "(Yokoyama et al. 2023, Science 379, eabn7850).  That is the empirical "
+         "basis for water being present, not for a resource yield or its "
+         "extraction cost; Watanabe et al. predates the return and gives only "
+         "the physical parameters (General_Research rc-545).",
          mass_kg=4.50e11, mean_radius_m=448.0),
     _env("433 Eros", "neo",
          1.1334, 1.4583, 1.7832, 5.270, 0.50, 2.7999,
@@ -302,7 +306,9 @@ ENVIRONMENTS_REFERENCE: List[dict] = [
          "Table 1 gives (5.6 ± 0.5)e11 kg for the binary system (Dimorphos "
          "~4.3e9 of it) and a 761 ± 26 m volume-equivalent diameter (radius "
          "380.5 m).  Both cells sit inside that 1-sigma and their own source "
-         "is not recorded.  ⚠️  The 2.26-hour rotation "
+         "is not recorded, so both are ESTIMATES of the primary, with no stated "
+         "method, epoch or radius convention, beside Daly's system values "
+         "(General_Research rc-596).  ⚠️  The 2.26-hour rotation "
          "puts its equator within a few percent of the spin barrier, so "
          "effective gravity there is near zero and the derived escape velocity "
          "is an upper bound.  A factor of 5 in flux between perihelion and "
