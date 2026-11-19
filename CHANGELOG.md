@@ -13,6 +13,22 @@ may read a version as proof that a number moved.
 
 ## Package releases
 
+### 0.18.8 - 2026-11-19
+
+**Data contract 1.27.7 → 1.27.8: seven General_Research candidates. No value
+moved.** Only `notes`, CITATIONS.md and the stamps changed.
+
+- **CITATIONS.md** gains Mirtich (NASA TM-83489, rc-852), Whitley et al. 2017
+  (GLEX-2017-3.2A.1, rc-853), Babic et al. (NASA-CR-195527, rc-854), the ACRV
+  report (NASA-CR-186677, rc-861), CoolProp and the three equations of state
+  behind the gas-density comparisons (rc-860), and Cannon, Gialich & Acain
+  2023 (rc-863).
+- **ALICE**: both components are a prospective asteroid feedstock, an
+  assumption, not a demonstrated route (rc-863).
+- **Electric propulsion cost**: after the NEXT-C and AEPS contract review, the
+  $10-15M per-string anchor stays an unsourced judgement and the $1.5M/kW is a
+  scenario (rc-299).
+
 ### 0.18.7 - 2026-11-19
 
 **Data contract 1.27.6 → 1.27.7: thirteen General_Research method candidates,
