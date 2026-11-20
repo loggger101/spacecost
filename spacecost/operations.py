@@ -390,10 +390,17 @@ OPERATIONAL_COSTS_REFERENCE: List[dict] = [
         "notes": "v1.6.0.  Thruster, power-processing unit, gimbals, xenon/argon "
                  "feed system, tankage and thermal — NOT the solar array, which "
                  "is carried separately by the 'Power system specific mass' row "
-                 "and scales 1/r^2.  NASA NEXT-C: 7 kW thruster ~12.7 kg + PPU "
-                 "34.5 kg ≈ 7 kg/kW (PPU: The NEXT-C Power Processing Unit, "
-                 "Aerojet/NASA 2020; the thruster mass has no registered "
-                 "source, and this note said 13.5 kg until 0.12.3).  Gateway "
+                 "and scales 1/r^2.  NEXT class, ~7 kW: thruster ~12.7-14 kg "
+                 "+ PPU 34.5 kg ≈ 7 kg/kW.  The thruster: 12.7 kg bare and "
+                 "13.5 kg with harnesses for NEXT PM1 (Oleson & McGuire, "
+                 "NASA/TM-2011-216973, pp. 37-38), ~14 kg for NEXT-C (Fisher "
+                 "et al., NTRS 20205005689, Table 1 p. 4 and p. 5).  The PPU: "
+                 "34.5 kg (The NEXT-C Power Processing Unit, NTRS 20205004248, "
+                 "Table 2 p. 4), whose output that table labels 7.4 kW and its "
+                 "text and Table 3 7.0 kW.  These are components: none covers "
+                 "the gimbals, feed system, tankage and thermal this row "
+                 "includes, so the 8 and its [5, 15] band are an estimate, not "
+                 "an integrated measurement (General_Research rc-865).  Gateway "
                  "AEPS is NOT the same class per kilowatt: its thruster head "
                  "alone is 53 kg at 12 kW, 4.4 kg/kW (Shastry et al., "
                  "IEPC-2024, NTRS 20240006249), so with a 4.7 kg/kW PPU an "
@@ -431,7 +438,8 @@ OPERATIONAL_COSTS_REFERENCE: List[dict] = [
                  "engine stop being interchangeable.  Together they reproduce "
                  "NEXT-C: 4.7 x 7.4 + 54 x 0.236 = 47.5 kg, at about the input "
                  "power above, against 47.2 kg "
-                 "measured (12.7 kg thruster + 34.5 kg PPU).",
+                 "measured (12.7 kg bare NEXT PM1 thruster, Oleson & McGuire "
+                 "pp. 37-38, + 34.5 kg PPU).",
         "reference_year":   _REF_YEAR_OPS,
     },
     {

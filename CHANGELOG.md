@@ -13,6 +13,18 @@ may read a version as proof that a number moved.
 
 ## Package releases
 
+### 0.18.9 - 2026-11-19
+
+**Data contract 1.27.8 → 1.27.9: the NEXT-class mass note cites what each
+figure is. No value moved.** Only `notes` and the stamps changed.
+
+- **Electric thruster + PPU specific mass** (rc-865): the 12.7 kg is NEXT PM1
+  bare (13.5 kg with harnesses; Oleson & McGuire, pp. 37-38) and NEXT-C is
+  ~14 kg (Fisher et al., Table 1); the PPU's 34.5 kg is NTRS 20205004248
+  Table 2, with its 7.4 / 7.0 kW output labels. None covers the row's gimbals,
+  feed, tankage and thermal, so 8 [5, 15] kg/kW is an estimate. The PPU row's
+  NEXT-C check names the 12.7 kg as PM1's.
+
 ### 0.18.8 - 2026-11-19
 
 **Data contract 1.27.7 → 1.27.8: seven General_Research candidates. No value
