@@ -13,6 +13,30 @@ may read a version as proof that a number moved.
 
 ## Package releases
 
+### 0.19.0 - 2026-11-19
+
+**Data contract 1.27.9 → 1.28.0: six values move, by the owner's decisions on
+General_Research candidates, and one row is added.**
+
+- **Bottled-gas densities** are the reference equations of state at 293.15 K
+  (CoolProp 8.0.0): argon 0.300 → 0.3135 kg/L at 18 MPa (rc-816), krypton
+  0.550 → 0.872 at 18 MPa (rc-857), nitrogen 0.250 → 0.302 at 30 MPa (rc-858),
+  xenon 2.000 → 1.868 at 10 MPa (rc-859). The COPV per litre is unchanged, so
+  the tank fraction moves inversely (argon 22.9% → 22.0%, krypton 12.5% → 7.9%,
+  nitrogen 45.9% → 38.0%, xenon 1.91% → 2.05%), and so does the cost per litre.
+- **Drilling / excavation energy** 200 [50, 500] → 5.7 [0.003, 7.4] Wh/kg,
+  terrestrial drilling + blasting + digging (DOE 2007) with loose-simulant
+  and all-extraction ends (rc-027).
+- **New row, Regolith handling & transfer energy**, 24.2 [0.86, 24.5] Wh/kg of
+  regolith extracted: what the old excavation figure carried besides digging,
+  priced on its own (DOE diesel materials handling; Arumugam et al. 2026; Giel
+  et al. 2025). Crushing and separation stay in the beneficiation row. A
+  consumer that reads only the excavation row now charges 5.7 where it charged
+  200, and must add this row to keep handling in its energy budget.
+- **Kuaizhou-11** keeps $12.2M; its note cites Xinhua 2018's below-$10,000/kg
+  quote as the ceiling, the FAA 2017 $15M estimate beside it, and drops the
+  Wikipedia citation (rc-202). Notes only.
+
 ### 0.18.9 - 2026-11-19
 
 **Data contract 1.27.8 → 1.27.9: the NEXT-class mass note cites what each

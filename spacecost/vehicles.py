@@ -1102,8 +1102,20 @@ LAUNCH_VEHICLES_REFERENCE: List[dict] = [
         "list_price_usd_low":        10_000_000,
         "price_basis":                   "reported",
         "reference_year":          _REF_YEAR_LAUNCH,
-        "notes": "Source: Wikipedia — ~$10,000/kg, i.e. ~$15M full.  Maiden "
-                 "flight failed (Jul 2020).  Under review: the $12.2M and $8,133/kg pair has no traced source.  Xinhua (2018) reported a quote below $10,000/kg, which it fits, and the FAA's 2017 compendium a $15M estimate; which basis the row holds is unresolved, so it stays (General_Research rc-202).",
+        "notes": "Maiden flight failed (Jul 2020).  The $12.2M headline is the "
+                 "geometric centre of a $10M-$15M band, so $8,133/kg on 1,500 "
+                 "kg, and it is read as a quote under a ceiling (owner's "
+                 "decision, General_Research rc-202): Xinhua (2018, republished "
+                 "by CNSA, para. 3) reported KZ-11 'quoted below US$10,000' per "
+                 "kg, which at 1.5 t is the $15M top and which $8,133/kg sits "
+                 "under.  The top also matches the FAA AST 2017 compendium's "
+                 "'$15M est' for a planned 2017 first launch, a preflight "
+                 "estimate and not a transaction.  The $10M low end has no "
+                 "source of its own.  Later reports bracket it: no more than $6M "
+                 "a launch (Beijing Business Daily, 2023), below $6,000/kg for "
+                 "bulk orders (chief designer, Hubei Daily, 2022), and a $28.3M "
+                 "listing with no stated basis (Next Spaceflight, 2026); none "
+                 "is a confirmed contract price.",
     },
     {
         "name":                          "Ceres-1",

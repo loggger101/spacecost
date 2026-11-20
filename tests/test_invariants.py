@@ -17,7 +17,7 @@ def test_row_counts():
     assert len(spacecost.LAUNCH_VEHICLES_REFERENCE) == 76
     assert len(spacecost.PROPELLANTS_REFERENCE) == 41
     assert len(spacecost.DELTA_V_REFERENCE) == 34
-    assert len(spacecost.OPERATIONAL_COSTS_REFERENCE) == 46
+    assert len(spacecost.OPERATIONAL_COSTS_REFERENCE) == 47
     assert len(spacecost.STORAGE_REFERENCE) == 20
 
 

@@ -561,7 +561,7 @@ _COMPONENTS = {
     "N2O4":      {"density_kg_per_L": 1.450, "cost_usd_per_kg":     35.00, "storage_class": "storable_liquid"},
     "MMH":       {"density_kg_per_L": 0.870, "cost_usd_per_kg":    100.00, "storage_class": "storable_liquid"},
     "Hydrazine": {"density_kg_per_L": 1.010, "cost_usd_per_kg":     75.00, "storage_class": "storable_liquid"},  # DOD ref + handling
-    "Xenon":     {"density_kg_per_L": 2.000, "cost_usd_per_kg": 10_000.00, "storage_class": "supercritical_gas", "pressure_mpa": 10.0},
+    "Xenon":     {"density_kg_per_L": 1.868, "cost_usd_per_kg": 10_000.00, "storage_class": "supercritical_gas", "pressure_mpa": 10.0},
     # v1.10.0.  Argon used to be ONE component carrying liquid-argon density
     # (1.395 kg/L, normal boiling point 87.3 K) with the storage class of a
     # cryogen and a boil-off of zero; the row's own two comments said "liquid
@@ -583,46 +583,43 @@ _COMPONENTS = {
     #             Studied, never flown, so the propellant row built on it is
     #             tagged `development` and the default search excludes it.
     #
-    # ArgonSC density: Peng-Robinson at 293.15 K / 18 MPa (the same bottle
-    # pressure as the krypton row) gives Z = 0.919 and ρ = 0.321 kg/L; a
-    # generalised-compressibility reading at Tr = 1.945, Pr = 3.70 gives
-    # Z ≈ 0.99 and ρ = 0.298.  0.30 is the round figure between them.
-# Neither estimate's inputs are recorded.  The reference equation of state,
-# Tegeler, Span & Wagner (J. Phys. Chem. Ref. Data 28, 779, 1999; density good
-# to +/-0.03% up to 30 MPa over 235-520 K), as CoolProp 8.0.0 implements it,
-# gives 0.3135 kg/L at 293.15 K / 18 MPa, 4.5% above 0.30.  The value is kept
-# here; moving it is a value change and goes to review (General_Research
-# rc-679).
-#
-# The other three bottled gases state a pressure and no temperature, and
-# none matches its reference equation of state at room temperature (CoolProp
-# 8.0.0, 293.15 K): krypton 0.8724 kg/L at 18 MPa (Lemmon & Span 2006),
-# 59% above the stored 0.550, which holds only near 370 K; nitrogen 0.3024
-# kg/L at 30 MPa (Span et al. 2000), 21% above 0.250, which holds near 350 K;
-# xenon 1.868 kg/L at 10 MPa (Lemmon & Span 2006), 6.6% below 2.000, which
-# holds near 284 K.  So each is a SCENARIO, and the tank fractions below
-# inherit it: at the EOS densities krypton pays 7.9% rather than 12.5%,
-# nitrogen 38.0% rather than 45.9%, xenon 2.0% rather than 1.9%.  The
-# molar-mass argument below survives; its krypton figure does not.  The
-# values are kept; moving them is a value change and goes to review
-# (General_Research rc-686, rc-687, rc-688).
+    # BOTTLED-GAS DENSITIES ARE THE REFERENCE EQUATIONS OF STATE AT 293.15 K
+# (data contract 1.28.0; owner's decision, General_Research rc-816, rc-857,
+# rc-858, rc-859).  Each bottle is at room temperature and its stated pressure,
+# read from CoolProp 8.0.0:
+#   ArgonSC  0.3135 kg/L at 18 MPa, Tegeler, Span & Wagner (J. Phys. Chem.
+#            Ref. Data 28, 779, 1999).  Was 0.300, a round figure between a
+#            Peng-Robinson 0.321 and a compressibility-chart 0.298.
+#   Krypton  0.872 kg/L at 18 MPa, Lemmon & Span (2006).  Was 0.550, which
+#            that equation gives only near 370 K.
+#   GN2      0.302 kg/L at 30 MPa, Span et al. (2000).  Was 0.250 (~350 K).
+#   Xenon    1.868 kg/L at 10 MPa, Lemmon & Span (2006).  Was 2.000 (~284 K).
+#            Near xenon's 289.7 K critical point its density is steep in
+#            temperature, so a bottle held colder or warmer than 293 K holds
+#            measurably more or less; the row assumes room temperature.
+# The COPV mass per litre does not depend on the gas, so the tank fractions
+# move inversely: argon 22.0% (was 22.9%), krypton 7.9% (12.5%), nitrogen
+# 38.0% (45.9%), xenon 2.05% (1.91%).
     #
     # Note the result barely moves with pressure, and that is the physics
     # rather than a coincidence: COPV mass goes as 1.5·p/(PV/W) and stored
     # density goes as p·M/(ZRT), so the tank FRACTION is ~1.5·Z·R·T/(M·(PV/W)),
-    # pressure cancels and molar mass is what is left.  Argon at 30 MPa pays
-    # 22.3% against 22.9% at 18 MPa.  Xenon 1.9% / krypton 12.5% / argon 22.9%
-    # is just M = 131.3 / 83.8 / 39.9 read backwards, and it is the whole
-    # reason a cheap propellant is not automatically a good one.
-    "ArgonSC":   {"density_kg_per_L": 0.300, "cost_usd_per_kg":     10.00, "storage_class": "supercritical_gas", "pressure_mpa": 18.0},
+    # pressure cancels and molar mass is what is left, times Z.  Z is not one
+    # here: at these bottles it is 0.94 for argon, 0.71 for krypton and 0.29
+    # for xenon (pM / rho R T), so the heavy gases bottle better still than M
+    # alone predicts.  Xenon 2.05% /
+    # krypton 7.9% / argon 22.0% still reads M = 131.3 / 83.8 / 39.9
+    # backwards, and it is the whole reason a cheap propellant is not
+    # automatically a good one.
+    "ArgonSC":   {"density_kg_per_L": 0.3135, "cost_usd_per_kg":     10.00, "storage_class": "supercritical_gas", "pressure_mpa": 18.0},
     "ArgonLIQ":  {"density_kg_per_L": 1.395, "cost_usd_per_kg":     10.00, "storage_class": "mild_cryogen"},     # liquid at NBP 87.3 K
 
     # ── v1.9.0 additions ─────────────────────────────────────────────────────
     "UDMH":      {"density_kg_per_L": 0.793, "cost_usd_per_kg":     80.00, "storage_class": "storable_liquid"},
     "Aerozine50":{"density_kg_per_L": 0.903, "cost_usd_per_kg":     90.00, "storage_class": "storable_liquid"},
     "HTP-98":    {"density_kg_per_L": 1.431, "cost_usd_per_kg":      5.00, "storage_class": "storable_liquid"},
-    "GN2":       {"density_kg_per_L": 0.250, "cost_usd_per_kg":      1.00, "storage_class": "supercritical_gas", "pressure_mpa": 30.0},
-    "Krypton":   {"density_kg_per_L": 0.550, "cost_usd_per_kg": float(band_centre(KRYPTON_USD_PER_KG_LOW, KRYPTON_USD_PER_KG_HIGH)), "storage_class": "supercritical_gas", "pressure_mpa": 18.0},
+    "GN2":       {"density_kg_per_L": 0.302, "cost_usd_per_kg":      1.00, "storage_class": "supercritical_gas", "pressure_mpa": 30.0},
+    "Krypton":   {"density_kg_per_L": 0.872, "cost_usd_per_kg": float(band_centre(KRYPTON_USD_PER_KG_LOW, KRYPTON_USD_PER_KG_HIGH)), "storage_class": "supercritical_gas", "pressure_mpa": 18.0},
     "Iodine":    {"density_kg_per_L": 4.930, "cost_usd_per_kg":     60.00, "storage_class": "sublimating_solid"},
     "Water":     {"density_kg_per_L": 1.000, "cost_usd_per_kg":      2.00, "storage_class": "benign_liquid"},  # $2/kg a scenario (rc-577)
     "ASCENT":    {"density_kg_per_L": 1.470, "cost_usd_per_kg":    500.00, "storage_class": "storable_liquid"},
@@ -938,7 +935,7 @@ PROPELLANTS_REFERENCE: List[dict] = [
                  "~2,800 s at 12 kW (Shastry et al., IEPC-2024, NTRS "
                  "20240006249).  "
                  "INL/RPT-23-75203: Xe sold at around $60/L in Q1 2023 = "
-                 "$10,243/kg at STP; used $10k/kg, Q1-2023 dollars.  Comparator: Epignosis Insights' composite fell to $2,650/kg by Aug 2026, analyst estimates rather than transactable prices, and NASA Glenn's Aug 2026 xenon buy publishes no quantity; $10,000 stays (General_Research rc-314).  The 54 kg/N is NEXT PM1's 12.7 kg (13.5 kg with harnesses) over 236 mN (NASA/TM-2011-216973, pp. 37-38), a predecessor proxy: NEXT-C is about 14 kg at 235 mN (NTRS 20205005689, pp. 4-5), ~60 kg/N, and neither figure states a system-mass boundary (General_Research rc-656).  Reference equation of state (CoolProp 8.0.0) at 293.15 K: 1.868 kg/L at 10 MPa (Lemmon & Span 2006), 6.6% below the stored 2.000, so the stored figure is a SCENARIO with no stated temperature, matching that equation only near 284 K; at the EOS density the COPV would be 0.0205 kg per kg of propellant instead of 0.0191 (General_Research rc-688).",
+                 "$10,243/kg at STP; used $10k/kg, Q1-2023 dollars.  Comparator: Epignosis Insights' composite fell to $2,650/kg by Aug 2026, analyst estimates rather than transactable prices, and NASA Glenn's Aug 2026 xenon buy publishes no quantity; $10,000 stays (General_Research rc-314).  The 54 kg/N is NEXT PM1's 12.7 kg (13.5 kg with harnesses) over 236 mN (NASA/TM-2011-216973, pp. 37-38), a predecessor proxy: NEXT-C is about 14 kg at 235 mN (NTRS 20205005689, pp. 4-5), ~60 kg/N, and neither figure states a system-mass boundary (General_Research rc-656).  Density 1.868 kg/L, the reference equation of state at 293.15 K / 10 MPa (Lemmon & Span 2006, CoolProp 8.0.0); until data contract 1.28.0 it was 2.000, which that equation gives only near 284 K, and the COPV was 0.0191 kg per kg of propellant where it is now 0.0205.  Near xenon's 289.7 K critical point the density is steep in temperature, so the row assumes a room-temperature bottle (General_Research rc-688, rc-859).",
     },
     {
         "name":                  "Argon  (Hall / ion)",
@@ -966,13 +963,16 @@ PROPELLANTS_REFERENCE: List[dict] = [
                  "of their previous Kr design).  Bulk industrial $7-15/kg per "
                  "SETS Space 2024; used $10/kg midpoint.\n"
                  "v1.10.0: stored SUPERCRITICAL at 18 MPa and ambient "
-                 "temperature, 0.30 kg/L, which is what has flown — no spacecraft "
+                 "temperature, 0.3135 kg/L (reference equation of state at "
+                 "293.15 K, Tegeler, Span & Wagner 1999, via CoolProp 8.0.0; "
+                 "0.300 until data contract 1.28.0, General_Research rc-816), "
+                 "which is what has flown — no spacecraft "
                  "has ever carried cryogenic argon.  Until v1.10.0 this row took "
                  "liquid-argon density (1.395 kg/L, 87.3 K) and a boil-off of "
                  "zero at the same time, which gave it the lightest tank of any "
                  "gas here and no cryogenic hold penalty.  Honestly stored it "
-                 "pays 22.9% of its own mass in COPV against krypton's 12.5% and "
-                 "xenon's 1.9% — argon is the LIGHTEST noble gas, so it is the "
+                 "pays 22.0% of its own mass in COPV against krypton's 7.9% and "
+                 "xenon's 2.05% — argon is the LIGHTEST noble gas, so it is the "
                  "worst of the three to bottle, and $10/kg does not buy that "
                  "back.  The cryogenic article is a separate row below.  Comparator: DLA's FY2026 technical argon, $1.14/lb (~$2.51/kg), a government standard of unreconciled purity and packaging, not a replacement (General_Research rc-310).  Its 1,500 s, 0.40 and 40 kg/N are generic mission-model SCENARIOS: SpaceX gives only relative figures (2.4x the thrust and 1.5x the Isp of the first generation, Progress Report 2023, p. 48), and NASA S3VI names argon with no values (General_Research rc-657).",
     },
@@ -1162,7 +1162,7 @@ PROPELLANTS_REFERENCE: List[dict] = [
                  "at 30 MPa the COPV masses 46% of the nitrogen it holds — the "
                  "clearest demonstration in this table of why tankage belongs in "
                  "the rocket equation.  Present as the floor of the Isp range, "
-                 "not as a candidate.  Comparator: DLA's FY2026 technical nitrogen, $0.16/lb (~$0.35/kg), of unstated grade, pressure and packaging against a high-pressure propellant row (General_Research rc-327).  Reference equation of state (CoolProp 8.0.0) at 293.15 K: 0.302 kg/L at 30 MPa (Span et al. 2000), 21% above the stored 0.250, so the stored figure is a SCENARIO with no stated temperature, matching that equation only near 350 K; at the EOS density the COPV would be 0.380 kg per kg of propellant instead of 0.459 (General_Research rc-687).",
+                 "not as a candidate.  Comparator: DLA's FY2026 technical nitrogen, $0.16/lb (~$0.35/kg), of unstated grade, pressure and packaging against a high-pressure propellant row (General_Research rc-327).  Density 0.302 kg/L, the reference equation of state at 293.15 K / 30 MPa (Span et al. 2000, CoolProp 8.0.0); until data contract 1.28.0 it was 0.250, which that equation gives only near 350 K, and the COPV was 0.459 kg per kg of propellant where it is now 0.380 (General_Research rc-687, rc-858).",
     },
     {
         "name":                  "Solid  (APCP)",
@@ -1235,11 +1235,11 @@ PROPELLANTS_REFERENCE: List[dict] = [
                  "3.75 g/L) to $2,100/kg (the bottom of SETS Space's 2024 "
                  "flight-grade quote, $2,100-$4,800); it was an unsourced $300 "
                  "until data contract 1.22.0.  ~2/3 the Isp, and a materially "
-                 "worse tank: 0.55 kg/L "
-                 "supercritical against xenon's 2.0 means the COPV masses 12.5% "
-                 "of the propellant against xenon's 1.9%.  Whether it beats "
+                 "worse tank: 0.872 kg/L "
+                 "supercritical against xenon's 1.868 means the COPV masses 7.9% "
+                 "of the propellant against xenon's 2.05%.  Whether it beats "
                  "xenon is exactly the kind of trade this table now lets the "
-                 "search resolve rather than assume.  The 0.45 is a total (thrust-power) efficiency and a scenario value.  NASA-457M's krypton discharge efficiency, 0.50 at 2,039 s and 300 V (Jacobson & Manzella, NASA/TM-2003-212700, App. p. 8), is a 50 kW-class lab figure on a narrower boundary: it brackets the value, it does not source it (General_Research rc-458).  Reference equation of state (CoolProp 8.0.0) at 293.15 K: 0.872 kg/L at 18 MPa (Lemmon & Span 2006), 59% above the stored 0.550, so the stored figure is a SCENARIO with no stated temperature, matching that equation only near 370 K; at the EOS density the COPV would be 0.079 kg per kg of propellant instead of 0.125 (General_Research rc-686).",
+                 "search resolve rather than assume.  The 0.45 is a total (thrust-power) efficiency and a scenario value.  NASA-457M's krypton discharge efficiency, 0.50 at 2,039 s and 300 V (Jacobson & Manzella, NASA/TM-2003-212700, App. p. 8), is a 50 kW-class lab figure on a narrower boundary: it brackets the value, it does not source it (General_Research rc-458).  Density 0.872 kg/L, the reference equation of state at 293.15 K / 18 MPa (Lemmon & Span 2006, CoolProp 8.0.0); until data contract 1.28.0 it was 0.550, which that equation gives only near 370 K, and the COPV was 0.125 kg per kg of propellant where it is now 0.079 (General_Research rc-686, rc-857).",
     },
     {
         "name":                  "Iodine  (Hall / gridded)",
@@ -1268,7 +1268,7 @@ PROPELLANTS_REFERENCE: List[dict] = [
                  "2021).  Isp 2,000 s is a SCENARIO: NASA/TM-2015-218829 (p. 19) gives ~2,000 s as Busek's target for a full-scale iodine Hall system at high thrust, a target for that system and not a measured Hall or gridded figure (General_Research rc-807).  "
                  "Stored as a SOLID at ambient pressure, ρ 4.93 kg/L, solid iodine's density at 25 C (WHO/HEP/ECH/WSH/2020.5, Table 1.1, p. 2), the material and not a loose-packed reservoir (General_Research rc-808), so "
                  "the reservoir masses 0.23% of the propellant against xenon's "
-                 "1.9% — by a wide margin the best storage density ever flown "
+                 "2.05% — by a wide margin the best storage density ever flown "
                  "outside mercury.  Cost $60/kg, an estimate: the US$60 in "
                  "Rafalskyi et al. is a total propellant cost with no mass "
                  "stated, not a price per kg.  The catch is condensable "
@@ -1762,7 +1762,7 @@ PROPELLANTS_REFERENCE: List[dict] = [
                  "thruster as the operational row, fed from a liquid tank at "
                  "87.3 K instead of an 18 MPa bottle.  It is the architecture a "
                  "multi-tonne stage would actually want: 1.395 kg/L against "
-                 "0.30 buys a 2.1% tank against 22.9%, which is the single "
+                 "0.3135 buys a 2.1% tank against 22.0%, which is the single "
                  "biggest storage swing in this table.\n"
                  "DEVELOPMENT, not operational, and the distinction is the point. "
                  "Liquid argon is routine on the ground and has never flown on a "

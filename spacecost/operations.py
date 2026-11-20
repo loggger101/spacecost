@@ -727,15 +727,54 @@ OPERATIONAL_COSTS_REFERENCE: List[dict] = [
     {
         "category":         "Drilling / excavation energy",
         "unit":             "Watt-hours per kg of regolith extracted",
-        "value":            200,
-        "range_low":         50,
-        "range_high":       500,
-        "notes": "Range derived from the Zacny / Honeybee Robotics excavation "
-                 "literature (Metzger, Zacny & Morrison 2020, ASCE J. Aerosp. "
-                 "Eng., thermal side; Zeng et al. 2007, NASA Glenn, excavation "
-                 "force model) — loose regolith ≲50 Wh/kg, "
-                 "consolidated rock ≳500 Wh/kg.  Pairs with the power-system "
-                 "row to size mining rig (kg-extracted per installed-kW-hr).",
+        "value":            5.7,
+        "range_low":        0.003,
+        "range_high":       7.4,
+        "notes": "Breaking the material loose and picking it up, nothing more. "
+                 "5.7 Wh/kg is US metal mining's drilling + blasting + digging, "
+                 "17,700 Btu per short ton of material (DOE Mining Industry "
+                 "Energy Bandwidth Study, 2007, Exhibit 24, on-site energy): "
+                 "hard rock, the consolidated end.  The low end is mechanical "
+                 "energy at a bucket drum in loose simulant, 0.0029-0.0071 "
+                 "Wh/kg (Schuler et al. 2022, NASA IPEx scaling, Fig. 15); "
+                 "continuous lunar excavators measure 0.007-0.023 (Giel et al. "
+                 "2025, Table IV; Kafi et al. 2026).  The high end, 7.4, is all "
+                 "of DOE's extraction including ventilation and dewatering.  "
+                 "No source measures asteroid rock, and every figure is at 1 g "
+                 "or on Earth.\n"
+                 "Until data contract 1.28.0 this row was 200 [50, 500], 35x the "
+                 "terrestrial dig and 3.7x a whole terrestrial metal mine with "
+                 "its crushing (General_Research rc-027).  What that figure "
+                 "carried besides digging is now priced where it belongs: moving "
+                 "the material, in 'Regolith handling & transfer energy' below, "
+                 "and crushing, grinding and separation, in 'Beneficiation / "
+                 "on-site processing energy' (the owner's decision).  Pairs with "
+                 "the power-system row to size the mining rig.",
+        "reference_year":   _REF_YEAR_OPS,
+    },
+    {
+        "category":         "Regolith handling & transfer energy",
+        "unit":             "Watt-hours per kg of regolith extracted",
+        "value":            24.2,
+        "range_low":        0.86,
+        "range_high":       24.5,
+        "notes": "Moving what was dug from the face to the hopper, hold or "
+                 "processor: the haulage a terrestrial mine pays and the "
+                 "excavation row above does not.  New in data contract 1.28.0 "
+                 "(General_Research rc-027, the owner's decision to price what "
+                 "the old 200 Wh/kg excavation figure implicitly carried).  "
+                 "24.2 Wh/kg is US metal mining's diesel materials handling, "
+                 "74,900 Btu per short ton (DOE 2007, Exhibit 24), a "
+                 "conservative choice: trucks over kilometres at 1 g.  The high "
+                 "end, 24.5, is an integrated lunar analogue's excavation "
+                 "energy including rover mobility over a 2.5 h, 37-cycle trial "
+                 "(Arumugam et al. 2026, npj Space Exploration 2:33, Table 1). "
+                 "The low end, 0.86, is a bucket-drum rover's whole batch cycle "
+                 "with unloading and 139 s of driving (Giel et al. 2025, "
+                 "Table III).  No source measures transfer in microgravity, "
+                 "where moving a kilogram a few metres takes far less than "
+                 "hauling it at 1 g but containing it takes more care; the "
+                 "value is a scenario at the conservative end.",
         "reference_year":   _REF_YEAR_OPS,
     },
     {
