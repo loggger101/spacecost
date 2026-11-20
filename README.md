@@ -58,7 +58,7 @@ spacecost build -o ./out           # write all seven CSVs
 | `launch_vehicles` | 76 | $/kg to LEO, GTO and escape with a low/high band, payload masses, list price, status, who can buy it |
 | `propellants` | 41 | vacuum Isp, bulk density, $/kg and $/L, storage class, derived tankage, thruster device, ISRU feed and processing energy |
 | `delta_v_segments` | 34 | m/s and trip duration per trajectory leg, 100 to 10,500 m/s |
-| `operational_costs` | 46 | $/mission-year and $/kg-payload lines, with low/high bands |
+| `operational_costs` | 47 | $/mission-year and $/kg-payload lines, with low/high bands |
 | `storage_systems` | 20 | how a kilogram is held, across the cargo, depot, propellant and energy domains |
 | `environments` | 23 | where it is being priced: solar flux, dark period, gravity, light time |
 
@@ -493,7 +493,7 @@ the CLI and CI, which is where a finding is heard.
 The bands also hold each table against **itself**. `usd_per_kg_to_leo` is
 `list_price_usd / payload_leo_kg` and the table carries all three, twelve
 columns apart on one very long row; `operational_costs` and `storage_systems`
-each carry a `value` with a `range_low` and `range_high` around it. All 66
+each carry a `value` with a `range_low` and `range_high` around it. All 67
 bracketed rows are held inside their own range. The launch $/kg is derived at
 import rather than typed, and the launch price and payload bands get the same
 check, so on the launch table these guard the frame a caller edits after
@@ -668,7 +668,7 @@ build` rebuilds the whole thing.
 These tables were built over fourteen releases as **Module 3 of
 [economicspace](https://github.com/loggger101/economicspace)**, an asteroid
 mining profitability pipeline, and extracted at `pipeline_version` 1.14.0
-(commit `b0b18b2`; the contract is 1.27.9 as of this release). Two thirds of
+(commit `b0b18b2`; the contract is 1.28.0 as of this release). Two thirds of
 that module was annotated reference data and nothing in its schema knows what
 an asteroid is, which is the argument for splitting it out: a launch price is
 useful to anyone costing a mission. economicspace consumes this package as its
